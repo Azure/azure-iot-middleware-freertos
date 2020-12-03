@@ -48,6 +48,12 @@ typedef struct AzureIotHubClientMessage
 {
     uint8_t message_type;
     MQTTPublishInfo_t * pxPublishInfo;
+    union
+    {
+        az_iot_hub_client_c2d_request c2d_request;
+        az_iot_hub_client_method_request method_request;
+        az_iot_hub_client_twin_response twin_response;
+    } parsed_message;
 } AzureIotHubClientMessage_t;
 
 /*
@@ -112,5 +118,9 @@ AzureIotHubClientError_t azure_iot_hub_client_direct_method_enable( AzureIoTHubC
 AzureIotHubClientError_t azure_iot_hub_client_device_twin_enable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                                   void ( * callback) (AzureIotHubClientMessage_t* message, void* context),
                                                                   void * callback_context );
+
+AzureIotHubClientError_t azure_iot_hub_client_send_method_response( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                  uint32_t status, az_span requestId,
+                                                                  const char * payload, uint32_t payloadLength);
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */
