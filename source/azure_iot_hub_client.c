@@ -322,7 +322,7 @@ AzureIotHubClientError_t azure_iot_hub_client_telemetry_send( AzureIoTHubClientH
 }
 
 AzureIotHubClientError_t azure_iot_hub_client_send_method_response( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                    uint32_t status, AzureIotHubClientMessage_t* message,
+                                                                    AzureIotHubClientMessage_t* message, uint32_t status,
                                                                     const char * payload, uint32_t payloadLength)
 {
     MQTTStatus_t xResult;
