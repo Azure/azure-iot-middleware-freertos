@@ -70,6 +70,7 @@ extern void vLoggingPrintf( const char * pcFormatString,
 /************ End of logging configuration ****************/
 
 #define DEVICE_ID				"fabrikam"
+#define MODULE_ID               ""
 
 #define HOSTNAME                "kartos.azure-devices.net"
 
