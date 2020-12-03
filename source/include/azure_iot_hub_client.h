@@ -120,7 +120,7 @@ AzureIotHubClientError_t azure_iot_hub_client_device_twin_enable( AzureIoTHubCli
                                                                   void * callback_context );
 
 AzureIotHubClientError_t azure_iot_hub_client_send_method_response( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                  uint32_t status, az_span requestId,
+                                                                  uint32_t status, AzureIotHubClientMessage_t* message,
                                                                   const char * payload, uint32_t payloadLength);
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */

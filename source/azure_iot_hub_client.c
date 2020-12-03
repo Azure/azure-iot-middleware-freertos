@@ -322,7 +322,7 @@ AzureIotHubClientError_t azure_iot_hub_client_telemetry_send( AzureIoTHubClientH
 }
 
 AzureIotHubClientError_t azure_iot_hub_client_send_method_response( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                    uint32_t status, az_span requestId,
+                                                                    uint32_t status, AzureIotHubClientMessage_t* message,
                                                                     const char * payload, uint32_t payloadLength)
 {
     MQTTStatus_t xResult;
@@ -332,7 +332,8 @@ AzureIotHubClientError_t azure_iot_hub_client_send_method_response( AzureIoTHubC
 
     size_t method_topic_length;
     az_result res = az_iot_hub_client_methods_response_get_publish_topic(&xAzureIoTHubClientHandle->iot_hub_client_core,
-                        requestId, (uint16_t)status, method_topic, sizeof(method_topic), &method_topic_length);
+                        message->parsed_message.method_request.request_id,
+                        (uint16_t)status, method_topic, sizeof(method_topic), &method_topic_length);
     if(az_result_failed(res))
     {
         return AZURE_IOT_HUB_CLIENT_FAILED;
