@@ -267,11 +267,16 @@ static void handle_c2d_message(AzureIotHubClientMessage_t * message, void * cont
 
 static void handle_direct_method(AzureIotHubClientMessage_t * message, void * context )
 {
-    (void)context;
-
     LogInfo(("Method payload : %.*s \r\n",
              message->pxPublishInfo->payloadLength,
              message->pxPublishInfo->pPayload));
+
+    AzureIoTHubClient_t* xAzureIotHubClient = (AzureIoTHubClient_t*)context;
+    if( azure_iot_hub_client_send_method_response( xAzureIotHubClient, message, 200,
+                       NULL, 0) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+    {
+        LogInfo( ("Error sending method response\r\n") );
+    }
 }
 
 static void handle_device_twin_message( AzureIotHubClientMessage_t * message, void * context )
