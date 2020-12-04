@@ -69,9 +69,18 @@ extern void vLoggingPrintf( const char * pcFormatString,
 
 /************ End of logging configuration ****************/
 
+#define ENABLE_DPS_SAMPLE
+
+#ifdef ENABLE_DPS_SAMPLE
+
+#define ENDPOINT                "testbarnacle.azure-devices-provisioning.net"
+#define ID_SCOPE                "0ne000A247E"
+#define REGISTRATION_ID         "fabrikam"
+
+#endif // ENABLE_DPS_SAMPLE
+
 #define DEVICE_ID				"fabrikam"
 #define MODULE_ID               ""
-
 #define HOSTNAME                "kartos.azure-devices.net"
 
 /**
@@ -247,6 +256,6 @@ extern void vLoggingPrintf( const char * pcFormatString,
 /**
  * @brief Size of the network buffer for MQTT packets.
  */
-#define democonfigNETWORK_BUFFER_SIZE       ( 1024U )
+#define democonfigNETWORK_BUFFER_SIZE       ( 5 * 1024U )
 
 #endif /* DEMO_CONFIG_H */

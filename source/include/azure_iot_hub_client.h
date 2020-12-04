@@ -76,18 +76,18 @@ typedef struct AzureIoTHubClient
 
     az_iot_hub_client iot_hub_client_core;
 
-    const char * hostname;
+    const uint8_t * hostname;
     uint32_t hostnameLength;
-    const char *deviceId;
+    const uint8_t *deviceId;
     uint32_t deviceIdLength;
 
     AzureIotHubClientReceiveContext_t xReceiveContext[3];
 } AzureIoTHubClient_t;
 
 AzureIotHubClientError_t azure_iot_hub_client_init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                    const char * pHostname, uint32_t hostnameLength,
-                                                    const char * pDeviceId, uint32_t deviceIdLength,
-                                                    const char * pModuleId, uint32_t moduleIdLength,
+                                                    const uint8_t * pHostname, uint32_t hostnameLength,
+                                                    const uint8_t * pDeviceId, uint32_t deviceIdLength,
+                                                    const uint8_t * pModuleId, uint32_t moduleIdLength,
                                                     uint8_t * pBuffer, uint32_t bufferLength,
                                                     AzureIotGetCurrentTimeFunc_t getTimeFunction,
                                                     const TransportInterface_t * pTransportInterface );
