@@ -50,6 +50,7 @@
 
 /* Azure IoTHub library includes */
 #include "azure_iot_hub_client.h"
+#include "azure_iot_provisioning_client.h"
 
 /* Demo Specific configs. */
 #include "demo_config.h"
@@ -66,9 +67,14 @@
 /*-----------------------------------------------------------*/
 
 /* Compile time error for undefined configs. */
-#ifndef HOSTNAME
+#if !defined(HOSTNAME) && !defined(ENABLE_DPS_SAMPLE)
     #error "Define the config HOSTNAME by following the instructions in file demo_config.h."
 #endif
+
+#if !defined(ENDPOINT) && defined(ENABLE_DPS_SAMPLE)
+#error "Define the config dps endpoint by following the instructions in file demo_config.h."
+#endif
+
 #ifndef democonfigROOT_CA_PEM
     #error "Please define Root CA certificate of the MQTT broker(democonfigROOT_CA_PEM) in demo_config.h."
 #endif
@@ -154,6 +160,12 @@
 
 /*-----------------------------------------------------------*/
 
+/* Define buffer for IoTHub info.  */
+#ifdef ENABLE_DPS_SAMPLE
+static uint8_t sampleIotHubHostname[128];
+static uint8_t sampleIotHubDeviceId[128];
+#endif /* ENABLE_DPS_SAMPLE */
+
 /* Each compilation unit must define the NetworkContext struct. */
 struct NetworkContext
 {
@@ -162,13 +174,19 @@ struct NetworkContext
 
 /*-----------------------------------------------------------*/
 
+#ifdef ENABLE_DPS_SAMPLE
+static uint32_t prvDPSDemo( NetworkCredentials_t * pXNetworkCredentials,
+                        uint8_t ** pIothubHostname, uint32_t * iothubHostnameLength,
+                        uint8_t ** piothubDeviceId, uint32_t * iothubDeviceIdLength );
+#endif /* ENABLE_DPS_SAMPLE */
+
 /**
  * @brief The task used to demonstrate the MQTT API.
  *
  * @param[in] pvParameters Parameters as passed at the time of task creation. Not
  * used in this example.
  */
-static void prvMQTTDemoTask( void * pvParameters );
+static void prvAzureDemoTask( void * pvParameters );
 
 
 /**
@@ -182,17 +200,9 @@ static void prvMQTTDemoTask( void * pvParameters );
  *
  * @return The status of the final connection attempt.
  */
-static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( NetworkCredentials_t * pxNetworkCredentials,
-                                                                  NetworkContext_t * pNetworkContext );
-
-/**
- * @brief Sends an MQTT Connect packet over the already connected TLS over TCP connection.
- *
- * @param[in, out] pxMQTTContext MQTT context pointer.
- * @param[in] xNetworkContext Network context.
- */
-static void prvCreateMQTTConnectionWithBroker( AzureIoTHubClient_t * pxAzureIotHubClient,
-                                               NetworkContext_t * pxNetworkContext );
+static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * pHostName, uint32_t port,
+                                                                  NetworkCredentials_t * pxNetworkCredentials,
+                                                                  NetworkContext_t * pxNetworkContext );
 /**
  * @brief The timer query function provided to the MQTT context.
  *
@@ -288,6 +298,21 @@ static void handle_device_twin_message( AzureIotHubClientMessage_t * message, vo
              message->pxPublishInfo->pPayload));
 }
 
+static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCredentials )
+{
+    pxNetworkCredentials->disableSni = democonfigDISABLE_SNI;
+    /* Set the credentials for establishing a TLS connection. */
+    pxNetworkCredentials->pRootCa = ( const unsigned char * ) democonfigROOT_CA_PEM;
+    pxNetworkCredentials->rootCaSize = sizeof( democonfigROOT_CA_PEM );
+    #ifdef democonfigCLIENT_CERTIFICATE_PEM
+        pxNetworkCredentials->pClientCert = ( const unsigned char * ) democonfigCLIENT_CERTIFICATE_PEM;
+        pxNetworkCredentials->clientCertSize = sizeof( democonfigCLIENT_CERTIFICATE_PEM );
+        pxNetworkCredentials->pPrivateKey = ( const unsigned char * ) democonfigCLIENT_PRIVATE_KEY_PEM;
+        pxNetworkCredentials->privateKeySize = sizeof( democonfigCLIENT_PRIVATE_KEY_PEM );
+    #endif
+
+    return 0;
+}
 /*
  * @brief Create the task that demonstrates the MQTT API Demo over a
  * mutually authenticated network connection with MQTT broker.
@@ -297,8 +322,8 @@ void vStartSimpleMQTTDemo( void )
     /* This example uses a single application task, which in turn is used to
      * connect, subscribe, publish, unsubscribe and disconnect from the MQTT
      * broker. */
-    xTaskCreate( prvMQTTDemoTask,          /* Function that implements the task. */
-                 "DemoTask",               /* Text name for the task - only used for debugging. */
+    xTaskCreate( prvAzureDemoTask,         /* Function that implements the task. */
+                 "AzureDemoTask",          /* Text name for the task - only used for debugging. */
                  democonfigDEMO_STACKSIZE, /* Size of stack (in words, not bytes) to allocate for the task. */
                  NULL,                     /* Task parameter - not used in this case. */
                  tskIDLE_PRIORITY,         /* Task priority, must be between 0 and configMAX_PRIORITIES - 1. */
@@ -306,35 +331,49 @@ void vStartSimpleMQTTDemo( void )
 }
 /*-----------------------------------------------------------*/
 
-/*
- * @brief The Example shown below uses MQTT APIs to create MQTT messages and
- * send them over the mutually authenticated network connection established with the
- * MQTT broker. This example is single threaded and uses statically allocated
- * memory. It uses QoS1 for sending to and receiving messages from the broker.
- *
- * This MQTT client subscribes to the topic as specified in mqttexampleTOPIC at the
- * top of this file by sending a subscribe packet and then waiting for a subscribe
- * acknowledgment (SUBACK).This client will then publish to the same topic it
- * subscribed to, so it will expect all the messages it sends to the broker to be
- * sent back to it from the broker.
- */
-static void prvMQTTDemoTask( void * pvParameters )
+static void prvAzureDemoTask( void * pvParameters )
 {
     uint32_t ulPublishCount = 0U;
     const uint32_t ulMaxPublishCount = 5UL;
-    NetworkContext_t xNetworkContext = { 0 };
-    TlsTransportParams_t xTlsTransportParams = { 0 };
     NetworkCredentials_t xNetworkCredentials = { 0 };
-    AzureIoTHubClient_t xAzureIotHubClient = { 0 };
+    TransportInterface_t xTransport;
+    NetworkContext_t xNetworkContext = { 0 };
     TlsTransportStatus_t xNetworkStatus;
+    AzureIoTHubClient_t xAzureIotHubClient = { 0 };
+    TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIotHubClientError_t xResult;
+    uint32_t status;
+    #ifdef ENABLE_DPS_SAMPLE
+    uint8_t * iotHubHostname = NULL;
+    uint8_t * iotHubDeviceId = NULL;
+    uint32_t iotHubHostnameLength = 0;
+    uint32_t iotHubDeviceIdLength = 0;
+    #else
+    uint8_t* iotHubHostname = ( uint8_t * )HOSTNAME;
+    uint8_t* iotHubDeviceId = ( uint8_t * )DEVICE_ID;
+    uint32_t iotHubHostnameLength = sizeof( HOSTNAME) - 1;
+    uint32_t iotHubDeviceIdLength = sizeof( DEVICE_ID ) - 1;
+    #endif /* ENABLE_DPS_SAMPLE */
 
-    /* Remove compiler warnings about unused parameters. */
-    ( void ) pvParameters;
+    ( void )pvParameters;
 
     ulGlobalEntryTimeMs = prvGetTimeMs();
 
-    /* Set the pParams member of the network context with desired transport. */
+    status = prvSetupNetworkCredentials( &xNetworkCredentials );
+    configASSERT(status == 0);
+
+#ifdef ENABLE_DPS_SAMPLE
+
+    /* Run DPS.  */
+    if ( ( status = prvDPSDemo( &xNetworkCredentials, &iotHubHostname,
+                                &iotHubHostnameLength, &iotHubDeviceId,
+                                &iotHubDeviceIdLength ) ) != 0)
+    {
+        printf("Failed on sample_dps_entry!: error code = 0x%08x\r\n", status);
+        return(status);
+    }
+#endif /* ENABLE_DPS_SAMPLE */
+
     xNetworkContext.pParams = &xTlsTransportParams;
 
     for( ; ; )
@@ -347,14 +386,32 @@ static void prvMQTTDemoTask( void * pvParameters )
          * value is reached. The function returns a failure status if the TCP
          * connection cannot be established to the broker after the configured
          * number of attempts. */
-        xNetworkStatus = prvConnectToServerWithBackoffRetries( &xNetworkCredentials,
-                                                               &xNetworkContext );
+        xNetworkStatus = prvConnectToServerWithBackoffRetries( (const char * )iotHubHostname, democonfigMQTT_BROKER_PORT,
+                                                               &xNetworkCredentials, &xNetworkContext );
         configASSERT( xNetworkStatus == TLS_TRANSPORT_SUCCESS );
 
         /* Sends an MQTT Connect packet over the already established TLS connection,
          * and waits for connection acknowledgment (CONNACK) packet. */
-        LogInfo( ( "Creating an MQTT connection to %s.\r\n", HOSTNAME ) );
-        prvCreateMQTTConnectionWithBroker( &xAzureIotHubClient, &xNetworkContext );
+        LogInfo( ( "Creating an MQTT connection to %s.\r\n", iotHubHostname ) );
+
+        /* Fill in Transport Interface send and receive function pointers. */
+        xTransport.pNetworkContext = &xNetworkContext;
+        xTransport.send = TLS_FreeRTOS_send;
+        xTransport.recv = TLS_FreeRTOS_recv;
+
+        /* Initialize MQTT library. */
+        xResult = azure_iot_hub_client_init( &xAzureIotHubClient,
+                                             iotHubHostname, iotHubHostnameLength,
+                                             iotHubDeviceId, iotHubDeviceIdLength,
+                                             (const uint8_t * )MODULE_ID, sizeof( MODULE_ID ) - 1,
+                                             ucSharedBuffer, sizeof( ucSharedBuffer ),
+                                             prvGetTimeMs,
+                                             &xTransport );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
+        xResult = azure_iot_hub_client_connect( &xAzureIotHubClient,
+                                                false, mqttexampleCONNACK_RECV_TIMEOUT_MS );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /**************************** Enable features. ******************************/
 
@@ -410,26 +467,84 @@ static void prvMQTTDemoTask( void * pvParameters )
         vTaskDelay( mqttexampleDELAY_BETWEEN_DEMO_ITERATIONS_TICKS );
     }
 }
+
+#ifdef ENABLE_DPS_SAMPLE
+
+static uint32_t prvDPSDemo( NetworkCredentials_t * pXNetworkCredentials,
+                        uint8_t ** pIothubHostname, uint32_t * iothubHostnameLength,
+                        uint8_t ** piothubDeviceId, uint32_t * iothubDeviceIdLength )
+{
+    NetworkContext_t xNetworkContext = { 0 };
+    TlsTransportParams_t xTlsTransportParams = { 0 };
+    AzureIoTProvisioningClient_t xAzureIotProvisioningClient = { 0 };
+    TlsTransportStatus_t xNetworkStatus;
+    AzureIotProvisioningClientError_t xResult;
+    TransportInterface_t xTransport;
+    uint32_t sampleIotHubHostnameLength = sizeof(sampleIotHubHostname);
+    uint32_t sampleIotHubDeviceIdLength = sizeof(sampleIotHubDeviceId);
+
+    /* Set the pParams member of the network context with desired transport. */
+    xNetworkContext.pParams = &xTlsTransportParams;
+
+    /****************************** Connect. ******************************/
+
+    xNetworkStatus = prvConnectToServerWithBackoffRetries( ENDPOINT, democonfigMQTT_BROKER_PORT,
+                                                           pXNetworkCredentials, &xNetworkContext);
+    configASSERT(xNetworkStatus == TLS_TRANSPORT_SUCCESS);
+
+    /* Fill in Transport Interface send and receive function pointers. */
+    xTransport.pNetworkContext = &xNetworkContext;
+    xTransport.send = TLS_FreeRTOS_send;
+    xTransport.recv = TLS_FreeRTOS_recv;
+
+    /* Sends an MQTT Connect packet over the already established TLS connection,
+     * and waits for connection acknowledgment (CONNACK) packet. */
+    LogInfo(("Creating an MQTT connection to %s.\r\n", ENDPOINT));
+
+    /* Initialize MQTT library. */
+    xResult = azure_iot_provisioning_client_init( &xAzureIotProvisioningClient,
+                                                  ENDPOINT, sizeof(ENDPOINT) - 1,
+                                                  ID_SCOPE, sizeof(ID_SCOPE) - 1,
+                                                  REGISTRATION_ID, sizeof(REGISTRATION_ID) - 1,
+                                                  ucSharedBuffer, sizeof(ucSharedBuffer),
+                                                  prvGetTimeMs,
+                                                  &xTransport );
+    configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
+
+    /****************** Publish and Keep Alive Loop. **********************/
+    xResult = azure_iot_provisioning_client_register(&xAzureIotProvisioningClient);
+    configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
+    
+    xResult = azure_iot_provisioning_client_hub_get( &xAzureIotProvisioningClient,   
+                                                     sampleIotHubHostname, &sampleIotHubHostnameLength,
+                                                     sampleIotHubDeviceId, &sampleIotHubDeviceIdLength );
+    configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
+
+    azure_iot_provisioning_deinit(&xAzureIotProvisioningClient);
+    
+    /* Close the network connection.  */
+    TLS_FreeRTOS_Disconnect(&xNetworkContext);
+
+    *pIothubHostname = sampleIotHubHostname;
+    *iothubHostnameLength = sampleIotHubHostnameLength;
+    *piothubDeviceId = sampleIotHubDeviceId;
+    *iothubDeviceIdLength = sampleIotHubDeviceIdLength;
+
+    return 0;
+}
+
+#endif // ENABLE_DPS_SAMPLE
+
 /*-----------------------------------------------------------*/
 
-static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( NetworkCredentials_t * pxNetworkCredentials,
+static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * pHostName, uint32_t port,
+                                                                  NetworkCredentials_t * pxNetworkCredentials,
                                                                   NetworkContext_t * pxNetworkContext )
 {
     TlsTransportStatus_t xNetworkStatus;
     BackoffAlgorithmStatus_t xBackoffAlgStatus = BackoffAlgorithmSuccess;
     BackoffAlgorithmContext_t xReconnectParams;
     uint16_t usNextRetryBackOff = 0U;
-
-    pxNetworkCredentials->disableSni = democonfigDISABLE_SNI;
-    /* Set the credentials for establishing a TLS connection. */
-    pxNetworkCredentials->pRootCa = ( const unsigned char * ) democonfigROOT_CA_PEM;
-    pxNetworkCredentials->rootCaSize = sizeof( democonfigROOT_CA_PEM );
-    #ifdef democonfigCLIENT_CERTIFICATE_PEM
-        pxNetworkCredentials->pClientCert = ( const unsigned char * ) democonfigCLIENT_CERTIFICATE_PEM;
-        pxNetworkCredentials->clientCertSize = sizeof( democonfigCLIENT_CERTIFICATE_PEM );
-        pxNetworkCredentials->pPrivateKey = ( const unsigned char * ) democonfigCLIENT_PRIVATE_KEY_PEM;
-        pxNetworkCredentials->privateKeySize = sizeof( democonfigCLIENT_PRIVATE_KEY_PEM );
-    #endif
 
     /* Initialize reconnect attempts and interval. */
     BackoffAlgorithm_InitializeParams( &xReconnectParams,
@@ -446,12 +561,10 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( NetworkCredent
         /* Establish a TLS session with the MQTT broker. This example connects to
          * the MQTT broker as specified in HOSTNAME and
          * democonfigMQTT_BROKER_PORT at the top of this file. */
-        LogInfo( ( "Creating a TLS connection to %s:%u.\r\n",
-                   HOSTNAME, democonfigMQTT_BROKER_PORT ) );
+        LogInfo( ( "Creating a TLS connection to %s:%u.\r\n", pHostName, port) );
         /* Attempt to create a mutually authenticated TLS connection. */
         xNetworkStatus = TLS_FreeRTOS_Connect( pxNetworkContext,
-                                               HOSTNAME,
-                                               democonfigMQTT_BROKER_PORT,
+                                               pHostName, port,
                                                pxNetworkCredentials,
                                                mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS,
                                                mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS );
@@ -480,42 +593,6 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( NetworkCredent
 
     return xNetworkStatus;
 }
-/*-----------------------------------------------------------*/
-
-static void prvCreateMQTTConnectionWithBroker( AzureIoTHubClient_t * pxAzureIotHubClient,
-                                               NetworkContext_t * pxNetworkContext )
-{
-    AzureIotHubClientError_t xResult;
-    TransportInterface_t xTransport;
-
-    /***
-     * For readability, error handling in this function is restricted to the use of
-     * asserts().
-     ***/
-
-    /* Fill in Transport Interface send and receive function pointers. */
-    xTransport.pNetworkContext = pxNetworkContext;
-    xTransport.send = TLS_FreeRTOS_send;
-    xTransport.recv = TLS_FreeRTOS_recv;
-
-    /* Initialize MQTT library. */
-    xResult = azure_iot_hub_client_init( pxAzureIotHubClient,
-                                         HOSTNAME, sizeof( HOSTNAME ) - 1,
-                                         DEVICE_ID, sizeof( DEVICE_ID ) - 1,
-                                         MODULE_ID, sizeof( MODULE_ID ) - 1,
-                                         ucSharedBuffer, sizeof( ucSharedBuffer ),
-                                         prvGetTimeMs,
-                                         &xTransport );
-    configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
-
-    xResult = azure_iot_hub_client_connect( pxAzureIotHubClient,
-                                            false, mqttexampleCONNACK_RECV_TIMEOUT_MS );
-    configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
-
-    /* Successfully established and MQTT connection with the broker. */
-    LogInfo( ( "An MQTT connection is established with %s.", HOSTNAME ) );
-}
-
 /*-----------------------------------------------------------*/
 
 static uint32_t prvGetTimeMs(void)

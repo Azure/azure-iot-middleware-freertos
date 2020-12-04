@@ -154,9 +154,9 @@ static uint32_t azure_iot_hub_client_device_twin_process( AzureIoTHubClientHandl
 }
 
 AzureIotHubClientError_t azure_iot_hub_client_init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                    const char * pHostname, uint32_t hostnameLength,
-                                                    const char * pDeviceId, uint32_t deviceIdLength,
-                                                    const char * pModuleId, uint32_t moduleIdLength,
+                                                    const uint8_t * pHostname, uint32_t hostnameLength,
+                                                    const uint8_t * pDeviceId, uint32_t deviceIdLength,
+                                                    const uint8_t * pModuleId, uint32_t moduleIdLength,
                                                     uint8_t * pBuffer, uint32_t bufferLength,
                                                     AzureIotGetCurrentTimeFunc_t getTimeFunction,
                                                     const TransportInterface_t * pTransportInterface )
@@ -169,10 +169,10 @@ AzureIotHubClientError_t azure_iot_hub_client_init( AzureIoTHubClientHandle_t xA
     memset( ( void * )xAzureIoTHubClientHandle, 0, sizeof(AzureIoTHubClient_t));
 
     /* Initialize Azure IoT Hub Client */
-    az_span hostname_span = az_span_create((uint8_t * )pHostname, hostnameLength);
-    az_span device_id_span = az_span_create((uint8_t * )pDeviceId, deviceIdLength);
+    az_span hostname_span = az_span_create(pHostname, hostnameLength);
+    az_span device_id_span = az_span_create(pDeviceId, deviceIdLength);
     options = az_iot_hub_client_options_default();
-    options.module_id = az_span_create((uint8_t * )pModuleId, moduleIdLength);
+    options.module_id = az_span_create(pModuleId, moduleIdLength);
 
     if ( az_result_failed( az_iot_hub_client_init( &xAzureIoTHubClientHandle->iot_hub_client_core,
                                                    hostname_span, device_id_span, &options ) ) )
