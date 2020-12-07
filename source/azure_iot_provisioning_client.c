@@ -23,6 +23,16 @@
 static char mqtt_user_name[128];
 static char provisioning_topic[128];
 
+/**
+ * 
+ * State transitions :
+ *          CONNECT -> { SUBSCRIBE | COMPLETE } -> { SUBSCRIBING | COMPLETE } -> { REQUEST | COMPLETE } ->
+ *          REQUESTING -> { RESPONSE | COMPLETE } -> { WAITING | COMPLETE } -> { REQUEST | COMPLETE }
+ * 
+ * Note : At COMPLETE state we should check the status of lastOperation to see if WorkFlow(WF)
+ *        finshed without error.
+ * 
+ **/
 static void azure_iot_provisioning_client_update_state( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle, uint32_t action_result)
 {
     uint32_t state = xAzureIoTProvisioningClientHandle->workflowState;
@@ -96,11 +106,17 @@ static void azure_iot_provisioning_client_update_state( AzureIoTProvisioningClie
         default :
         {
             printf("Unknown state: %u", state);
+            configASSERT(false);
         }
         break;
     }
 }
 
+/**
+ * 
+ * Implementation of connect action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT
+ *
+ * */
 static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTConnectInfo_t xConnectInfo;
@@ -108,12 +124,13 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
     MQTTStatus_t xResult;
     bool xSessionPresent;
 
+    if ( xAzureIoTProvisioningClientHandle->workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT )
+    {
+        return;
+    }
+
     ( void ) memset( ( void * ) &xConnectInfo, 0x00, sizeof( xConnectInfo ) );
 
-    /* Start with a clean session i.e. direct the MQTT broker to discard any
-     * previous session data. Also, establishing a connection with clean session
-     * will ensure that the broker does not store any data when this client
-     * gets disconnected. */
     xConnectInfo.cleanSession = true;
 
     size_t mqtt_user_name_length;
@@ -124,9 +141,6 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
     }
     else
     {
-        /* The client identifier is used to uniquely identify this MQTT client to
-         * the MQTT broker. In a production device the identifier can be something
-         * unique, such as a device serial number. */
         xConnectInfo.pClientIdentifier = xAzureIoTProvisioningClientHandle->pRegistrationId;
         xConnectInfo.clientIdentifierLength = ( uint16_t ) xAzureIoTProvisioningClientHandle->registrationIdLength;
         xConnectInfo.pUserName = mqtt_user_name;
@@ -135,8 +149,6 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
         xConnectInfo.passwordLength = 0;
         xConnectInfo.keepAliveSeconds = azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS;
 
-        /* Send MQTT CONNECT packet to broker. LWT is not used in this demo, so it
-         * is passed as NULL. */
         if ( ( xResult = MQTT_Connect( &(xAzureIoTProvisioningClientHandle->xMQTTContext),
                                        &xConnectInfo,
                                        NULL,
@@ -160,6 +172,11 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
     azure_iot_provisioning_client_update_state(xAzureIoTProvisioningClientHandle, ret);
 }
 
+/**
+ * 
+ * Implementation of subscribe action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE
+ *
+ * */
 static void azure_iot_provisioning_client_subscribe( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTSubscribeInfo_t mqttSubscription;
@@ -193,6 +210,11 @@ static void azure_iot_provisioning_client_subscribe( AzureIoTProvisioningClientH
     }
 }
 
+/**
+ * 
+ * Implementation of request action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST
+ *
+ * */
 static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTStatus_t xResult;
@@ -231,11 +253,8 @@ static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHan
         xMQTTPublishInfo.topicNameLength = ( uint16_t ) mqtt_topic_length;
         xMQTTPublishInfo.pPayload = NULL;
         xMQTTPublishInfo.payloadLength = 0;
-
-        /* Get a unique packet id. */
         usPublishPacketIdentifier = MQTT_GetPacketId( &(xAzureIoTProvisioningClientHandle->xMQTTContext) );
 
-        /* Send PUBLISH packet. Packet ID is not used for a QoS1 publish. */
         if ( ( xResult = MQTT_Publish( &(xAzureIoTProvisioningClientHandle->xMQTTContext),
                                        &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != MQTTSuccess )
         {
@@ -250,6 +269,11 @@ static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHan
     }
 }
 
+/**
+ * 
+ * Implementation of parsing response action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE
+ *
+ * */
 static void azure_iot_provisioning_client_parse_response( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     az_result core_result;
@@ -290,6 +314,11 @@ static void azure_iot_provisioning_client_parse_response( AzureIoTProvisioningCl
     }
 }
 
+/**
+ * 
+ * Implementation of wait check action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING
+ *
+ * */
 static void azure_iot_provisioning_client_check_timeout( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     if (xAzureIoTProvisioningClientHandle->workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING)
@@ -303,6 +332,10 @@ static void azure_iot_provisioning_client_check_timeout( AzureIoTProvisioningCli
     }
 }
 
+/**
+ * Trigger state machine action base on the state.
+ *  
+ **/
 static void triggerAction( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
 
@@ -336,7 +369,7 @@ static void triggerAction( AzureIoTProvisioningClientHandle_t xAzureIoTProvision
         case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING :
         case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE :
         {
-
+            /* None action taken here, as these states are waiting for receive path. */
         }
         break;
 
@@ -353,7 +386,11 @@ static void triggerAction( AzureIoTProvisioningClientHandle_t xAzureIoTProvision
     }
 }
 
-static AzureIotProvisioningClientError_t azure_iot_provisioning_client_run_state_machine( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
+/**
+ *  Run the workflow : trigger action on state and process receive path in MQTT loop
+ * 
+ */
+static AzureIotProvisioningClientError_t azure_iot_provisioning_client_run_workflow( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTStatus_t xResult;
     xAzureIoTProvisioningClientHandle->workflowState = AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT;
@@ -382,6 +419,10 @@ static void prvMQTTProcessSubAck( AzureIoTProvisioningClientHandle_t xAzureIoTPr
     azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 }
 
+/**
+ * Process MQTT Response from Provisioning Service
+ * 
+ */
 static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                     MQTTPublishInfo_t * pPublishInfo )
 {
@@ -473,36 +514,48 @@ void azure_iot_provisioning_deinit( AzureIoTProvisioningClientHandle_t xAzureIoT
 
 AzureIotProvisioningClientError_t azure_iot_provisioning_client_register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
-    return azure_iot_provisioning_client_run_state_machine( xAzureIoTProvisioningClientHandle );
+    if ( xAzureIoTProvisioningClientHandle == NULL ||
+         xAzureIoTProvisioningClientHandle->workflowState != 0 )
+    {
+        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+    }
+
+    return azure_iot_provisioning_client_run_workflow( xAzureIoTProvisioningClientHandle );
 }
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_hub_get( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
+AzureIotProvisioningClientError_t azure_iot_provisioning_client_hub_get( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                                                          uint8_t * pHubHostname, uint32_t * pHostnameLength,
                                                                          uint8_t * pDeviceId, uint32_t * pDeviceIdLength )
 {
     uint32_t hostnameLength;
     uint32_t deviceIdLength;
 
-    if ( xAzureIoTDPSClientHandle->workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
+    if ( xAzureIoTProvisioningClientHandle == NULL || pHubHostname == NULL ||
+         pHostnameLength == NULL || pDeviceId == NULL || pDeviceIdLength == NULL )
+    {
+        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+    }
+
+    if ( xAzureIoTProvisioningClientHandle->workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
     {
         return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
     }
 
-    if ( xAzureIoTDPSClientHandle->lastOperationResult )
+    if ( xAzureIoTProvisioningClientHandle->lastOperationResult )
     {
-        return xAzureIoTDPSClientHandle->lastOperationResult;
+        return xAzureIoTProvisioningClientHandle->lastOperationResult;
     }
 
-    hostnameLength = az_span_size(xAzureIoTDPSClientHandle->register_response.registration_state.assigned_hub_hostname);
-    deviceIdLength = az_span_size(xAzureIoTDPSClientHandle->register_response.registration_state.device_id);
+    hostnameLength = az_span_size(xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname);
+    deviceIdLength = az_span_size(xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id);
 
     if ( *pHostnameLength < hostnameLength || *pDeviceIdLength < deviceIdLength )
     {
         return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
     }
 
-    memcpy(pHubHostname, az_span_ptr(xAzureIoTDPSClientHandle->register_response.registration_state.assigned_hub_hostname), hostnameLength);
-    memcpy(pDeviceId, az_span_ptr(xAzureIoTDPSClientHandle->register_response.registration_state.device_id), deviceIdLength);
+    memcpy(pHubHostname, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname), hostnameLength);
+    memcpy(pDeviceId, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id), deviceIdLength);
     *pHostnameLength = hostnameLength;
     *pDeviceIdLength = deviceIdLength;
 
