@@ -462,6 +462,9 @@
     <ClCompile Include="..\..\libraries\azure-sdk-for-c\sdk\src\azure\core\az_span.c">
       <Filter>FreeRTOS+\FreeRTOS IoT Libraries\Azure\src\core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\source\azure_iot_provisioning_client.c">
+      <Filter>FreeRTOS+\FreeRTOS IoT Libraries\Azure\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\include\NetworkInterface.h">
@@ -819,6 +822,9 @@
     </ClInclude>
     <ClInclude Include="..\..\libraries\azure-sdk-for-c\sdk\src\azure\core\az_span_private.h">
       <Filter>FreeRTOS+\FreeRTOS IoT Libraries\Azure\src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\source\include\azure_iot_provisioning_client.h">
+      <Filter>FreeRTOS+\FreeRTOS IoT Libraries\Azure\include</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
