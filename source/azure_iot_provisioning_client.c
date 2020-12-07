@@ -227,7 +227,7 @@ static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHan
     /* Check the state.  */
     if ( xAzureIoTProvisioningClientHandle->workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST )
     {
-        if ( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_length == 0 )
+        if ( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload_length == 0 )
         {
             core_result = az_iot_provisioning_client_register_get_publish_topic( &xAzureIoTProvisioningClientHandle->iot_dps_client_core,
                                                                                  provisioning_topic, sizeof( provisioning_topic ), &mqtt_topic_length );
@@ -277,8 +277,8 @@ static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHan
 static void azure_iot_provisioning_client_parse_response( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     az_result core_result;
-    az_span payload = az_span_create( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response,
-                                      xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_length );
+    az_span payload = az_span_create( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload,
+                                      xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload_length );
     az_span topic = az_span_create( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic,
                                     xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic_length );
 
@@ -428,12 +428,20 @@ static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoT
 {
     if ( xAzureIoTProvisioningClientHandle->workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING)
     {
-        if ( pPublishInfo->payloadLength < sizeof(xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response) &&
-             pPublishInfo->topicNameLength < sizeof(xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic))
+        vPortFree( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload);
+        vPortFree( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic );
+
+        xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload =
+            ( uint8_t * ) pvPortMalloc( pPublishInfo->payloadLength );
+        xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic = 
+            ( uint8_t * ) pvPortMalloc( pPublishInfo->topicNameLength );
+
+        if ( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload &&
+             xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic )
         {
-            memcpy( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response,
+            memcpy( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload,
                     pPublishInfo->pPayload, pPublishInfo->payloadLength );
-            xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_length = pPublishInfo->payloadLength;
+            xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload_length = pPublishInfo->payloadLength;
             memcpy( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic,
                     pPublishInfo->pTopicName, pPublishInfo->topicNameLength );
             xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic_length = pPublishInfo->topicNameLength;
@@ -509,7 +517,10 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
 
 void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
-    (void)xAzureIoTProvisioningClientHandle;
+    vPortFree( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload );
+    vPortFree( xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic );
+    xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_payload = NULL;
+    xAzureIoTProvisioningClientHandle->azure_iot_provisioning_client_last_response_topic = NULL;
 }
 
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
