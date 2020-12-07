@@ -30,21 +30,21 @@
 
 typedef struct AzureIoTHubClient* AzureIoTHubClientHandle_t;
 
-typedef enum AzureIotHubClientError
+typedef enum AzureIoTHubClientError
 {
     AZURE_IOT_HUB_CLIENT_SUCCESS = 0,
     AZURE_IOT_HUB_CLIENT_STATUS_PENDING,
     AZURE_IOT_HUB_CLIENT_INIT_FAILED,
     AZURE_IOT_HUB_CLIENT_FAILED,
-} AzureIotHubClientError_t;
+} AzureIoTHubClientError_t;
 
-typedef uint32_t(*AzureIotGetCurrentTimeFunc_t)(void);
+typedef uint32_t(*AzureIoTGetCurrentTimeFunc_t)(void);
 
 /*
  *  This holds the message type (IE telemetry, methods, etc) and
  *  the publish info which holds payload/length, the topic/length, QOS, dup, etc.
 */
-typedef struct AzureIotHubClientMessage
+typedef struct AzureIoTHubClientMessage
 {
     uint8_t message_type;
     MQTTPublishInfo_t * pxPublishInfo;
@@ -54,21 +54,21 @@ typedef struct AzureIotHubClientMessage
         az_iot_hub_client_method_request method_request;
         az_iot_hub_client_twin_response twin_response;
     } parsed_message;
-} AzureIotHubClientMessage_t;
+} AzureIoTHubClientMessage_t;
 
 /*
  *  The subscription has the details of the topic filter, length, and QOS.
  *  The process function is the function to call for a specific topic.
 */
-typedef struct AzureIotHubClientReceiveContext
+typedef struct AzureIoTHubClientReceiveContext
 {
     MQTTSubscribeInfo_t xMQTTSubscription;
     uint32_t ( * process_function )( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                      MQTTPublishInfo_t * pxPublishInfo );
 
     void * callback_context;
-    void ( * callback ) ( AzureIotHubClientMessage_t * message, void * context );
-} AzureIotHubClientReceiveContext_t;
+    void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context );
+} AzureIoTHubClientReceiveContext_t;
 
 typedef struct AzureIoTHubClient
 {
@@ -81,46 +81,46 @@ typedef struct AzureIoTHubClient
     const uint8_t *deviceId;
     uint32_t deviceIdLength;
 
-    AzureIotHubClientReceiveContext_t xReceiveContext[3];
+    AzureIoTHubClientReceiveContext_t xReceiveContext[3];
 } AzureIoTHubClient_t;
 
-AzureIotHubClientError_t azure_iot_hub_client_init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                    const uint8_t * pHostname, uint32_t hostnameLength,
-                                                    const uint8_t * pDeviceId, uint32_t deviceIdLength,
-                                                    const uint8_t * pModuleId, uint32_t moduleIdLength,
-                                                    uint8_t * pBuffer, uint32_t bufferLength,
-                                                    AzureIotGetCurrentTimeFunc_t getTimeFunction,
-                                                    const TransportInterface_t * pTransportInterface );
+AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                 const uint8_t * pHostname, uint32_t hostnameLength,
+                                                 const uint8_t * pDeviceId, uint32_t deviceIdLength,
+                                                 const uint8_t * pModuleId, uint32_t moduleIdLength,
+                                                 uint8_t * pBuffer, uint32_t bufferLength,
+                                                 AzureIoTGetCurrentTimeFunc_t getTimeFunction,
+                                                 const TransportInterface_t * pTransportInterface );
 
 
-void azure_iot_hub_deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
+void AzureIoTHubClient_Deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
 
 
-AzureIotHubClientError_t azure_iot_hub_client_connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                       bool cleanSession, TickType_t xTimeoutTicks );
+AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                    bool cleanSession, TickType_t xTimeoutTicks );
 
-AzureIotHubClientError_t azure_iot_hub_client_disconnect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
+AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
 
-AzureIotHubClientError_t azure_iot_hub_client_telemetry_send( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                              const char * pTelemetryData, uint32_t telemetryDataLength );
+AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                          const char * pTelemetryData, uint32_t telemetryDataLength );
 
-AzureIotHubClientError_t azure_iot_hub_client_do_work( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                       uint32_t timeoutMs );
+AzureIoTHubClientError_t AzureIoTHubClient_DoWork( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                   uint32_t timeoutMs );
 
-AzureIotHubClientError_t azure_iot_hub_client_cloud_message_enable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                    void ( * callback) (AzureIotHubClientMessage_t* message, void* context),
-                                                                    void * callback_context );
+AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                               void ( * callback) (AzureIoTHubClientMessage_t* message, void* context),
+                                                               void * callback_context );
 
-AzureIotHubClientError_t azure_iot_hub_client_direct_method_enable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                    void ( * callback) (AzureIotHubClientMessage_t* message, void* context),
-                                                                    void * callback_context );
+AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                               void ( * callback) (AzureIoTHubClientMessage_t* message, void* context),
+                                                               void * callback_context );
 
-AzureIotHubClientError_t azure_iot_hub_client_device_twin_enable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                  void ( * callback) (AzureIotHubClientMessage_t* message, void* context),
-                                                                  void * callback_context );
+AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                             void ( * callback) (AzureIoTHubClientMessage_t* message, void* context),
+                                                             void * callback_context );
 
-AzureIotHubClientError_t azure_iot_hub_client_send_method_response( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                  AzureIotHubClientMessage_t* message, uint32_t status,
-                                                                  const char * payload, uint32_t payloadLength);
+AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                               AzureIoTHubClientMessage_t* message, uint32_t status,
+                                                               const char * payload, uint32_t payloadLength);
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */

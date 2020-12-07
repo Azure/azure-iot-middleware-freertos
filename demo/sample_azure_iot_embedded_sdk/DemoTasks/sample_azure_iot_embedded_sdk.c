@@ -266,7 +266,7 @@ static MQTTFixedBuffer_t xBuffer =
 
 /*-----------------------------------------------------------*/
 
-static void handle_c2d_message(AzureIotHubClientMessage_t * message, void * context )
+static void handle_c2d_message(AzureIoTHubClientMessage_t * message, void * context )
 {
     (void)context;
 
@@ -275,21 +275,21 @@ static void handle_c2d_message(AzureIotHubClientMessage_t * message, void * cont
              message->pxPublishInfo->pPayload));
 }
 
-static void handle_direct_method(AzureIotHubClientMessage_t * message, void * context )
+static void handle_direct_method(AzureIoTHubClientMessage_t * message, void * context )
 {
     LogInfo(("Method payload : %.*s \r\n",
              message->pxPublishInfo->payloadLength,
              message->pxPublishInfo->pPayload));
 
-    AzureIoTHubClient_t* xAzureIotHubClient = (AzureIoTHubClient_t*)context;
-    if( azure_iot_hub_client_send_method_response( xAzureIotHubClient, message, 200,
+    AzureIoTHubClient_t* xAzureIoTHubClient = (AzureIoTHubClient_t*)context;
+    if( AzureIoTHubClient_SendMethodResponse( xAzureIoTHubClient, message, 200,
                        NULL, 0) != AZURE_IOT_HUB_CLIENT_SUCCESS )
     {
         LogInfo( ("Error sending method response\r\n") );
     }
 }
 
-static void handle_device_twin_message( AzureIotHubClientMessage_t * message, void * context )
+static void handle_device_twin_message( AzureIoTHubClientMessage_t * message, void * context )
 {
     (void)context;
 
@@ -339,9 +339,9 @@ static void prvAzureDemoTask( void * pvParameters )
     TransportInterface_t xTransport;
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportStatus_t xNetworkStatus;
-    AzureIoTHubClient_t xAzureIotHubClient = { 0 };
+    AzureIoTHubClient_t xAzureIoTHubClient = { 0 };
     TlsTransportParams_t xTlsTransportParams = { 0 };
-    AzureIotHubClientError_t xResult;
+    AzureIoTHubClientError_t xResult;
     uint32_t status;
     #ifdef ENABLE_DPS_SAMPLE
     uint8_t * iotHubHostname = NULL;
@@ -400,7 +400,7 @@ static void prvAzureDemoTask( void * pvParameters )
         xTransport.recv = TLS_FreeRTOS_recv;
 
         /* Initialize MQTT library. */
-        xResult = azure_iot_hub_client_init( &xAzureIotHubClient,
+        xResult = AzureIoTHubClient_Init( &xAzureIoTHubClient,
                                              iotHubHostname, iotHubHostnameLength,
                                              iotHubDeviceId, iotHubDeviceIdLength,
                                              (const uint8_t * )MODULE_ID, sizeof( MODULE_ID ) - 1,
@@ -409,32 +409,32 @@ static void prvAzureDemoTask( void * pvParameters )
                                              &xTransport );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = azure_iot_hub_client_connect( &xAzureIotHubClient,
+        xResult = AzureIoTHubClient_Connect( &xAzureIoTHubClient,
                                                 false, mqttexampleCONNACK_RECV_TIMEOUT_MS );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /**************************** Enable features. ******************************/
 
-        xResult = azure_iot_hub_client_cloud_message_enable( &xAzureIotHubClient, handle_c2d_message, &xAzureIotHubClient );
+        xResult = AzureIoTHubClient_CloudMessageEnable( &xAzureIoTHubClient, handle_c2d_message, &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = azure_iot_hub_client_direct_method_enable( &xAzureIotHubClient, handle_direct_method, &xAzureIotHubClient );
+        xResult = azure_iot_hub_client_direct_method_enable( &xAzureIoTHubClient, handle_direct_method, &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = azure_iot_hub_client_device_twin_enable( &xAzureIotHubClient, handle_device_twin_message, &xAzureIotHubClient );
+        xResult = AzureIoTHubClient_DeviceTwinEnable( &xAzureIoTHubClient, handle_device_twin_message, &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /****************** Publish and Keep Alive Loop. **********************/
         /* Publish messages with QoS1, send and process Keep alive messages. */
         for( ulPublishCount = 0; ulPublishCount < ulMaxPublishCount; ulPublishCount++ )
         {
-            xResult = azure_iot_hub_client_telemetry_send( &xAzureIotHubClient,
+            xResult = AzureIoTHubClient_TelemetrySend( &xAzureIoTHubClient,
                                                            mqttexampleMESSAGE,
                                                            sizeof( mqttexampleMESSAGE ) - 1 );
             configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
             LogInfo( ( "Attempt to receive publish message from IoTHub.\r\n" ) );
-            xResult = azure_iot_hub_client_do_work( &xAzureIotHubClient,
+            xResult = AzureIoTHubClient_DoWork( &xAzureIoTHubClient,
                                                     mqttexamplePROCESS_LOOP_TIMEOUT_MS );
             configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
@@ -451,7 +451,7 @@ static void prvAzureDemoTask( void * pvParameters )
          * connection. */
         LogInfo( ( "Disconnecting the MQTT connection with %s.\r\n",
                    HOSTNAME ) );
-        xResult = azure_iot_hub_client_disconnect( &xAzureIotHubClient );
+        xResult = AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /* Close the network connection.  */
@@ -476,9 +476,9 @@ static uint32_t prvDPSDemo( NetworkCredentials_t * pXNetworkCredentials,
 {
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportParams_t xTlsTransportParams = { 0 };
-    AzureIoTProvisioningClient_t xAzureIotProvisioningClient = { 0 };
+    AzureIoTProvisioningClient_t xAzureIoTProvisioningClient = { 0 };
     TlsTransportStatus_t xNetworkStatus;
-    AzureIotProvisioningClientError_t xResult;
+    AzureIoTProvisioningClientError_t xResult;
     TransportInterface_t xTransport;
     uint32_t sampleIotHubHostnameLength = sizeof(sampleIotHubHostname);
     uint32_t sampleIotHubDeviceIdLength = sizeof(sampleIotHubDeviceId);
@@ -502,7 +502,7 @@ static uint32_t prvDPSDemo( NetworkCredentials_t * pXNetworkCredentials,
     LogInfo(("Creating an MQTT connection to %s.\r\n", ENDPOINT));
 
     /* Initialize MQTT library. */
-    xResult = azure_iot_provisioning_client_init( &xAzureIotProvisioningClient,
+    xResult = azure_iot_provisioning_client_init( &xAzureIoTProvisioningClient,
                                                   ENDPOINT, sizeof(ENDPOINT) - 1,
                                                   ID_SCOPE, sizeof(ID_SCOPE) - 1,
                                                   REGISTRATION_ID, sizeof(REGISTRATION_ID) - 1,
@@ -512,15 +512,15 @@ static uint32_t prvDPSDemo( NetworkCredentials_t * pXNetworkCredentials,
     configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
 
     /****************** Publish and Keep Alive Loop. **********************/
-    xResult = azure_iot_provisioning_client_register(&xAzureIotProvisioningClient);
+    xResult = AzureIoTProvisioningClient_Register(&xAzureIoTProvisioningClient);
     configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
     
-    xResult = azure_iot_provisioning_client_hub_get( &xAzureIotProvisioningClient,   
+    xResult = AzureIoTProvisioningClient_HubGet( &xAzureIoTProvisioningClient,   
                                                      sampleIotHubHostname, &sampleIotHubHostnameLength,
                                                      sampleIotHubDeviceId, &sampleIotHubDeviceIdLength );
     configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
 
-    azure_iot_provisioning_deinit(&xAzureIotProvisioningClient);
+    azure_iot_provisioning_deinit(&xAzureIoTProvisioningClient);
     
     /* Close the network connection.  */
     TLS_FreeRTOS_Disconnect(&xNetworkContext);
