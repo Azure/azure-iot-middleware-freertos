@@ -30,7 +30,7 @@
 
 typedef struct AzureIoTProvisioningClient * AzureIoTProvisioningClientHandle_t;
 
-typedef enum AzureIotProvisioningClientError
+typedef enum AzureIoTProvisioningClientError
 {
     AZURE_IOT_PROVISIONING_CLIENT_SUCCESS = 0,
     AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT,
@@ -38,9 +38,9 @@ typedef enum AzureIotProvisioningClientError
     AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED,
     AZURE_IOT_PROVISIONING_CLIENT_SERVER_ERROR,
     AZURE_IOT_PROVISIONING_CLIENT_FAILED,
-} AzureIotProvisioningClientError_t;
+} AzureIoTProvisioningClientError_t;
 
-typedef uint32_t( * AzureIotGetCurrentTimeFunc_t)(void);
+typedef uint32_t( * AzureIoTGetCurrentTimeFunc_t)(void);
 
 typedef struct AzureIoTProvisioningClient
 {
@@ -66,24 +66,24 @@ typedef struct AzureIoTProvisioningClient
     uint32_t workflowState;
     uint32_t lastOperationResult;
     uint32_t azure_iot_provisioning_client_req_timeout;
-    AzureIotGetCurrentTimeFunc_t getTimeFunction;
+    AzureIoTGetCurrentTimeFunc_t getTimeFunction;
 } AzureIoTProvisioningClient_t;
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_init( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
-                                                                      const char * pEndpoint, uint32_t endpointLength,
-                                                                      const char * pIdScope, uint32_t idScopeLength,
-                                                                      const char * pRegistrationId, uint32_t registrationIdLength,
-                                                                      uint8_t * pBuffer, uint32_t bufferLength,
-                                                                      AzureIotGetCurrentTimeFunc_t getTimeFunction,
-                                                                      const TransportInterface_t * pTransportInterface );
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
+                                                                   const char * pEndpoint, uint32_t endpointLength,
+                                                                   const char * pIdScope, uint32_t idScopeLength,
+                                                                   const char * pRegistrationId, uint32_t registrationIdLength,
+                                                                   uint8_t * pBuffer, uint32_t bufferLength,
+                                                                   AzureIoTGetCurrentTimeFunc_t getTimeFunction,
+                                                                   const TransportInterface_t * pTransportInterface );
 
 
 void azure_iot_provisioning_deinit( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle );
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_register( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle );
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle );
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_hub_get( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
-                                                                         uint8_t * pHubHostname, uint32_t * pHostnameLength,
-                                                                         uint8_t * pDeviceId, uint32_t* pDeviceIdLength);
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
+                                                                     uint8_t * pHubHostname, uint32_t * pHostnameLength,
+                                                                     uint8_t * pDeviceId, uint32_t* pDeviceIdLength);
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */

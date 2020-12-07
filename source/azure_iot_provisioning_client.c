@@ -120,7 +120,7 @@ static void azure_iot_provisioning_client_update_state( AzureIoTProvisioningClie
 static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTConnectInfo_t xConnectInfo;
-    AzureIotProvisioningClientError_t ret;
+    AzureIoTProvisioningClientError_t ret;
     MQTTStatus_t xResult;
     bool xSessionPresent;
 
@@ -181,7 +181,7 @@ static void azure_iot_provisioning_client_subscribe( AzureIoTProvisioningClientH
 {
     MQTTSubscribeInfo_t mqttSubscription;
     MQTTStatus_t xResult;
-    AzureIotProvisioningClientError_t ret;
+    AzureIoTProvisioningClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
 
     if ( xAzureIoTProvisioningClientHandle->workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE )
@@ -218,7 +218,7 @@ static void azure_iot_provisioning_client_subscribe( AzureIoTProvisioningClientH
 static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTStatus_t xResult;
-    AzureIotProvisioningClientError_t ret;
+    AzureIoTProvisioningClientError_t ret;
     MQTTPublishInfo_t xMQTTPublishInfo;
     uint32_t mqtt_topic_length;
     uint16_t usPublishPacketIdentifier;
@@ -390,7 +390,7 @@ static void triggerAction( AzureIoTProvisioningClientHandle_t xAzureIoTProvision
  *  Run the workflow : trigger action on state and process receive path in MQTT loop
  * 
  */
-static AzureIotProvisioningClientError_t azure_iot_provisioning_client_run_workflow( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
+static AzureIoTProvisioningClientError_t azure_iot_provisioning_client_run_workflow( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     MQTTStatus_t xResult;
     xAzureIoTProvisioningClientHandle->workflowState = AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT;
@@ -463,15 +463,15 @@ static void prvEventCallback( MQTTContext_t * pxMQTTContext,
     }
 }
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_init( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                      const char * pEndpoint, uint32_t endpointLength,
-                                                                      const char * pIdScope, uint32_t idScopeLength,
-                                                                      const char * pRegistrationId, uint32_t registrationIdLength,
-                                                                      uint8_t * pBuffer, uint32_t bufferLength,
-                                                                      AzureIotGetCurrentTimeFunc_t getTimeFunction,
-                                                                      const TransportInterface_t * pTransportInterface )
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+                                                                   const char * pEndpoint, uint32_t endpointLength,
+                                                                   const char * pIdScope, uint32_t idScopeLength,
+                                                                   const char * pRegistrationId, uint32_t registrationIdLength,
+                                                                   uint8_t * pBuffer, uint32_t bufferLength,
+                                                                   AzureIoTGetCurrentTimeFunc_t getTimeFunction,
+                                                                   const TransportInterface_t * pTransportInterface )
 {
-    AzureIotProvisioningClientError_t ret;
+    AzureIoTProvisioningClientError_t ret;
     MQTTFixedBuffer_t xBuffer = { pBuffer, bufferLength };
     az_span endpoint_span = az_span_create( ( uint8_t * )pEndpoint, endpointLength);
     az_span id_scope_span = az_span_create( ( uint8_t * )pIdScope, idScopeLength);
@@ -512,7 +512,7 @@ void azure_iot_provisioning_deinit( AzureIoTProvisioningClientHandle_t xAzureIoT
     (void)xAzureIoTProvisioningClientHandle;
 }
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     if ( xAzureIoTProvisioningClientHandle == NULL ||
          xAzureIoTProvisioningClientHandle->workflowState != 0 )
@@ -523,9 +523,9 @@ AzureIotProvisioningClientError_t azure_iot_provisioning_client_register( AzureI
     return azure_iot_provisioning_client_run_workflow( xAzureIoTProvisioningClientHandle );
 }
 
-AzureIotProvisioningClientError_t azure_iot_provisioning_client_hub_get( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                         uint8_t * pHubHostname, uint32_t * pHostnameLength,
-                                                                         uint8_t * pDeviceId, uint32_t * pDeviceIdLength )
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+                                                                     uint8_t * pHubHostname, uint32_t * pHostnameLength,
+                                                                     uint8_t * pDeviceId, uint32_t * pDeviceIdLength )
 {
     uint32_t hostnameLength;
     uint32_t deviceIdLength;
