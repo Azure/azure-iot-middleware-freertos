@@ -27,17 +27,12 @@
 #include "transport_interface.h"
 
 #ifndef azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS
-#define azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS             ( 4*60U )
+#define azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS                ( 4*60U )
 #endif
 
 #ifndef azureIoTPROVISIONINGClientCONNACK_RECV_TIMEOUT_MS
-#define azureIoTPROVISIONINGClientCONNACK_RECV_TIMEOUT_MS               ( 1000U )
+#define azureIoTPROVISIONINGClientCONNACK_RECV_TIMEOUT_MS                   ( 1000U )
 #endif
-
-#define AZURE_IOT_PROVISIONING_C2D_MESSAGE                               (0x1)
-#define AZURE_IOT_PROVISIONING_DIRECT_METHOD_MESSAGE                     (0x2)
-#define AZURE_IOT_PROVISIONING_DEVICE_TWIN_MESSAGE                       (0x3)
-#define AZURE_IOT_PROVISIONING_DESIRED_PROPERTY_MESSAGE                  (0x4)
 
 typedef struct AzureIoTProvisioningClient * AzureIoTProvisioningClientHandle_t;
 
@@ -94,6 +89,6 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTP
 
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
                                                                      uint8_t * pHubHostname, uint32_t * pHostnameLength,
-                                                                     uint8_t * pDeviceId, uint32_t* pDeviceIdLength);
+                                                                     uint8_t * pDeviceId, uint32_t* pDeviceIdLength );
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */

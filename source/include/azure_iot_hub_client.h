@@ -31,13 +31,13 @@
 #endif
 
 #ifndef azureIoTHubClientCONNACK_RECV_TIMEOUT_MS
-#define azureIoTHubClientCONNACK_RECV_TIMEOUT_MS               ( 1000U )
+#define azureIoTHubClientCONNACK_RECV_TIMEOUT_MS                ( 1000U )
 #endif
 
-#define AZURE_IOT_HUB_C2D_MESSAGE                               (0x1)
-#define AZURE_IOT_HUB_DIRECT_METHOD_MESSAGE                     (0x2)
-#define AZURE_IOT_HUB_DEVICE_TWIN_MESSAGE                       (0x3)
-#define AZURE_IOT_HUB_DESIRED_PROPERTY_MESSAGE                  (0x4)
+#define AZURE_IOT_HUB_C2D_MESSAGE                               ( 0x1 )
+#define AZURE_IOT_HUB_DIRECT_METHOD_MESSAGE                     ( 0x2 )
+#define AZURE_IOT_HUB_DEVICE_TWIN_MESSAGE                       ( 0x3 )
+#define AZURE_IOT_HUB_DESIRED_PROPERTY_MESSAGE                  ( 0x4 )
 
 typedef struct AzureIoTHubClient* AzureIoTHubClientHandle_t;
 
@@ -49,7 +49,7 @@ typedef enum AzureIoTHubClientError
     AZURE_IOT_HUB_CLIENT_FAILED,
 } AzureIoTHubClientError_t;
 
-typedef uint32_t(*AzureIoTGetCurrentTimeFunc_t)(void);
+typedef uint32_t( * AzureIoTGetCurrentTimeFunc_t )( void );
 
 /*
  *  This holds the message type (IE telemetry, methods, etc) and
@@ -132,6 +132,6 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
 
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                                AzureIoTHubClientMessage_t* message, uint32_t status,
-                                                               const char * payload, uint32_t payloadLength);
+                                                               const char * payload, uint32_t payloadLength );
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */
