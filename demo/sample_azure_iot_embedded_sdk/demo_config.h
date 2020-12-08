@@ -1,28 +1,13 @@
-/*
- * FreeRTOS Kernel V10.3.0
- * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * http://www.FreeRTOS.org
- * http://aws.amazon.com/freertos
- *
- */
+/**************************************************************************/
+/*                                                                        */
+/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
+/*                                                                        */
+/*       This software is licensed under the Microsoft Software License   */
+/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
+/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
+/*       and in the root directory of this software.                      */
+/*                                                                        */
+/**************************************************************************/
 
 #ifndef DEMO_CONFIG_H
 #define DEMO_CONFIG_H
@@ -83,36 +68,6 @@ extern void vLoggingPrintf( const char * pcFormatString,
 #define MODULE_ID               ""
 #define HOSTNAME                "kartos.azure-devices.net"
 
-/**
- * @brief The port to use for the demo.
- *
- * In general, port 8883 is for secured MQTT connections.
- *
- * @note Port 443 requires use of the ALPN TLS extension with the ALPN protocol
- * name. Using ALPN with this demo would require additional changes, including
- * setting the `pAlpnProtos` member of the `NetworkCredentials_t` struct before
- * forming the TLS connection. When using port 8883, ALPN is not required.
- *
- * #define democonfigMQTT_BROKER_PORT    ( insert here. )
- */
-
-/**
- * @brief Server's root CA certificate.
- *
- * For AWS IoT MQTT broker, this certificate is used to identify the AWS IoT
- * server and is publicly available. Refer to the AWS documentation available
- * in the link below.
- * https://docs.aws.amazon.com/iot/latest/developerguide/server-authentication.html#server-authentication-certs
- *
- * @note This certificate should be PEM-encoded.
- *
- * Must include the PEM header and footer:
- * "-----BEGIN CERTIFICATE-----\n"\
- * "...base64 data...\n"\
- * "-----END CERTIFICATE-----\n"
- *
- * #define democonfigROOT_CA_PEM    "...insert here..."
- */
 #define democonfigROOT_CA_PEM "-----BEGIN CERTIFICATE-----\r\n" \
 "MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ\r\n" \
 "RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD\r\n" \
@@ -180,43 +135,6 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * SNI should be enabled whenever possible.
  */
 #define democonfigDISABLE_SNI    ( pdFALSE )
-
-/**
- * @brief Configuration that indicates if the demo connection is made to the AWS IoT Core MQTT broker.
- *
- * If username/password based authentication is used, the demo will use appropriate TLS ALPN and
- * SNI configurations as required for the Custom Authentication feature of AWS IoT.
- * For more information, refer to the following documentation:
- * https://docs.aws.amazon.com/iot/latest/developerguide/custom-auth.html#custom-auth-mqtt
- *
- * #define democonfigUSE_AWS_IOT_CORE_BROKER    ( 1 )
- */
-
-/**
- * @brief The username value for authenticating client to the MQTT broker when
- * username/password based client authentication is used.
- *
- * For AWS IoT MQTT broker, refer to the AWS IoT documentation below for
- * details regarding client authentication with a username and password.
- * https://docs.aws.amazon.com/iot/latest/developerguide/custom-authentication.html
- * An authorizer setup needs to be done, as mentioned in the above link, to use
- * username/password based client authentication.
- *
- * #define democonfigCLIENT_USERNAME    "...insert here..."
- */
-
-/**
- * @brief The password value for authenticating client to the MQTT broker when
- * username/password based client authentication is used.
- *
- * For AWS IoT MQTT broker, refer to the AWS IoT documentation below for
- * details regarding client authentication with a username and password.
- * https://docs.aws.amazon.com/iot/latest/developerguide/custom-authentication.html
- * An authorizer setup needs to be done, as mentioned in the above link, to use
- * username/password based client authentication.
- *
- * #define democonfigCLIENT_PASSWORD    "...insert here..."
- */
 
 /**
  * @brief The name of the operating system that the application is running on.
