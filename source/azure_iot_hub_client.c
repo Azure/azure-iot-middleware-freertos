@@ -52,7 +52,7 @@ static void prvEventCallback( MQTTContext_t * pxMQTTContext,
                               MQTTDeserializedInfo_t * pxDeserializedInfo )
 {
     /* First element in AzureIoTHubClientHandle */
-    AzureIoTHubClientHandle_t  xAzureIoTHubClientHandle = (AzureIoTHubClientHandle_t)pxMQTTContext;
+    AzureIoTHubClientHandle_t  xAzureIoTHubClientHandle = ( AzureIoTHubClientHandle_t ) pxMQTTContext;
 
     if( ( pxPacketInfo->type & 0xF0U ) == MQTT_PACKET_TYPE_PUBLISH )
     {
@@ -179,7 +179,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
     MQTTFixedBuffer_t xBuffer = { pBuffer, bufferLength };
     az_iot_hub_client_options options;
 
-    memset( ( void * )xAzureIoTHubClientHandle, 0, sizeof(AzureIoTHubClient_t));
+    memset( ( void * )xAzureIoTHubClientHandle, 0, sizeof( AzureIoTHubClient_t ) );
 
     /* Initialize Azure IoT Hub Client */
     az_span hostname_span = az_span_create( ( uint8_t * ) pHostname, hostnameLength );
@@ -248,7 +248,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     xConnectInfo.pClientIdentifier = ( const char * ) xAzureIoTHubClientHandle->deviceId;
     xConnectInfo.clientIdentifierLength = ( uint16_t ) xAzureIoTHubClientHandle -> deviceIdLength;
     xConnectInfo.pUserName = mqtt_user_name;
-    xConnectInfo.userNameLength = (uint16_t)mqtt_user_name_length;
+    xConnectInfo.userNameLength = ( uint16_t ) mqtt_user_name_length;
     xConnectInfo.pPassword = NULL;
     xConnectInfo.passwordLength = 0;
     xConnectInfo.keepAliveSeconds = azureIoTHubClientKEEP_ALIVE_TIMEOUT_SECONDS;
@@ -338,7 +338,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandl
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMessage_t* message, uint32_t status,
+                                                               AzureIoTHubClientMessage_t * message, uint32_t status,
                                                                const char * payload, uint32_t payloadLength )
 {
     MQTTStatus_t xResult;
@@ -407,7 +407,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_DoWork( AzureIoTHubClientHandle_t xAz
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               void ( * callback ) ( AzureIoTHubClientMessage_t* message, void* context ),
+                                                               void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context ),
                                                                void * callback_context )
 {
     MQTTSubscribeInfo_t * pMQTTSubscription = &xAzureIoTHubClientHandle->xReceiveContext[0].xMQTTSubscription;
@@ -442,7 +442,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               void ( * callback ) ( AzureIoTHubClientMessage_t* message, void* context ),
+                                                               void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context ),
                                                                void * callback_context )
 {   
     MQTTSubscribeInfo_t * pMQTTSubscription = &xAzureIoTHubClientHandle->xReceiveContext[1].xMQTTSubscription;
@@ -477,7 +477,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                             void ( * callback ) ( AzureIoTHubClientMessage_t* message, void* context ),
+                                                             void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context ),
                                                              void * callback_context )
 {
     MQTTSubscribeInfo_t * pMQTTSubscription;

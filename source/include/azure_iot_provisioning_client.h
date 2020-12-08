@@ -27,7 +27,7 @@
 #include "transport_interface.h"
 
 #ifndef azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS
-#define azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS                ( 4*60U )
+#define azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS                ( 4 * 60U )
 #endif
 
 #ifndef azureIoTPROVISIONINGClientCONNACK_RECV_TIMEOUT_MS
@@ -89,6 +89,6 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTP
 
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
                                                                      uint8_t * pHubHostname, uint32_t * pHostnameLength,
-                                                                     uint8_t * pDeviceId, uint32_t* pDeviceIdLength );
+                                                                     uint8_t * pDeviceId, uint32_t * pDeviceIdLength );
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */
