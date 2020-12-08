@@ -169,10 +169,10 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
     memset( ( void * )xAzureIoTHubClientHandle, 0, sizeof(AzureIoTHubClient_t));
 
     /* Initialize Azure IoT Hub Client */
-    az_span hostname_span = az_span_create(pHostname, hostnameLength);
-    az_span device_id_span = az_span_create(pDeviceId, deviceIdLength);
+    az_span hostname_span = az_span_create( ( uint8_t * ) pHostname, hostnameLength );
+    az_span device_id_span = az_span_create( (uint8_t * ) pDeviceId, deviceIdLength);
     options = az_iot_hub_client_options_default();
-    options.module_id = az_span_create(pModuleId, moduleIdLength);
+    options.module_id = az_span_create( ( uint8_t * )pModuleId, moduleIdLength);
 
     if ( az_result_failed( az_iot_hub_client_init( &xAzureIoTHubClientHandle->iot_hub_client_core,
                                                    hostname_span, device_id_span, &options ) ) )
@@ -230,7 +230,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     /* The client identifier is used to uniquely identify this MQTT client to
      * the MQTT broker. In a production device the identifier can be something
      * unique, such as a device serial number. */
-    xConnectInfo.pClientIdentifier = xAzureIoTHubClientHandle->deviceId;
+    xConnectInfo.pClientIdentifier = ( const char * ) xAzureIoTHubClientHandle->deviceId;
     xConnectInfo.clientIdentifierLength = ( uint16_t ) xAzureIoTHubClientHandle -> deviceIdLength;
     xConnectInfo.pUserName = mqtt_user_name;
     xConnectInfo.userNameLength = (uint16_t)mqtt_user_name_length;
@@ -255,7 +255,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     {
         /* Successfully established and MQTT connection with the broker. */
         printf( ( "An MQTT connection is established with %.*s.\r\n", xAzureIoTHubClientHandle->hostnameLength,
-                  xAzureIoTHubClientHandle->hostname ) );
+                  ( const char * ) xAzureIoTHubClientHandle->hostname ) );
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
 
@@ -274,7 +274,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
     else
     {
         printf( ( "Disconnecting the MQTT connection with %.*s.\r\n", xAzureIoTHubClientHandle->hostnameLength,
-                  xAzureIoTHubClientHandle->hostname ) );
+                  ( const char * ) xAzureIoTHubClientHandle->hostname ) );
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
 
