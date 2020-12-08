@@ -40,7 +40,7 @@ static char provisioning_topic[128];
  *          CONNECT -> { SUBSCRIBE | COMPLETE } -> { SUBSCRIBING | COMPLETE } -> { REQUEST | COMPLETE } ->
  *          REQUESTING -> { RESPONSE | COMPLETE } -> { WAITING | COMPLETE } -> { REQUEST | COMPLETE }
  * 
- * Note : At COMPLETE state we should check the status of lastOperation to see if WorkFlow(WF)
+ * Note : At COMPLETE state we should check the status of lastOperation to see if WorkFlow( WF )
  *        finshed without error.
  * 
  **/
@@ -146,7 +146,7 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
 
     size_t mqtt_user_name_length;
     if( az_result_failed( az_iot_provisioning_client_get_user_name( &xAzureIoTProvisioningClientHandle->iot_dps_client_core,
-                                                                    mqtt_user_name, sizeof(mqtt_user_name), &mqtt_user_name_length) ) )
+                                                                    mqtt_user_name, sizeof( mqtt_user_name ), &mqtt_user_name_length ) ) )
     {
         ret = AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED;
     }
@@ -180,7 +180,7 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
         }
     }
 
-    azure_iot_provisioning_client_update_state(xAzureIoTProvisioningClientHandle, ret );
+    azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, ret );
 }
 
 /**
@@ -415,7 +415,7 @@ static AzureIoTProvisioningClientError_t azure_iot_provisioning_client_run_workf
         {
             LogError( ( "Failed to process loop: ProcessLoopDuration=%u, Error=%s\r\n", azureIoTProvisioningPROCESS_LOOP_TIMEOUT_MS,
                         MQTT_Status_strerror( xResult ) ) );
-            azure_iot_provisioning_client_update_state(xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_FAILED);
+            azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_FAILED );
         }
     }
 
@@ -423,11 +423,11 @@ static AzureIoTProvisioningClientError_t azure_iot_provisioning_client_run_workf
 }
 
 static void prvMQTTProcessSubAck( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                  MQTTPublishInfo_t* pxPacketInfo )
+                                  MQTTPublishInfo_t * pxPacketInfo )
 {
     ( void )pxPacketInfo;
     // TODO check the state
-    azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
+    azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );
 }
 
 /**
@@ -568,16 +568,16 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
         return xAzureIoTProvisioningClientHandle->lastOperationResult;
     }
 
-    hostnameLength = az_span_size(xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname);
-    deviceIdLength = az_span_size(xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id);
+    hostnameLength = az_span_size( xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname );
+    deviceIdLength = az_span_size( xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id );
 
     if ( *pHostnameLength < hostnameLength || *pDeviceIdLength < deviceIdLength )
     {
         return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
     }
 
-    memcpy( pHubHostname, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname), hostnameLength );
-    memcpy( pDeviceId, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id), deviceIdLength );
+    memcpy( pHubHostname, az_span_ptr( xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname), hostnameLength );
+    memcpy( pDeviceId, az_span_ptr( xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id), deviceIdLength );
     *pHostnameLength = hostnameLength;
     *pDeviceIdLength = deviceIdLength;
 

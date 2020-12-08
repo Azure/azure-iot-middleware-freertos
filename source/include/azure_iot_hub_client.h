@@ -39,7 +39,7 @@
 #define AZURE_IOT_HUB_DEVICE_TWIN_MESSAGE                       ( 0x3 )
 #define AZURE_IOT_HUB_DESIRED_PROPERTY_MESSAGE                  ( 0x4 )
 
-typedef struct AzureIoTHubClient* AzureIoTHubClientHandle_t;
+typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubClientError
 {
@@ -119,19 +119,19 @@ AzureIoTHubClientError_t AzureIoTHubClient_DoWork( AzureIoTHubClientHandle_t xAz
                                                    uint32_t timeoutMs );
 
 AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               void ( * callback) (AzureIoTHubClientMessage_t* message, void* context),
+                                                               void ( * callback) (AzureIoTHubClientMessage_t * message, void * context),
                                                                void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               void ( * callback) (AzureIoTHubClientMessage_t* message, void* context),
+                                                               void ( * callback) (AzureIoTHubClientMessage_t * message, void * context),
                                                                void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                             void ( * callback) (AzureIoTHubClientMessage_t* message, void* context),
+                                                             void ( * callback) (AzureIoTHubClientMessage_t * message, void * context),
                                                              void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMessage_t* message, uint32_t status,
+                                                               AzureIoTHubClientMessage_t * message, uint32_t status,
                                                                const char * payload, uint32_t payloadLength );
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */
