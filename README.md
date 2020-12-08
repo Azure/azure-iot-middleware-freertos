@@ -2,6 +2,8 @@
 
 ![Windows Build](https://github.com/hihigupt/azure_freertos_middleware/workflows/MSBuild/badge.svg)
 
+More docs can be found in the [doc/](doc/) directory.
+
 ## Running the Sample With Device Provisioning
 
 1. Open the VS solution [here](./demo/sample_azure_iot_embedded_sdk).
