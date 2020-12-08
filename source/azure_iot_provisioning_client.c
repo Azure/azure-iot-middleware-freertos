@@ -507,7 +507,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
     return ret;
 }
 
-void azure_iot_provisioning_deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
+void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
     (void)xAzureIoTProvisioningClientHandle;
 }
