@@ -1,5 +1,8 @@
 # Azure FreeRTOS Middleware
 
+![Windows Build](https://github.com/hihigupt/azure_freertos_middleware/workflows/MSBuild/badge.svg)
+
+
 ## Running the Sample
 
 1. Open the VS solution [here](./demo/sample_azure_iot_embedded_sdk).
