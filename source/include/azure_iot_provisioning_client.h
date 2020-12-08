@@ -1,3 +1,14 @@
+/**************************************************************************/
+/*                                                                        */
+/*       Copyright (c) Microsoft Corporation. All rights reserved.        */
+/*                                                                        */
+/*       This software is licensed under the Microsoft Software License   */
+/*       Terms for Microsoft Azure RTOS. Full text of the license can be  */
+/*       found in the LICENSE file at https://aka.ms/AzureRTOS_EULA       */
+/*       and in the root directory of this software.                      */
+/*                                                                        */
+/**************************************************************************/
+
 /**
  * @file azure_iot_provisioning_client.h
  * 
@@ -46,7 +57,6 @@ typedef struct AzureIoTProvisioningClient
 {
     MQTTContext_t xMQTTContext;
 
-    /* TODO: make this dynamic */
     uint8_t * azure_iot_provisioning_client_last_response_payload;
     uint32_t azure_iot_provisioning_client_last_response_payload_length;
     uint8_t * azure_iot_provisioning_client_last_response_topic;
