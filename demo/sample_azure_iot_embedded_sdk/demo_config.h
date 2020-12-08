@@ -54,20 +54,74 @@ extern void vLoggingPrintf( const char * pcFormatString,
 
 /************ End of logging configuration ****************/
 
+/**
+ * @brief Enable Device Provisioning
+ * 
+ * @note To disable Device Provisioning undef this macro
+ *
+ */
 #define ENABLE_DPS_SAMPLE
 
 #ifdef ENABLE_DPS_SAMPLE
 
-#define ENDPOINT                "testbarnacle.azure-devices-provisioning.net"
-#define ID_SCOPE                "0ne000A247E"
-#define REGISTRATION_ID         "fabrikam"
+/**
+ * @brief Provisioning service endpoint.
+ *
+ * @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#service-operations-endpoint
+ * 
+ */
+#define ENDPOINT                            "<YOUR DPS ENDPOINT HERE>"
+
+/**
+ * @brief Id scope of provisioning service.
+ * 
+ * @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#id-scope
+ * 
+ */
+#define ID_SCOPE                            "<YOUR ID SCOPE HERE>"
+
+/**
+ * @brief Registration Id of provisioning service
+ *
+ *  @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#registration-id
+ */
+#define REGISTRATION_ID                     "<YOUR REGISTRATION ID HERE>"
 
 #endif // ENABLE_DPS_SAMPLE
 
-#define DEVICE_ID				"fabrikam"
-#define MODULE_ID               ""
-#define HOSTNAME                "kartos.azure-devices.net"
+/**
+ * @brief IoTHub device Id.
+ *
+ */
+#define DEVICE_ID                           "<YOUR DEVICE ID HERE>"
 
+/**
+ * @brief IoTHub module Id.
+ *
+ */
+#define MODULE_ID                           ""
+/**
+ * @brief IoTHub hostname.
+ *
+ */
+#define HOSTNAME                            "<YOUR IOT HUB HOSTNAME HERE>"
+
+/**
+ * @brief Client's X509 Certificate.
+ *
+ */
+#define democonfigCLIENT_CERTIFICATE_PEM    "<YOUR DEVICE CERT HERE>"
+
+/**
+ * @brief Client's private key.
+ *
+ */
+#define democonfigCLIENT_PRIVATE_KEY_PEM    "<YOUR DEVICE PRIVATE KEY HERE>"
+
+/**
+ * @brief Baltimore Trusted RooT CA.
+ *
+ */
 #define democonfigROOT_CA_PEM "-----BEGIN CERTIFICATE-----\r\n" \
 "MIIDdzCCAl+gAwIBAgIEAgAAuTANBgkqhkiG9w0BAQUFADBaMQswCQYDVQQGEwJJ\r\n" \
 "RTESMBAGA1UEChMJQmFsdGltb3JlMRMwEQYDVQQLEwpDeWJlclRydXN0MSIwIAYD\r\n" \
@@ -89,43 +143,6 @@ extern void vLoggingPrintf( const char * pcFormatString,
 "ksLi4xaNmjICq44Y3ekQEe5+NauQrz4wlHrQMz2nZQ/1/I6eYs9HRCwBXbsdtTLS\r\n" \
 "R9I4LtD+gdwyah617jzV/OeBHRnDJELqYzmp\r\n" \
 "-----END CERTIFICATE-----\r\n"
-
-#define democonfigCLIENT_CERTIFICATE_PEM "-----BEGIN CERTIFICATE-----\r\n"\
-"MIIBUTCB+QIUQIuXoZrzE0biEdFp3eE2LEvk1w4wCgYIKoZIzj0EAwIwRTELMAkG\r\n"\
-"A1UEBhMCQVUxEzARBgNVBAgMClNvbWUtU3RhdGUxITAfBgNVBAoMGEludGVybmV0\r\n"\
-"IFdpZGdpdHMgUHR5IEx0ZDAeFw0yMDA5MDEwNzUyMzlaFw0yMTA5MDEwNzUyMzla\r\n"\
-"MBMxETAPBgNVBAMMCGZhYnJpa2FtMFkwEwYHKoZIzj0CAQYIKoZIzj0DAQcDQgAE\r\n"\
-"SC1Trg8ZZsGLJBp5EnXHGOaDD1JP1EpciWr+Li7IALORJK/OoNo2OgM3WROTGKB1\r\n"\
-"zIw+6Kj4aQh23WmVshJQIjAKBggqhkjOPQQDAgNHADBEAiAp4X50SDkaficRJq2D\r\n"\
-"XeuhuMiaB7QVzKcs0fznoBxr1gIgQx95ZX33/8k/3zf2Q+myPIeZmvd/AX3BaJSN\r\n"\
-"1F3VICc=\r\n"\
-"-----END CERTIFICATE-----\r\n"
-
- /**
-  * @brief Client's private key.
-  *
-  * For AWS IoT MQTT broker, refer to the AWS documentation below for details
-  * regarding clientauthentication.
-  * https://docs.aws.amazon.com/iot/latest/developerguide/client-authentication.html
-  *
-  * @note This private key should be PEM-encoded.
-  *
-  * Must include the PEM header and footer:
-  * "-----BEGIN RSA PRIVATE KEY-----\n"\
-  * "...base64 data...\n"\
-  * "-----END RSA PRIVATE KEY-----\n"
-  *
-  * #define democonfigCLIENT_PRIVATE_KEY_PEM    "...insert here..."
-  */
-
-#define democonfigCLIENT_PRIVATE_KEY_PEM "-----BEGIN EC PARAMETERS-----\r\n"\
-"BggqhkjOPQMBBw==\r\n"\
-"-----END EC PARAMETERS-----\r\n"\
-"-----BEGIN EC PRIVATE KEY-----\r\n"\
-"MHcCAQEEIAGertgK003ewL7wePlhwqdgsD2uwkcMW8B3JmFqzKCVoAoGCCqGSM49\r\n"\
-"AwEHoUQDQgAESC1Trg8ZZsGLJBp5EnXHGOaDD1JP1EpciWr+Li7IALORJK/OoNo2\r\n"\
-"OgM3WROTGKB1zIw+6Kj4aQh23WmVshJQIg==\r\n"\
-"-----END EC PRIVATE KEY-----\r\n"
 
 /**
  * @brief An option to disable Server Name Indication.
