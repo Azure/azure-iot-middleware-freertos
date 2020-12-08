@@ -20,6 +20,44 @@
 
 #include "azure/az_iot.h"
 
+ /**************************************************/
+ /******* DO NOT CHANGE the following order ********/
+ /**************************************************/
+
+ /* Logging related header files are required to be included in the following order:
+  * 1. Include the header file "logging_levels.h".
+  * 2. Define LIBRARY_LOG_NAME and  LIBRARY_LOG_LEVEL.
+  * 3. Include the header file "logging_stack.h".
+  */
+
+  /* Include header that defines log levels. */
+#include "logging_levels.h"
+
+/* Logging configuration for the Sockets. */
+#ifndef LIBRARY_LOG_NAME
+#define LIBRARY_LOG_NAME     "Provisioning"
+#endif
+#ifndef LIBRARY_LOG_LEVEL
+#define LIBRARY_LOG_LEVEL    LOG_ERROR
+#endif
+
+/* Prototype for the function used to print to console on Windows simulator
+ * of FreeRTOS.
+ * The function prints to the console before the network is connected;
+ * then a UDP port after the network has connected. */
+extern void vLoggingPrintf(const char* pcFormatString,
+    ...);
+
+/* Map the SdkLog macro to the logging function to enable logging
+ * on Windows simulator. */
+#ifndef SdkLog
+#define SdkLog( message )    vLoggingPrintf message
+#endif
+
+#include "logging_stack.h"
+
+ /************ End of logging configuration ****************/
+
 #define azureIoTProvisioningPROCESS_LOOP_TIMEOUT_MS             ( 500U )
 
 #define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT          ( 0x1 )
@@ -110,13 +148,13 @@ static void azure_iot_provisioning_client_update_state( AzureIoTProvisioningClie
 
         case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE :
         {
-            printf( "Complete done\r\n" );
+            LogInfo( ( "Complete done\r\n" ) );
         }
         break;
 
         default :
         {
-            printf( "Unknown state: %u", state );
+            LogError( ( "Unknown state: %u", state ) );
             configASSERT( false );
         }
         break;
@@ -166,16 +204,16 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
                                        azureIoTPROVISIONINGClientCONNACK_RECV_TIMEOUT_MS,
                                        &xSessionPresent ) ) != MQTTSuccess )
         {
-            printf( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%s \r\n",
-                      xAzureIoTProvisioningClientHandle->endpointLength, xAzureIoTProvisioningClientHandle->pEndpoint,
-                      MQTT_Status_strerror( xResult ) ) );
+            LogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%s \r\n",
+                        xAzureIoTProvisioningClientHandle->endpointLength, xAzureIoTProvisioningClientHandle->pEndpoint,
+                        MQTT_Status_strerror( xResult ) ) );
             ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
         }
         else
         {
             /* Successfully established and MQTT connection with the broker. */
-            printf( ( "An MQTT connection is established with %.*s.\r\n", xAzureIoTProvisioningClientHandle->endpointLength,
-                      xAzureIoTProvisioningClientHandle->pEndpoint ) );
+            LogInfo( ( "An MQTT connection is established with %.*s.\r\n", xAzureIoTProvisioningClientHandle->endpointLength,
+                       xAzureIoTProvisioningClientHandle->pEndpoint ) );
             ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
         }
     }
@@ -203,13 +241,13 @@ static void azure_iot_provisioning_client_subscribe( AzureIoTProvisioningClientH
 
         usSubscribePacketIdentifier = MQTT_GetPacketId( & ( xAzureIoTProvisioningClientHandle->xMQTTContext ) );
 
-        printf( ( "Attempt to subscribe to the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
+        LogInfo( ( "Attempt to subscribe to the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
 
         if ( ( xResult = MQTT_Subscribe( &( xAzureIoTProvisioningClientHandle->xMQTTContext ),
                                          &mqttSubscription, 1,  usSubscribePacketIdentifier ) ) != MQTTSuccess )
         {
-            printf( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s",
-                      MQTT_Status_strerror( xResult ) ) );
+            LogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s",
+                        MQTT_Status_strerror( xResult ) ) );
             ret = AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED;
         }
         else
@@ -302,7 +340,7 @@ static void azure_iot_provisioning_client_parse_response( AzureIoTProvisioningCl
         if ( az_result_failed( core_result ) )
         {
             azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_FAILED );
-            printf( "IoTProvisioning client failed to parse packet, error status: %d", core_result );
+            LogError( ( "IoTProvisioning client failed to parse packet, error status: %d", core_result ) );
             return;
         }
 
@@ -413,8 +451,8 @@ static AzureIoTProvisioningClientError_t azure_iot_provisioning_client_run_workf
         if ( ( xResult = MQTT_ProcessLoop( &( xAzureIoTProvisioningClientHandle->xMQTTContext ),
                                            azureIoTProvisioningPROCESS_LOOP_TIMEOUT_MS ) ) != MQTTSuccess )
         {
-            printf( ( "Failed to process loop: ProcessLoopDuration=%u, Error=%s\r\n", azureIoTProvisioningPROCESS_LOOP_TIMEOUT_MS,
-                      MQTT_Status_strerror( xResult ) ) );
+            LogError( ( "Failed to process loop: ProcessLoopDuration=%u, Error=%s\r\n", azureIoTProvisioningPROCESS_LOOP_TIMEOUT_MS,
+                        MQTT_Status_strerror( xResult ) ) );
             azure_iot_provisioning_client_update_state(xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_FAILED);
         }
     }
@@ -576,8 +614,8 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
         return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
     }
 
-    memcpy(pHubHostname, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname), hostnameLength );
-    memcpy(pDeviceId, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id), deviceIdLength );
+    memcpy( pHubHostname, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.assigned_hub_hostname), hostnameLength );
+    memcpy( pDeviceId, az_span_ptr(xAzureIoTProvisioningClientHandle->register_response.registration_state.device_id), deviceIdLength );
     *pHostnameLength = hostnameLength;
     *pDeviceIdLength = deviceIdLength;
 

@@ -300,7 +300,7 @@ static void prvAzureDemoTask( void * pvParameters )
     ulGlobalEntryTimeMs = prvGetTimeMs();
 
     status = prvSetupNetworkCredentials( &xNetworkCredentials );
-    configASSERT(status == 0);
+    configASSERT( status == 0);
 
 #ifdef ENABLE_DPS_SAMPLE
 
@@ -309,7 +309,7 @@ static void prvAzureDemoTask( void * pvParameters )
                                       &iotHubHostnameLength, &iotHubDeviceId,
                                       &iotHubDeviceIdLength ) ) != 0)
     {
-        printf("Failed on sample_dps_entry!: error code = 0x%08x\r\n", status);
+        LogError( ( "Failed on sample_dps_entry!: error code = 0x%08x\r\n", status ) );
         return;
     }
 #endif /* ENABLE_DPS_SAMPLE */
@@ -535,7 +535,7 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
 }
 /*-----------------------------------------------------------*/
 
-static uint32_t prvGetTimeMs(void)
+static uint32_t prvGetTimeMs( void )
 {
     TickType_t xTickCount = 0;
     uint32_t ulTimeMs = 0UL;

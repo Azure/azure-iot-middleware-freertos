@@ -20,6 +20,42 @@
 
 #include "azure/az_iot.h"
 
+ /**************************************************/
+  /******* DO NOT CHANGE the following order ********/
+  /**************************************************/
+
+  /* Logging related header files are required to be included in the following order:
+   * 1. Include the header file "logging_levels.h".
+   * 2. Define LIBRARY_LOG_NAME and  LIBRARY_LOG_LEVEL.
+   * 3. Include the header file "logging_stack.h".
+   */
+
+   /* Include header that defines log levels. */
+#include "logging_levels.h"
+
+/* Logging configuration for the Sockets. */
+#ifndef LIBRARY_LOG_NAME
+#define LIBRARY_LOG_NAME     "IoTHub"
+#endif
+#ifndef LIBRARY_LOG_LEVEL
+#define LIBRARY_LOG_LEVEL    LOG_ERROR
+#endif
+
+/* Prototype for the function used to print to console on Windows simulator
+ * of FreeRTOS.
+ * The function prints to the console before the network is connected;
+ * then a UDP port after the network has connected. */
+extern void vLoggingPrintf(const char* pcFormatString,
+    ...);
+
+/* Map the SdkLog macro to the logging function to enable logging
+ * on Windows simulator. */
+#ifndef SdkLog
+#define SdkLog( message )    vLoggingPrintf message
+#endif
+
+#include "logging_stack.h"
+
 static char mqtt_user_name[128];
 static char telemetry_topic[128];
 static char method_topic[128];
@@ -261,16 +297,16 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
                                    xTimeoutTicks,
                                    &xSessionPresent ) ) != MQTTSuccess )
     {
-        printf( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%s \r\n",
-                  xAzureIoTHubClientHandle->hostnameLength, xAzureIoTHubClientHandle->hostname,
-                  MQTT_Status_strerror( xResult ) ) );
+        LogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%s \r\n",
+                    xAzureIoTHubClientHandle->hostnameLength, xAzureIoTHubClientHandle->hostname,
+                    MQTT_Status_strerror( xResult ) ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     else
     {
         /* Successfully established and MQTT connection with the broker. */
-        printf( ( "An MQTT connection is established with %.*s.\r\n", xAzureIoTHubClientHandle->hostnameLength,
-                  ( const char * ) xAzureIoTHubClientHandle->hostname ) );
+        LogInfo( ( "An MQTT connection is established with %.*s.\r\n", xAzureIoTHubClientHandle->hostnameLength,
+                   ( const char * ) xAzureIoTHubClientHandle->hostname ) );
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
 
@@ -288,8 +324,8 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
     }
     else
     {
-        printf( ( "Disconnecting the MQTT connection with %.*s.\r\n", xAzureIoTHubClientHandle->hostnameLength,
-                  ( const char * ) xAzureIoTHubClientHandle->hostname ) );
+        LogInfo( ( "Disconnecting the MQTT connection with %.*s.\r\n", xAzureIoTHubClientHandle->hostnameLength,
+                   ( const char * ) xAzureIoTHubClientHandle->hostname ) );
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
 
@@ -393,8 +429,8 @@ AzureIoTHubClientError_t AzureIoTHubClient_DoWork( AzureIoTHubClientHandle_t xAz
     /* Process incoming UNSUBACK packet from the broker. */
     if ( ( xResult = MQTT_ProcessLoop( &( xAzureIoTHubClientHandle -> xMQTTContext ), timeoutMs ) ) != MQTTSuccess )
     {
-        printf( ( "Failed to receive UNSUBACK packet from broker: ProcessLoopDuration=%u, Error=%s\r\n", timeoutMs,
-                  MQTT_Status_strerror( xResult ) ) );
+        LogError( ( "Failed to receive UNSUBACK packet from broker: ProcessLoopDuration=%u, Error=%s\r\n", timeoutMs,
+                    MQTT_Status_strerror( xResult ) ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     else
@@ -421,13 +457,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
     
     usSubscribePacketIdentifier = MQTT_GetPacketId( &( xAzureIoTHubClientHandle->xMQTTContext ) );
     
-    printf( ( "Attempt to subscribe to the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
+    LogInfo( ( "Attempt to subscribe to the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
 
     if ( ( xResult = MQTT_Subscribe( &( xAzureIoTHubClientHandle -> xMQTTContext ),
                                      pMQTTSubscription, 1,  usSubscribePacketIdentifier ) ) != MQTTSuccess )
     {
-        printf( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s",
-                  MQTT_Status_strerror( xResult ) ) );
+        LogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s",
+                    MQTT_Status_strerror( xResult ) ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     else
@@ -456,13 +492,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
     
     usSubscribePacketIdentifier = MQTT_GetPacketId( &( xAzureIoTHubClientHandle->xMQTTContext ) );
     
-    printf( ( "Attempt to subscribe to the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) );
+    LogInfo( ( "Attempt to subscribe to the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) );
 
     if ( ( xResult = MQTT_Subscribe( &( xAzureIoTHubClientHandle -> xMQTTContext ),
                                      pMQTTSubscription, 1,  usSubscribePacketIdentifier ) ) != MQTTSuccess )
     {
-        printf( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s",
-                  MQTT_Status_strerror( xResult ) ) );
+        LogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s",
+                    MQTT_Status_strerror( xResult ) ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     else
@@ -495,14 +531,14 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
     
     usSubscribePacketIdentifier = MQTT_GetPacketId( &( xAzureIoTHubClientHandle->xMQTTContext ) );
     
-    printf( ( "Attempt to subscribe to the MQTT  %s and %s topics.\r\n",
+    LogInfo( ( "Attempt to subscribe to the MQTT  %s and %s topics.\r\n",
                 AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) );
 
     if ( ( xResult = MQTT_Subscribe( &( xAzureIoTHubClientHandle -> xMQTTContext ),
                                      pMQTTSubscription, 2,  usSubscribePacketIdentifier ) ) != MQTTSuccess )
     {
-        printf( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s \r\n",
-                  MQTT_Status_strerror( xResult ) ) );
+        LogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%s \r\n",
+                    MQTT_Status_strerror( xResult ) ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     else
