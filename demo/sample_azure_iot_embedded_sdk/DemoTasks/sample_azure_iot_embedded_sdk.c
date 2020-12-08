@@ -47,52 +47,52 @@
 
 /*-----------------------------------------------------------*/
 
-#define democonfigMQTT_BROKER_PORT    ( 8883 )
+#define democonfigMQTT_BROKER_PORT                          ( 8883 )
 
 /*-----------------------------------------------------------*/
 
 /**
  * @brief The maximum number of retries for network operation with server.
  */
-#define mqttexampleRETRY_MAX_ATTEMPTS                     ( 5U )
+#define mqttexampleRETRY_MAX_ATTEMPTS                       ( 5U )
 
 /**
  * @brief The maximum back-off delay (in milliseconds) for retrying failed operation
  *  with server.
  */
-#define mqttexampleRETRY_MAX_BACKOFF_DELAY_MS             ( 5000U )
+#define mqttexampleRETRY_MAX_BACKOFF_DELAY_MS               ( 5000U )
 
 /**
  * @brief The base back-off delay (in milliseconds) to use for network operation retry
  * attempts.
  */
-#define mqttexampleRETRY_BACKOFF_BASE_MS                  ( 500U )
+#define mqttexampleRETRY_BACKOFF_BASE_MS                    ( 500U )
 
 /**
  * @brief Timeout for receiving CONNACK packet in milliseconds.
  */
-#define mqttexampleCONNACK_RECV_TIMEOUT_MS                ( 1000U )
+#define mqttexampleCONNACK_RECV_TIMEOUT_MS                  ( 1000U )
 
 /**
  * @brief The number of topic filters to subscribe.
  */
-#define mqttexampleTOPIC_COUNT                            ( 1 )
+#define mqttexampleTOPIC_COUNT                              ( 1 )
 
 /**
  * @brief The Telemetry message published in this example.
  */
-#define mqttexampleMESSAGE                                "Hello World!"
+#define mqttexampleMESSAGE                                  "Hello World!"
 
 /**
  * @brief Time in ticks to wait between each cycle of the demo implemented
  * by prvMQTTDemoTask().
  */
-#define mqttexampleDELAY_BETWEEN_DEMO_ITERATIONS_TICKS    ( pdMS_TO_TICKS( 5000U ) )
+#define mqttexampleDELAY_BETWEEN_DEMO_ITERATIONS_TICKS      ( pdMS_TO_TICKS( 5000U ) )
 
 /**
  * @brief Timeout for MQTT_ProcessLoop in milliseconds.
  */
-#define mqttexamplePROCESS_LOOP_TIMEOUT_MS                ( 500U )
+#define mqttexamplePROCESS_LOOP_TIMEOUT_MS                  ( 500U )
 
 /**
  * @brief Delay (in ticks) between consecutive cycles of MQTT publish operations in a
@@ -101,22 +101,22 @@
  * Note that the process loop also has a timeout, so the total time between
  * publishes is the sum of the two delays.
  */
-#define mqttexampleDELAY_BETWEEN_PUBLISHES_TICKS          ( pdMS_TO_TICKS( 2000U ) )
+#define mqttexampleDELAY_BETWEEN_PUBLISHES_TICKS            ( pdMS_TO_TICKS( 2000U ) )
 
 /**
  * @brief Transport timeout in milliseconds for transport send and receive.
  */
-#define mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS         ( 200U )
+#define mqttexampleTRANSPORT_SEND_RECV_TIMEOUT_MS           ( 200U )
 
 /**
  * @brief Milliseconds per second.
  */
-#define MILLISECONDS_PER_SECOND    ( 1000U )
+#define MILLISECONDS_PER_SECOND                             ( 1000U )
 
 /**
  * @brief Milliseconds per FreeRTOS tick.
  */
-#define MILLISECONDS_PER_TICK      ( MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
+#define MILLISECONDS_PER_TICK                               ( MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
 
 /*-----------------------------------------------------------*/
 
@@ -205,7 +205,7 @@ static MQTTFixedBuffer_t xBuffer =
 
 /*-----------------------------------------------------------*/
 
-static void handle_c2d_message(AzureIoTHubClientMessage_t * message, void * context )
+static void handle_c2d_message( AzureIoTHubClientMessage_t * message, void * context )
 {
     ( void ) context;
 
@@ -214,13 +214,13 @@ static void handle_c2d_message(AzureIoTHubClientMessage_t * message, void * cont
                message->pxPublishInfo->pPayload ) );
 }
 
-static void handle_direct_method(AzureIoTHubClientMessage_t * message, void * context )
+static void handle_direct_method( AzureIoTHubClientMessage_t * message, void * context )
 {
     LogInfo( ( "Method payload : %.*s \r\n",
                message->pxPublishInfo->payloadLength,
                message->pxPublishInfo->pPayload ) );
 
-    AzureIoTHubClient_t * xAzureIoTHubClient = ( AzureIoTHubClient_t * )context;
+    AzureIoTHubClient_t * xAzureIoTHubClient = ( AzureIoTHubClient_t * ) context;
 
     if( AzureIoTHubClient_SendMethodResponse( xAzureIoTHubClient, message, 200,
                                               NULL, 0 ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
@@ -307,7 +307,7 @@ static void prvAzureDemoTask( void * pvParameters )
     /* Run DPS.  */
     if ( ( status = prvIoTHubInfoGet( &xNetworkCredentials, &iotHubHostname,
                                       &iotHubHostnameLength, &iotHubDeviceId,
-                                      &iotHubDeviceIdLength ) ) != 0)
+                                      &iotHubDeviceIdLength ) ) != 0 )
     {
         LogError( ( "Failed on sample_dps_entry!: error code = 0x%08x\r\n", status ) );
         return;
@@ -544,11 +544,11 @@ static uint32_t prvGetTimeMs( void )
     xTickCount = xTaskGetTickCount();
 
     /* Convert the ticks to milliseconds. */
-    ulTimeMs = (uint32_t)xTickCount * MILLISECONDS_PER_TICK;
+    ulTimeMs = ( uint32_t ) xTickCount * MILLISECONDS_PER_TICK;
 
     /* Reduce ulGlobalEntryTimeMs from obtained time so as to always return the
      * elapsed time in the application. */
-    ulTimeMs = (uint32_t)(ulTimeMs - ulGlobalEntryTimeMs);
+    ulTimeMs = ( uint32_t ) ( ulTimeMs - ulGlobalEntryTimeMs );
 
     return ulTimeMs;
 }
