@@ -20,42 +20,6 @@
 
 #include "azure/az_iot.h"
 
- /**************************************************/
-  /******* DO NOT CHANGE the following order ********/
-  /**************************************************/
-
-  /* Logging related header files are required to be included in the following order:
-   * 1. Include the header file "logging_levels.h".
-   * 2. Define LIBRARY_LOG_NAME and  LIBRARY_LOG_LEVEL.
-   * 3. Include the header file "logging_stack.h".
-   */
-
-   /* Include header that defines log levels. */
-#include "logging_levels.h"
-
-/* Logging configuration for the Sockets. */
-#ifndef LIBRARY_LOG_NAME
-#define LIBRARY_LOG_NAME     "IoTHub"
-#endif
-#ifndef LIBRARY_LOG_LEVEL
-#define LIBRARY_LOG_LEVEL    LOG_ERROR
-#endif
-
-/* Prototype for the function used to print to console on Windows simulator
- * of FreeRTOS.
- * The function prints to the console before the network is connected;
- * then a UDP port after the network has connected. */
-extern void vLoggingPrintf(const char* pcFormatString,
-    ...);
-
-/* Map the SdkLog macro to the logging function to enable logging
- * on Windows simulator. */
-#ifndef SdkLog
-#define SdkLog( message )    vLoggingPrintf message
-#endif
-
-#include "logging_stack.h"
-
 static char mqtt_user_name[128];
 static char telemetry_topic[128];
 static char method_topic[128];
