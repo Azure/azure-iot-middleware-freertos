@@ -20,11 +20,15 @@
 /* Transport interface include. */
 #include "FreeRTOS.h"
 
-#include "azure/az_iot.h"
+#include "azure_iot.h"
 
 #include "core_mqtt.h"
 #include "logging_stack.h"
 #include "transport_interface.h"
+
+#ifndef azureIoTHUBDEFAULTTOKENTIMEOUTINSEC
+#define azureIoTHUBDEFAULTTOKENTIMEOUTINSEC                     ( 60 * 60U )
+#endif
 
 #ifndef azureIoTHubClientKEEP_ALIVE_TIMEOUT_SECONDS
 #define azureIoTHubClientKEEP_ALIVE_TIMEOUT_SECONDS             ( 60U )
@@ -44,12 +48,19 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 typedef enum AzureIoTHubClientError
 {
     AZURE_IOT_HUB_CLIENT_SUCCESS = 0,
+    AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT,
     AZURE_IOT_HUB_CLIENT_STATUS_PENDING,
+    AZURE_IOT_HUB_CLIENT_STATUS_OOM,
     AZURE_IOT_HUB_CLIENT_INIT_FAILED,
     AZURE_IOT_HUB_CLIENT_FAILED,
 } AzureIoTHubClientError_t;
 
-typedef uint32_t( * AzureIoTGetCurrentTimeFunc_t )( void );
+typedef uint64_t( * AzureIoTGetCurrentTimeFunc_t )( void );
+
+typedef uint32_t( * AzureIoTGetHMACFunc_t )( const uint8_t * pKey, uint32_t keyLength,
+                                             const uint8_t * pData, uint32_t dataLength,
+                                             uint8_t * pOutput, uint32_t outputLength,
+                                             uint32_t * pBytesCopied );
 
 /*
  *  This holds the message type (IE telemetry, methods, etc) and
@@ -91,7 +102,15 @@ typedef struct AzureIoTHubClient
     uint32_t hostnameLength;
     const uint8_t *deviceId;
     uint32_t deviceIdLength;
+    const uint8_t * azure_iot_hub_client_symmetric_key;
+    uint32_t azure_iot_hub_client_symmetric_key_length;
 
+    uint32_t ( * azure_iot_hub_client_token_refresh )( struct AzureIoTHubClient * xAzureIoTHubClientHandle,
+                                                       uint64_t expiryTimeSecs, const uint8_t * key, uint32_t keyLen,
+                                                       uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
+    AzureIoTGetHMACFunc_t azure_iot_hub_client_hmac_function;
+    AzureIoTGetCurrentTimeFunc_t azure_iot_hub_client_time_function;
+    
     AzureIoTHubClientReceiveContext_t xReceiveContext[3];
 } AzureIoTHubClient_t;
 
@@ -106,6 +125,9 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
 
 void AzureIoTHubClient_Deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
 
+AzureIoTHubClientError_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                            const uint8_t * pSymmetricKey, uint32_t pSymmetricKeyLength, 
+                                                            AzureIoTGetHMACFunc_t hmacFunction );
 
 AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                     bool cleanSession, TickType_t xTimeoutTicks );
@@ -119,15 +141,15 @@ AzureIoTHubClientError_t AzureIoTHubClient_DoWork( AzureIoTHubClientHandle_t xAz
                                                    uint32_t timeoutMs );
 
 AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               void ( * callback) (AzureIoTHubClientMessage_t * message, void * context),
+                                                               void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context ),
                                                                void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               void ( * callback) (AzureIoTHubClientMessage_t * message, void * context),
+                                                               void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context ),
                                                                void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                             void ( * callback) (AzureIoTHubClientMessage_t * message, void * context),
+                                                             void ( * callback ) ( AzureIoTHubClientMessage_t * message, void * context ),
                                                              void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,

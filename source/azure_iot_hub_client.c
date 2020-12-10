@@ -16,11 +16,26 @@
 
 #include <stdio.h>
 
+/* Kernel includes. */
+#include "FreeRTOS.h"
+#include "task.h"
+
 #include "azure_iot_hub_client.h"
 
 #include "azure/az_iot.h"
 
+/**
+ * @brief Milliseconds per second.
+ */
+#define MILLISECONDS_PER_SECOND                             ( 1000U )
+
+/**
+ * @brief Milliseconds per FreeRTOS tick.
+ */
+#define MILLISECONDS_PER_TICK                               ( MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
+
 static char mqtt_user_name[128];
+static char mqtt_password[256];
 static char telemetry_topic[128];
 static char method_topic[128];
 
@@ -166,6 +181,61 @@ static uint32_t azure_iot_hub_client_device_twin_process( AzureIoTHubClientHandl
     return AZURE_IOT_HUB_CLIENT_SUCCESS;
 }
 
+static uint32_t azure_iot_hub_client_token_get( struct AzureIoTHubClient * xAzureIoTHubClientHandle,
+                                                uint64_t expiryTimeSecs, const uint8_t * pKey, uint32_t keyLen,
+                                                uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength )
+{
+    uint8_t buffer[512];
+    az_span span = az_span_create( pSASBuffer, sasBufferLen );
+    uint8_t * pOutput;
+    uint32_t outputLen;
+    az_result core_result;
+    uint32_t bytesUsed;
+
+    core_result = az_iot_hub_client_sas_get_signature( &( xAzureIoTHubClientHandle->iot_hub_client_core ),
+                                                       expiryTimeSecs, span, &span );
+    if ( az_result_failed( core_result ) )
+    {
+        LogError( ( "IoTHub failed failed to get signature with error status: %d", core_result ) );
+        return AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+
+    bytesUsed = ( uint32_t ) az_span_size( span );
+    if ( AzureIoTBase64HMACCalculate( xAzureIoTHubClientHandle->azure_iot_hub_client_hmac_function,
+                                      pKey, keyLen, pSASBuffer, bytesUsed,
+                                      buffer, sizeof( buffer ), &pOutput, &outputLen ) )
+    {
+        LogError( ( "IoTHub failed to encoded hash" ) );
+        return AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+
+    span = az_span_create( pOutput, ( int32_t )outputLen );
+    core_result= az_iot_hub_client_sas_get_password( &( xAzureIoTHubClientHandle->iot_hub_client_core ),
+                                                     expiryTimeSecs, span, AZ_SPAN_EMPTY,
+                                                     ( char * ) pSASBuffer, sasBufferLen, pSaSLength );
+    if ( az_result_failed( core_result ) )
+    {
+        LogError( ( "IoTHub failed to generate token with error status: %d", core_result ) );
+        return AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+
+    return AZURE_IOT_HUB_CLIENT_SUCCESS;
+}
+
+static uint32_t prvGetTimeMs( void )
+{
+    TickType_t xTickCount = 0;
+    uint32_t ulTimeMs = 0UL;
+
+    /* Get the current tick count. */
+    xTickCount = xTaskGetTickCount();
+
+    /* Convert the ticks to milliseconds. */
+    ulTimeMs = ( uint32_t ) xTickCount * MILLISECONDS_PER_TICK;
+
+    return ulTimeMs;
+}
+
 AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                  const uint8_t * pHostname, uint32_t hostnameLength,
                                                  const uint8_t * pDeviceId, uint32_t deviceIdLength,
@@ -183,7 +253,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
 
     /* Initialize Azure IoT Hub Client */
     az_span hostname_span = az_span_create( ( uint8_t * ) pHostname, hostnameLength );
-    az_span device_id_span = az_span_create( (uint8_t * ) pDeviceId, deviceIdLength );
+    az_span device_id_span = az_span_create( ( uint8_t * ) pDeviceId, deviceIdLength );
     options = az_iot_hub_client_options_default();
     options.module_id = az_span_create( ( uint8_t * ) pModuleId, moduleIdLength );
 
@@ -194,7 +264,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
     }
     /* Initialize MQTT library. */
     else if ( ( xResult = MQTT_Init( &( xAzureIoTHubClientHandle -> xMQTTContext ), pTransportInterface,
-                                     getTimeFunction, prvEventCallback,
+                                     prvGetTimeMs, prvEventCallback,
                                      &xBuffer ) ) != MQTTSuccess )
     {
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
@@ -205,6 +275,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
         xAzureIoTHubClientHandle->deviceIdLength = deviceIdLength;
         xAzureIoTHubClientHandle->hostname = pHostname;
         xAzureIoTHubClientHandle->hostnameLength = hostnameLength;
+        xAzureIoTHubClientHandle->azure_iot_hub_client_time_function = getTimeFunction;
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
     
@@ -225,6 +296,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     AzureIoTHubClientError_t ret;
     MQTTStatus_t xResult;
     bool xSessionPresent;
+    uint32_t bytesCopied;
 
     ( void ) memset( ( void * ) &xConnectInfo, 0x00, sizeof( xConnectInfo ) );
 
@@ -249,10 +321,26 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     xConnectInfo.clientIdentifierLength = ( uint16_t ) xAzureIoTHubClientHandle -> deviceIdLength;
     xConnectInfo.pUserName = mqtt_user_name;
     xConnectInfo.userNameLength = ( uint16_t ) mqtt_user_name_length;
-    xConnectInfo.pPassword = NULL;
-    xConnectInfo.passwordLength = 0;
     xConnectInfo.keepAliveSeconds = azureIoTHubClientKEEP_ALIVE_TIMEOUT_SECONDS;
+    xConnectInfo.passwordLength = 0;
+    xConnectInfo.pPassword = mqtt_password;
 
+    if ( xAzureIoTHubClientHandle->azure_iot_hub_client_token_refresh )
+    {
+        if ( xAzureIoTHubClientHandle->azure_iot_hub_client_token_refresh( xAzureIoTHubClientHandle,
+                                                                           xAzureIoTHubClientHandle->azure_iot_hub_client_time_function() + azureIoTHUBDEFAULTTOKENTIMEOUTINSEC,
+                                                                           xAzureIoTHubClientHandle->azure_iot_hub_client_symmetric_key,
+                                                                           xAzureIoTHubClientHandle->azure_iot_hub_client_symmetric_key_length,
+                                                                           ( uint8_t * ) mqtt_password, sizeof( mqtt_password ),
+                                                                           &bytesCopied ) )
+        {
+            LogError( ( "Failed to generate auth token \r\n" ) );
+            return AZURE_IOT_HUB_CLIENT_FAILED;
+        }
+
+        xConnectInfo.passwordLength = ( uint16_t ) bytesCopied;
+    }
+    
     /* Send MQTT CONNECT packet to broker. LWT is not used in this demo, so it
      * is passed as NULL. */
     if ( ( xResult = MQTT_Connect( &( xAzureIoTHubClientHandle -> xMQTTContext ),
@@ -514,6 +602,26 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
     }
 
     return ret;
+}
+
+AzureIoTHubClientError_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                            const uint8_t * pSymmetricKey, uint32_t pSymmetricKeyLength, 
+                                                            AzureIoTGetHMACFunc_t hmacFunction )
+{
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( pSymmetricKey == NULL ) || ( pSymmetricKeyLength == 0 ) ||
+         ( hmacFunction == NULL ) )
+    {
+        LogError( ("IoTHub client symmetric key fail: Invalid argument" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    xAzureIoTHubClientHandle->azure_iot_hub_client_symmetric_key = pSymmetricKey;
+    xAzureIoTHubClientHandle->azure_iot_hub_client_symmetric_key_length = pSymmetricKeyLength;
+    xAzureIoTHubClientHandle->azure_iot_hub_client_token_refresh = azure_iot_hub_client_token_get;
+    xAzureIoTHubClientHandle->azure_iot_hub_client_hmac_function = hmacFunction;
+
+    return AZURE_IOT_HUB_CLIENT_SUCCESS;
 }
 
 /*-----------------------------------------------------------*/

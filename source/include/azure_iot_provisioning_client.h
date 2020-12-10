@@ -20,11 +20,15 @@
 /* Transport interface include. */
 #include "FreeRTOS.h"
 
-#include "azure/az_iot.h"
+#include "azure_iot.h"
 
 #include "core_mqtt.h"
 #include "logging_stack.h"
 #include "transport_interface.h"
+
+#ifndef azureIoTPROVISIONINGDEFAULTTOKENTIMEOUTINSEC
+#define azureIoTPROVISIONINGDEFAULTTOKENTIMEOUTINSEC                        ( 60 * 60U )
+#endif
 
 #ifndef azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS
 #define azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS                ( 4 * 60U )
@@ -41,12 +45,11 @@ typedef enum AzureIoTProvisioningClientError
     AZURE_IOT_PROVISIONING_CLIENT_SUCCESS = 0,
     AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT,
     AZURE_IOT_PROVISIONING_CLIENT_STATUS_PENDING,
+    AZURE_IOT_PROVISIONING_CLIENT_STATUS_OOM,
     AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED,
     AZURE_IOT_PROVISIONING_CLIENT_SERVER_ERROR,
     AZURE_IOT_PROVISIONING_CLIENT_FAILED,
 } AzureIoTProvisioningClientError_t;
-
-typedef uint32_t( * AzureIoTGetCurrentTimeFunc_t)(void);
 
 typedef struct AzureIoTProvisioningClient
 {
@@ -70,11 +73,19 @@ typedef struct AzureIoTProvisioningClient
 
     uint32_t workflowState;
     uint32_t lastOperationResult;
-    uint32_t azure_iot_provisioning_client_req_timeout;
+    uint64_t azure_iot_provisioning_client_req_timeout;
     AzureIoTGetCurrentTimeFunc_t getTimeFunction;
+
+    const uint8_t * azure_iot_provisioning_client_symmetric_key;
+    uint32_t azure_iot_provisioning_client_symmetric_key_length;
+
+    uint32_t ( * azure_iot_provisioning_client_token_refresh )( struct AzureIoTProvisioningClient * xAzureIoTProvisioningClientHandle,
+                                                                uint64_t expiryTimeSecs, const uint8_t * key, uint32_t keyLen,
+                                                                uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
+    AzureIoTGetHMACFunc_t azure_iot_provisioning_client_hmac_function;
 } AzureIoTProvisioningClient_t;
 
-AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                                                    const char * pEndpoint, uint32_t endpointLength,
                                                                    const char * pIdScope, uint32_t idScopeLength,
                                                                    const char * pRegistrationId, uint32_t registrationIdLength,
@@ -83,11 +94,15 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
                                                                    const TransportInterface_t * pTransportInterface );
 
 
-void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle );
+void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle );
 
-AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle );
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+                                                                              const uint8_t * pSymmetricKey, uint32_t pSymmetricKeyLength,
+                                                                              AzureIoTGetHMACFunc_t hmacFunction );
 
-AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTDPSClientHandle,
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle );
+
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                                                      uint8_t * pHubHostname, uint32_t * pHostnameLength,
                                                                      uint8_t * pDeviceId, uint32_t * pDeviceIdLength );
 

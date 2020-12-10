@@ -107,16 +107,21 @@ extern void vLoggingPrintf( const char * pcFormatString,
 #define HOSTNAME                            "<YOUR IOT HUB HOSTNAME HERE>"
 
 /**
- * @brief Client's X509 Certificate.
+ * @brief Device symmetric key
  *
  */
-#define democonfigCLIENT_CERTIFICATE_PEM    "<YOUR DEVICE CERT HERE>"
+#define DEVICE_SYMMETRIC_KEY                "<Symmetric key>"
+
+/**
+ * @brief Client's X509 Certificate.
+ *
+ * #define democonfigCLIENT_CERTIFICATE_PEM    "<YOUR DEVICE CERT HERE>"
+ */
 
 /**
  * @brief Client's private key.
- *
+ * #define democonfigCLIENT_PRIVATE_KEY_PEM    "<YOUR DEVICE PRIVATE KEY HERE>"
  */
-#define democonfigCLIENT_PRIVATE_KEY_PEM    "<YOUR DEVICE PRIVATE KEY HERE>"
 
 /**
  * @brief Baltimore Trusted RooT CA.

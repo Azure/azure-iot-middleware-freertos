@@ -33,16 +33,24 @@
 /*-----------------------------------------------------------*/
 
 /* Compile time error for undefined configs. */
-#if !defined(HOSTNAME) && !defined(ENABLE_DPS_SAMPLE)
+#if !defined( HOSTNAME ) && !defined( ENABLE_DPS_SAMPLE )
     #error "Define the config HOSTNAME by following the instructions in file demo_config.h."
 #endif
 
-#if !defined(ENDPOINT) && defined(ENABLE_DPS_SAMPLE)
+#if !defined( ENDPOINT ) && defined( ENABLE_DPS_SAMPLE )
 #error "Define the config dps endpoint by following the instructions in file demo_config.h."
 #endif
 
 #ifndef democonfigROOT_CA_PEM
     #error "Please define Root CA certificate of the MQTT broker(democonfigROOT_CA_PEM) in demo_config.h."
+#endif
+
+#if defined( DEVICE_SYMMETRIC_KEY ) && defined( democonfigCLIENT_CERTIFICATE_PEM )
+    #error "Please define only one auth DEVICE_SYMMETRIC_KEY or democonfigCLIENT_CERTIFICATE_PEM in demo_config.h."
+#endif
+
+#if !defined( DEVICE_SYMMETRIC_KEY ) && !defined( democonfigCLIENT_CERTIFICATE_PEM )
+    #error "Please define one auth DEVICE_SYMMETRIC_KEY or democonfigCLIENT_CERTIFICATE_PEM in demo_config.h."
 #endif
 
 /*-----------------------------------------------------------*/
@@ -175,11 +183,11 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
                                                                   NetworkCredentials_t * pxNetworkCredentials,
                                                                   NetworkContext_t * pxNetworkContext );
 /**
- * @brief The timer query function provided to the MQTT context.
+ * @brief Unix time.
  *
  * @return Time in milliseconds.
  */
-static uint32_t prvGetTimeMs( void );
+static uint64_t prvGetUnixTime( void );
 
 /*-----------------------------------------------------------*/
 
@@ -189,12 +197,9 @@ static uint32_t prvGetTimeMs( void );
 static uint8_t ucSharedBuffer[ democonfigNETWORK_BUFFER_SIZE ];
 
 /**
- * @brief Global entry time into the application to use as a reference timestamp
- * in the #prvGetTimeMs function. #prvGetTimeMs will always return the difference
- * between the current time and the global entry time. This will reduce the chances
- * of overflow for the 32 bit unsigned integer used for holding the timestamp.
+ * @brief Global start unix time
  */
-static uint32_t ulGlobalEntryTimeMs;
+static uint64_t ulGlobalEntryTime = 1639093301;
 
 /** @brief Static buffer used to hold MQTT messages being sent and received. */
 static MQTTFixedBuffer_t xBuffer =
@@ -204,6 +209,44 @@ static MQTTFixedBuffer_t xBuffer =
 };
 
 /*-----------------------------------------------------------*/
+
+#ifdef DEVICE_SYMMETRIC_KEY
+
+static uint32_t calculateHMAC( const uint8_t * pKey, uint32_t keyLength,
+                               const uint8_t * pData, uint32_t dataLength,
+                               uint8_t * pOutput, uint32_t outputLength,
+                               uint32_t * pBytesCopied )
+{
+    uint32_t ret;
+
+    if ( outputLength < 32 )
+    {
+        return 1;
+    }
+
+    mbedtls_md_context_t ctx;
+    mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;           
+    mbedtls_md_init( &ctx );
+
+    if ( mbedtls_md_setup( &ctx, mbedtls_md_info_from_type( md_type ), 1 ) ||
+         mbedtls_md_hmac_starts( &ctx, pKey, keyLength ) ||
+         mbedtls_md_hmac_update( &ctx, pData, dataLength ) ||
+         mbedtls_md_hmac_finish( &ctx, pOutput ) )
+    {
+        ret = 1;
+    }
+    else
+    {
+        ret = 0;
+    }
+    
+    mbedtls_md_free( &ctx );
+    *pBytesCopied = 32;
+
+    return ret;
+}
+
+#endif // DEVICE_SYMMETRIC_KEY
 
 static void handle_c2d_message( AzureIoTHubClientMessage_t * message, void * context )
 {
@@ -291,13 +334,11 @@ static void prvAzureDemoTask( void * pvParameters )
     #else
     uint8_t* iotHubHostname = ( uint8_t * )HOSTNAME;
     uint8_t* iotHubDeviceId = ( uint8_t * )DEVICE_ID;
-    uint32_t iotHubHostnameLength = sizeof( HOSTNAME) - 1;
+    uint32_t iotHubHostnameLength = sizeof( HOSTNAME ) - 1;
     uint32_t iotHubDeviceIdLength = sizeof( DEVICE_ID ) - 1;
     #endif /* ENABLE_DPS_SAMPLE */
 
     ( void ) pvParameters;
-
-    ulGlobalEntryTimeMs = prvGetTimeMs();
 
     status = prvSetupNetworkCredentials( &xNetworkCredentials );
     configASSERT( status == 0);
@@ -345,9 +386,19 @@ static void prvAzureDemoTask( void * pvParameters )
                                           iotHubDeviceId, iotHubDeviceIdLength,
                                           ( const uint8_t * ) MODULE_ID, sizeof( MODULE_ID ) - 1,
                                           ucSharedBuffer, sizeof( ucSharedBuffer ),
-                                          prvGetTimeMs,
+                                          prvGetUnixTime,
                                           &xTransport );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
+#ifdef DEVICE_SYMMETRIC_KEY
+
+        xResult = AzureIoTHubClient_SymmetricKeySet( &xAzureIoTHubClient,
+                                                     ( const uint8_t * ) DEVICE_SYMMETRIC_KEY,
+                                                     sizeof( DEVICE_SYMMETRIC_KEY ) - 1, 
+                                                     calculateHMAC );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
+#endif // DEVICE_SYMMETRIC_KEY
 
         xResult = AzureIoTHubClient_Connect( &xAzureIoTHubClient,
                                              false, mqttexampleCONNACK_RECV_TIMEOUT_MS );
@@ -439,7 +490,7 @@ static uint32_t prvIoTHubInfoGet( NetworkCredentials_t * pXNetworkCredentials,
 
     /* Sends an MQTT Connect packet over the already established TLS connection,
      * and waits for connection acknowledgment (CONNACK) packet. */
-    LogInfo(("Creating an MQTT connection to %s.\r\n", ENDPOINT));
+    LogInfo( ( "Creating an MQTT connection to %s.\r\n", ENDPOINT ) );
 
     /* Initialize MQTT library. */
     xResult = AzureIoTProvisioningClient_Init( &xAzureIoTProvisioningClient,
@@ -447,18 +498,28 @@ static uint32_t prvIoTHubInfoGet( NetworkCredentials_t * pXNetworkCredentials,
                                                ID_SCOPE, sizeof( ID_SCOPE ) - 1,
                                                REGISTRATION_ID, sizeof( REGISTRATION_ID ) - 1,
                                                ucSharedBuffer, sizeof( ucSharedBuffer ),
-                                               prvGetTimeMs,
+                                               prvGetUnixTime,
                                                &xTransport );
-    configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+    configASSERT( xResult == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );
+
+#ifdef DEVICE_SYMMETRIC_KEY
+
+    xResult = AzureIoTProvisioningClient_SymmetricKeySet( &xAzureIoTProvisioningClient,
+                                                          ( const uint8_t * ) DEVICE_SYMMETRIC_KEY,
+                                                          sizeof( DEVICE_SYMMETRIC_KEY ) - 1,
+                                                          calculateHMAC );
+    configASSERT( xResult == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );
+
+#endif // DEVICE_SYMMETRIC_KEY
 
     /****************** Publish and Keep Alive Loop. **********************/
     xResult = AzureIoTProvisioningClient_Register( &xAzureIoTProvisioningClient );
-    configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+    configASSERT( xResult == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );
     
     xResult = AzureIoTProvisioningClient_HubGet( &xAzureIoTProvisioningClient,   
                                                  sampleIotHubHostname, &sampleIotHubHostnameLength,
                                                  sampleIotHubDeviceId, &sampleIotHubDeviceIdLength );
-    configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+    configASSERT( xResult == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );
 
     AzureIoTProvisioningClient_Deinit( &xAzureIoTProvisioningClient );
     
@@ -501,7 +562,7 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
         /* Establish a TLS session with the MQTT broker. This example connects to
          * the MQTT broker as specified in HOSTNAME and
          * democonfigMQTT_BROKER_PORT at the top of this file. */
-        LogInfo( ( "Creating a TLS connection to %s:%u.\r\n", pHostName, port) );
+        LogInfo( ( "Creating a TLS connection to %s:%u.\r\n", pHostName, port ) );
         /* Attempt to create a mutually authenticated TLS connection. */
         xNetworkStatus = TLS_FreeRTOS_Connect( pxNetworkContext,
                                                pHostName, port,
@@ -535,22 +596,22 @@ static TlsTransportStatus_t prvConnectToServerWithBackoffRetries( const char * p
 }
 /*-----------------------------------------------------------*/
 
-static uint32_t prvGetTimeMs( void )
+static uint64_t prvGetUnixTime( void )
 {
     TickType_t xTickCount = 0;
-    uint32_t ulTimeMs = 0UL;
+    uint64_t ulTime = 0UL;
 
     /* Get the current tick count. */
     xTickCount = xTaskGetTickCount();
 
     /* Convert the ticks to milliseconds. */
-    ulTimeMs = ( uint32_t ) xTickCount * MILLISECONDS_PER_TICK;
+    ulTime = ( uint64_t ) xTickCount / configTICK_RATE_HZ;
 
     /* Reduce ulGlobalEntryTimeMs from obtained time so as to always return the
      * elapsed time in the application. */
-    ulTimeMs = ( uint32_t ) ( ulTimeMs - ulGlobalEntryTimeMs );
+    ulTime = ( uint64_t ) ( ulTime + ulGlobalEntryTime );
 
-    return ulTimeMs;
+    return ulTime;
 }
 
 /*-----------------------------------------------------------*/

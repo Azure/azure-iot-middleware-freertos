@@ -502,6 +502,7 @@
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <ClCompile Include="..\..\libraries\FreeRTOS\FreeRTOS-Plus\Demo\Common\Logging\windows\Logging_WinSim.c" />
+    <ClCompile Include="..\..\source\azure_iot.c" />
     <ClCompile Include="..\..\source\azure_iot_hub_client.c" />
     <ClCompile Include="..\..\source\azure_iot_provisioning_client.c" />
     <ClCompile Include="..\Common\main.c" />
@@ -626,6 +627,7 @@
     <ClInclude Include="..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include\mbedtls\x509_crt.h" />
     <ClInclude Include="..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include\mbedtls\x509_csr.h" />
     <ClInclude Include="..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include\mbedtls\xtea.h" />
+    <ClInclude Include="..\..\source\include\azure_iot.h" />
     <ClInclude Include="..\..\source\include\azure_iot_hub_client.h" />
     <ClInclude Include="..\..\source\include\azure_iot_provisioning_client.h" />
     <ClInclude Include="mbedtls_config.h" />
