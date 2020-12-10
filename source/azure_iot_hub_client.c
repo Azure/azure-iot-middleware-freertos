@@ -30,7 +30,7 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClientHandle_t xAzureIoTHu
     uint32_t index;
     configASSERT( pxPublishInfo != NULL );
 
-    for( index = 0; index < sizeof( xAzureIoTHubClientHandle->xReceiveContext ); index++ )
+    for( index = 0; index < ( sizeof( xAzureIoTHubClientHandle->xReceiveContext ) / sizeof( xAzureIoTHubClientHandle->xReceiveContext[0] ) ); index++ )
     {
         if ( xAzureIoTHubClientHandle->xReceiveContext[index].process_function != NULL &&
              ( xAzureIoTHubClientHandle->xReceiveContext[index].process_function( xAzureIoTHubClientHandle, pxPublishInfo ) == AZURE_IOT_HUB_CLIENT_SUCCESS ) )
