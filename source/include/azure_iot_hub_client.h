@@ -40,8 +40,9 @@
 
 #define AZURE_IOT_HUB_C2D_MESSAGE                               ( 0x1 )
 #define AZURE_IOT_HUB_DIRECT_METHOD_MESSAGE                     ( 0x2 )
-#define AZURE_IOT_HUB_DEVICE_TWIN_MESSAGE                       ( 0x3 )
-#define AZURE_IOT_HUB_DESIRED_PROPERTY_MESSAGE                  ( 0x4 )
+#define AZURE_IOT_HUB_TWIN_GET_MESSAGE                          ( 0x3 )
+#define AZURE_IOT_HUB_TWIN_REPORTED_RESPONSE_MESSAGE            ( 0x4 )
+#define AZURE_IOT_HUB_TWIN_DESIRED_PROPERTY_MESSAGE             ( 0x5 )
 
 typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
@@ -111,6 +112,8 @@ typedef struct AzureIoTHubClient
     AzureIoTGetHMACFunc_t azure_iot_hub_client_hmac_function;
     AzureIoTGetCurrentTimeFunc_t azure_iot_hub_client_time_function;
     
+    uint32_t currentRequestId;
+
     AzureIoTHubClientReceiveContext_t xReceiveContext[3];
 } AzureIoTHubClient_t;
 
@@ -153,7 +156,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
                                                              void * callback_context );
 
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMessage_t * message, uint32_t status,
-                                                               const char * payload, uint32_t payloadLength );
+                                                               AzureIoTHubClientMessage_t* message, uint32_t status,
+                                                               const char * pMethodPayload, uint32_t methodPayloadLength);
+
+AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                   const char* pReportedPayload, uint32_t reportedPayloadLength);
+
+AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle);
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */

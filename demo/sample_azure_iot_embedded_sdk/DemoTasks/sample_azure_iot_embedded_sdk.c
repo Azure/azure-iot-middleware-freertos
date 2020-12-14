@@ -92,6 +92,11 @@
 #define mqttexampleMESSAGE                                  "Hello World!"
 
 /**
+ * @brief The reported property payload to send to IoT Hub
+ */
+#define mqttexampleTWIN_PROPERTY                            " { \"hello\": \"world\" } "
+
+/**
  * @brief Time in ticks to wait between each cycle of the demo implemented
  * by prvMQTTDemoTask().
  */
@@ -276,6 +281,20 @@ static void handle_device_twin_message( AzureIoTHubClientMessage_t * message, vo
 {
     ( void ) context;
 
+    switch( message->message_type )
+    {
+        case AZURE_IOT_HUB_TWIN_GET_MESSAGE:
+            LogInfo( ("Device twin document GET received") );
+            break;
+        case AZURE_IOT_HUB_TWIN_REPORTED_RESPONSE_MESSAGE:
+            LogInfo( ("Device twin reported property response received") );
+            break;
+        case AZURE_IOT_HUB_TWIN_DESIRED_PROPERTY_MESSAGE:
+            LogInfo( ("Device twin desired property received") );
+            break;
+        default:
+            LogError( ("Unknown twin message") );
+    }
     LogInfo( ( "Twin document payload : %.*s \r\n",
                message->pxPublishInfo->payloadLength,
                message->pxPublishInfo->pPayload ) );
@@ -415,6 +434,10 @@ static void prvAzureDemoTask( void * pvParameters )
         xResult = AzureIoTHubClient_DeviceTwinEnable( &xAzureIoTHubClient, handle_device_twin_message, &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
+        // Get the device twin on boot
+        xResult = AzureIoTHubClient_DeviceTwinGet( &xAzureIoTHubClient);
+        configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
+
         /****************** Publish and Keep Alive Loop. **********************/
         /* Publish messages with QoS1, send and process Keep alive messages. */
         for( ulPublishCount = 0; ulPublishCount < ulMaxPublishCount; ulPublishCount++ )
@@ -428,6 +451,15 @@ static void prvAzureDemoTask( void * pvParameters )
             xResult = AzureIoTHubClient_DoWork( &xAzureIoTHubClient,
                                                 mqttexamplePROCESS_LOOP_TIMEOUT_MS );
             configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
+            if ( ulPublishCount % 2 == 0)
+            {
+                // Send reported property every other cycle
+                xResult = AzureIoTHubClient_DeviceTwinReportedSend( &xAzureIoTHubClient,
+                                                        mqttexampleTWIN_PROPERTY,
+                                                        sizeof( mqttexampleTWIN_PROPERTY ) - 1 );
+                configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+            }
 
             /* Leave Connection Idle for some time. */
             LogInfo( ( "Keeping Connection Idle...\r\n\r\n" ) );

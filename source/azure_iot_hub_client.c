@@ -38,6 +38,8 @@ static char mqtt_user_name[128];
 static char mqtt_password[256];
 static char telemetry_topic[128];
 static char method_topic[128];
+static char device_twin_reported_topic[128];
+static char device_twin_get_topic[128];
 
 static void prvMQTTProcessIncomingPublish( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                            MQTTPublishInfo_t * pxPublishInfo )
@@ -172,7 +174,28 @@ static uint32_t azure_iot_hub_client_device_twin_process( AzureIoTHubClientHandl
 
     if ( xAzureIoTHubClientHandle->xReceiveContext[2].callback )
     {
-        message.message_type = out_request.response_type;
+        uint32_t request_id;
+        if ( az_span_size(out_request.request_id) == 0 )
+        {
+            message.message_type = AZURE_IOT_HUB_TWIN_DESIRED_PROPERTY_MESSAGE;
+        }
+        else
+        {
+            if( az_result_failed(az_span_atou32(out_request.request_id, &request_id)) )
+            {
+                return AZURE_IOT_HUB_CLIENT_FAILED;
+            }
+
+            if( request_id & 0x01 )
+            {
+                message.message_type = AZURE_IOT_HUB_TWIN_REPORTED_RESPONSE_MESSAGE;
+            }
+            else
+            {
+                message.message_type = AZURE_IOT_HUB_TWIN_GET_MESSAGE;
+            }
+        }
+
         message.pxPublishInfo = pxPublishInfo;
         xAzureIoTHubClientHandle->xReceiveContext[2].callback( &message,
                                                                xAzureIoTHubClientHandle->xReceiveContext[2].callback_context );
@@ -234,6 +257,39 @@ static uint32_t prvGetTimeMs( void )
     ulTimeMs = ( uint32_t ) xTickCount * MILLISECONDS_PER_TICK;
 
     return ulTimeMs;
+}
+
+static int prv_request_id_get( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                               az_span in_span, bool odd_seq, az_span* out_span)
+{
+    az_span span;
+
+    if ( odd_seq == (xAzureIoTHubClientHandle->currentRequestId & 0x01 == 1) )
+    {
+        xAzureIoTHubClientHandle->currentRequestId += 2;
+    }
+    else
+    {
+        xAzureIoTHubClientHandle->currentRequestId += 1;
+    }
+    
+    if ( xAzureIoTHubClientHandle->currentRequestId == 0)
+    {
+        xAzureIoTHubClientHandle->currentRequestId = 2;
+    }
+
+    az_span remainder;
+    az_result res = az_span_u32toa(in_span, xAzureIoTHubClientHandle->currentRequestId, &remainder);
+
+    if (az_result_failed(res))
+    {
+        LogError(("Couldn't convert request id to span"));
+        return AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+
+    *out_span = az_span_slice(*out_span, 0, az_span_size(*out_span) - az_span_size(remainder));
+
+    return AZURE_IOT_HUB_CLIENT_SUCCESS;
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
@@ -426,8 +482,8 @@ AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandl
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMessage_t * message, uint32_t status,
-                                                               const char * payload, uint32_t payloadLength )
+                                                               AzureIoTHubClientMessage_t* message, uint32_t status,
+                                                               const char * pMethodPayload, uint32_t methodPayloadLength)
 {
     MQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
@@ -452,8 +508,8 @@ AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient
     xMQTTPublishInfo.retain = false;
     xMQTTPublishInfo.pTopicName = method_topic;
     xMQTTPublishInfo.topicNameLength = ( uint16_t ) method_topic_length;
-    xMQTTPublishInfo.pPayload = payload;
-    xMQTTPublishInfo.payloadLength = payloadLength;
+    xMQTTPublishInfo.pPayload = pMethodPayload;
+    xMQTTPublishInfo.payloadLength = methodPayloadLength;
 
     /* Get a unique packet id. */
     usPublishPacketIdentifier = MQTT_GetPacketId( &( xAzureIoTHubClientHandle -> xMQTTContext ) );
@@ -622,6 +678,102 @@ AzureIoTHubClientError_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHan
     xAzureIoTHubClientHandle->azure_iot_hub_client_hmac_function = hmacFunction;
 
     return AZURE_IOT_HUB_CLIENT_SUCCESS;
+}
+
+AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                   const char* pReportedPayload, uint32_t reportedPayloadLength)
+{
+    MQTTStatus_t xResult;
+    AzureIoTHubClientError_t ret;
+    MQTTPublishInfo_t xMQTTPublishInfo;
+    uint16_t usPublishPacketIdentifier;
+
+    char request_id[10];
+    az_span request_id_span = az_span_create( ( uint8_t* )request_id, sizeof(request_id) );
+    prv_request_id_get(xAzureIoTHubClientHandle, request_id_span, true, &request_id_span);
+
+    size_t device_twin_reported_topic_length;
+    az_result res = az_iot_hub_client_twin_patch_get_publish_topic(&xAzureIoTHubClientHandle->iot_hub_client_core,
+                                                                      request_id_span,
+                                                                      device_twin_reported_topic, sizeof(device_twin_reported_topic),
+                                                                      &device_twin_reported_topic_length);
+    if(az_result_failed(res))
+    {
+        return AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+
+    /* Some fields are not used by this demo so start with everything at 0. */
+    ( void ) memset( ( void * ) &xMQTTPublishInfo, 0x00, sizeof( xMQTTPublishInfo ) );
+
+    /* This demo uses QoS1. */
+    xMQTTPublishInfo.qos = MQTTQoS1;
+    xMQTTPublishInfo.retain = false;
+    xMQTTPublishInfo.pTopicName = device_twin_reported_topic;
+    xMQTTPublishInfo.topicNameLength = ( uint16_t ) device_twin_reported_topic_length;
+    xMQTTPublishInfo.pPayload = pReportedPayload;
+    xMQTTPublishInfo.payloadLength = reportedPayloadLength;
+
+    /* Get a unique packet id. */
+    usPublishPacketIdentifier = MQTT_GetPacketId( &( xAzureIoTHubClientHandle -> xMQTTContext ) );
+
+    /* Send PUBLISH packet. Packet ID is not used for a QoS1 publish. */
+    if ( ( xResult = MQTT_Publish( &( xAzureIoTHubClientHandle -> xMQTTContext ),
+                                   &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != MQTTSuccess )
+    {
+        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+    }
+    else
+    {
+        ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
+    }
+
+    return ret;
+}
+
+AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle)
+{
+    MQTTStatus_t xResult;
+    AzureIoTHubClientError_t ret;
+    MQTTPublishInfo_t xMQTTPublishInfo;
+    uint16_t usPublishPacketIdentifier;
+
+    char request_id[10];
+    az_span request_id_span = az_span_create( ( uint8_t* )request_id, sizeof(request_id) );
+    prv_request_id_get(xAzureIoTHubClientHandle, request_id_span, false, &request_id_span);
+
+    size_t device_twin_get_topic_length;
+    az_result res = az_iot_hub_client_twin_document_get_publish_topic(&xAzureIoTHubClientHandle->iot_hub_client_core,
+                                                                      request_id_span,
+                                                                      device_twin_get_topic, sizeof(device_twin_get_topic),
+                                                                      &device_twin_get_topic_length);
+    if(az_result_failed(res))
+    {
+        return AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+
+    /* This demo uses QoS1. */
+    xMQTTPublishInfo.qos = MQTTQoS1;
+    xMQTTPublishInfo.retain = false;
+    xMQTTPublishInfo.pTopicName = device_twin_get_topic;
+    xMQTTPublishInfo.topicNameLength = ( uint16_t ) device_twin_get_topic_length;
+    xMQTTPublishInfo.pPayload =     NULL;
+    xMQTTPublishInfo.payloadLength = 0;
+
+    /* Get a unique packet id. */
+    usPublishPacketIdentifier = MQTT_GetPacketId( &( xAzureIoTHubClientHandle -> xMQTTContext ) );
+
+    /* Send PUBLISH packet. Packet ID is not used for a QoS1 publish. */
+    if ( ( xResult = MQTT_Publish( &( xAzureIoTHubClientHandle -> xMQTTContext ),
+                                   &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != MQTTSuccess )
+    {
+        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+    }
+    else
+    {
+        ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
+    }
+
+    return ret;
 }
 
 /*-----------------------------------------------------------*/
