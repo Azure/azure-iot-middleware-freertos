@@ -38,22 +38,25 @@
 #define azureIoTHubClientCONNACK_RECV_TIMEOUT_MS                ( 1000U )
 #endif
 
-#define AZURE_IOT_HUB_C2D_MESSAGE                               ( 0x1 )
-#define AZURE_IOT_HUB_DIRECT_METHOD_MESSAGE                     ( 0x2 )
-#define AZURE_IOT_HUB_TWIN_GET_MESSAGE                          ( 0x3 )
-#define AZURE_IOT_HUB_TWIN_REPORTED_RESPONSE_MESSAGE            ( 0x4 )
-#define AZURE_IOT_HUB_TWIN_DESIRED_PROPERTY_MESSAGE             ( 0x5 )
-
 typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
+
+typedef enum AzureIoTHubMessageType
+{
+    AZURE_IOT_HUB_C2D_MESSAGE = 0x1,                ///< The message is a C2D message.
+    AZURE_IOT_HUB_DIRECT_METHOD_MESSAGE,            ///< The message is a direct method message.
+    AZURE_IOT_HUB_TWIN_GET_MESSAGE,                 ///< The message is a twin get response (payload contains the twin document).
+    AZURE_IOT_HUB_TWIN_REPORTED_RESPONSE_MESSAGE,   ///< The message is a twin reported property status response.
+    AZURE_IOT_HUB_TWIN_DESIRED_PROPERTY_MESSAGE,    ///< The message is a twin desired property message (incoming from the service).
+} AzureIoTHubMessageType_t;
 
 typedef enum AzureIoTHubClientError
 {
-    AZURE_IOT_HUB_CLIENT_SUCCESS = 0,
-    AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT,
-    AZURE_IOT_HUB_CLIENT_STATUS_PENDING,
-    AZURE_IOT_HUB_CLIENT_STATUS_OOM,
-    AZURE_IOT_HUB_CLIENT_INIT_FAILED,
-    AZURE_IOT_HUB_CLIENT_FAILED,
+    AZURE_IOT_HUB_CLIENT_SUCCESS = 0,               ///< Success.
+    AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT,          ///< Input argument does not comply with the expected range of values.
+    AZURE_IOT_HUB_CLIENT_STATUS_PENDING,            ///< The status of the operation is pending.
+    AZURE_IOT_HUB_CLIENT_STATUS_OOM,                ///< The system is out of memory.
+    AZURE_IOT_HUB_CLIENT_INIT_FAILED,               ///< The initialization failed.
+    AZURE_IOT_HUB_CLIENT_FAILED,                    ///< There was a failure.
 } AzureIoTHubClientError_t;
 
 typedef uint64_t( * AzureIoTGetCurrentTimeFunc_t )( void );
@@ -69,7 +72,7 @@ typedef uint32_t( * AzureIoTGetHMACFunc_t )( const uint8_t * pKey, uint32_t keyL
 */
 typedef struct AzureIoTHubClientMessage
 {
-    uint8_t message_type;
+    AzureIoTHubMessageType_t message_type;
     MQTTPublishInfo_t * pxPublishInfo;
     union
     {
