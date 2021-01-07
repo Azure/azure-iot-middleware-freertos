@@ -119,10 +119,10 @@ void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzur
 /**
  * @brief Set the symmetric key to use for authentication.
  * 
- * @param xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param pSymmetricKey The symmetric key to use for the connection.
- * @param pSymmetricKeyLength The length of the \p pSymmetricKey.
- * @param hmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
+ * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[in] pSymmetricKey The symmetric key to use for the connection.
+ * @param[in] pSymmetricKeyLength The length of the \p pSymmetricKey.
+ * @param[in] hmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
@@ -132,7 +132,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( Az
 /**
  * @brief Begin the provisioning process.
  * 
- * @param xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle );
@@ -140,11 +140,11 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTP
 /**
  * @brief After a registration has been completed, get the IoT Hub host name and device id.
  * 
- * @param xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param pHubHostname The pointer to a buffer which will be populated with the IoT Hub hostname.
- * @param pHostnameLength The pointer to the uint32_t which will be populated with the length of the hostname.
- * @param pDeviceId The pointer to a buffer which will be populated with the device id.
- * @param pDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device id.
+ * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[out] pHubHostname The pointer to a buffer which will be populated with the IoT Hub hostname.
+ * @param[out] pHostnameLength The pointer to the `uint32_t` which will be populated with the length of the hostname.
+ * @param[out] pDeviceId The pointer to a buffer which will be populated with the device id.
+ * @param[out] pDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device id.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
