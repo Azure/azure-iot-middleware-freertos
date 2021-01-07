@@ -132,6 +132,12 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( Az
 /**
  * @brief Begin the provisioning process.
  * 
+ * @note This is a blocking call.
+ * 
+ * This call will issue the request to the service to provision this device. It will then poll the service
+ * to check if an IoT Hub and device id have been provided. After a successful result, AzureIoTProvisioningClient_HubGet() can
+ * be called to get the IoT Hub and device id. Otherwise an appropriate error result will be returned.
+ * 
  * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
