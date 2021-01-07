@@ -42,7 +42,7 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    AZURE_IOT_HUB_C2D_MESSAGE = 0x1,                    ///< The message is a C2D message.
+    AZURE_IOT_HUB_C2D_MESSAGE = 1,                    ///< The message is a C2D message.
     AZURE_IOT_HUB_DIRECT_METHOD_MESSAGE,                ///< The message is a direct method message.
     AZURE_IOT_HUB_TWIN_GET_MESSAGE,                     ///< The message is a twin get response (payload contains the twin document).
     AZURE_IOT_HUB_TWIN_REPORTED_RESPONSE_MESSAGE,       ///< The message is a twin reported property status response.
@@ -114,9 +114,10 @@ typedef struct AzureIoTHubClient
                                                        uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
     AzureIoTGetHMACFunc_t azure_iot_hub_client_hmac_function;
     AzureIoTGetCurrentTimeFunc_t azure_iot_hub_client_time_function;
-    
+
     uint32_t currentRequestId;
 
+    //TODO: Look to make this a possible define to save space
     AzureIoTHubClientReceiveContext_t xReceiveContext[3];
 } AzureIoTHubClient_t;
 
