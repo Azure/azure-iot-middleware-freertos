@@ -53,36 +53,39 @@ typedef enum AzureIoTProvisioningClientError
 
 typedef struct AzureIoTProvisioningClient
 {
-    MQTTContext_t xMQTTContext;
+    struct
+    {
+        MQTTContext_t xMQTTContext;
 
-    uint8_t * azure_iot_provisioning_client_last_response_payload;
-    uint32_t azure_iot_provisioning_client_last_response_payload_length;
-    uint8_t * azure_iot_provisioning_client_last_response_topic;
-    uint32_t azure_iot_provisioning_client_last_response_topic_length;
+        uint8_t * azure_iot_provisioning_client_last_response_payload;
+        uint32_t azure_iot_provisioning_client_last_response_payload_length;
+        uint8_t * azure_iot_provisioning_client_last_response_topic;
+        uint32_t azure_iot_provisioning_client_last_response_topic_length;
 
-    az_iot_provisioning_client_register_response register_response;
-    
-    az_iot_provisioning_client iot_dps_client_core;
+        az_iot_provisioning_client_register_response register_response;
+        
+        az_iot_provisioning_client iot_dps_client_core;
 
-    const char * pRegistrationId;
-    uint32_t registrationIdLength;
-    const char * pEndpoint;
-    uint32_t endpointLength;
-    const char * pIdScope;
-    uint32_t idScopeLength;
+        const char * pRegistrationId;
+        uint32_t registrationIdLength;
+        const char * pEndpoint;
+        uint32_t endpointLength;
+        const char * pIdScope;
+        uint32_t idScopeLength;
 
-    uint32_t workflowState;
-    uint32_t lastOperationResult;
-    uint64_t azure_iot_provisioning_client_req_timeout;
-    AzureIoTGetCurrentTimeFunc_t getTimeFunction;
+        uint32_t workflowState;
+        uint32_t lastOperationResult;
+        uint64_t azure_iot_provisioning_client_req_timeout;
+        AzureIoTGetCurrentTimeFunc_t getTimeFunction;
 
-    const uint8_t * azure_iot_provisioning_client_symmetric_key;
-    uint32_t azure_iot_provisioning_client_symmetric_key_length;
+        const uint8_t * azure_iot_provisioning_client_symmetric_key;
+        uint32_t azure_iot_provisioning_client_symmetric_key_length;
 
-    uint32_t ( * azure_iot_provisioning_client_token_refresh )( struct AzureIoTProvisioningClient * xAzureIoTProvisioningClientHandle,
-                                                                uint64_t expiryTimeSecs, const uint8_t * key, uint32_t keyLen,
-                                                                uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
-    AzureIoTGetHMACFunc_t azure_iot_provisioning_client_hmac_function;
+        uint32_t ( * azure_iot_provisioning_client_token_refresh )( struct AzureIoTProvisioningClient * xAzureIoTProvisioningClientHandle,
+                                                                    uint64_t expiryTimeSecs, const uint8_t * key, uint32_t keyLen,
+                                                                    uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
+        AzureIoTGetHMACFunc_t azure_iot_provisioning_client_hmac_function;
+    } _internal;
 } AzureIoTProvisioningClient_t;
 
 /**

@@ -98,27 +98,29 @@ typedef struct AzureIoTHubClientReceiveContext
 
 typedef struct AzureIoTHubClient
 {
-    MQTTContext_t xMQTTContext;
+    struct
+    {
+        MQTTContext_t xMQTTContext;
 
-    az_iot_hub_client iot_hub_client_core;
+        az_iot_hub_client iot_hub_client_core;
 
-    const uint8_t * hostname;
-    uint32_t hostnameLength;
-    const uint8_t *deviceId;
-    uint32_t deviceIdLength;
-    const uint8_t * azure_iot_hub_client_symmetric_key;
-    uint32_t azure_iot_hub_client_symmetric_key_length;
+        const uint8_t * hostname;
+        uint32_t hostnameLength;
+        const uint8_t *deviceId;
+        uint32_t deviceIdLength;
+        const uint8_t * azure_iot_hub_client_symmetric_key;
+        uint32_t azure_iot_hub_client_symmetric_key_length;
 
-    uint32_t ( * azure_iot_hub_client_token_refresh )( struct AzureIoTHubClient * xAzureIoTHubClientHandle,
-                                                       uint64_t expiryTimeSecs, const uint8_t * key, uint32_t keyLen,
-                                                       uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
-    AzureIoTGetHMACFunc_t azure_iot_hub_client_hmac_function;
-    AzureIoTGetCurrentTimeFunc_t azure_iot_hub_client_time_function;
+        uint32_t ( * azure_iot_hub_client_token_refresh )( struct AzureIoTHubClient * xAzureIoTHubClientHandle,
+                                                        uint64_t expiryTimeSecs, const uint8_t * key, uint32_t keyLen,
+                                                        uint8_t * pSASBuffer, uint32_t sasBufferLen, uint32_t * pSaSLength );
+        AzureIoTGetHMACFunc_t azure_iot_hub_client_hmac_function;
+        AzureIoTGetCurrentTimeFunc_t azure_iot_hub_client_time_function;
 
-    uint32_t currentRequestId;
+        uint32_t currentRequestId;
 
-    //TODO: Look to make this a possible define to save space
-    AzureIoTHubClientReceiveContext_t xReceiveContext[3];
+        AzureIoTHubClientReceiveContext_t xReceiveContext[3];
+    } _internal;
 } AzureIoTHubClient_t;
 
 /**
