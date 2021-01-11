@@ -448,7 +448,8 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
 }
 
 AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                          const char * pTelemetryData, uint32_t telemetryDataLength )
+                                                          const char * pTelemetryData, uint32_t telemetryDataLength,
+                                                          AzureIoTMessageProperties_t* properties )
 {
     MQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
@@ -457,8 +458,8 @@ AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandl
 
     size_t telemetry_topic_length;
     if( az_result_failed( az_iot_hub_client_telemetry_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
-                                                                         NULL, telemetry_topic,
-                                                                         sizeof( telemetry_topic ), &telemetry_topic_length ) ) )
+                                                                         properties != NULL ? &properties->_internal.properties : NULL,
+                                                                         telemetry_topic, sizeof( telemetry_topic ), &telemetry_topic_length ) ) )
 
     /* Some fields are not used by this demo so start with everything at 0. */
     ( void ) memset( ( void * ) &xMQTTPublishInfo, 0x00, sizeof( xMQTTPublishInfo ) );

@@ -197,10 +197,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @param[in] pTelemetryData The pointer to the buffer of telemetry data.
  * @param[in] telemetryDataLength The length of the buffer to send as telemetry.
+ * @param[in] properties The property bag to send with the message.
  * @return An #AzureIoTHubClientError_t with the result of the operation.
  */
 AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                          const char * pTelemetryData, uint32_t telemetryDataLength );
+                                                          const char * pTelemetryData, uint32_t telemetryDataLength,
+                                                          AzureIoTMessageProperties_t* properties );
 
 /**
  * @brief Do work receiving MQTT messages from IoT Hub.

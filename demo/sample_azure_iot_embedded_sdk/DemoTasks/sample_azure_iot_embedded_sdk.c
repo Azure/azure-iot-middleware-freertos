@@ -139,6 +139,8 @@ static uint8_t sampleIotHubHostname[128];
 static uint8_t sampleIotHubDeviceId[128];
 #endif /* ENABLE_DPS_SAMPLE */
 
+static uint8_t propertyBuffer[32];
+
 /* Each compilation unit must define the NetworkContext struct. */
 struct NetworkContext
 {
@@ -438,13 +440,22 @@ static void prvAzureDemoTask( void * pvParameters )
         xResult = AzureIoTHubClient_DeviceTwinGet( &xAzureIoTHubClient);
         configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
 
+        // Create a bag of properties for the telemetry
+        AzureIoTMessageProperties_t propertyBag;
+        xResult = AzureIoTMessagePropertiesInit(&propertyBag, propertyBuffer, 0, sizeof(propertyBag));
+        configASSERT(xResult == AZURE_IOT_HUB_CLIENT_SUCCESS);
+
+        xResult = AzureIoTMessagePropertiesAppend(&propertyBag, "name", strlen("name"),
+                                                               "value", strlen("value"));
+
         /****************** Publish and Keep Alive Loop. **********************/
         /* Publish messages with QoS1, send and process Keep alive messages. */
         for( ulPublishCount = 0; ulPublishCount < ulMaxPublishCount; ulPublishCount++ )
         {
             xResult = AzureIoTHubClient_TelemetrySend( &xAzureIoTHubClient,
                                                        mqttexampleMESSAGE,
-                                                       sizeof( mqttexampleMESSAGE ) - 1 );
+                                                       sizeof( mqttexampleMESSAGE ) - 1,
+                                                       &propertyBag );
             configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
             LogInfo( ( "Attempt to receive publish message from IoTHub.\r\n" ) );
