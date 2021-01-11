@@ -212,6 +212,55 @@ static AzureIoTError_t azure_iot_base64_encode( uint8_t * name, uint32_t length,
     return AZURE_IOT_SUCCESS;
 }
 
+AzureIoTError_t AzureIoTMessagePropertiesInit(AzureIoTMessageProperties_t* messageProperties,
+                                              uint8_t* buffer, uint32_t writtenLength,
+                                              uint32_t bufferLength)
+{
+    az_span propertyBufferSpan = az_span_create(buffer, bufferLength);
+    az_result result = az_iot_message_properties_init(&messageProperties->_internal.properties, propertyBufferSpan, writtenLength);
+    if (az_result_failed(result))
+    {
+        return AZURE_IOT_FAILED;
+    }
+
+    return AZURE_IOT_SUCCESS;
+}
+
+AzureIoTError_t AzureIoTMessagePropertiesAppend(AzureIoTMessageProperties_t* messageProperties,
+                                                uint8_t* pName, uint32_t nameLength,
+                                                uint8_t* pValue, uint32_t valueLength)
+{
+    az_span nameSpan = az_span_create(pName, nameLength);
+    az_span valueSpan = az_span_create(pValue, valueLength);
+
+    az_result result = az_iot_message_properties_append(&messageProperties->_internal.properties, nameSpan, valueSpan);
+    if (az_result_failed(result))
+    {
+        return AZURE_IOT_FAILED;
+    }
+
+    return AZURE_IOT_SUCCESS;
+}
+
+AzureIoTError_t AzureIoTMessagePropertiesFind(AzureIoTMessageProperties_t* messageProperties,
+                                              uint8_t* pName, uint32_t nameLength,
+                                              uint8_t** outValue, uint32_t* outValueLength)
+{
+    az_span nameSpan = az_span_create(pName, nameLength);
+    az_span outValueSpan;
+
+    az_result result = az_iot_message_properties_find(&messageProperties->_internal.properties, nameSpan, &outValueSpan);
+    if(az_result_failed(result))
+    {
+        return AZURE_IOT_STATUS_ITEM_NOT_FOUND;
+    }
+
+    *outValue = az_span_ptr(outValueSpan);
+    *outValueLength = az_span_size(outValueSpan);
+
+    return AZURE_IOT_SUCCESS;
+}
+
 AzureIoTError_t AzureIoTBase64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
                                              const uint8_t *key_ptr, uint32_t key_size,
                                              const uint8_t *message_ptr, uint32_t message_size,
