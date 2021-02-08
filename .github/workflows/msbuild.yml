@@ -29,4 +29,4 @@ jobs:
       working-directory: ${{env.GITHUB_WORKSPACE}}
       # Add additional options to the MSBuild command line here (like platform or verbosity level).
       # See https://docs.microsoft.com/visualstudio/msbuild/msbuild-command-line-reference
-      run: msbuild /m .\demo\sample_azure_iot_embedded_sdk\sample_azure_iot_embedded_sdk.sln
+      run: msbuild /m .\demo\sample_azure_iot_embedded_sdk\windows\sample_azure_iot_embedded_sdk.sln
