@@ -490,6 +490,15 @@ static void prvAzureDemoTask( void * pvParameters )
 
         /**************************** Disconnect. *****************************/
 
+        xResult = AzureIoTHubClient_DeviceTwinDisable( &xAzureIoTHubClient );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
+        xResult = AzureIoTHubClient_DirectMethodDisable( &xAzureIoTHubClient );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
+        xResult = AzureIoTHubClient_CloudMessageDisable( &xAzureIoTHubClient );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
         /* Send an MQTT Disconnect packet over the already connected TLS over
          * TCP connection. There is no corresponding response for the disconnect
          * packet. After sending disconnect, client must close the network
