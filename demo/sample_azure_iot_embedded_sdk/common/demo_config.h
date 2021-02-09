@@ -74,6 +74,8 @@ extern void vLoggingPrintf( const char * pcFormatString,
 
 /**
  * @brief Registration Id of provisioning service
+ * 
+ * @warning If using X509 authentication, this MUST match the Common Name of the cert.
  *
  *  @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#registration-id
  */
