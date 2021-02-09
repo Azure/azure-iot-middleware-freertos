@@ -474,7 +474,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
                                                            mqtt_user_name, sizeof( mqtt_user_name ),
                                                            &mqtt_user_name_length ) ) )
     {
-        return AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        return AZURE_IOT_HUB_CLIENT_FAILED;
     }
 
     /* The client identifier is used to uniquely identify this MQTT client to
@@ -515,7 +515,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
         AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%d \r\n",
                       xAzureIoTHubClientHandle->_internal.hostnameLength, xAzureIoTHubClientHandle->_internal.hostname,
                       xResult ) );
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -535,7 +535,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
 
     if( ( xResult = AzureIoTMQTT_Disconnect( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ) ) ) != AzureIoTMQTTSuccess )
     {
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -582,7 +582,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandl
     if( ( xResult = AzureIoTMQTT_Publish( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
                                           &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != AzureIoTMQTTSuccess )
     {
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -630,7 +630,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient
     if( ( xResult = AzureIoTMQTT_Publish( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
                                           &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != AzureIoTMQTTSuccess )
     {
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -651,7 +651,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_
     {
         AZLogError( ( "MQTT_ProcessLoop failed : ProcessLoopDuration=%u, Error=%d\r\n", timeoutMs,
                       xResult ) );
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -684,7 +684,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
     {
         AZLogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%d",
                       xResult ) );
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -723,7 +723,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
     {
         AZLogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%d",
                       xResult ) );
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -766,7 +766,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
     {
         AZLogError( ( "Failed to SUBSCRIBE to MQTT topic. Error=%d \r\n",
                       xResult ) );
-        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
     else
     {
@@ -905,6 +905,109 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandl
     }
     else
     {
+        ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
+    }
+
+    return ret;
+}
+
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+{
+    AzureIoTMQTTSubscribeInfo_t mqttSubscription;
+    AzureIoTMQTTStatus_t xResult;
+    AzureIoTHubClientError_t ret;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
+
+    mqttSubscription.qos = AzureIoTMQTTQoS1;
+    mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
+    mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
+    usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ) );
+
+    AZLogInfo( ( "Attempt to unsubscribe from the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
+
+    if( ( xResult = AzureIoTMQTT_Unsubscribe( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
+                                              &mqttSubscription, 1, usSubscribePacketIdentifier ) ) != AzureIoTMQTTSuccess )
+    {
+        AZLogError( ( "Failed to UNSUBSCRIBE from MQTT topic. Error=%d",
+                      xResult ) );
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+    else
+    {
+        memset( context, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+        ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
+    }
+
+    return ret;
+}
+
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+{
+    AzureIoTMQTTSubscribeInfo_t mqttSubscription;
+    AzureIoTMQTTStatus_t xResult;
+    AzureIoTHubClientError_t ret;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
+
+    mqttSubscription.qos = AzureIoTMQTTQoS0;
+    mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
+    mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
+    usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ) );
+
+    AZLogInfo( ( "Attempt to unsubscribe from the MQTT  %s topics.\r\n", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) );
+
+    if( ( xResult = AzureIoTMQTT_Unsubscribe( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
+                                              &mqttSubscription, 1, usSubscribePacketIdentifier ) ) != AzureIoTMQTTSuccess )
+    {
+        AZLogError( ( "Failed to UNSUBSCRIBE from MQTT topic. Error=%d",
+                      xResult ) );
+        ret = AZURE_IOT_HUB_CLIENT_FAILED;
+    }
+    else
+    {
+        memset( context, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+        ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
+    }
+
+    return ret;
+}
+
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+{
+    AzureIoTMQTTSubscribeInfo_t mqttSubscription[ 2 ];
+    AzureIoTMQTTStatus_t xResult;
+    AzureIoTHubClientError_t ret;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
+
+    mqttSubscription[ 0 ].qos = AzureIoTMQTTQoS0;
+    mqttSubscription[ 0 ].pTopicFilter = AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
+    mqttSubscription[ 0 ].topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+    mqttSubscription[ 1 ].qos = AzureIoTMQTTQoS0;
+    mqttSubscription[ 1 ].pTopicFilter = AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
+    mqttSubscription[ 1 ].topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) - 1;
+    usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ) );
+
+    AZLogInfo( ( "Attempt to unsubscribe from the MQTT  %s and %s topics.\r\n",
+                 AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) );
+
+    if( ( xResult = AzureIoTMQTT_Unsubscribe( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
+                                              mqttSubscription, 2, usSubscribePacketIdentifier ) ) != AzureIoTMQTTSuccess )
+    {
+        AZLogError( ( "Failed to UNSUBSCRIBE from MQTT topic. Error=%d \r\n",
+                      xResult ) );
+        ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
+    }
+    else
+    {
+        memset( context, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
 
