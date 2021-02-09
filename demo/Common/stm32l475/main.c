@@ -44,12 +44,12 @@
 
 #ifndef WIFI_SSID
 //#error "Symbol WIFI_SSID must be defined."
-#define WIFI_SSID "higupt-dev3"
+#define WIFI_SSID "<SSID>"
 #endif /* WIFI_SSID  */
 
 #ifndef WIFI_PASSWORD
 //#error "Symbol WIFI_PASSWORD must be defined."
-#define WIFI_PASSWORD "welcome1"
+#define WIFI_PASSWORD "<Password>"
 #endif /* WIFI_PASSWORD  */
 
 /* WIFI Security type, the security types are defined in wifi.h.
@@ -165,22 +165,17 @@ UBaseType_t uxRand( void )
 
 void vApplicationDaemonTaskStartupHook( void )
 {
-    BaseType_t xWifiStatus;
+	/**
+	* Initialize wifi semaphore
+	*/
+	xWifiSemaphoreHandle = xSemaphoreCreateMutexStatic( &( xSemaphoreBuffer ) );
+	/* Initialize semaphore. */
+	xSemaphoreGive( xWifiSemaphoreHandle );
 
-    if( ( xWifiStatus = prvInitializeWifi() ) == 0 )
-    {
-        /* Demos that use the network are created after the network is
-         * up. */
-        configPRINTF( ( "---------STARTING DEMO---------\r\n" ) );
-        vStartSimpleMQTTDemo();
-    }
-    else
-    {
-        configPRINTF( ( "WiFi module failed to initialize.\r\n" ) );
-
-        /* Stop here if we fail to initialize WiFi. */
-        configASSERT( xWifiStatus == 0 );
-    }
+    /* Demos that use the network are created after the network is
+    * up. */
+    configPRINTF( ( "---------STARTING DEMO---------\r\n" ) );
+    vStartSimpleMQTTDemo();
 }
 /*-----------------------------------------------------------*/
 
@@ -199,13 +194,6 @@ static BaseType_t prvInitializeWifi( void )
 
     if( xWifiStatus == WIFI_STATUS_OK )
     {
-        /**
-         * Initialize wifi semaphore
-         */
-        xWifiSemaphoreHandle = xSemaphoreCreateMutexStatic( &( xSemaphoreBuffer ) );
-        /* Initialize semaphore. */
-        xSemaphoreGive( xWifiSemaphoreHandle );
-
         configPRINTF( ( "WiFi module initialized.\r\n" ) );
         
         configPRINTF( ( "STM32L4XX Lib:\r\n") );
@@ -411,6 +399,11 @@ static void prvMiscInitialization( void )
 
     /* UART console init. */
     Console_UART_Init();
+
+    if( prvInitializeWifi() != 0 )
+    {
+        Error_Handler();
+    }
 }
 /*-----------------------------------------------------------*/
 
