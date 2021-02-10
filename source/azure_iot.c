@@ -9,7 +9,7 @@
 
 #include "azure_iot.h"
 
-static char _azure_iot_base64_array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+static const char _azure_iot_base64_array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 static void azure_iot_log_listener( az_log_classification classification, az_span message )
 {

@@ -8,8 +8,6 @@
 
 #include "azure_iot_provisioning_client.h"
 
-#include <stdio.h>
-
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
