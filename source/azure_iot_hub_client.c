@@ -405,6 +405,16 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
     AzureIoTHubClientError_t ret;
     az_iot_hub_client_options options;
 
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( pHostname == NULL ) || ( hostnameLength == 0 ) ||
+         ( pDeviceId == NULL ) || ( deviceIdLength == 0 ) ||
+         ( pBuffer == NULL ) || ( bufferLength == 0 ) ||
+         ( getTimeFunction == NULL ) || ( pTransportInterface == NULL ) )
+    {
+        AZLogError( ( "Failed to initialize: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
     memset( ( void * ) xAzureIoTHubClientHandle, 0, sizeof( AzureIoTHubClient_t ) );
 
     /* Initialize Azure IoT Hub Client */
@@ -419,6 +429,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
     if( az_result_failed( az_iot_hub_client_init( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
                                                   hostname_span, device_id_span, &options ) ) )
     {
+        AZLogError( ( "Failed to initialize az_iot_hub_client_init \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     /* Initialize AzureIoTMQTT library. */
@@ -426,6 +437,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
                                             prvGetTimeMs, prvEventCallback,
                                             pBuffer,  bufferLength ) ) != AzureIoTMQTTSuccess )
     {
+        AZLogError( ( "Failed to initialize AzureIoTMQTT_Init \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INIT_FAILED;
     }
     else
@@ -458,6 +470,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     bool xSessionPresent;
     uint32_t bytesCopied;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to connect: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
     ( void ) memset( ( void * ) &xConnectInfo, 0x00, sizeof( xConnectInfo ) );
 
     /* Start with a clean session i.e. direct the MQTT broker to discard any
@@ -472,6 +490,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
                                                            mqtt_user_name, sizeof( mqtt_user_name ),
                                                            &mqtt_user_name_length ) ) )
     {
+        AZLogError( ( "Failed to get username\r\n" ) );
         return AZURE_IOT_HUB_CLIENT_FAILED;
     }
 
@@ -531,6 +550,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to disconnect: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
     if( ( xResult = AzureIoTMQTT_Disconnect( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ) ) ) != AzureIoTMQTTSuccess )
     {
         ret = AZURE_IOT_HUB_CLIENT_FAILED;
@@ -554,8 +579,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandl
     AzureIoTHubClientError_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo;
     uint16_t usPublishPacketIdentifier;
-
     size_t telemetry_topic_length;
+
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to send telemetry: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
 
     if( az_result_failed( az_iot_hub_client_telemetry_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
                                                                          ( properties != NULL ) ? &properties->_internal.properties : NULL,
@@ -600,12 +630,21 @@ AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient
     AzureIoTHubClientError_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     uint16_t usPublishPacketIdentifier;
-    az_span requestIdSpan = az_span_create( ( uint8_t * ) message->requestId, ( int32_t ) message->requestIdLength );
-
+    az_span requestIdSpan;
     size_t method_topic_length;
-    az_result res = az_iot_hub_client_methods_response_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
-                                                                          requestIdSpan, ( uint16_t ) status, method_topic,
-                                                                          sizeof( method_topic ), &method_topic_length );
+    az_result res;
+
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( message == NULL ) )
+    {
+        AZLogError( ( "Failed to send method response: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    requestIdSpan = az_span_create( ( uint8_t * ) message->requestId, ( int32_t ) message->requestIdLength );
+    res = az_iot_hub_client_methods_response_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
+                                                                requestIdSpan, ( uint16_t ) status, method_topic,
+                                                                sizeof( method_topic ), &method_topic_length );
 
     if( az_result_failed( res ) )
     {
@@ -644,6 +683,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to process loop: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
     /* Process incoming UNSUBACK packet from the broker. */
     if( ( xResult = AzureIoTMQTT_ProcessLoop( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ), timeoutMs ) ) != AzureIoTMQTTSuccess )
     {
@@ -668,8 +713,16 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
-    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
+    AzureIoTHubClientReceiveContext_t * context;
 
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( callback == NULL ) )
+    {
+        AZLogError( ( "Failed to enable cloud message : Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
     mqttSubscription.qos = AzureIoTMQTTQoS1;
     mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
     mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
@@ -707,8 +760,16 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
-    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
+    AzureIoTHubClientReceiveContext_t * context;
 
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( callback == NULL ) )
+    {
+        AZLogError( ( "Failed to enable direct method: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
     mqttSubscription.qos = AzureIoTMQTTQoS0;
     mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
     mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
@@ -746,8 +807,16 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
-    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
+    AzureIoTHubClientReceiveContext_t * context;
 
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( callback == NULL ) )
+    {
+        AZLogError( ( "Failed to enable device twin: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
     mqttSubscription[ 0 ].qos = AzureIoTMQTTQoS0;
     mqttSubscription[ 0 ].pTopicFilter = AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
     mqttSubscription[ 0 ].topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
@@ -815,6 +884,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubCl
     az_result res;
     az_span request_id_span = az_span_create( ( uint8_t * ) request_id, sizeof( request_id ) );
 
+    if ( ( xAzureIoTHubClientHandle == NULL ) ||
+         ( pReportedPayload == NULL ) || ( reportedPayloadLength == 0 ) )
+    {
+        AZLogError( ( "Failed to reported property: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
     if( xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ]._internal.state != TOPIC_SUBSCRIBE_STATE_SUBACK )
     {
         return AZURE_IOT_HUB_CLIENT_FAILED;
@@ -869,6 +945,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandl
     size_t device_twin_get_topic_length;
     az_result res;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to get twin: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
     if( xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ]._internal.state != TOPIC_SUBSCRIBE_STATE_SUBACK )
     {
         return AZURE_IOT_HUB_CLIENT_FAILED;
@@ -917,8 +999,15 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClien
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
-    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
+    AzureIoTHubClientReceiveContext_t * context;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to disable cloud message: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
     mqttSubscription.qos = AzureIoTMQTTQoS1;
     mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
     mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
@@ -950,8 +1039,15 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClien
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
-    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
+    AzureIoTHubClientReceiveContext_t * context;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to disable direct method: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
     mqttSubscription.qos = AzureIoTMQTTQoS0;
     mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
     mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
@@ -983,8 +1079,15 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClientH
     AzureIoTMQTTStatus_t xResult;
     AzureIoTHubClientError_t ret;
     uint16_t usSubscribePacketIdentifier;
-    AzureIoTHubClientReceiveContext_t * context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
+    AzureIoTHubClientReceiveContext_t * context;
 
+    if ( xAzureIoTHubClientHandle == NULL )
+    {
+        AZLogError( ( "Failed to disable device twin: Invalid argument \r\n" ) );
+        return AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+
+    context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
     mqttSubscription[ 0 ].qos = AzureIoTMQTTQoS0;
     mqttSubscription[ 0 ].pTopicFilter = AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
     mqttSubscription[ 0 ].topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
