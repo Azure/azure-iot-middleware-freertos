@@ -272,9 +272,9 @@ static void handle_direct_method( AzureIoTHubClientMethodRequest_t * message,
                message->payloadLength,
                message->messagePayload ) );
 
-    AzureIoTHubClient_t * xAzureIoTHubClient = ( AzureIoTHubClient_t * ) context;
+    AzureIoTHubClient_t * xHandle = ( AzureIoTHubClient_t * ) context;
 
-    if( AzureIoTHubClient_SendMethodResponse( xAzureIoTHubClient, message, 200,
+    if( AzureIoTHubClient_SendMethodResponse( xHandle, message, 200,
                                               NULL, 0 ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
     {
         LogInfo( ( "Error sending method response\r\n" ) );

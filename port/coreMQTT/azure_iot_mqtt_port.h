@@ -2,7 +2,7 @@
 /* SPDX-License-Identifier: MIT */
 
 /**
- * @file azure_iot.h
+ * @file azure_iot_mqtt_port.h
  *
  */
 

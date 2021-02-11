@@ -74,7 +74,7 @@ static void prvMQTTProcessResponse( AzureIoTHubClientHandle_t xAzureIoTHubClient
     uint32_t index;
     AzureIoTHubClientReceiveContext_t * context;
 
-    if( ( pxIncomingPacket->type & 0xF0U ) == MQTT_PACKET_TYPE_SUBACK )
+    if( ( pxIncomingPacket->type & 0xF0U ) == AZURE_IOT_MQTT_PACKET_TYPE_SUBACK )
     {
         for( index = 0; index < ( sizeof( xAzureIoTHubClientHandle->_internal.xReceiveContext ) / sizeof( xAzureIoTHubClientHandle->_internal.xReceiveContext[ 0 ] ) ); index++ )
         {
