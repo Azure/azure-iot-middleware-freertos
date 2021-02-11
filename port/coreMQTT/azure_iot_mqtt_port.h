@@ -2,7 +2,7 @@
 /* SPDX-License-Identifier: MIT */
 
 /**
- * @file azure_iot.h
+ * @file azure_iot_mqtt_port.h
  *
  */
 
@@ -13,11 +13,12 @@
 
 #include "core_mqtt.h"
 
-typedef struct AzureIoTMqtt {
+struct AzureIoTMQTT
+{
     struct
     {
         struct MQTTContext context;
     } _internal;
-} AzureIoTMqtt_t;
+};
 
 #endif // AZURE_IOT_MQTT_PORT_H
