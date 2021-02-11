@@ -1,6 +1,8 @@
 # Azure FreeRTOS Middleware
 
-![Windows Build](https://github.com/hihigupt/azure_freertos_middleware/workflows/MSBuild/badge.svg)
+![Windows Build](https://github.com/Azure/azure-iot-middleware-freertos/workflows/MSBuild/badge.svg)
+
+![Linux Build](https://github.com/Azure/azure-iot-middleware-freertos/workflows/C/C++%20CI/badge.svg)
 
 More docs can be found in the [doc/](doc/) directory.
 
