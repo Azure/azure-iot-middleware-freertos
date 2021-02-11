@@ -296,9 +296,9 @@ static void azure_iot_provisioning_client_parse_response( AzureIoTProvisioningCl
 {
     az_result core_result;
     az_span payload = az_span_create( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload,
-                                      xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length );
+                                      ( int32_t ) xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length );
     az_span topic = az_span_create( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic,
-                                    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length );
+                                    ( int32_t ) xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length );
 
     /* Check the state.  */
     if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE )
@@ -470,7 +470,7 @@ static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoT
         {
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload,
                     pPublishInfo->pPayload, pPublishInfo->payloadLength );
-            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length = pPublishInfo->payloadLength;
+            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length =  pPublishInfo->payloadLength;
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic,
                     pPublishInfo->pTopicName, pPublishInfo->topicNameLength );
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length = pPublishInfo->topicNameLength;
@@ -509,7 +509,7 @@ static uint32_t azure_iot_provisioning_client_token_get( AzureIoTProvisioningCli
                                                          uint32_t * pSaSLength )
 {
     uint8_t buffer[ 512 ];
-    az_span span = az_span_create( pSASBuffer, sasBufferLen );
+    az_span span = az_span_create( pSASBuffer, ( int32_t ) sasBufferLen );
     uint8_t * pOutput;
     uint32_t outputLen;
     az_result core_result;
@@ -578,9 +578,9 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
                                                                    const TransportInterface_t * pTransportInterface )
 {
     AzureIoTProvisioningClientError_t ret;
-    az_span endpoint_span = az_span_create( ( uint8_t * ) pEndpoint, endpointLength );
-    az_span id_scope_span = az_span_create( ( uint8_t * ) pIdScope, idScopeLength );
-    az_span registration_id_span = az_span_create( ( uint8_t * ) pRegistrationId, registrationIdLength );
+    az_span endpoint_span = az_span_create( ( uint8_t * ) pEndpoint, ( int32_t ) endpointLength );
+    az_span id_scope_span = az_span_create( ( uint8_t * ) pIdScope, ( int32_t ) idScopeLength );
+    az_span registration_id_span = az_span_create( ( uint8_t * ) pRegistrationId, ( int32_t ) registrationIdLength );
 
     memset( xAzureIoTProvisioningClientHandle, 0, sizeof( AzureIoTProvisioningClient_t ) );
 
@@ -661,8 +661,8 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
         return xAzureIoTProvisioningClientHandle->_internal.lastOperationResult;
     }
 
-    hostnameLength = az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.assigned_hub_hostname );
-    deviceIdLength = az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.device_id );
+    hostnameLength = ( uint32_t ) az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.assigned_hub_hostname );
+    deviceIdLength = ( uint32_t ) az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.device_id );
 
     if( ( *pHostnameLength < hostnameLength ) || ( *pDeviceIdLength < deviceIdLength ) )
     {

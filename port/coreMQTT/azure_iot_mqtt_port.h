@@ -13,12 +13,12 @@
 
 #include "core_mqtt.h"
 
-typedef struct AzureIoTMQTT
+struct AzureIoTMQTT
 {
     struct
     {
         struct MQTTContext context;
     } _internal;
-} AzureIoTMQTT_t;
+};
 
 #endif // AZURE_IOT_MQTT_PORT_H

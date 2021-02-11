@@ -50,7 +50,7 @@ typedef struct AzureIoTProvisioningClient
         AzureIoTMQTT_t xMQTTContext;
 
         uint8_t * azure_iot_provisioning_client_last_response_payload;
-        uint32_t azure_iot_provisioning_client_last_response_payload_length;
+        size_t azure_iot_provisioning_client_last_response_payload_length;
         uint8_t * azure_iot_provisioning_client_last_response_topic;
         uint32_t azure_iot_provisioning_client_last_response_topic_length;
 

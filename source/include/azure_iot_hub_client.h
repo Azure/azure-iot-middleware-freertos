@@ -83,13 +83,6 @@ typedef enum AzureIoTHubMessageStatus
     AZURE_IOT_STATUS_TIMEOUT = 504,
 } AzureIoTHubMessageStatus_t;
 
-typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pKey,
-                                              uint32_t keyLength,
-                                              const uint8_t * pData,
-                                              uint32_t dataLength,
-                                              uint8_t * pOutput,
-                                              uint32_t outputLength,
-                                              uint32_t * pBytesCopied );
 /* Forward declaration */
 struct AzureIoTHubClientTwinResponse;
 struct AzureIoTHubClientMethodRequest;
@@ -278,7 +271,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHan
  */
 AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                     bool cleanSession,
-                                                    TickType_t xTimeoutTicks );
+                                                    uint32_t xTimeoutTicks );
 
 /**
  * @brief Disconnect from the IoT Hub endpoint

@@ -247,8 +247,8 @@ AzureIoTError_t AzureIoTMessagePropertiesInit( AzureIoTMessageProperties_t * mes
                                                uint32_t writtenLength,
                                                uint32_t bufferLength )
 {
-    az_span propertyBufferSpan = az_span_create( buffer, bufferLength );
-    az_result result = az_iot_message_properties_init( &messageProperties->_internal.properties, propertyBufferSpan, writtenLength );
+    az_span propertyBufferSpan = az_span_create( buffer, ( int32_t ) bufferLength );
+    az_result result = az_iot_message_properties_init( &messageProperties->_internal.properties, propertyBufferSpan, ( int32_t ) writtenLength );
 
     if( az_result_failed( result ) )
     {
@@ -264,8 +264,8 @@ AzureIoTError_t AzureIoTMessagePropertiesAppend( AzureIoTMessageProperties_t * m
                                                  uint8_t * pValue,
                                                  uint32_t valueLength )
 {
-    az_span nameSpan = az_span_create( pName, nameLength );
-    az_span valueSpan = az_span_create( pValue, valueLength );
+    az_span nameSpan = az_span_create( pName, ( int32_t ) nameLength );
+    az_span valueSpan = az_span_create( pValue, ( int32_t ) valueLength );
 
     az_result result = az_iot_message_properties_append( &messageProperties->_internal.properties, nameSpan, valueSpan );
 
@@ -283,7 +283,7 @@ AzureIoTError_t AzureIoTMessagePropertiesFind( AzureIoTMessageProperties_t * mes
                                                uint8_t ** outValue,
                                                uint32_t * outValueLength )
 {
-    az_span nameSpan = az_span_create( pName, nameLength );
+    az_span nameSpan = az_span_create( pName, ( int32_t ) nameLength );
     az_span outValueSpan;
 
     az_result result = az_iot_message_properties_find( &messageProperties->_internal.properties, nameSpan, &outValueSpan );
@@ -294,7 +294,7 @@ AzureIoTError_t AzureIoTMessagePropertiesFind( AzureIoTMessageProperties_t * mes
     }
 
     *outValue = az_span_ptr( outValueSpan );
-    *outValueLength = az_span_size( outValueSpan );
+    *outValueLength = ( uint32_t ) az_span_size( outValueSpan );
 
     return AZURE_IOT_SUCCESS;
 }
@@ -356,7 +356,7 @@ AzureIoTError_t AzureIoTBase64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMAC
     }
 
     *output_pptr = ( uint8_t * ) ( encoded_hash_buf );
-    *output_len_ptr = strlen( encoded_hash_buf );
+    *output_len_ptr =  ( uint32_t ) strlen( encoded_hash_buf );
 
     return AZURE_IOT_SUCCESS;
 }

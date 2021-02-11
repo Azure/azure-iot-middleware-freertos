@@ -174,9 +174,9 @@ static uint32_t azure_iot_hub_client_direct_method_process( AzureIoTHubClientRec
         message.messagePayload = mqttPublishInfo->pPayload;
         message.payloadLength = mqttPublishInfo->payloadLength;
         message.methodName = az_span_ptr( out_request.name );
-        message.methodNameLength = az_span_size( out_request.name );
+        message.methodNameLength = ( size_t ) az_span_size( out_request.name );
         message.requestId = az_span_ptr( out_request.request_id );
-        message.requestIdLength = az_span_size( out_request.request_id );
+        message.requestIdLength = ( size_t ) az_span_size( out_request.request_id );
         context->_internal.callbacks.methodCallback( &message, context->_internal.callback_context );
     }
 
@@ -236,7 +236,7 @@ static uint32_t azure_iot_hub_client_device_twin_process( AzureIoTHubClientRecei
         message.payloadLength = mqttPublishInfo->payloadLength;
         message.messageStatus = out_request.status;
         message.version = az_span_ptr( out_request.version );
-        message.versionLength = az_span_size( out_request.version );
+        message.versionLength = ( size_t ) az_span_size( out_request.version );
         message.requestId = request_id;
         context->_internal.callbacks.twinCallback( &message,
                                                    context->_internal.callback_context );
@@ -254,7 +254,7 @@ static uint32_t azure_iot_hub_client_token_get( struct AzureIoTHubClient * xAzur
                                                 uint32_t * pSaSLength )
 {
     uint8_t buffer[ 512 ];
-    az_span span = az_span_create( pSASBuffer, sasBufferLen );
+    az_span span = az_span_create( pSASBuffer, ( int32_t ) sasBufferLen );
     uint8_t * pOutput;
     uint32_t outputLen;
     az_result core_result;
@@ -408,13 +408,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
     memset( ( void * ) xAzureIoTHubClientHandle, 0, sizeof( AzureIoTHubClient_t ) );
 
     /* Initialize Azure IoT Hub Client */
-    az_span hostname_span = az_span_create( ( uint8_t * ) pHostname, hostnameLength );
-    az_span device_id_span = az_span_create( ( uint8_t * ) pDeviceId, deviceIdLength );
+    az_span hostname_span = az_span_create( ( uint8_t * ) pHostname, ( int32_t ) hostnameLength );
+    az_span device_id_span = az_span_create( ( uint8_t * ) pDeviceId, ( int32_t ) deviceIdLength );
 
     options = az_iot_hub_client_options_default();
-    options.module_id = az_span_create( ( uint8_t * ) pHubClientOptions->pModuleId, pHubClientOptions->moduleIdLength );
-    options.model_id = az_span_create( ( uint8_t * ) pHubClientOptions->pModelId, pHubClientOptions->modelIdLength );
-    options.user_agent = az_span_create( ( uint8_t * ) pHubClientOptions->pUserAgent, pHubClientOptions->userAgentLength );
+    options.module_id = az_span_create( ( uint8_t * ) pHubClientOptions->pModuleId, ( int32_t ) pHubClientOptions->moduleIdLength );
+    options.model_id = az_span_create( ( uint8_t * ) pHubClientOptions->pModelId, ( int32_t ) pHubClientOptions->modelIdLength );
+    options.user_agent = az_span_create( ( uint8_t * ) pHubClientOptions->pUserAgent, ( int32_t ) pHubClientOptions->userAgentLength );
 
     if( az_result_failed( az_iot_hub_client_init( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
                                                   hostname_span, device_id_span, &options ) ) )
@@ -450,7 +450,7 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandl
 
 AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                     bool cleanSession,
-                                                    TickType_t xTimeoutTicks )
+                                                    uint32_t xTimeoutTicks )
 {
     AzureIoTMQTTConnectInfo_t xConnectInfo;
     AzureIoTHubClientError_t ret;
@@ -600,7 +600,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient
     AzureIoTHubClientError_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     uint16_t usPublishPacketIdentifier;
-    az_span requestIdSpan = az_span_create( ( uint8_t * ) message->requestId, message->requestIdLength );
+    az_span requestIdSpan = az_span_create( ( uint8_t * ) message->requestId, ( int32_t ) message->requestIdLength );
 
     size_t method_topic_length;
     az_result res = az_iot_hub_client_methods_response_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
