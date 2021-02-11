@@ -483,7 +483,7 @@ static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoT
     }
 }
 
-static void prvEventCallback( AzureIoTMqttHandle_t pxMQTTContext,
+static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
                               AzureIoTMQTTPacketInfo_t * pxPacketInfo,
                               AzureIoTMQTTDeserializedInfo_t * pxDeserializedInfo )
 {

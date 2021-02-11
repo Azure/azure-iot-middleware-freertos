@@ -189,7 +189,7 @@ typedef struct AzureIoTHubClient
 {
     struct
     {
-        AzureIoTMqtt_t xMQTTContext;
+        AzureIoTMQTT_t xMQTTContext;
 
         az_iot_hub_client iot_hub_client_core;
 

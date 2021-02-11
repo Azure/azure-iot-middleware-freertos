@@ -13,7 +13,7 @@
 
 #include "core_mqtt.h"
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Init( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t  pContext,
                                         const TransportInterface_t * pTransportInterface,
                                         AzureIoTMQTTGetCurrentTimeFunc_t getTimeFunction,
                                         AzureIoTMQTTEventCallback_t userCallback,
@@ -35,7 +35,7 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Init( AzureIoTMqttHandle_t  pContext,
                                        &buffer );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Connect( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t  pContext,
                                            const AzureIoTMQTTConnectInfo_t * pConnectInfo,
                                            const AzureIoTMQTTPublishInfo_t * pWillInfo,
                                            uint32_t timeoutMs,
@@ -47,7 +47,7 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Connect( AzureIoTMqttHandle_t  pContext,
                                           timeoutMs, pSessionPresent );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Subscribe( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_Subscribe( AzureIoTMQTTHandle_t  pContext,
                                              const AzureIoTMQTTSubscribeInfo_t * pSubscriptionList,
                                              size_t subscriptionCount,
                                              uint16_t packetId )
@@ -56,7 +56,7 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Subscribe( AzureIoTMqttHandle_t  pContext,
                                             subscriptionCount, packetId);
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Publish( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_Publish( AzureIoTMQTTHandle_t  pContext,
                                            const AzureIoTMQTTPublishInfo_t * pPublishInfo,
                                            uint16_t packetId )
 {
@@ -65,12 +65,12 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Publish( AzureIoTMqttHandle_t  pContext,
                                           packetId );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Ping( AzureIoTMqttHandle_t  pContext )
+AzureIoTMQTTStatus_t AzureIoTMQTT_Ping( AzureIoTMQTTHandle_t  pContext )
 {
     return ( MQTTStatus_t ) MQTT_Ping( &( pContext->_internal.context ) );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Unsubscribe( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_Unsubscribe( AzureIoTMQTTHandle_t  pContext,
                                                const AzureIoTMQTTSubscribeInfo_t * pSubscriptionList,
                                                size_t subscriptionCount,
                                                uint16_t packetId )
@@ -80,24 +80,24 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Unsubscribe( AzureIoTMqttHandle_t  pContext,
                                               subscriptionCount, packetId );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Disconnect( AzureIoTMqttHandle_t  pContext )
+AzureIoTMQTTStatus_t AzureIoTMQTT_Disconnect( AzureIoTMQTTHandle_t  pContext )
 {
     return ( MQTTStatus_t ) MQTT_Disconnect( &( pContext->_internal.context ) );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_ProcessLoop( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_ProcessLoop( AzureIoTMQTTHandle_t  pContext,
                                                uint32_t timeoutMs )
 {
     return ( MQTTStatus_t ) MQTT_ProcessLoop( &( pContext->_internal.context ), timeoutMs );
 }
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_ReceiveLoop( AzureIoTMqttHandle_t  pContext,
+AzureIoTMQTTStatus_t AzureIoTMQTT_ReceiveLoop( AzureIoTMQTTHandle_t  pContext,
                                                uint32_t timeoutMs )
 {
     return ( MQTTStatus_t ) MQTT_ReceiveLoop( &( pContext->_internal.context ), timeoutMs );
 }
 
-uint16_t AzureIoTMQTT_GetPacketId( AzureIoTMqttHandle_t  pContext )
+uint16_t AzureIoTMQTT_GetPacketId( AzureIoTMQTTHandle_t  pContext )
 {
     return ( MQTTStatus_t ) MQTT_GetPacketId( &( pContext->_internal.context ) );
 }
