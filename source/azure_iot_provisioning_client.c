@@ -582,6 +582,17 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
     az_span id_scope_span = az_span_create( ( uint8_t * ) pIdScope, ( int32_t ) idScopeLength );
     az_span registration_id_span = az_span_create( ( uint8_t * ) pRegistrationId, ( int32_t ) registrationIdLength );
 
+    if( ( xAzureIoTProvisioningClientHandle == NULL ) || 
+        ( pEndpoint == NULL ) || ( endpointLength == 0 ) || 
+        ( pIdScope == NULL ) || ( idScopeLength == 0 ) || 
+        ( pRegistrationId == NULL ) || ( registrationIdLength == 0 ) ||
+        ( pBuffer == NULL ) || ( bufferLength == 0 ) ||
+        ( getTimeFunction == NULL ) || ( pTransportInterface == NULL ) )
+    {
+        AZLogError( ( "Provisioning initialization failed: Invalid argument" ) );
+        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+    }
+
     memset( xAzureIoTProvisioningClientHandle, 0, sizeof( AzureIoTProvisioningClient_t ) );
 
     xAzureIoTProvisioningClientHandle->_internal.pEndpoint = pEndpoint;
@@ -614,6 +625,12 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
 
 void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
+    if ( xAzureIoTProvisioningClientHandle == NULL )
+    {
+        AZLogError( ( "AzureIoTProvisioningClient_Deinit failed: Invalid argument" ) );
+        return;
+    }
+
     vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload );
     vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic );
     xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload = NULL;
@@ -623,8 +640,9 @@ void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzur
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                                                        uint32_t timeout )
 {
-    if( ( xAzureIoTProvisioningClientHandle == NULL ) )
+    if( xAzureIoTProvisioningClientHandle == NULL )
     {
+        AZLogError( ( "Provisioning registration failed: Invalid argument" ) );
         return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
 
@@ -648,6 +666,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
     if( ( xAzureIoTProvisioningClientHandle == NULL ) || ( pHubHostname == NULL ) ||
         ( pHostnameLength == NULL ) || ( pDeviceId == NULL ) || ( pDeviceIdLength == NULL ) )
     {
+        AZLogError( ( "Provisioning hub get failed: Invalid argument" ) );
         return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
 
@@ -685,7 +704,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( Az
     if( ( xAzureIoTProvisioningClientHandle == NULL ) ||
         ( pSymmetricKey == NULL ) || ( pSymmetricKeyLength == 0 ) )
     {
-        AZLogError( ( "IoTHub client symmetric key fail: Invalid argument" ) );
+        AZLogError( ( "Provisioning client symmetric key fail: Invalid argument" ) );
         return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
 
