@@ -55,12 +55,8 @@ openssl x509 -noout -fingerprint -in device_ec_cert.pem | sed 's/://g'| sed 's/\
 ## Known Shortcomings
 
 - The method response is sent from the method callback which isn't ideal from a threading perspective.
-- The union [here](https://github.com/hihigupt/azure_freertos_middleware/blob/fd69f8a99289428327adefde33c09b995b19ccb1/source/include/azure_iot_hub_client.h#L51-L56) could be improved especially as it breaks encapsulation of the middleware layer.
-
 
 ## APIs May Need to be Added
 
-- Add or read message properties (`&<name>=<value>`)
 - PnP APIs
   - And with that the APIs for JSON reading and writing (if we are to abstract those or expose the raw JSON APIs)
-- Feature disable functions

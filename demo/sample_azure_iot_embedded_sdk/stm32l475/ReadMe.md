@@ -23,3 +23,17 @@ Update the WiFi SSID and password in [main.c](../../Common/stm32l475/main.c)
 
 - `WIFI_SSID`
 - `WIFI_PASSWORD`
+
+## Troubleshooting
+
+> Debugger complains about ST-Link or J-Link
+
+There is a program [here](https://www.segger.com/downloads/jlink#STLink_Reflash) which can help you switch between ST-Link and J-Link debugging for your STML475. You can also feel free to switch debuggers in the STCube IDE by toggling at `Run -> Debug Configurations -> Debugger -> Debug Probe`
+
+![img](../../../doc/img/cube-debug.png)
+
+> WiFi issues in general
+
+Please make sure the device's WiFi module is up to date with this `bin` here:
+
+[Inventek ISM 43362 Wi-Fi module firmware update](https://www.st.com/resource/en/utilities/inventek_fw_updater.zip).
