@@ -34,6 +34,8 @@ Update the WiFi SSID and password in [main.c](../../Common/stm32l475/main.c)
 
 You can right click on the project to build and then select the bug icon in the top toolbar to debug the sample. You can then view the output from the device on the serial port by finding the correct COM port of your device and setting the BAUD to `115200`.
 
+![img](../../../doc/img/cube_demo.png)
+
 ## Troubleshooting
 
 > Debugger complains about ST-Link or J-Link
