@@ -23,7 +23,7 @@ More docs can be found in the [doc/](doc/) directory.
 1. Build the solution and run.
 1. If the demo fails due to an unchosen network configuration, choose the appropriate one from the list in the terminal and change the value [here](https://github.com/hihigupt/azure_freertos_middleware/blob/e3bcba92e15d47f7f184ef3648782bf84bb84c7b/demo/sample_azure_iot_embedded_sdk/FreeRTOSConfig.h#L138).
 
-## Running Sample on STML475 Discovery Board
+## Running Sample on STM32L475 Discovery Board
 
 Please see the doc [here](./demo/sample_azure_iot_embedded_sdk/stm32l475/README.md) to run on this board.
 
