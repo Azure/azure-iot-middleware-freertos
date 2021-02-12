@@ -6,20 +6,26 @@
 
 More docs can be found in the [doc/](doc/) directory.
 
-## Running the Sample With Device Provisioning
+## Running Sample on Windows
+
+### Running the Sample With Device Provisioning
 
 1. Open the VS solution [here](./demo/sample_azure_iot_embedded_sdk).
 1. Open the [demo_config.h](./demo/sample_azure_iot_embedded_sdk/demo_config.h), and update the `ENDPOINT`, `ID_SCOPE`, `REGISTRATION_ID `. 
 1. For authentication you can use `DEVICE_SYMMETRIC_KEY` for symmetric key or client side certificate `democonfigCLIENT_CERTIFICATE_PEM`, and `democonfigCLIENT_PRIVATE_KEY_PEM`. If you need help generating a cert and private key, see the below [Generating a Cert](#generating-a-cert) section.
 1. Build the solution and run.
 
-## Running the Sample Without Device Provisioning
+### Running the Sample Without Device Provisioning
 
 1. Open the VS solution [here](./demo/sample_azure_iot_embedded_sdk).
 1. Open the [demo_config.h](./demo/sample_azure_iot_embedded_sdk/demo_config.h), comment out `ENABLE_DPS_SAMPLE` and update the `DEVICE_ID`, `HOSTNAME`. 
 1. For authentication you can use `DEVICE_SYMMETRIC_KEY` for symmetric key or client side certificate `democonfigCLIENT_CERTIFICATE_PEM`, and `democonfigCLIENT_PRIVATE_KEY_PEM`. If you need help generating a cert and private key, see the below [Generating a Cert](#generating-a-cert) section.
 1. Build the solution and run.
 1. If the demo fails due to an unchosen network configuration, choose the appropriate one from the list in the terminal and change the value [here](https://github.com/hihigupt/azure_freertos_middleware/blob/e3bcba92e15d47f7f184ef3648782bf84bb84c7b/demo/sample_azure_iot_embedded_sdk/FreeRTOSConfig.h#L138).
+
+## Running Sample on STM32L475 Discovery Board
+
+Please see the doc [here](./demo/sample_azure_iot_embedded_sdk/stm32l475/ReadMe.md) to run on this board.
 
 ## High Level
 
@@ -49,12 +55,8 @@ openssl x509 -noout -fingerprint -in device_ec_cert.pem | sed 's/://g'| sed 's/\
 ## Known Shortcomings
 
 - The method response is sent from the method callback which isn't ideal from a threading perspective.
-- The union [here](https://github.com/hihigupt/azure_freertos_middleware/blob/fd69f8a99289428327adefde33c09b995b19ccb1/source/include/azure_iot_hub_client.h#L51-L56) could be improved especially as it breaks encapsulation of the middleware layer.
-
 
 ## APIs May Need to be Added
 
-- Add or read message properties (`&<name>=<value>`)
 - PnP APIs
   - And with that the APIs for JSON reading and writing (if we are to abstract those or expose the raw JSON APIs)
-- Feature disable functions

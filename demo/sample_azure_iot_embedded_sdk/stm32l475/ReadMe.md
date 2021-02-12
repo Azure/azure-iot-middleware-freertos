@@ -1,61 +1,51 @@
 # Run Demo on STM32L475-Discovery board
 
-1. Update demo_config.h to point to your IoTHub or DPS endpoint.
-```
-/**
- * @brief Provisioning service endpoint.
- *
- * @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#service-operations-endpoint
- * 
- */
-#define ENDPOINT                            "<YOUR DPS ENDPOINT HERE>"
+## Download Programs
 
-/**
- * @brief Id scope of provisioning service.
- * 
- * @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#id-scope
- * 
- */
-#define ID_SCOPE                            "<YOUR ID SCOPE HERE>"
+[Download the IDE here.](https://www.st.com/en/development-tools/stm32cubeide.html)
+[Download Termite here.](https://www.compuphase.com/software_termite.htm) (Or feel free to use any serial viewer you like.)
 
-/**
- * @brief Registration Id of provisioning service
- *
- *  @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#registration-id
- */
-#define REGISTRATION_ID                     "<YOUR REGISTRATION ID HERE>"
+## Update Device Credentials
 
-#endif // ENABLE_DPS_SAMPLE
+In [demo_config.h](../common/demo_config.h), update the following values for either DPS or IoT Hub:
 
-/**
- * @brief IoTHub device Id.
- *
- */
-#define DEVICE_ID                           "<YOUR DEVICE ID HERE>"
+### DPS
 
-/**
- * @brief IoTHub module Id.
- *
- */
-#define MODULE_ID                           ""
-/**
- * @brief IoTHub hostname.
- *
- */
-#define HOSTNAME                            "<YOUR IOT HUB HOSTNAME HERE>"
+- `ENDPOINT`
+- `ID_SCOPE`
+- `REGISTRATION_ID`
+- `DEVICE_SYMMETRIC_KEY` OR `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM`
 
-/**
- * @brief Device symmetric key
- *
- */
-#define DEVICE_SYMMETRIC_KEY                "<Symmetric key>"
+### IoT Hub
 
-```
+- `DEVICE_ID`
+- `HOSTNAME`
+- `DEVICE_SYMMETRIC_KEY` OR `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM`
 
-2. Compile the code with following macro to set the SSID and password of the AP.
-```
--DWIFI_SSID="higupt-dev3"
--DWIFI_PASSWORD="welcome1
-```
+## Update Device WiFi Credentials
 
-3. Run the demo.
+Update the WiFi SSID and password in [main.c](../../Common/stm32l475/main.c)
+
+- `WIFI_SSID`
+- `WIFI_PASSWORD`
+
+
+## Build and Run
+
+You can right click on the project to build and then select the bug icon in the top toolbar to debug the sample. You can then view the output from the device on the serial port by finding the correct COM port of your device and setting the BAUD to `115200`.
+
+![img](../../../doc/img/cube_demo.png)
+
+## Troubleshooting
+
+> Debugger complains about ST-Link or J-Link
+
+There is a program [here](https://www.segger.com/downloads/jlink#STLink_Reflash) which can help you switch between ST-Link and J-Link debugging for your STM32L475. You can also feel free to switch debuggers in the STCube IDE by toggling at `Run -> Debug Configurations -> Debugger -> Debug Probe`
+
+![img](../../../doc/img/cube-debug.png)
+
+> WiFi issues in general
+
+Please make sure the device's WiFi module is up to date with this `bin` here:
+
+[Inventek ISM 43362 Wi-Fi module firmware update](https://www.st.com/resource/en/utilities/inventek_fw_updater.zip).
