@@ -25,7 +25,7 @@ More docs can be found in the [doc/](doc/) directory.
 
 ## Running Sample on STM32L475 Discovery Board
 
-Please see the doc [here](./demo/sample_azure_iot_embedded_sdk/stm32l475/README.md) to run on this board.
+Please see the doc [here](./demo/sample_azure_iot_embedded_sdk/stm32l475/ReadMe.md) to run on this board.
 
 ## High Level
 
