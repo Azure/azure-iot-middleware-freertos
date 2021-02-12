@@ -503,8 +503,6 @@ static void prvAzureDemoTask( void * pvParameters )
          * TCP connection. There is no corresponding response for the disconnect
          * packet. After sending disconnect, client must close the network
          * connection. */
-        LogInfo( ( "Disconnecting the MQTT connection with %s.\r\n",
-                   HOSTNAME ) );
         xResult = AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
