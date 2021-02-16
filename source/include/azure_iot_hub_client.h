@@ -287,13 +287,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @param[in] pTelemetryData The pointer to the buffer of telemetry data.
  * @param[in] telemetryDataLength The length of the buffer to send as telemetry.
- * @param[in] properties The property bag to send with the message.
+ * @param[in] pProperties The property bag to send with the message.
  * @return An #AzureIoTHubClientError_t with the result of the operation.
  */
 AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                           const uint8_t * pTelemetryData,
                                                           uint32_t telemetryDataLength,
-                                                          AzureIoTMessageProperties_t * properties );
+                                                          AzureIoTMessageProperties_t * pProperties );
 
 /**
  * @brief Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.
@@ -313,13 +313,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @param[in] callback The #AzureIoTHubClientC2DCallback_t to invoke when a C2D messages arrive.
- * @param[in] callback_context A pointer to a context to pass to the callback.
+ * @param[in] pCallbackContext A pointer to a context to pass to the callback.
  * @param[in] timeout Timeout in ms for enable operation to complete.
  * @return An #AzureIoTHubClientError_t with the result of the operation.
  */
 AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                                AzureIoTHubClientC2DCallback_t c2dCallback,
-                                                               void * callback_context,
+                                                               void * pCallbackContext,
                                                                uint32_t timeout );
 
 /**
@@ -327,13 +327,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @param[in] callback The #AzureIoTHubClientMethodCallback_t to invoke when direct method messages arrive.
- * @param[in] callback_context A pointer to a context to pass to the callback.
+ * @param[in] pCallbackContext A pointer to a context to pass to the callback.
  * @param[in] timeout Timeout in ms for enable operation to complete.
  * @return An #AzureIoTHubClientError_t with the result of the operation.
  */
 AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                                AzureIoTHubClientMethodCallback_t methodCallback,
-                                                               void * callback_context,
+                                                               void * pCallbackContext,
                                                                uint32_t timeout );
 
 /**
@@ -341,13 +341,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @param[in] callback The #AzureIoTHubClientTwinCallback_t to invoke when device twin messages arrive.
- * @param[in] callback_context A pointer to a context to pass to the callback.
+ * @param[in] pCallbackContext A pointer to a context to pass to the callback.
  * @param[in] timeout Timeout in ms for enable operation to complete.
  * @return An #AzureIoTHubClientError_t with the result of the operation.
  */
 AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                              AzureIoTHubClientTwinCallback_t twinCallback,
-                                                             void * callback_context,
+                                                             void * pCallbackContext,
                                                              uint32_t timeout );
 
 /**
@@ -378,14 +378,14 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClientH
  * @brief Send a response to a received direct method message.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
- * @param[in] message The pointer to the #AzureIoTHubClientMethodRequest_t to which a response is being sent.
+ * @param[in] pMessage The pointer to the #AzureIoTHubClientMethodRequest_t to which a response is being sent.
  * @param[in] status A code that indicates the result of the method, as defined by the user.
  * @param[in] pMethodPayload __[nullable]__ An optional method response payload.
  * @param[in] methodPayloadLength The length of the method response payload.
  * @return An #AzureIoTHubClientError_t with the result of the operation.
  */
 AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMethodRequest_t * message,
+                                                               AzureIoTHubClientMethodRequest_t * pMessage,
                                                                uint32_t status,
                                                                const uint8_t * pMethodPayload,
                                                                uint32_t methodPayloadLength );

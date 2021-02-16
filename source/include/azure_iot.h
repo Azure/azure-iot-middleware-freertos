@@ -66,13 +66,13 @@ AzureIoTError_t AzureIoTLogInit();
  * @brief Initialize
  *
  * @param messageProperties The #AzureIoTMessageProperties_t* to use for the operation.
- * @param buffer The pointer to the buffer.
+ * @param pBuffer The pointer to the buffer.
  * @param writtenLength The length of the properties already written (if applicable).
  * @param bufferLength The length of \p bufferLength.
  * @return An #AzureIoTError_t with the result of the operation.
  */
 AzureIoTError_t AzureIoTMessagePropertiesInit( AzureIoTMessageProperties_t * messageProperties,
-                                               uint8_t * buffer,
+                                               uint8_t * pBuffer,
                                                uint32_t writtenLength,
                                                uint32_t bufferLength );
 
@@ -98,15 +98,15 @@ AzureIoTError_t AzureIoTMessagePropertiesAppend( AzureIoTMessageProperties_t * m
  * @param messageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param pName The name of the property to find.
  * @param nameLength Length of the property name.
- * @param outValue The output pointer to the value.
- * @param outValueLength The length of \p outValue.
+ * @param pOutValue The output pointer to the value.
+ * @param pOutValueLength The length of \p outValue.
  * @return An #AzureIoTError_t with the result of the operation.
  */
 AzureIoTError_t AzureIoTMessagePropertiesFind( AzureIoTMessageProperties_t * messageProperties,
                                                uint8_t * pName,
                                                uint32_t nameLength,
-                                               uint8_t ** outValue,
-                                               uint32_t * outValueLength );
+                                               uint8_t ** pOutValue,
+                                               uint32_t * pOutValueLength );
 
 /**
  * @brief As part of symmetric key authentication, HMAC256 a buffer of bytes and base64 encode the result.
@@ -114,25 +114,25 @@ AzureIoTError_t AzureIoTMessagePropertiesFind( AzureIoTMessageProperties_t * mes
  * @note This is used within Azure IoT Hub and Device Provisioning APIs should a symmetric key be set.
  *
  * @param xAzureIoTHMACFunction The #AzureIoTGetHMACFunc_t function to use for HMAC256 hashing.
- * @param key_ptr A pointer to the base64 encoded key.
- * @param key_size The length of the \p key_ptr.
- * @param message_ptr A pointer to the message to be hashed.
- * @param message_size The length of \p message_ptr.
- * @param buffer_ptr An intermediary buffer to put the base64 decoded key.
- * @param buffer_len The length of \p buffer_ptr.
- * @param output_pptr The buffer into which the resulting HMAC256 hashed, base64 encoded message will
+ * @param pKey A pointer to the base64 encoded key.
+ * @param keySize The length of the \p pKey.
+ * @param pMessage A pointer to the message to be hashed.
+ * @param messageSize The length of \p pMessage.
+ * @param pBuffer An intermediary buffer to put the base64 decoded key.
+ * @param bufferLength The length of \p pBuffer.
+ * @param pOutput The buffer into which the resulting HMAC256 hashed, base64 encoded message will
  * be placed.
- * @param output_len_ptr The output length of \p output_pptr.
+ * @param pOutputLength The output length of \p pOutput.
  * @return An #AzureIoTError_t with the result of the operation.
  */
 AzureIoTError_t AzureIoTBase64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
-                                             const uint8_t * key_ptr,
-                                             uint32_t key_size,
-                                             const uint8_t * message_ptr,
-                                             uint32_t message_size,
-                                             uint8_t * buffer_ptr,
-                                             uint32_t buffer_len,
-                                             uint8_t ** output_pptr,
-                                             uint32_t * output_len_ptr );
+                                             const uint8_t * pKey,
+                                             uint32_t keySize,
+                                             const uint8_t * pMessage,
+                                             uint32_t messageSize,
+                                             uint8_t * pBuffer,
+                                             uint32_t bufferLength,
+                                             uint8_t ** pOutput,
+                                             uint32_t * pOutputLength );
 
 #endif /* AZURE_IOT_H */
