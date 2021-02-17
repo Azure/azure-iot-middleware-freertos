@@ -49,6 +49,7 @@ typedef struct AzureIoTProvisioningClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
+        char provisioning_topic_buffer[ azureIoTTOPIC_MAX ];
         uint8_t * azure_iot_provisioning_client_last_response_payload;
         size_t azure_iot_provisioning_client_last_response_payload_length;
         uint8_t * azure_iot_provisioning_client_last_response_topic;
