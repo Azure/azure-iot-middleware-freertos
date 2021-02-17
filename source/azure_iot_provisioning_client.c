@@ -36,10 +36,6 @@
  */
 #define MILLISECONDS_PER_TICK                                 ( MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
 
-static char mqtt_user_name[ 128 ];
-static char mqtt_password[ 256 ];
-static char provisioning_topic[ 128 ];
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -126,7 +122,7 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
     AzureIoTProvisioningClientError_t ret;
     AzureIoTMQTTStatus_t xResult;
     bool xSessionPresent;
-    uint32_t bytesCopied;
+    uint32_t bytesCopied = 0;
     size_t mqtt_user_name_length;
     az_result res;
 
@@ -137,39 +133,40 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
         return;
     }
 
-    xConnectInfo.cleanSession = true;
-    res = az_iot_provisioning_client_get_user_name( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
-                                                    mqtt_user_name, sizeof( mqtt_user_name ), &mqtt_user_name_length );
-    if( az_result_failed( res ) )
+    if( ( xConnectInfo.pUserName = ( char * ) pvPortMalloc( azureIoTUSERNAME_MAX ) ) == NULL )
+    {
+        AZLogError( ( "Failed to allocate memory\r\n" ) );
+        ret = AZURE_IOT_PROVISIONING_CLIENT_STATUS_OOM;
+    }
+    else if( az_result_failed( res = az_iot_provisioning_client_get_user_name( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
+                                                                               ( char * ) xConnectInfo.pUserName,
+                                                                               azureIoTUSERNAME_MAX, &mqtt_user_name_length ) ) )
     {
         AZLogError( ( "Failed to get username: %08x \r\n", res ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED;
     }
+    /* Check if token refersh is set, then generate password */
+    else if( ( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh ) &&
+             ( ( ( xConnectInfo.pPassword = ( char * ) pvPortMalloc( azureIoTPASSWORD_MAX ) ) == NULL ) ||
+               ( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh( xAzureIoTProvisioningClientHandle,
+                                                                                                           xAzureIoTProvisioningClientHandle->_internal.getTimeFunction() + azureIoTPROVISIONINGDEFAULTTOKENTIMEOUTINSEC,
+                                                                                                           xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key,
+                                                                                                           xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key_length,
+                                                                                                           ( uint8_t * ) xConnectInfo.pPassword,
+                                                                                                           azureIoTPASSWORD_MAX,
+                                                                                                           &bytesCopied ) ) ) )
+    {
+        AZLogError( ( "Failed to generate auth token \r\n" ) );
+        ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
+    }
     else
     {
+        xConnectInfo.cleanSession = true;
         xConnectInfo.pClientIdentifier = ( const char * ) xAzureIoTProvisioningClientHandle->_internal.pRegistrationId;
         xConnectInfo.clientIdentifierLength = ( uint16_t ) xAzureIoTProvisioningClientHandle->_internal.registrationIdLength;
-        xConnectInfo.pUserName = mqtt_user_name;
         xConnectInfo.userNameLength = ( uint16_t ) mqtt_user_name_length;
         xConnectInfo.keepAliveSeconds = azureIoTPROVISIONINGClientKEEP_ALIVE_TIMEOUT_SECONDS;
-        xConnectInfo.pPassword = mqtt_password;
-
-        if( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh )
-        {
-            if( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh( xAzureIoTProvisioningClientHandle,
-                                                                                                          xAzureIoTProvisioningClientHandle->_internal.getTimeFunction() + azureIoTPROVISIONINGDEFAULTTOKENTIMEOUTINSEC,
-                                                                                                          xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key,
-                                                                                                          xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key_length,
-                                                                                                          ( uint8_t * ) mqtt_password, sizeof( mqtt_password ),
-                                                                                                          &bytesCopied ) )
-            {
-                AZLogError( ( "Failed to generate auth token \r\n" ) );
-                azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_FAILED );
-                return;
-            }
-
-            xConnectInfo.passwordLength = ( uint16_t ) bytesCopied;
-        }
+        xConnectInfo.passwordLength = ( uint16_t ) bytesCopied;
 
         if( ( xResult = AzureIoTMQTT_Connect( &( xAzureIoTProvisioningClientHandle->_internal.xMQTTContext ),
                                               &xConnectInfo,
@@ -189,6 +186,16 @@ static void azure_iot_provisioning_client_connect( AzureIoTProvisioningClientHan
                          xAzureIoTProvisioningClientHandle->_internal.pEndpoint ) );
             ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
         }
+    }
+
+    if( xConnectInfo.pUserName != NULL )
+    {
+        vPortFree( ( void * ) xConnectInfo.pUserName );
+    }
+
+    if( xConnectInfo.pPassword != NULL )
+    {
+        vPortFree( ( void * ) xConnectInfo.pPassword );
     }
 
     azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, ret );
@@ -258,13 +265,17 @@ static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHan
         if( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length == 0 )
         {
             core_result = az_iot_provisioning_client_register_get_publish_topic( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
-                                                                                 provisioning_topic, sizeof( provisioning_topic ), &mqtt_topic_length );
+                                                                                 xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer,
+                                                                                 sizeof( xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer ),
+                                                                                 &mqtt_topic_length );
         }
         else
         {
             core_result = az_iot_provisioning_client_query_status_get_publish_topic( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
-                                                                                     xAzureIoTProvisioningClientHandle->_internal.register_response.operation_id, provisioning_topic,
-                                                                                     sizeof( provisioning_topic ), &mqtt_topic_length );
+                                                                                     xAzureIoTProvisioningClientHandle->_internal.register_response.operation_id,
+                                                                                     xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer,
+                                                                                     sizeof( xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer ),
+                                                                                     &mqtt_topic_length );
         }
 
         if( az_result_failed( core_result ) )
@@ -276,7 +287,7 @@ static void azure_iot_provisioning_client_request( AzureIoTProvisioningClientHan
         ( void ) memset( ( void * ) &xMQTTPublishInfo, 0x00, sizeof( xMQTTPublishInfo ) );
 
         xMQTTPublishInfo.qos = AzureIoTMQTTQoS0;
-        xMQTTPublishInfo.pTopicName = provisioning_topic;
+        xMQTTPublishInfo.pTopicName = xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer;
         xMQTTPublishInfo.topicNameLength = ( uint16_t ) mqtt_topic_length;
         usPublishPacketIdentifier = AzureIoTMQTT_GetPacketId( &( xAzureIoTProvisioningClientHandle->_internal.xMQTTContext ) );
 
@@ -622,37 +633,39 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
         ( getTimeFunction == NULL ) || ( pTransportInterface == NULL ) )
     {
         AZLogError( ( "Provisioning initialization failed: Invalid argument" ) );
-        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
-    }
-
-    memset( xAzureIoTProvisioningClientHandle, 0, sizeof( AzureIoTProvisioningClient_t ) );
-
-    xAzureIoTProvisioningClientHandle->_internal.pEndpoint = pEndpoint;
-    xAzureIoTProvisioningClientHandle->_internal.endpointLength = endpointLength;
-    xAzureIoTProvisioningClientHandle->_internal.pIdScope = pIdScope;
-    xAzureIoTProvisioningClientHandle->_internal.idScopeLength = idScopeLength;
-    xAzureIoTProvisioningClientHandle->_internal.pRegistrationId = pRegistrationId;
-    xAzureIoTProvisioningClientHandle->_internal.registrationIdLength = registrationIdLength;
-    xAzureIoTProvisioningClientHandle->_internal.getTimeFunction = getTimeFunction;
-
-    core_result = az_iot_provisioning_client_init( &( xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core ),
-                                                   endpoint_span, id_scope_span,
-                                                   registration_id_span, NULL );
-    if( az_result_failed( core_result ) )
-    {
-        AZLogError( ( "Provisioning initialization failed: with core error : %08x", core_result ) );
-        ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
-    }
-    else if( ( xResult = AzureIoTMQTT_Init( &( xAzureIoTProvisioningClientHandle->_internal.xMQTTContext ), pTransportInterface,
-                                            prvGetTimeMs, prvEventCallback,
-                                            pBuffer, bufferLength ) ) != AzureIoTMQTTSuccess )
-    {
-        AZLogError( ( "Provisioning initialization failed: with mqtt init error : %d", xResult ) );
-        ret = AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED;
+        ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
     else
     {
-        ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
+        memset( xAzureIoTProvisioningClientHandle, 0, sizeof( AzureIoTProvisioningClient_t ) );
+
+        xAzureIoTProvisioningClientHandle->_internal.pEndpoint = pEndpoint;
+        xAzureIoTProvisioningClientHandle->_internal.endpointLength = endpointLength;
+        xAzureIoTProvisioningClientHandle->_internal.pIdScope = pIdScope;
+        xAzureIoTProvisioningClientHandle->_internal.idScopeLength = idScopeLength;
+        xAzureIoTProvisioningClientHandle->_internal.pRegistrationId = pRegistrationId;
+        xAzureIoTProvisioningClientHandle->_internal.registrationIdLength = registrationIdLength;
+        xAzureIoTProvisioningClientHandle->_internal.getTimeFunction = getTimeFunction;
+
+        core_result = az_iot_provisioning_client_init( &( xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core ),
+                                                       endpoint_span, id_scope_span,
+                                                       registration_id_span, NULL );
+        if( az_result_failed( core_result ) )
+        {
+            AZLogError( ( "Provisioning initialization failed: with core error : %08x", core_result ) );
+            ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
+        }
+        else if( ( xResult = AzureIoTMQTT_Init( &( xAzureIoTProvisioningClientHandle->_internal.xMQTTContext ), pTransportInterface,
+                                                prvGetTimeMs, prvEventCallback,
+                                                pBuffer, bufferLength ) ) != AzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Provisioning initialization failed: with mqtt init error : %d", xResult ) );
+            ret = AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED;
+        }
+        else
+        {
+            ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
+        }
     }
 
     return ret;
@@ -661,34 +674,41 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
 
 void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
-    if ( xAzureIoTProvisioningClientHandle == NULL )
+    if( xAzureIoTProvisioningClientHandle == NULL )
     {
         AZLogError( ( "AzureIoTProvisioningClient_Deinit failed: Invalid argument" ) );
-        return;
     }
-
-    vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload );
-    vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic );
-    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload = NULL;
-    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic = NULL;
+    else
+    {
+        vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload );
+        vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic );
+        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload = NULL;
+        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic = NULL;
+    }
 }
 /*-----------------------------------------------------------*/
 
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                                                        uint32_t timeout )
 {
+    AzureIoTProvisioningClientError_t ret;
+
     if( xAzureIoTProvisioningClientHandle == NULL )
     {
         AZLogError( ( "Provisioning registration failed: Invalid argument" ) );
-        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+        ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
-
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_INIT )
+    else
     {
-        xAzureIoTProvisioningClientHandle->_internal.workflowState = AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT;
-    }
+        if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_INIT )
+        {
+            xAzureIoTProvisioningClientHandle->_internal.workflowState = AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT;
+        }
 
-    return azure_iot_provisioning_client_run_workflow( xAzureIoTProvisioningClientHandle, timeout );
+        ret = azure_iot_provisioning_client_run_workflow( xAzureIoTProvisioningClientHandle, timeout );
+    }
+    
+    return ret;
 }
 /*-----------------------------------------------------------*/
 
@@ -700,40 +720,44 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
 {
     uint32_t hostnameLength;
     uint32_t deviceIdLength;
+    AzureIoTProvisioningClientError_t ret;
 
     if( ( xAzureIoTProvisioningClientHandle == NULL ) || ( pHubHostname == NULL ) ||
         ( pHostnameLength == NULL ) || ( pDeviceId == NULL ) || ( pDeviceIdLength == NULL ) )
     {
         AZLogError( ( "Provisioning hub get failed: Invalid argument" ) );
-        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+        ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
-
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
+    else if( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
     {
         AZLogError( ( "Provisioning client state is not in complete state" ) );
-        return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
+        ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
     }
-
-    if( xAzureIoTProvisioningClientHandle->_internal.lastOperationResult )
+    else if( xAzureIoTProvisioningClientHandle->_internal.lastOperationResult )
     {
-        return xAzureIoTProvisioningClientHandle->_internal.lastOperationResult;
+        ret = xAzureIoTProvisioningClientHandle->_internal.lastOperationResult;
     }
-
-    hostnameLength = ( uint32_t ) az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.assigned_hub_hostname );
-    deviceIdLength = ( uint32_t ) az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.device_id );
-
-    if( ( *pHostnameLength < hostnameLength ) || ( *pDeviceIdLength < deviceIdLength ) )
+    else
     {
-        AZLogWarn( ( "Memory passed is not enough to store hub info \r\n" ) );
-        return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
+        hostnameLength = ( uint32_t ) az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.assigned_hub_hostname );
+        deviceIdLength = ( uint32_t ) az_span_size( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.device_id );
+
+        if( ( *pHostnameLength < hostnameLength ) || ( *pDeviceIdLength < deviceIdLength ) )
+        {
+            AZLogWarn( ( "Memory passed is not enough to store hub info \r\n" ) );
+            ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
+        }
+        else
+        {
+            memcpy( pHubHostname, az_span_ptr( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.assigned_hub_hostname ), hostnameLength );
+            memcpy( pDeviceId, az_span_ptr( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.device_id ), deviceIdLength );
+            *pHostnameLength = hostnameLength;
+            *pDeviceIdLength = deviceIdLength;
+            ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
+        }
     }
-
-    memcpy( pHubHostname, az_span_ptr( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.assigned_hub_hostname ), hostnameLength );
-    memcpy( pDeviceId, az_span_ptr( xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.device_id ), deviceIdLength );
-    *pHostnameLength = hostnameLength;
-    *pDeviceIdLength = deviceIdLength;
-
-    return AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
+    
+    return ret;
 }
 /*-----------------------------------------------------------*/
 
@@ -742,18 +766,24 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( Az
                                                                               uint32_t pSymmetricKeyLength,
                                                                               AzureIoTGetHMACFunc_t hmacFunction )
 {
+    AzureIoTProvisioningClientError_t ret;
+
     if( ( xAzureIoTProvisioningClientHandle == NULL ) ||
         ( pSymmetricKey == NULL ) || ( pSymmetricKeyLength == 0 ) )
     {
         AZLogError( ( "Provisioning client symmetric key fail: Invalid argument" ) );
-        return AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+        ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+    }
+    else
+    {
+        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key = pSymmetricKey;
+        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key_length = pSymmetricKeyLength;
+        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh = azure_iot_provisioning_client_token_get;
+        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_hmac_function = hmacFunction;
+
+        ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
     }
 
-    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key = pSymmetricKey;
-    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key_length = pSymmetricKeyLength;
-    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh = azure_iot_provisioning_client_token_get;
-    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_hmac_function = hmacFunction;
-
-    return AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
+    return ret;
 }
 /*-----------------------------------------------------------*/
