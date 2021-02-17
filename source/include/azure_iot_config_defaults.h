@@ -20,6 +20,18 @@
     #define azureIoTSUBACK_WAIT_INTERVAL_MS         ( 10U )
 #endif
 
+#ifndef azureIoTUSERNAME_MAX
+    #define azureIoTUSERNAME_MAX                    ( 128U )
+#endif
+
+#ifndef azureIoTPASSWORD_MAX
+    #define azureIoTPASSWORD_MAX                    ( 256U )
+#endif
+
+#ifndef azureIoTTOPIC_MAX
+    #define azureIoTTOPIC_MAX                       ( 128U )
+#endif
+
 /**
  * @brief Macro that is called in the AzureIoT Middleware library for logging "Error" level
  * messages.
