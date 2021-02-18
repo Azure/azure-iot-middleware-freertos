@@ -345,6 +345,9 @@ static void azure_iot_provisioning_client_parse_response( AzureIoTProvisioningCl
         }
         else if( xAzureIoTProvisioningClientHandle->_internal.register_response.retry_after_seconds == 0 )
         {
+            AZLogError( ( "IoTProvisioning client failed with error %d, extended error status: %u\r\n",
+                          xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.error_code,
+                          xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.extended_error_code ) );
             /* Server responded with error with no retry.  */
             azure_iot_provisioning_client_update_state( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_SERVER_ERROR );
         }
@@ -707,7 +710,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTP
 
         ret = azure_iot_provisioning_client_run_workflow( xAzureIoTProvisioningClientHandle, timeout );
     }
-    
+
     return ret;
 }
 /*-----------------------------------------------------------*/
@@ -756,7 +759,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
             ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
         }
     }
-    
+
     return ret;
 }
 /*-----------------------------------------------------------*/
@@ -781,6 +784,33 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( Az
         xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh = azure_iot_provisioning_client_token_get;
         xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_hmac_function = hmacFunction;
 
+        ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
+    }
+
+    return ret;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+                                                                              uint32_t  * pExtendedErrorCode )
+{
+    AzureIoTProvisioningClientError_t ret;
+
+    if( ( xAzureIoTProvisioningClientHandle == NULL ) ||
+        ( pExtendedErrorCode == NULL ) )
+    {
+        AZLogError( ( "Provisioning client extended code get failed : Invalid argument" ) );
+        ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
+    }
+    else if ( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
+    {
+        AZLogError( ( "Provisioning client state is not in complete state" ) );
+        ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
+    }
+    else
+    {
+        *pExtendedErrorCode =
+            xAzureIoTProvisioningClientHandle->_internal.register_response.registration_state.extended_error_code;
         ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
     }
 
