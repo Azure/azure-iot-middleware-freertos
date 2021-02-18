@@ -14,7 +14,7 @@
 #include "core_mqtt.h"
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t  pContext,
-                                        const TransportInterface_t * pTransportInterface,
+                                        const AzureIoTTransportInterface_t * pTransportInterface,
                                         AzureIoTMQTTGetCurrentTimeFunc_t getTimeFunction,
                                         AzureIoTMQTTEventCallback_t userCallback,
                                         uint8_t * pNetworkBuffer, uint32_t networkBufferLength )
@@ -26,10 +26,11 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t  pContext,
     assert( sizeof( AzureIoTMQTTSubscribeInfo_t ) == sizeof( MQTTSubscribeInfo_t ) );
     assert( sizeof( AzureIoTMQTTPacketInfo_t ) == sizeof( MQTTPacketInfo_t ) );
     assert( sizeof( AzureIoTMQTTPublishInfo_t ) == sizeof( MQTTPublishInfo_t ) );
-    assert( sizeof( AzureIoTMQTTStatus_t ) == sizeof(MQTTStatus_t) );
+    assert( sizeof( AzureIoTMQTTStatus_t ) == sizeof( MQTTStatus_t ) );
+    assert( sizeof( AzureIoTTransportInterface_t ) == sizeof( TransportInterface_t ) );
 
     return ( MQTTStatus_t ) MQTT_Init( &( pContext->_internal.context ),
-                                       pTransportInterface,
+                                       ( const TransportInterface_t * )pTransportInterface,
                                        ( MQTTGetCurrentTimeFunc_t )getTimeFunction,
                                        ( MQTTEventCallback_t ) userCallback,
                                        &buffer );

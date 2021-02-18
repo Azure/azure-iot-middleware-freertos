@@ -20,7 +20,7 @@
     #define true     ( int8_t ) 1
 #endif
 
-#include "transport_interface.h"
+#include "azure_iot_transport_interface.h"
 
 #define AZURE_IOT_MQTT_PACKET_TYPE_CONNECT        ( ( uint8_t ) 0x10U )  /**< @brief CONNECT (client-to-server). */
 #define AZURE_IOT_MQTT_PACKET_TYPE_CONNACK        ( ( uint8_t ) 0x20U )  /**< @brief CONNACK (server-to-client). */
@@ -195,7 +195,7 @@ typedef void (* AzureIoTMQTTEventCallback_t )( AzureIoTMQTTHandle_t  pContext,
 
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t  pContext,
-                                        const TransportInterface_t * pTransportInterface,
+                                        const AzureIoTTransportInterface_t * pTransportInterface,
                                         AzureIoTMQTTGetCurrentTimeFunc_t getTimeFunction,
                                         AzureIoTMQTTEventCallback_t userCallback,
                                         uint8_t * pNetworkBuffer, uint32_t networkBufferLength );

@@ -1,32 +1,13 @@
-/*
- * coreMQTT v1.0.1
- * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
 
 /**
- * @file transport_interface.h
+ * @file azure_iot_transport_interface.h
  * @brief Transport interface definitions to send and receive data over the
  * network.
  */
-#ifndef TRANSPORT_INTERFACE_H_
-#define TRANSPORT_INTERFACE_H_
+#ifndef AZURE_IOT_TRANSPORT_INTERFACE_H_
+#define AZURE_IOT_TRANSPORT_INTERFACE_H_
 
 #include <stdint.h>
 #include <stddef.h>
@@ -52,7 +33,7 @@
  *
  * Each of the functions above take in an opaque context @ref NetworkContext_t.
  * The functions above and the context are also grouped together in the
- * @ref TransportInterface_t structure:<br><br>
+ * @ref AzureIoTTransportInterface_t structure:<br><br>
  * @snippet this define_transportinterface
  * <br>
  *
@@ -166,9 +147,9 @@ typedef struct NetworkContext NetworkContext_t;
  * @return The number of bytes received or a negative error code.
  */
 /* @[define_transportrecv] */
-typedef int32_t ( * TransportRecv_t )( NetworkContext_t * pNetworkContext,
-                                       void * pBuffer,
-                                       size_t bytesToRecv );
+typedef int32_t ( * AzureIoTTransportRecv_t )( NetworkContext_t * pNetworkContext,
+                                               void * pBuffer,
+                                               size_t bytesToRecv );
 /* @[define_transportrecv] */
 
 /**
@@ -182,22 +163,22 @@ typedef int32_t ( * TransportRecv_t )( NetworkContext_t * pNetworkContext,
  * @return The number of bytes sent or a negative error code.
  */
 /* @[define_transportsend] */
-typedef int32_t ( * TransportSend_t )( NetworkContext_t * pNetworkContext,
-                                       const void * pBuffer,
-                                       size_t bytesToSend );
+typedef int32_t ( * AzureIoTTransportSend_t )( NetworkContext_t * pNetworkContext,
+                                               const void * pBuffer,
+                                               size_t bytesToSend );
 /* @[define_transportsend] */
 
 /**
- * @transportstruct
+ * @azuretransportstruct
  * @brief The transport layer interface.
  */
 /* @[define_transportinterface] */
-typedef struct TransportInterface
+typedef struct AzureIoTTransportInterface
 {
-    TransportRecv_t recv;               /**< Transport receive interface. */
-    TransportSend_t send;               /**< Transport send interface. */
+    AzureIoTTransportRecv_t recv;               /**< Transport receive interface. */
+    AzureIoTTransportSend_t send;               /**< Transport send interface. */
     NetworkContext_t * pNetworkContext; /**< Implementation-defined network context. */
-} TransportInterface_t;
+} AzureIoTTransportInterface_t;
 /* @[define_transportinterface] */
 
-#endif /* ifndef TRANSPORT_INTERFACE_H_ */
+#endif /* ifndef AZURE_IOT_TRANSPORT_INTERFACE_H_ */
