@@ -368,7 +368,7 @@ static void prvAzureDemoTask( void * pvParameters )
 
     ( void ) pvParameters;
 
-    AzureIoTLogInit();
+    configASSERT( AzureIoTInit() == AZURE_IOT_SUCCESS );
 
     status = prvSetupNetworkCredentials( &xNetworkCredentials );
     configASSERT( status == 0 );

@@ -57,10 +57,10 @@ typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pKey,
                                               uint32_t * pBytesCopied );
 
 /**
- * @brief Initialize Logging
+ * @brief Initialize Azure IoT
  *
  */
-AzureIoTError_t AzureIoTLogInit();
+AzureIoTError_t AzureIoTInit();
 
 /**
  * @brief Initialize
