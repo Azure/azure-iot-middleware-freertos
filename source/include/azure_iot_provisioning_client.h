@@ -111,7 +111,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
                                                                    uint8_t * pBuffer,
                                                                    uint32_t bufferLength,
                                                                    AzureIoTGetCurrentTimeFunc_t getTimeFunction,
-                                                                   const TransportInterface_t * pTransportInterface );
+                                                                   const AzureIoTTransportInterface_t * pTransportInterface );
 
 /**
  * @brief Deinitialize the Azure IoT Provisioning Client.
@@ -175,7 +175,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
  * @note Extended code is 6 digit error code.
  *
  * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[out] pExtendedErrorCode The pointer to the uint32_t which will be populated with the extended code.
+ * @param[out] pExtendedErrorCode The pointer to the uint32_t which will be populated with the extended code
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandlem,
