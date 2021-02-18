@@ -169,4 +169,16 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
                                                                      uint8_t * pDeviceId,
                                                                      uint32_t * pDeviceIdLength );
 
+/**
+ * @brief Get extended code for Provisioning failure.
+ *
+ * @note Extended code is 6 digit error code.
+ *
+ * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[out] pExtendedErrorCode The pointer to the uint32_t which will be populated with the extended code.
+ * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
+ */
+AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandlem,
+                                                                              uint32_t  * pExtendedErrorCode );
+
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */
