@@ -111,7 +111,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
                                                                    uint8_t * pBuffer,
                                                                    uint32_t bufferLength,
                                                                    AzureIoTGetCurrentTimeFunc_t getTimeFunction,
-                                                                   const TransportInterface_t * pTransportInterface );
+                                                                   const AzureIoTTransportInterface_t * pTransportInterface );
 
 /**
  * @brief Deinitialize the Azure IoT Provisioning Client.

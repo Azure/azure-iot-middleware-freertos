@@ -239,7 +239,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
                                                  uint8_t * pBuffer,
                                                  uint32_t bufferLength,
                                                  AzureIoTGetCurrentTimeFunc_t getTimeFunction,
-                                                 const TransportInterface_t * pTransportInterface );
+                                                 const AzureIoTTransportInterface_t * pTransportInterface );
 
 /**
  * @brief Deinitialize the Azure IoT Hub Client.

@@ -619,7 +619,7 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvi
                                                                    uint8_t * pBuffer,
                                                                    uint32_t bufferLength,
                                                                    AzureIoTGetCurrentTimeFunc_t getTimeFunction,
-                                                                   const TransportInterface_t * pTransportInterface )
+                                                                   const AzureIoTTransportInterface_t * pTransportInterface )
 {
     AzureIoTProvisioningClientError_t ret;
     az_span endpoint_span = az_span_create( ( uint8_t * ) pEndpoint, ( int32_t ) endpointLength );
