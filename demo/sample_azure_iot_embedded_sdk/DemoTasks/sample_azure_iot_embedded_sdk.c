@@ -368,7 +368,7 @@ static void prvAzureDemoTask( void * pvParameters )
 
     ( void ) pvParameters;
 
-    configASSERT( AzureIoTInit() == AZURE_IOT_SUCCESS );
+    configASSERT( AzureIoT_Init() == AZURE_IOT_SUCCESS );
 
     status = prvSetupNetworkCredentials( &xNetworkCredentials );
     configASSERT( status == 0 );
@@ -452,10 +452,10 @@ static void prvAzureDemoTask( void * pvParameters )
 
         /* Create a bag of properties for the telemetry */
         AzureIoTMessageProperties_t propertyBag;
-        xResult = AzureIoTMessagePropertiesInit( &propertyBag, propertyBuffer, 0, sizeof( propertyBag ) );
+        xResult = AzureIoT_MessagePropertiesInit( &propertyBag, propertyBuffer, 0, sizeof( propertyBag ) );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = AzureIoTMessagePropertiesAppend( &propertyBag, ( uint8_t * ) "name", sizeof( "name" ) - 1,
+        xResult = AzureIoT_MessagePropertiesAppend( &propertyBag, ( uint8_t * ) "name", sizeof( "name" ) - 1,
                                                    ( uint8_t * ) "value", sizeof( "value" ) - 1 );
 
         /****************** Publish and Keep Alive Loop. **********************/

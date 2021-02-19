@@ -31,7 +31,7 @@
  * - [Transport Receive](@ref TransportRecv_t)
  * - [Transport Send](@ref TransportSend_t)
  *
- * Each of the functions above take in an opaque context @ref NetworkContext_t.
+ * Each of the functions above take in an opaque context @ref struct NetworkContext.
  * The functions above and the context are also grouped together in the
  * @ref AzureIoTTransportInterface_t structure:<br><br>
  * @snippet this define_transportinterface
@@ -41,10 +41,9 @@
  *
  * The following steps give guidance on implementing the transport interface:
  *
- * -# Implementing @ref NetworkContext_t<br><br>
+ * -# Implementing @ref struct NetworkContext<br><br>
  * @snippet this define_networkcontext
  * <br>
- * @ref NetworkContext_t is the incomplete type <b>struct NetworkContext</b>.
  * The implemented struct NetworkContext must contain all of the information
  * that is needed to receive and send data with the @ref TransportRecv_t
  * and the @ref TransportSend_t implementations.<br>
@@ -72,7 +71,7 @@
  * <br><br>
  * <b>Example code:</b>
  * @code{c}
- * int32_t myNetworkRecvImplementation( NetworkContext_t * pNetworkContext,
+ * int32_t myNetworkRecvImplementation( struct NetworkContext * pNetworkContext,
  *                                      void * pBuffer,
  *                                      size_t bytesToRecv )
  * {
@@ -104,7 +103,7 @@
  * <br><br>
  * <b>Example code:</b>
  * @code{c}
- * int32_t myNetworkSendImplementation( NetworkContext_t * pNetworkContext,
+ * int32_t myNetworkSendImplementation( struct NetworkContext * pNetworkContext,
  *                                      const void * pBuffer,
  *                                      size_t bytesToSend )
  * {
@@ -126,14 +125,12 @@
 
 /**
  * @transportstruct
- * @typedef NetworkContext_t
  * @brief The NetworkContext is an incomplete type. An implementation of this
  * interface must define struct NetworkContext for the system requirements.
  * This context is passed into the network interface functions.
  */
 /* @[define_networkcontext] */
 struct NetworkContext;
-typedef struct NetworkContext NetworkContext_t;
 /* @[define_networkcontext] */
 
 /**
@@ -147,7 +144,7 @@ typedef struct NetworkContext NetworkContext_t;
  * @return The number of bytes received or a negative error code.
  */
 /* @[define_transportrecv] */
-typedef int32_t ( * AzureIoTTransportRecv_t )( NetworkContext_t * pNetworkContext,
+typedef int32_t ( * AzureIoTTransportRecv_t )( struct NetworkContext * pNetworkContext,
                                                void * pBuffer,
                                                size_t bytesToRecv );
 /* @[define_transportrecv] */
@@ -163,7 +160,7 @@ typedef int32_t ( * AzureIoTTransportRecv_t )( NetworkContext_t * pNetworkContex
  * @return The number of bytes sent or a negative error code.
  */
 /* @[define_transportsend] */
-typedef int32_t ( * AzureIoTTransportSend_t )( NetworkContext_t * pNetworkContext,
+typedef int32_t ( * AzureIoTTransportSend_t )( struct NetworkContext * pNetworkContext,
                                                const void * pBuffer,
                                                size_t bytesToSend );
 /* @[define_transportsend] */
@@ -177,7 +174,7 @@ typedef struct AzureIoTTransportInterface
 {
     AzureIoTTransportRecv_t recv;               /**< Transport receive interface. */
     AzureIoTTransportSend_t send;               /**< Transport send interface. */
-    NetworkContext_t * pNetworkContext; /**< Implementation-defined network context. */
+    struct NetworkContext * pNetworkContext; /**< Implementation-defined network context. */
 } AzureIoTTransportInterface_t;
 /* @[define_transportinterface] */
 

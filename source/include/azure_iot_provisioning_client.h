@@ -75,12 +75,12 @@ typedef struct AzureIoTProvisioningClient
         uint32_t azure_iot_provisioning_client_symmetric_key_length;
 
         uint32_t ( * azure_iot_provisioning_client_token_refresh )( struct AzureIoTProvisioningClient * xAzureIoTProvisioningClientHandle,
-                                                                    uint64_t expiryTimeSecs,
-                                                                    const uint8_t * key,
-                                                                    uint32_t keyLen,
-                                                                    uint8_t * pSASBuffer,
-                                                                    uint32_t sasBufferLen,
-                                                                    uint32_t * pSaSLength );
+                                                                    uint64_t ullExpiryTimeSecs,
+                                                                    const uint8_t * ucKey,
+                                                                    uint32_t ulKeyLen,
+                                                                    uint8_t * pucSASBuffer,
+                                                                    uint32_t ulSasBufferLen,
+                                                                    uint32_t * pulSaSLength );
         AzureIoTGetHMACFunc_t azure_iot_provisioning_client_hmac_function;
     } _internal;
 } AzureIoTProvisioningClient_t;
@@ -89,29 +89,29 @@ typedef struct AzureIoTProvisioningClient
  * @brief Initialize the Azure IoT Provisioning Client.
  *
  * @param[out] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[in] pEndpoint The IoT Provisioning Hostname.
- * @param[in] endpointLength The length of the IoT Provisioning Hostname.
- * @param[in] pIdScope The id scope to use for provisioning.
- * @param[in] idScopeLength The length of the scope id.
- * @param[in] pRegistrationId The registration id to use for provisioning.
- * @param[in] registrationIdLength The length of the registration id.
- * @param[in] pBuffer The buffer to use for MQTT messages.
- * @param[in] bufferLength bufferLength The length of the \p pBuffer.
- * @param[in] getTimeFunction A function pointer to a function which gives the current epoch time.
- * @param[in] pTransportInterface The transport interface to use for the MQTT library.
+ * @param[in] pucEndpoint The IoT Provisioning Hostname.
+ * @param[in] ulEndpointLength The length of the IoT Provisioning Hostname.
+ * @param[in] pucIdScope The id scope to use for provisioning.
+ * @param[in] ulIdScopeLength The length of the scope id.
+ * @param[in] pucRegistrationId The registration id to use for provisioning.
+ * @param[in] ulRegistrationIdLength The length of the registration id.
+ * @param[in] pucBuffer The buffer to use for MQTT messages.
+ * @param[in] ulBufferLength bufferLength The length of the \p pucBuffer.
+ * @param[in] xGetTimeFunction A function pointer to a function which gives the current epoch time.
+ * @param[in] pxTransportInterface The transport interface to use for the MQTT library.
  * @return AzureIoTProvisioningClientError_t
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                   const uint8_t * pEndpoint,
-                                                                   uint32_t endpointLength,
-                                                                   const uint8_t * pIdScope,
-                                                                   uint32_t idScopeLength,
-                                                                   const uint8_t * pRegistrationId,
-                                                                   uint32_t registrationIdLength,
-                                                                   uint8_t * pBuffer,
-                                                                   uint32_t bufferLength,
-                                                                   AzureIoTGetCurrentTimeFunc_t getTimeFunction,
-                                                                   const AzureIoTTransportInterface_t * pTransportInterface );
+                                                                   const uint8_t * pucEndpoint,
+                                                                   uint32_t ulEndpointLength,
+                                                                   const uint8_t * pucIdScope,
+                                                                   uint32_t ulIdScopeLength,
+                                                                   const uint8_t * pucRegistrationId,
+                                                                   uint32_t ulRegistrationIdLength,
+                                                                   uint8_t * pucBuffer,
+                                                                   uint32_t ulBufferLength,
+                                                                   AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
+                                                                   const AzureIoTTransportInterface_t * pxTransportInterface );
 
 /**
  * @brief Deinitialize the Azure IoT Provisioning Client.
@@ -124,15 +124,15 @@ void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzur
  * @brief Set the symmetric key to use for authentication.
  *
  * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[in] pSymmetricKey The symmetric key to use for the connection.
- * @param[in] pSymmetricKeyLength The length of the \p pSymmetricKey.
- * @param[in] hmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
+ * @param[in] pucSymmetricKey The symmetric key to use for the connection.
+ * @param[in] ulSymmetricKeyLength The length of the \p pucSymmetricKey.
+ * @param[in] xHmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                              const uint8_t * pSymmetricKey,
-                                                                              uint32_t pSymmetricKeyLength,
-                                                                              AzureIoTGetHMACFunc_t hmacFunction );
+                                                                              const uint8_t * pucSymmetricKey,
+                                                                              uint32_t ulSymmetricKeyLength,
+                                                                              AzureIoTGetHMACFunc_t xHmacFunction );
 
 /**
  * @brief Begin the provisioning process.
@@ -145,29 +145,29 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_SymmetricKeySet( Az
  * user need to call this function to resume the registartion.
  *
  * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[in] timeout Timeout in ms to wait for registration to finish.
+ * @param[in] ulTimeout Timeout in ms to wait for registration to finish.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  *      - AZURE_IOT_PROVISIONING_CLIENT_PENDING registration is still in progess.
  *      - AZURE_IOT_PROVISIONING_CLIENT_SUCCESS registration is completed.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                       uint32_t timeout );
+                                                                       uint32_t ulTimeout );
 
 /**
  * @brief After a registration has been completed, get the IoT Hub host name and device id.
  *
  * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[out] pHubHostname The pointer to a buffer which will be populated with the IoT Hub hostname.
- * @param[out] pHostnameLength The pointer to the `uint32_t` which will be populated with the length of the hostname.
- * @param[out] pDeviceId The pointer to a buffer which will be populated with the device id.
- * @param[out] pDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device id.
+ * @param[out] pucHubHostname The pointer to a buffer which will be populated with the IoT Hub hostname.
+ * @param[out] pulHostnameLength The pointer to the `uint32_t` which will be populated with the length of the hostname.
+ * @param[out] pucDeviceId The pointer to a buffer which will be populated with the device id.
+ * @param[out] pulDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device id.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                     uint8_t * pHubHostname,
-                                                                     uint32_t * pHostnameLength,
-                                                                     uint8_t * pDeviceId,
-                                                                     uint32_t * pDeviceIdLength );
+                                                                     uint8_t * pucHubHostname,
+                                                                     uint32_t * pulHostnameLength,
+                                                                     uint8_t * pucDeviceId,
+                                                                     uint32_t * pulDeviceIdLength );
 
 /**
  * @brief Get extended code for Provisioning failure.
@@ -175,10 +175,10 @@ AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_HubGet( AzureIoTPro
  * @note Extended code is 6 digit error code.
  *
  * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[out] pExtendedErrorCode The pointer to the uint32_t which will be populated with the extended code.
+ * @param[out] pulExtendedErrorCode The pointer to the uint32_t which will be populated with the extended code.
  * @return An #AzureIoTProvisioningClientError_t with the result of the operation.
  */
 AzureIoTProvisioningClientError_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                              uint32_t  * pExtendedErrorCode );
+                                                                              uint32_t  * pulExtendedErrorCode );
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */
