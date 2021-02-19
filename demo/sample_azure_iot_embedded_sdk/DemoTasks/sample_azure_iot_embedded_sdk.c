@@ -347,7 +347,7 @@ static void prvAzureDemoTask( void * pvParameters )
     uint32_t ulPublishCount = 0U;
     const uint32_t ulMaxPublishCount = 5UL;
     NetworkCredentials_t xNetworkCredentials = { 0 };
-    TransportInterface_t xTransport;
+    AzureIoTTransportInterface_t xTransport;
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportStatus_t xNetworkStatus;
     TlsTransportParams_t xTlsTransportParams = { 0 };
@@ -529,7 +529,7 @@ static void prvAzureDemoTask( void * pvParameters )
         TlsTransportParams_t xTlsTransportParams = { 0 };
         TlsTransportStatus_t xNetworkStatus;
         AzureIoTProvisioningClientError_t xResult;
-        TransportInterface_t xTransport;
+        AzureIoTTransportInterface_t xTransport;
         uint32_t sampleIotHubHostnameLength = sizeof( sampleIotHubHostname );
         uint32_t sampleIotHubDeviceIdLength = sizeof( sampleIotHubDeviceId );
 
