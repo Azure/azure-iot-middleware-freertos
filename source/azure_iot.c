@@ -13,7 +13,7 @@ static const char _azure_iot_base64_array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg
 
 /*-----------------------------------------------------------*/
 
-static void azure_iot_log_listener( az_log_classification classification, az_span message )
+static void prvAzureIoTLogListener( az_log_classification classification, az_span message )
 {
     ( void ) classification;
 
@@ -21,7 +21,7 @@ static void azure_iot_log_listener( az_log_classification classification, az_spa
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTError_t azure_iot_base64_decode( char * base64name,
+static AzureIoTError_t prvAzureIoTBase64Decode( char * base64name,
                                                 uint32_t length,
                                                 uint8_t * name,
                                                 uint32_t name_size,
@@ -144,7 +144,7 @@ static AzureIoTError_t azure_iot_base64_decode( char * base64name,
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTError_t azure_iot_base64_encode( uint8_t * name,
+static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
                                                 uint32_t length,
                                                 char * base64name,
                                                 uint32_t base64name_size )
@@ -241,7 +241,7 @@ static AzureIoTError_t azure_iot_base64_encode( uint8_t * name,
 AzureIoTError_t AzureIoTInit()
 {
 #if ( LIBRARY_LOG_LEVEL == LOG_INFO )
-    az_log_set_message_callback( azure_iot_log_listener );
+    az_log_set_message_callback( prvAzureIoTLogListener );
 #endif
 
     return AZURE_IOT_SUCCESS;
@@ -360,7 +360,7 @@ AzureIoTError_t AzureIoTBase64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMAC
     }
 
     binary_key_buf_size = bufferLength;
-    status = azure_iot_base64_decode( ( char * ) pKey, keySize,
+    status = prvAzureIoTBase64Decode( ( char * ) pKey, keySize,
                                       pBuffer, binary_key_buf_size, &binary_key_buf_size );
 
     if( status )
@@ -390,7 +390,7 @@ AzureIoTError_t AzureIoTBase64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMAC
 
     /* Additional space is required by encoder.  */
     hash_buf[ hash_buf_size - 1 ] = 0;
-    status = azure_iot_base64_encode( hash_buf, hash_buf_size - 1,
+    status = prvAzureIoTBase64Encode( hash_buf, hash_buf_size - 1,
                                       encoded_hash_buf, encoded_hash_buf_size );
 
     if( status )
