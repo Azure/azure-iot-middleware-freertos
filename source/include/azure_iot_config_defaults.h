@@ -4,32 +4,32 @@
 #ifndef AZURE_IOT_CONFIG_DEFAULT_H
 #define AZURE_IOT_CONFIG_DEFAULT_H
 
-#ifndef azureIoTDEFAULTTOKENTIMEOUTINSEC
-    #define azureIoTDEFAULTTOKENTIMEOUTINSEC        ( 60 * 60U )
+#ifndef azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
+    #define azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC    ( 60 * 60U )
 #endif
 
-#ifndef azureIoTKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureIoTKEEP_ALIVE_TIMEOUT_SECONDS      ( 60U )
+#ifndef azureiotKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiotKEEP_ALIVE_TIMEOUT_SECONDS      ( 60U )
 #endif
 
-#ifndef azureIoTCONNACK_RECV_TIMEOUT_MS
-    #define azureIoTCONNACK_RECV_TIMEOUT_MS         ( 1000U )
+#ifndef azureiotCONNACK_RECV_TIMEOUT_MS
+    #define azureiotCONNACK_RECV_TIMEOUT_MS         ( 1000U )
 #endif
 
-#ifndef azureIoTSUBACK_WAIT_INTERVAL_MS
-    #define azureIoTSUBACK_WAIT_INTERVAL_MS         ( 10U )
+#ifndef azureiotSUBACK_WAIT_INTERVAL_MS
+    #define azureiotSUBACK_WAIT_INTERVAL_MS         ( 10U )
 #endif
 
-#ifndef azureIoTUSERNAME_MAX
-    #define azureIoTUSERNAME_MAX                    ( 128U )
+#ifndef azureiotUSERNAME_MAX
+    #define azureiotUSERNAME_MAX                    ( 128U )
 #endif
 
-#ifndef azureIoTPASSWORD_MAX
-    #define azureIoTPASSWORD_MAX                    ( 256U )
+#ifndef azureiotPASSWORD_MAX
+    #define azureiotPASSWORD_MAX                    ( 256U )
 #endif
 
-#ifndef azureIoTTOPIC_MAX
-    #define azureIoTTOPIC_MAX                       ( 128U )
+#ifndef azureiotTOPIC_MAX
+    #define azureiotTOPIC_MAX                       ( 128U )
 #endif
 
 /**
@@ -103,7 +103,7 @@
  * to the macro in the AzureIoT Middleware library on compilation.
  */
 #ifndef LogDebug
-    #define LogDebug( message )
+    #define AZLogDebug( message )
 #else
     #define AZLogDebug       LogDebug
 #endif
