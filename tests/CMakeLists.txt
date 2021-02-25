@@ -53,5 +53,9 @@ target_link_libraries(
   azure_iot_provisioning_client_ut PUBLIC cmocka az_iot_freertos_middleware)
 
 foreach(test ${unit_tests})
+  target_link_options(
+    ${test}
+      PRIVATE
+        -Wl,--gc-sections)
   add_test(${test} ${test})
 endforeach()
