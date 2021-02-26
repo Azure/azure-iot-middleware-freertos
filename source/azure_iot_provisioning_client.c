@@ -17,42 +17,31 @@
 
 #ifndef azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC
     #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC        azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
-#endif
+#endif /* azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC */
 
 #ifndef azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS
     #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS          azureiotKEEP_ALIVE_TIMEOUT_SECONDS
-#endif
+#endif /* azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiotprovisioningCONNACK_RECV_TIMEOUT_MS
     #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS             azureiotCONNACK_RECV_TIMEOUT_MS
-#endif
+#endif /* azureiotprovisioningCONNACK_RECV_TIMEOUT_MS */
 
-#define azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS           ( 500U )
+#ifndef azureiotprovisioningUSER_AGENT
+    #define azureiotprovisioningUSER_AGENT                          ""
+#endif /* azureiotprovisioningUSER_AGENT */
 
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_INIT           ( 0x0 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT        ( 0x1 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE      ( 0x2 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST        ( 0x3 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE       ( 0x4 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBING    ( 0x5 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING     ( 0x6 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING        ( 0x7 )
-#define AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE       ( 0x8 )
+#define azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS                 ( 500U )
 
-/**
- * @brief Milliseconds per second.
- */
-#define MILLISECONDS_PER_SECOND                               ( 1000U )
-
-/**
- * @brief Milliseconds per FreeRTOS tick.
- */
-#define MILLISECONDS_PER_TICK                                 ( MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
-
-#ifndef AZURE_IOT_PROVISION_CLIENT_USER_AGENT
-#define AZURE_IOT_PROVISION_CLIENT_USER_AGENT                 ""
-#endif /* AZURE_IOT_PROVISION_CLIENT_USER_AGENT */
-
+#define azureiotprovisioningWF_STATE_INIT                           ( 0x0 )
+#define azureiotprovisioningWF_STATE_CONNECT                        ( 0x1 )
+#define azureiotprovisioningWF_STATE_SUBSCRIBE                      ( 0x2 )
+#define azureiotprovisioningWF_STATE_REQUEST                        ( 0x3 )
+#define azureiotprovisioningWF_STATE_RESPONSE                       ( 0x4 )
+#define azureiotprovisioningWF_STATE_SUBSCRIBING                    ( 0x5 )
+#define azureiotprovisioningWF_STATE_REQUESTING                     ( 0x6 )
+#define azureiotprovisioningWF_STATE_WAITING                        ( 0x7 )
+#define azureiotprovisioningWF_STATE_COMPLETE                       ( 0x8 )
 
 /*-----------------------------------------------------------*/
 
@@ -75,49 +64,49 @@ static void prvAzureIoTProvisioningClientUpdateState( AzureIoTProvisioningClient
 
     switch( state )
     {
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT:
+        case azureiotprovisioningWF_STATE_CONNECT:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? azureiotprovisioningWF_STATE_SUBSCRIBE :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE:
+        case azureiotprovisioningWF_STATE_SUBSCRIBE:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBING :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? azureiotprovisioningWF_STATE_SUBSCRIBING :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBING:
+        case azureiotprovisioningWF_STATE_SUBSCRIBING:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? azureiotprovisioningWF_STATE_REQUEST :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST:
+        case azureiotprovisioningWF_STATE_REQUEST:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? azureiotprovisioningWF_STATE_REQUESTING :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING:
+        case azureiotprovisioningWF_STATE_REQUESTING:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? azureiotprovisioningWF_STATE_RESPONSE :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE:
+        case azureiotprovisioningWF_STATE_RESPONSE:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_PENDING ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_PENDING ? azureiotprovisioningWF_STATE_WAITING :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING:
+        case azureiotprovisioningWF_STATE_WAITING:
             xAzureIoTProvisioningClientHandle->_internal.workflowState =
-                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST :
-                AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE;
+                action_result == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS ? azureiotprovisioningWF_STATE_REQUEST :
+                azureiotprovisioningWF_STATE_COMPLETE;
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE:
+        case azureiotprovisioningWF_STATE_COMPLETE:
             AZLogInfo( ( "Complete done\r\n" ) );
             break;
 
@@ -131,7 +120,7 @@ static void prvAzureIoTProvisioningClientUpdateState( AzureIoTProvisioningClient
 
 /**
  *
- * Implementation of connect action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT
+ * Implementation of connect action, this action is only allowed in azureiotprovisioningWF_STATE_CONNECT
  *
  * */
 static void prvAzureIoTProvisioningClientConnect( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
@@ -144,7 +133,7 @@ static void prvAzureIoTProvisioningClientConnect( AzureIoTProvisioningClientHand
     size_t mqtt_user_name_length;
     az_result res;
 
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT )
+    if( xAzureIoTProvisioningClientHandle->_internal.workflowState != azureiotprovisioningWF_STATE_CONNECT )
     {
         AZLogWarn( ( "Connect action called in wrong state %d\r\n",
                      xAzureIoTProvisioningClientHandle->_internal.workflowState ) );
@@ -222,7 +211,7 @@ static void prvAzureIoTProvisioningClientConnect( AzureIoTProvisioningClientHand
 
 /**
  *
- * Implementation of subscribe action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE
+ * Implementation of subscribe action, this action is only allowed in azureiotprovisioningWF_STATE_SUBSCRIBE
  *
  * */
 static void prvAzureIoTProvisioningClientSubscribe( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
@@ -232,7 +221,7 @@ static void prvAzureIoTProvisioningClientSubscribe( AzureIoTProvisioningClientHa
     AzureIoTProvisioningClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
 
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE )
+    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_SUBSCRIBE )
     {
         mqttSubscription.qos = AzureIoTMQTTQoS0;
         mqttSubscription.pTopicFilter = AZ_IOT_PROVISIONING_CLIENT_REGISTER_SUBSCRIBE_TOPIC;
@@ -265,7 +254,7 @@ static void prvAzureIoTProvisioningClientSubscribe( AzureIoTProvisioningClientHa
 
 /**
  *
- * Implementation of request action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST
+ * Implementation of request action, this action is only allowed in azureiotprovisioningWF_STATE_REQUEST
  *
  * */
 static void prvAzureIoTProvisioningClientRequest( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
@@ -278,7 +267,7 @@ static void prvAzureIoTProvisioningClientRequest( AzureIoTProvisioningClientHand
     az_result core_result;
 
     /* Check the state.  */
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST )
+    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_REQUEST )
     {
         if( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length == 0 )
         {
@@ -332,7 +321,7 @@ static void prvAzureIoTProvisioningClientRequest( AzureIoTProvisioningClientHand
 
 /**
  *
- * Implementation of parsing response action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE
+ * Implementation of parsing response action, this action is only allowed in azureiotprovisioningWF_STATE_RESPONSE
  *
  * */
 static void prvAzureIoTProvisioningClientParseResponse( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
@@ -344,7 +333,7 @@ static void prvAzureIoTProvisioningClientParseResponse( AzureIoTProvisioningClie
                                     ( int32_t ) xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length );
 
     /* Check the state.  */
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE )
+    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_RESPONSE )
     {
         core_result =
             az_iot_provisioning_client_parse_received_topic_and_payload( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
@@ -386,12 +375,12 @@ static void prvAzureIoTProvisioningClientParseResponse( AzureIoTProvisioningClie
 
 /**
  *
- * Implementation of wait check action, this action is only allowed in AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING
+ * Implementation of wait check action, this action is only allowed in azureiotprovisioningWF_STATE_WAITING
  *
  * */
 static void prvAzureIoTProvisioningClientCheckTimeout( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle )
 {
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING )
+    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_WAITING )
     {
         if( xAzureIoTProvisioningClientHandle->_internal.getTimeFunction() >
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_req_timeout )
@@ -411,29 +400,29 @@ static void prvTriggerAction( AzureIoTProvisioningClientHandle_t xAzureIoTProvis
 {
     switch( xAzureIoTProvisioningClientHandle->_internal.workflowState )
     {
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT:
+        case azureiotprovisioningWF_STATE_CONNECT:
             prvAzureIoTProvisioningClientConnect( xAzureIoTProvisioningClientHandle );
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBE:
+        case azureiotprovisioningWF_STATE_SUBSCRIBE:
             prvAzureIoTProvisioningClientSubscribe( xAzureIoTProvisioningClientHandle );
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUEST:
+        case azureiotprovisioningWF_STATE_REQUEST:
             prvAzureIoTProvisioningClientRequest( xAzureIoTProvisioningClientHandle );
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_RESPONSE:
+        case azureiotprovisioningWF_STATE_RESPONSE:
             prvAzureIoTProvisioningClientParseResponse( xAzureIoTProvisioningClientHandle );
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_SUBSCRIBING:
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING:
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE:
+        case azureiotprovisioningWF_STATE_SUBSCRIBING:
+        case azureiotprovisioningWF_STATE_REQUESTING:
+        case azureiotprovisioningWF_STATE_COMPLETE:
             /* None action taken here, as these states are waiting for receive path. */
             break;
 
-        case AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_WAITING:
+        case azureiotprovisioningWF_STATE_WAITING:
             prvAzureIoTProvisioningClientCheckTimeout( xAzureIoTProvisioningClientHandle );
             break;
 
@@ -458,7 +447,7 @@ static AzureIoTProvisioningClientResult_t prvAzureIoTProvisioningClientRunWorkfl
 
     do
     {
-        if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
+        if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_COMPLETE )
         {
             break;
         }
@@ -484,7 +473,7 @@ static AzureIoTProvisioningClientResult_t prvAzureIoTProvisioningClientRunWorkfl
         }
     } while( ulTimeoutMilliseconds );
 
-    if( ( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE ) )
+    if( ( xAzureIoTProvisioningClientHandle->_internal.workflowState != azureiotprovisioningWF_STATE_COMPLETE ) )
     {
         ret = AZURE_IOT_PROVISIONING_CLIENT_PENDING;
     }
@@ -513,7 +502,7 @@ static void prvMQTTProcessSubAck( AzureIoTProvisioningClientHandle_t xAzureIoTPr
 static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                     AzureIoTMQTTPublishInfo_t * pPublishInfo )
 {
-    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_REQUESTING )
+    if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_REQUESTING )
     {
         vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload );
         vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic );
@@ -620,7 +609,7 @@ static uint32_t prvGetTimeMs( void )
     xTickCount = xTaskGetTickCount();
 
     /* Convert the ticks to milliseconds. */
-    ulTimeMs = ( uint32_t ) xTickCount * MILLISECONDS_PER_TICK;
+    ulTimeMs = ( uint32_t ) xTickCount * azureiotMILLISECONDS_PER_TICK;
 
     return ulTimeMs;
 }
@@ -637,8 +626,8 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_OptionsInit( Azure
     }
     else
     {
-        pxProvisioningClientOptions->pUserAgent = ( const uint8_t * ) AZURE_IOT_PROVISION_CLIENT_USER_AGENT;
-        pxProvisioningClientOptions->userAgentLength = sizeof( AZURE_IOT_PROVISION_CLIENT_USER_AGENT ) - 1;
+        pxProvisioningClientOptions->pUserAgent = ( const uint8_t * ) azureiotprovisioningUSER_AGENT;
+        pxProvisioningClientOptions->userAgentLength = sizeof( azureiotprovisioningUSER_AGENT ) - 1;
         ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
     }
 
@@ -695,7 +684,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         }
         else
         {
-            options.user_agent = az_span_create( ( uint8_t * ) AZURE_IOT_PROVISION_CLIENT_USER_AGENT, sizeof( AZURE_IOT_PROVISION_CLIENT_USER_AGENT ) - 1 );
+            options.user_agent = az_span_create( ( uint8_t * ) azureiotprovisioningUSER_AGENT, sizeof( azureiotprovisioningUSER_AGENT ) - 1 );
         }
 
         core_result = az_iot_provisioning_client_init( &( xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core ),
@@ -751,9 +740,9 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Register( AzureIoT
     }
     else
     {
-        if( xAzureIoTProvisioningClientHandle->_internal.workflowState == AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_INIT )
+        if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_INIT )
         {
-            xAzureIoTProvisioningClientHandle->_internal.workflowState = AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_CONNECT;
+            xAzureIoTProvisioningClientHandle->_internal.workflowState = azureiotprovisioningWF_STATE_CONNECT;
         }
 
         ret = prvAzureIoTProvisioningClientRunWorkflow( xAzureIoTProvisioningClientHandle, ulTimeoutMilliseconds );
@@ -779,7 +768,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_HubGet( AzureIoTPr
         AZLogError( ( "Provisioning hub get failed: Invalid argument" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
-    else if( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
+    else if( xAzureIoTProvisioningClientHandle->_internal.workflowState != azureiotprovisioningWF_STATE_COMPLETE )
     {
         AZLogError( ( "Provisioning client state is not in complete state" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
@@ -850,7 +839,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_ExtendedCodeGet( A
         AZLogError( ( "Provisioning client extended code get failed : Invalid argument" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
-    else if ( xAzureIoTProvisioningClientHandle->_internal.workflowState != AZURE_IOT_PROVISIONING_CLIENT_WF_STATE_COMPLETE )
+    else if ( xAzureIoTProvisioningClientHandle->_internal.workflowState != azureiotprovisioningWF_STATE_COMPLETE )
     {
         AZLogError( ( "Provisioning client state is not in complete state" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;

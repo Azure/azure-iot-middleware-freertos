@@ -33,6 +33,16 @@
 #endif
 
 /**
+ * @brief Milliseconds per second.
+ */
+#define azureiotMILLISECONDS_PER_SECOND             ( 1000U )
+
+/**
+ * @brief Milliseconds per FreeRTOS tick.
+ */
+#define azureiotMILLISECONDS_PER_TICK               ( azureiotMILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
+
+/**
  * @brief Macro that is called in the AzureIoT Middleware library for logging "Error" level
  * messages.
  *
