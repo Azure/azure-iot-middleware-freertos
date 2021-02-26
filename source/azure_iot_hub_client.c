@@ -13,6 +13,19 @@
 #include "task.h"
 
 #include "azure/az_iot.h"
+#include "azure/core/az_version.h"
+
+#ifndef azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC
+    #define azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC     azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
+#endif
+
+#ifndef azureiothubKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiothubKEEP_ALIVE_TIMEOUT_SECONDS       azureiotKEEP_ALIVE_TIMEOUT_SECONDS
+#endif
+
+#ifndef azureiothubSUBACK_WAIT_INTERVAL_MS
+    #define azureiothubSUBACK_WAIT_INTERVAL_MS          azureiotSUBACK_WAIT_INTERVAL_MS
+#endif
 
 /**
  * @brief Milliseconds per second.
@@ -37,6 +50,10 @@
 #define TOPIC_SUBSCRIBE_STATE_NONE       0
 #define TOPIC_SUBSCRIBE_STATE_SUB        1
 #define TOPIC_SUBSCRIBE_STATE_SUBACK     2
+
+#ifndef AZURE_IOT_HUB_CLIENT_USER_AGENT
+#define AZURE_IOT_HUB_CLIENT_USER_AGENT  "DeviceClientType=c%2F" AZ_SDK_VERSION_STRING "%28FreeRTOS%29"
+#endif /* AZURE_IOT_HUB_CLIENT_USER_AGENT */
 
 /*-----------------------------------------------------------*/
 
@@ -109,7 +126,7 @@ static uint32_t prvAzureIoTHubClientCloudMessageProcess( AzureIoTHubClientReceiv
                                                          AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                          void * pxPublishInfo )
 {
-    AzureIoTHubClientC2DRequest_t message;
+    AzureIoTHubClientCloudMessageRequest_t message;
     AzureIoTMQTTPublishInfo_t * mqttPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pxPublishInfo;
     az_iot_hub_client_c2d_request out_request;
     az_span topic_span = az_span_create( ( uint8_t * ) mqttPublishInfo->pTopicName, mqttPublishInfo->topicNameLength );
@@ -121,22 +138,22 @@ static uint32_t prvAzureIoTHubClientCloudMessageProcess( AzureIoTHubClientReceiv
     }
 
     /* Process incoming Publish. */
-    AZLogInfo( ( "C2D message QoS : %d\n", mqttPublishInfo->qos ) );
+    AZLogInfo( ( "Cloud message QoS : %d\n", mqttPublishInfo->qos ) );
 
     /* Verify the received publish is for the we have subscribed to. */
-    AZLogInfo( ( "C2D message topic: %.*s  with payload : %.*s",
+    AZLogInfo( ( "Cloud message topic: %.*s  with payload : %.*s",
                  mqttPublishInfo->topicNameLength,
                  mqttPublishInfo->pTopicName,
                  mqttPublishInfo->payloadLength,
                  mqttPublishInfo->pPayload ) );
 
-    if( context->_internal.callbacks.c2dCallback )
+    if( context->_internal.callbacks.cloudMessageCallback )
     {
         message.messagePayload = mqttPublishInfo->pPayload;
         message.payloadLength = mqttPublishInfo->payloadLength;
         message.properties._internal.properties = out_request.properties;
-        context->_internal.callbacks.c2dCallback( &message,
-                                                  context->_internal.callback_context );
+        context->_internal.callbacks.cloudMessageCallback( &message,
+                                                           context->_internal.callback_context );
     }
 
     return AZURE_IOT_HUB_CLIENT_SUCCESS;
@@ -353,11 +370,11 @@ static int prvRequestIdGet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTHubClientError_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                  AzureIoTHubClientReceiveContext_t * context,
-                                                  uint32_t timeout )
+static AzureIoTHubClientResult_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                   AzureIoTHubClientReceiveContext_t * context,
+                                                   uint32_t ulTimeoutMilliseconds )
 {
-    AzureIoTHubClientError_t ret = AZURE_IOT_HUB_CLIENT_SUBACK_WAIT_TIMEOUT;
+    AzureIoTHubClientResult_t ret = AZURE_IOT_HUB_CLIENT_SUBACK_WAIT_TIMEOUT;
     uint32_t waitTime;
 
     do
@@ -368,15 +385,15 @@ static AzureIoTHubClientError_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAzu
             break;
         }
 
-        if( timeout > azureIoTHubClientSUBACK_WAIT_INTERVAL_MS )
+        if( ulTimeoutMilliseconds > azureiothubSUBACK_WAIT_INTERVAL_MS )
         {
-            timeout -= azureIoTHubClientSUBACK_WAIT_INTERVAL_MS;
-            waitTime = azureIoTHubClientSUBACK_WAIT_INTERVAL_MS;
+            ulTimeoutMilliseconds -= azureiothubSUBACK_WAIT_INTERVAL_MS;
+            waitTime = azureiothubSUBACK_WAIT_INTERVAL_MS;
         }
         else
         {
-            waitTime = timeout;
-            timeout = 0;
+            waitTime = ulTimeoutMilliseconds;
+            ulTimeoutMilliseconds = 0;
         }
 
         if( AzureIoTMQTT_ProcessLoop( &xAzureIoTHubClientHandle->_internal.xMQTTContext, waitTime ) != AzureIoTMQTTSuccess )
@@ -384,7 +401,7 @@ static AzureIoTHubClientError_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAzu
             ret = AZURE_IOT_HUB_CLIENT_FAILED;
             break;
         }
-    } while( timeout );
+    } while( ulTimeoutMilliseconds );
 
     if( context->_internal.state == TOPIC_SUBSCRIBE_STATE_SUBACK )
     {
@@ -395,27 +412,50 @@ static AzureIoTHubClientError_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAzu
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                 const uint8_t * pucHostname,
-                                                 uint32_t ulHostnameLength,
-                                                 const uint8_t * pucDeviceId,
-                                                 uint32_t ulDeviceIdLength,
-                                                 AzureIoTHubClientOptions_t * pxHubClientOptions,
-                                                 uint8_t * pucBuffer,
-                                                 uint32_t ulBufferLength,
-                                                 AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
-                                                 const AzureIoTTransportInterface_t * pxTransportInterface )
+AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOptions_t * pxHubClientOptions )
+{
+    AzureIoTHubClientResult_t ret;
+
+    if ( pxHubClientOptions == NULL )
+    {
+        AZLogError( ( "Failed to initialize options: Invalid argument \r\n" ) );
+        ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
+    }
+    else
+    {
+        pxHubClientOptions->pModelId = NULL;
+        pxHubClientOptions->modelIdLength = 0;
+        pxHubClientOptions->pModuleId = NULL;
+        pxHubClientOptions->moduleIdLength = 0;
+        pxHubClientOptions->pUserAgent = ( const uint8_t * ) AZURE_IOT_HUB_CLIENT_USER_AGENT;
+        pxHubClientOptions->userAgentLength = sizeof( AZURE_IOT_HUB_CLIENT_USER_AGENT ) - 1;
+        ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
+    }
+
+    return ret;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                  const uint8_t * pucHostname,
+                                                  uint32_t ulHostnameLength,
+                                                  const uint8_t * pucDeviceId,
+                                                  uint32_t ulDeviceIdLength,
+                                                  AzureIoTHubClientOptions_t * pxHubClientOptions,
+                                                  uint8_t * pucBuffer,
+                                                  uint32_t ulBufferLength,
+                                                  AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
+                                                  const AzureIoTTransportInterface_t * pxTransportInterface )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     az_iot_hub_client_options options;
 
     if ( ( xAzureIoTHubClientHandle == NULL ) ||
          ( pucHostname == NULL ) || ( ulHostnameLength == 0 ) ||
          ( pucDeviceId == NULL ) || ( ulDeviceIdLength == 0 ) ||
          ( pucBuffer == NULL ) || ( ulBufferLength == 0 ) ||
-         ( xGetTimeFunction == NULL ) || ( pxTransportInterface == NULL ) ||
-         ( pxHubClientOptions == NULL ) )
+         ( xGetTimeFunction == NULL ) || ( pxTransportInterface == NULL ) )
     {
         AZLogError( ( "Failed to initialize: Invalid argument \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
@@ -429,9 +469,17 @@ AzureIoTHubClientError_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzur
         az_span device_id_span = az_span_create( ( uint8_t * ) pucDeviceId, ( int32_t ) ulDeviceIdLength );
 
         options = az_iot_hub_client_options_default();
-        options.module_id = az_span_create( ( uint8_t * ) pxHubClientOptions->pModuleId, ( int32_t ) pxHubClientOptions->moduleIdLength );
-        options.model_id = az_span_create( ( uint8_t * ) pxHubClientOptions->pModelId, ( int32_t ) pxHubClientOptions->modelIdLength );
-        options.user_agent = az_span_create( ( uint8_t * ) pxHubClientOptions->pUserAgent, ( int32_t ) pxHubClientOptions->userAgentLength );
+
+        if ( pxHubClientOptions )
+        {
+            options.module_id = az_span_create( ( uint8_t * ) pxHubClientOptions->pModuleId, ( int32_t ) pxHubClientOptions->moduleIdLength );
+            options.model_id = az_span_create( ( uint8_t * ) pxHubClientOptions->pModelId, ( int32_t ) pxHubClientOptions->modelIdLength );
+            options.user_agent = az_span_create( ( uint8_t * ) pxHubClientOptions->pUserAgent, ( int32_t ) pxHubClientOptions->userAgentLength );
+        }
+        else
+        {
+            options.user_agent = az_span_create( ( uint8_t * ) AZURE_IOT_HUB_CLIENT_USER_AGENT, sizeof( AZURE_IOT_HUB_CLIENT_USER_AGENT ) - 1 );
+        }
 
         if( az_result_failed( az_iot_hub_client_init( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
                                                       hostname_span, device_id_span, &options ) ) )
@@ -468,12 +516,12 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandl
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                    bool cleanSession,
-                                                    uint32_t ulTimeoutTicks )
+AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                     bool cleanSession,
+                                                     uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTConnectInfo_t xConnectInfo = { 0 };
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     AzureIoTMQTTStatus_t xResult;
     bool xSessionPresent;
     uint32_t bytesCopied = 0;
@@ -485,13 +533,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
         AZLogError( ( "Failed to connect: Invalid argument \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
     }
-    else if( ( xConnectInfo.pUserName = ( char * ) pvPortMalloc( azureIoTUSERNAME_MAX ) ) == NULL )
+    else if( ( xConnectInfo.pUserName = ( char * ) pvPortMalloc( azureiotUSERNAME_MAX ) ) == NULL )
     {
         AZLogError( ( "Failed to allocate memory\r\n" ) );
-        ret = AZURE_IOT_HUB_CLIENT_STATUS_OUT_OF_MEMORY;
+        ret = AZURE_IOT_HUB_CLIENT_OUT_OF_MEMORY;
     }
     else if( az_result_failed( res = az_iot_hub_client_get_user_name( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
-                                                                      ( char * ) xConnectInfo.pUserName, azureIoTUSERNAME_MAX,
+                                                                      ( char * ) xConnectInfo.pUserName, azureiotUSERNAME_MAX,
                                                                       &mqtt_user_name_length ) ) )
     {
         AZLogError( ( "Failed to get username: %08x\r\n", res ) );
@@ -499,12 +547,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
     }
     /* Check if token refersh is set, then generate password */
     else if( ( xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_token_refresh ) &&
-             ( ( ( xConnectInfo.pPassword = ( char * ) pvPortMalloc( azureIoTPASSWORD_MAX ) ) == NULL ) ||
+             ( ( ( xConnectInfo.pPassword = ( char * ) pvPortMalloc( azureiotPASSWORD_MAX ) ) == NULL ) ||
                ( xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_token_refresh( xAzureIoTHubClientHandle,
-                                                                                         xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_time_function() + azureIoTHUBDEFAULTTOKENTIMEOUTINSEC,
+                                                                                         xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_time_function() + azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC,
                                                                                          xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_symmetric_key,
                                                                                          xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_symmetric_key_length,
-                                                                                         ( uint8_t * ) xConnectInfo.pPassword, azureIoTPASSWORD_MAX,
+                                                                                         ( uint8_t * ) xConnectInfo.pPassword, azureiotPASSWORD_MAX,
                                                                                          &bytesCopied ) ) ) )
     {
         AZLogError( ( "Failed to generate auth token \r\n" ) );
@@ -516,7 +564,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
         xConnectInfo.pClientIdentifier = ( const char * ) xAzureIoTHubClientHandle->_internal.deviceId;
         xConnectInfo.clientIdentifierLength = ( uint16_t ) xAzureIoTHubClientHandle->_internal.deviceIdLength;
         xConnectInfo.userNameLength = ( uint16_t ) mqtt_user_name_length;
-        xConnectInfo.keepAliveSeconds = azureIoTHubClientKEEP_ALIVE_TIMEOUT_SECONDS;
+        xConnectInfo.keepAliveSeconds = azureiothubKEEP_ALIVE_TIMEOUT_SECONDS;
         xConnectInfo.passwordLength = ( uint16_t ) bytesCopied;
 
         /* Send MQTT CONNECT packet to broker. LWT is not used in this demo, so it
@@ -524,7 +572,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
         if( ( xResult = AzureIoTMQTT_Connect( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
                                               &xConnectInfo,
                                               NULL,
-                                              ulTimeoutTicks,
+                                              ulTimeoutMilliseconds,
                                               &xSessionPresent ) ) != AzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%d \r\n",
@@ -555,10 +603,10 @@ AzureIoTHubClientError_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t xA
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
 
     if( xAzureIoTHubClientHandle == NULL )
     {
@@ -582,13 +630,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_Disconnect( AzureIoTHubClientHandle_t
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                          const uint8_t * pucTelemetryData,
-                                                          uint32_t ulTelemetryDataLength,
-                                                          AzureIoTMessageProperties_t * pxProperties )
+AzureIoTHubClientResult_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                           const uint8_t * pucTelemetryData,
+                                                           uint32_t ulTelemetryDataLength,
+                                                           AzureIoTMessageProperties_t * pxProperties )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     uint16_t usPublishPacketIdentifier;
     size_t telemetry_topic_length;
@@ -636,14 +684,14 @@ AzureIoTHubClientError_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHandl
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMethodRequest_t * pxMessage,
-                                                               uint32_t ulStatus,
-                                                               const uint8_t * pucMethodPayload,
-                                                               uint32_t ulMethodPayloadLength )
+AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                const AzureIoTHubClientMethodRequest_t * pxMessage,
+                                                                uint32_t ulStatus,
+                                                                const uint8_t * pucMethodPayload,
+                                                                uint32_t ulMethodPayloadLength )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     uint16_t usPublishPacketIdentifier;
     az_span requestIdSpan;
@@ -696,11 +744,11 @@ AzureIoTHubClientError_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                        uint32_t ulTimeoutMs )
+AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                         uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
 
     if( xAzureIoTHubClientHandle == NULL )
     {
@@ -709,9 +757,9 @@ AzureIoTHubClientError_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_
     }
     /* Process incoming UNSUBACK packet from the broker. */
     else if( ( xResult = AzureIoTMQTT_ProcessLoop( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ),
-                                                   ulTimeoutMs ) ) != AzureIoTMQTTSuccess )
+                                                   ulTimeoutMilliseconds ) ) != AzureIoTMQTTSuccess )
     {
-        AZLogError( ( "MQTT_ProcessLoop failed : ProcessLoopDuration=%u, Error=%d\r\n", ulTimeoutMs,
+        AZLogError( ( "MQTT_ProcessLoop failed : ProcessLoopDuration=%u, Error=%d\r\n", ulTimeoutMilliseconds,
                       xResult ) );
         ret = AZURE_IOT_HUB_CLIENT_FAILED;
     }
@@ -724,19 +772,19 @@ AzureIoTHubClientError_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientC2DCallback_t xC2dCallback,
-                                                               void * prvCallbackContext,
-                                                               uint32_t ulTimeout )
+AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                AzureIoTHubClientCloudMessageCallback_t xCloudMessageCallback,
+                                                                void * prvCallbackContext,
+                                                                uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
     AzureIoTHubClientReceiveContext_t * context;
 
     if( ( xAzureIoTHubClientHandle == NULL ) ||
-        ( xC2dCallback == NULL ) )
+        ( xCloudMessageCallback == NULL ) )
     {
         AZLogError( ( "Failed to enable cloud message : Invalid argument \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
@@ -763,10 +811,10 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
             context->_internal.state = TOPIC_SUBSCRIBE_STATE_SUB;
             context->_internal.mqttSubPacketId = usSubscribePacketIdentifier;
             context->_internal.process_function = prvAzureIoTHubClientCloudMessageProcess;
-            context->_internal.callbacks.c2dCallback = xC2dCallback;
+            context->_internal.callbacks.cloudMessageCallback = xCloudMessageCallback;
             context->_internal.callback_context = prvCallbackContext;
 
-            ret = prvWaitForSubAck( xAzureIoTHubClientHandle, context, ulTimeout );
+            ret = prvWaitForSubAck( xAzureIoTHubClientHandle, context, ulTimeoutMilliseconds );
         }
     }
 
@@ -774,14 +822,14 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClient
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                               AzureIoTHubClientMethodCallback_t xMethodCallback,
-                                                               void * prvCallbackContext,
-                                                               uint32_t ulTimeout )
+AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                AzureIoTHubClientMethodCallback_t xMethodCallback,
+                                                                void * prvCallbackContext,
+                                                                uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
     AzureIoTHubClientReceiveContext_t * context;
 
@@ -816,7 +864,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
             context->_internal.callbacks.methodCallback = xMethodCallback;
             context->_internal.callback_context = prvCallbackContext;
 
-            ret = prvWaitForSubAck( xAzureIoTHubClientHandle, context, ulTimeout );
+            ret = prvWaitForSubAck( xAzureIoTHubClientHandle, context, ulTimeoutMilliseconds );
         }
     }
 
@@ -824,14 +872,14 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClient
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                             AzureIoTHubClientTwinCallback_t xTwinCallback,
-                                                             void * prvCallbackContext,
-                                                             uint32_t ulTimeout )
+AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                              AzureIoTHubClientTwinCallback_t xTwinCallback,
+                                                              void * prvCallbackContext,
+                                                              uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription[ 2 ];
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
     AzureIoTHubClientReceiveContext_t * context;
 
@@ -871,7 +919,7 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
             context->_internal.callbacks.twinCallback = xTwinCallback;
             context->_internal.callback_context = prvCallbackContext;
 
-            ret = prvWaitForSubAck( xAzureIoTHubClientHandle, context, ulTimeout );
+            ret = prvWaitForSubAck( xAzureIoTHubClientHandle, context, ulTimeoutMilliseconds );
         }
     }
 
@@ -879,12 +927,12 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHa
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                            const uint8_t * pucSymmetricKey,
-                                                            uint32_t ulSymmetricKeyLength,
-                                                            AzureIoTGetHMACFunc_t xHmacFunction )
+AzureIoTHubClientResult_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                             const uint8_t * pucSymmetricKey,
+                                                             uint32_t ulSymmetricKeyLength,
+                                                             AzureIoTGetHMACFunc_t xHmacFunction )
 {
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
 
     if( ( xAzureIoTHubClientHandle == NULL ) ||
         ( pucSymmetricKey == NULL ) || ( ulSymmetricKeyLength == 0 ) ||
@@ -906,13 +954,13 @@ AzureIoTHubClientError_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHan
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                   const uint8_t * pucReportedPayload,
-                                                                   uint32_t ulReportedPayloadLength,
-                                                                   uint32_t * pulRequestId )
+AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                    const uint8_t * pucReportedPayload,
+                                                                    uint32_t ulReportedPayloadLength,
+                                                                    uint32_t * pulRequestId )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     uint16_t usPublishPacketIdentifier;
     char request_id[ 10 ];
@@ -972,10 +1020,10 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubCl
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     uint16_t usPublishPacketIdentifier;
     char request_id[ 10 ];
@@ -1032,11 +1080,11 @@ AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandl
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
     AzureIoTHubClientReceiveContext_t * context;
 
@@ -1073,11 +1121,11 @@ AzureIoTHubClientError_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClien
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
     AzureIoTHubClientReceiveContext_t * context;
 
@@ -1114,11 +1162,11 @@ AzureIoTHubClientError_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClien
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientError_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription[ 2 ];
     AzureIoTMQTTStatus_t xResult;
-    AzureIoTHubClientError_t ret;
+    AzureIoTHubClientResult_t ret;
     uint16_t usSubscribePacketIdentifier;
     AzureIoTHubClientReceiveContext_t * context;
 

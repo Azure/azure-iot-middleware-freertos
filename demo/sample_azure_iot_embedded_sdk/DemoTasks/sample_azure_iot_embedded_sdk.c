@@ -255,12 +255,12 @@ static uint64_t ulGlobalEntryTime = 1639093301;
 
 #endif // DEVICE_SYMMETRIC_KEY
 
-static void handle_c2d_message( AzureIoTHubClientC2DRequest_t * message,
-                                void * context )
+static void handle_cloud_message( AzureIoTHubClientCloudMessageRequest_t * message,
+                                  void * context )
 {
     ( void ) context;
 
-    LogInfo( ( "C2D message payload : %.*s \r\n",
+    LogInfo( ( "Cloud message payload : %.*s \r\n",
                message->payloadLength,
                message->messagePayload ) );
 }
@@ -351,7 +351,7 @@ static void prvAzureDemoTask( void * pvParameters )
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportStatus_t xNetworkStatus;
     TlsTransportParams_t xTlsTransportParams = { 0 };
-    AzureIoTHubClientError_t xResult;
+    AzureIoTHubClientResult_t xResult;
     uint32_t status;
 
     #ifdef ENABLE_DPS_SAMPLE
@@ -437,7 +437,7 @@ static void prvAzureDemoTask( void * pvParameters )
 
         /**************************** Enable features. ******************************/
 
-        xResult = AzureIoTHubClient_CloudMessageEnable( &xAzureIoTHubClient, handle_c2d_message, &xAzureIoTHubClient, ULONG_MAX );
+        xResult = AzureIoTHubClient_CloudMessageEnable( &xAzureIoTHubClient, handle_cloud_message, &xAzureIoTHubClient, ULONG_MAX );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         xResult = AzureIoTHubClient_DirectMethodEnable( &xAzureIoTHubClient, handle_direct_method, &xAzureIoTHubClient, ULONG_MAX );
@@ -528,7 +528,7 @@ static void prvAzureDemoTask( void * pvParameters )
         NetworkContext_t xNetworkContext = { 0 };
         TlsTransportParams_t xTlsTransportParams = { 0 };
         TlsTransportStatus_t xNetworkStatus;
-        AzureIoTProvisioningClientError_t xResult;
+        AzureIoTProvisioningClientResult_t xResult;
         AzureIoTTransportInterface_t xTransport;
         uint32_t sampleIotHubHostnameLength = sizeof( sampleIotHubHostname );
         uint32_t sampleIotHubDeviceIdLength = sizeof( sampleIotHubDeviceId );
@@ -556,7 +556,7 @@ static void prvAzureDemoTask( void * pvParameters )
                                                    ( const uint8_t * ) ENDPOINT, sizeof( ENDPOINT ) - 1,
                                                    ( const uint8_t * ) ID_SCOPE, sizeof( ID_SCOPE ) - 1,
                                                    ( const uint8_t * ) REGISTRATION_ID, sizeof( REGISTRATION_ID ) - 1,
-                                                   ucSharedBuffer, sizeof( ucSharedBuffer ),
+                                                   NULL, ucSharedBuffer, sizeof( ucSharedBuffer ),
                                                    prvGetUnixTime,
                                                    &xTransport );
         configASSERT( xResult == AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );

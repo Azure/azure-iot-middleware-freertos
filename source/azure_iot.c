@@ -248,6 +248,12 @@ AzureIoTError_t AzureIoT_Init()
 }
 /*-----------------------------------------------------------*/
 
+void AzureIoT_Deinit()
+{
+    AZLogDebug( ( "AzureIoT_Deinit called \r\n" ) );
+}
+/*-----------------------------------------------------------*/
+
 AzureIoTError_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * pxMessageProperties,
                                                 uint8_t * pucBuffer,
                                                 uint32_t ulWrittenLength,

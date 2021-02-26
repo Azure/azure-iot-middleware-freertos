@@ -63,6 +63,12 @@ typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
 AzureIoTError_t AzureIoT_Init();
 
 /**
+ * @brief Deinitialize Azure IoT
+ *
+ */
+void AzureIoT_Deinit();
+
+/**
  * @brief Initialize
  *
  * @param pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.

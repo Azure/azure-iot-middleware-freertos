@@ -111,17 +111,6 @@ static void testAzureIoTHubClient_Init_Failure(void** state)
                                                 &xTransportInterface ),
                         AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-  /* Fail init when null options passed */
-  assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                ucHostname, sizeof( ucHostname ) - 1,
-                                                ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                NULL,
-                                                ucBuffer,
-                                                sizeof( ucBuffer ),
-                                                prvGetUnixTime,
-                                                &xTransportInterface ),
-                        AZURE_IOT_HUB_CLIENT_SUCCESS );
-
   /* Fail init when null buffer passed */
   assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
                                                 ucHostname, sizeof( ucHostname ) - 1,
