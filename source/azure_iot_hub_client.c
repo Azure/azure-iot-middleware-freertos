@@ -762,10 +762,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                AzureIoTHubClientCloudMessageCallback_t xCloudMessageCallback,
-                                                                void * prvCallbackContext,
-                                                                uint32_t ulTimeoutMilliseconds )
+AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageSubscribe( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                   AzureIoTHubClientCloudMessageCallback_t xCloudMessageCallback,
+                                                                   void * prvCallbackContext,
+                                                                   uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
@@ -812,10 +812,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClien
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                AzureIoTHubClientMethodCallback_t xMethodCallback,
-                                                                void * prvCallbackContext,
-                                                                uint32_t ulTimeoutMilliseconds )
+AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodSubscribe( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                   AzureIoTHubClientMethodCallback_t xMethodCallback,
+                                                                   void * prvCallbackContext,
+                                                                   uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
@@ -862,10 +862,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClien
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                              AzureIoTHubClientTwinCallback_t xTwinCallback,
-                                                              void * prvCallbackContext,
-                                                              uint32_t ulTimeoutMilliseconds )
+AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinSubscribe( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                 AzureIoTHubClientTwinCallback_t xTwinCallback,
+                                                                 void * prvCallbackContext,
+                                                                 uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription[ 2 ];
     AzureIoTMQTTStatus_t xResult;
@@ -1070,7 +1070,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHand
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageUnsubscribe( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
@@ -1111,7 +1111,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClie
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodUnsubscribe( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription = { 0 };
     AzureIoTMQTTStatus_t xResult;
@@ -1152,7 +1152,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClie
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
+AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinUnsubscribe( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle )
 {
     AzureIoTMQTTSubscribeInfo_t mqttSubscription[ 2 ];
     AzureIoTMQTTStatus_t xResult;

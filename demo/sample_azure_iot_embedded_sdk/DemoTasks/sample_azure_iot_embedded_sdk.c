@@ -437,13 +437,13 @@ static void prvAzureDemoTask( void * pvParameters )
 
         /**************************** Enable features. ******************************/
 
-        xResult = AzureIoTHubClient_CloudMessageEnable( &xAzureIoTHubClient, handle_cloud_message, &xAzureIoTHubClient, ULONG_MAX );
+        xResult = AzureIoTHubClient_CloudMessageSubscribe( &xAzureIoTHubClient, handle_cloud_message, &xAzureIoTHubClient, ULONG_MAX );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = AzureIoTHubClient_DirectMethodEnable( &xAzureIoTHubClient, handle_direct_method, &xAzureIoTHubClient, ULONG_MAX );
+        xResult = AzureIoTHubClient_DirectMethodSubscribe( &xAzureIoTHubClient, handle_direct_method, &xAzureIoTHubClient, ULONG_MAX );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = AzureIoTHubClient_DeviceTwinEnable( &xAzureIoTHubClient, handle_device_twin_message, &xAzureIoTHubClient, ULONG_MAX );
+        xResult = AzureIoTHubClient_DeviceTwinSubscribe( &xAzureIoTHubClient, handle_device_twin_message, &xAzureIoTHubClient, ULONG_MAX );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /* Get the device twin on boot */
@@ -490,13 +490,13 @@ static void prvAzureDemoTask( void * pvParameters )
 
         /**************************** Disconnect. *****************************/
 
-        xResult = AzureIoTHubClient_DeviceTwinDisable( &xAzureIoTHubClient );
+        xResult = AzureIoTHubClient_DeviceTwinUnsubscribe( &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = AzureIoTHubClient_DirectMethodDisable( &xAzureIoTHubClient );
+        xResult = AzureIoTHubClient_DirectMethodUnsubscribe( &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
-        xResult = AzureIoTHubClient_CloudMessageDisable( &xAzureIoTHubClient );
+        xResult = AzureIoTHubClient_CloudMessageUnsubscribe( &xAzureIoTHubClient );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /* Send an MQTT Disconnect packet over the already connected TLS over
