@@ -17,43 +17,33 @@
 
 #ifndef azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC
     #define azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC     azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
-#endif
+#endif /* azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC */
 
 #ifndef azureiothubKEEP_ALIVE_TIMEOUT_SECONDS
     #define azureiothubKEEP_ALIVE_TIMEOUT_SECONDS       azureiotKEEP_ALIVE_TIMEOUT_SECONDS
-#endif
+#endif /* azureiothubKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiothubSUBACK_WAIT_INTERVAL_MS
     #define azureiothubSUBACK_WAIT_INTERVAL_MS          azureiotSUBACK_WAIT_INTERVAL_MS
-#endif
+#endif /* azureiothubSUBACK_WAIT_INTERVAL_MS */
 
-/**
- * @brief Milliseconds per second.
- */
-#define MILLISECONDS_PER_SECOND          ( 1000U )
-
-/**
- * @brief Milliseconds per FreeRTOS tick.
- */
-#define MILLISECONDS_PER_TICK            ( MILLISECONDS_PER_SECOND / configTICK_RATE_HZ )
+#ifndef azureiothubUSER_AGENT
+    #define azureiothubUSER_AGENT                       "DeviceClientType=c%2F" AZ_SDK_VERSION_STRING "%28FreeRTOS%29"
+#endif /* azureiothubUSER_AGENT */
 
 /*
  * Indexes of the receive context buffer for each feature
  */
-#define RECEIVE_CONTEXT_INDEX_C2D        0
-#define RECEIVE_CONTEXT_INDEX_METHODS    1
-#define RECEIVE_CONTEXT_INDEX_TWIN       2
+#define azureiothubRECEIVE_CONTEXT_INDEX_C2D            0
+#define azureiothubRECEIVE_CONTEXT_INDEX_METHODS        1
+#define azureiothubRECEIVE_CONTEXT_INDEX_TWIN           2
 
 /*
  * Topic subscribe state
  */
-#define TOPIC_SUBSCRIBE_STATE_NONE       0
-#define TOPIC_SUBSCRIBE_STATE_SUB        1
-#define TOPIC_SUBSCRIBE_STATE_SUBACK     2
-
-#ifndef AZURE_IOT_HUB_CLIENT_USER_AGENT
-#define AZURE_IOT_HUB_CLIENT_USER_AGENT  "DeviceClientType=c%2F" AZ_SDK_VERSION_STRING "%28FreeRTOS%29"
-#endif /* AZURE_IOT_HUB_CLIENT_USER_AGENT */
+#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE           0
+#define azureiothubTOPIC_SUBSCRIBE_STATE_SUB            1
+#define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK         2
 
 /*-----------------------------------------------------------*/
 
@@ -96,7 +86,7 @@ static void prvMQTTProcessResponse( AzureIoTHubClientHandle_t xAzureIoTHubClient
             if( context->_internal.mqttSubPacketId == usPacketId )
             {
                 /* TODO: inspect packet to see is ack was successful*/
-                context->_internal.state = TOPIC_SUBSCRIBE_STATE_SUBACK;
+                context->_internal.state = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
                 break;
             }
         }
@@ -324,7 +314,7 @@ static uint32_t prvGetTimeMs( void )
     xTickCount = xTaskGetTickCount();
 
     /* Convert the ticks to milliseconds. */
-    ulTimeMs = ( uint32_t ) xTickCount * MILLISECONDS_PER_TICK;
+    ulTimeMs = ( uint32_t ) xTickCount * azureiotMILLISECONDS_PER_TICK;
 
     return ulTimeMs;
 }
@@ -379,7 +369,7 @@ static AzureIoTHubClientResult_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAz
 
     do
     {
-        if( context->_internal.state == TOPIC_SUBSCRIBE_STATE_SUBACK )
+        if( context->_internal.state == azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
         {
             ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
             break;
@@ -403,7 +393,7 @@ static AzureIoTHubClientResult_t prvWaitForSubAck( AzureIoTHubClientHandle_t xAz
         }
     } while( ulTimeoutMilliseconds );
 
-    if( context->_internal.state == TOPIC_SUBSCRIBE_STATE_SUBACK )
+    if( context->_internal.state == azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
     {
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
@@ -427,8 +417,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
         pxHubClientOptions->modelIdLength = 0;
         pxHubClientOptions->pModuleId = NULL;
         pxHubClientOptions->moduleIdLength = 0;
-        pxHubClientOptions->pUserAgent = ( const uint8_t * ) AZURE_IOT_HUB_CLIENT_USER_AGENT;
-        pxHubClientOptions->userAgentLength = sizeof( AZURE_IOT_HUB_CLIENT_USER_AGENT ) - 1;
+        pxHubClientOptions->pUserAgent = ( const uint8_t * ) azureiothubUSER_AGENT;
+        pxHubClientOptions->userAgentLength = sizeof( azureiothubUSER_AGENT ) - 1;
         ret = AZURE_IOT_HUB_CLIENT_SUCCESS;
     }
 
@@ -478,7 +468,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzu
         }
         else
         {
-            options.user_agent = az_span_create( ( uint8_t * ) AZURE_IOT_HUB_CLIENT_USER_AGENT, sizeof( AZURE_IOT_HUB_CLIENT_USER_AGENT ) - 1 );
+            options.user_agent = az_span_create( ( uint8_t * ) azureiothubUSER_AGENT, sizeof( azureiothubUSER_AGENT ) - 1 );
         }
 
         if( az_result_failed( az_iot_hub_client_init( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
@@ -791,7 +781,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClien
     }
     else
     {
-        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
+        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_C2D ];
         mqttSubscription.qos = AzureIoTMQTTQoS1;
         mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
         mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
@@ -808,7 +798,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageEnable( AzureIoTHubClien
         }
         else
         {
-            context->_internal.state = TOPIC_SUBSCRIBE_STATE_SUB;
+            context->_internal.state = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
             context->_internal.mqttSubPacketId = usSubscribePacketIdentifier;
             context->_internal.process_function = prvAzureIoTHubClientCloudMessageProcess;
             context->_internal.callbacks.cloudMessageCallback = xCloudMessageCallback;
@@ -841,7 +831,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClien
     }
     else
     {
-        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
+        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_METHODS ];
         mqttSubscription.qos = AzureIoTMQTTQoS0;
         mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
         mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
@@ -858,7 +848,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodEnable( AzureIoTHubClien
         }
         else
         {
-            context->_internal.state = TOPIC_SUBSCRIBE_STATE_SUB;
+            context->_internal.state = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
             context->_internal.mqttSubPacketId = usSubscribePacketIdentifier;
             context->_internal.process_function = prvAzureIoTHubClientDirectMethodProcess;
             context->_internal.callbacks.methodCallback = xMethodCallback;
@@ -891,7 +881,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientH
     }
     else
     {
-        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
+        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ];
         memset( mqttSubscription, 0, sizeof( mqttSubscription ) );
         mqttSubscription[ 0 ].qos = AzureIoTMQTTQoS0;
         mqttSubscription[ 0 ].pTopicFilter = AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
@@ -913,7 +903,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinEnable( AzureIoTHubClientH
         }
         else
         {
-            context->_internal.state = TOPIC_SUBSCRIBE_STATE_SUB;
+            context->_internal.state = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
             context->_internal.mqttSubPacketId = usSubscribePacketIdentifier;
             context->_internal.process_function = prvAzureIoTHubClientDeviceTwinProcess;
             context->_internal.callbacks.twinCallback = xTwinCallback;
@@ -974,7 +964,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubC
         AZLogError( ( "Failed to reported property: Invalid argument \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
     }
-    else if( xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ]._internal.state != TOPIC_SUBSCRIBE_STATE_SUBACK )
+    else if( xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ]._internal.state != azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
     {
         AZLogError( ( "Failed to reported property: twin topic not subscribed \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_FAILED;
@@ -1036,7 +1026,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHand
         AZLogError( ( "Failed to get twin: Invalid argument \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
     }
-    else if( xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ]._internal.state != TOPIC_SUBSCRIBE_STATE_SUBACK )
+    else if( xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ]._internal.state != azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
     {
         AZLogError( ( "Failed to get twin: twin topic not subscribed \r\n" ) );
         ret = AZURE_IOT_HUB_CLIENT_FAILED;
@@ -1095,7 +1085,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_CloudMessageDisable( AzureIoTHubClie
     }
     else
     {
-        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_C2D ];
+        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_C2D ];
         mqttSubscription.qos = AzureIoTMQTTQoS1;
         mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
         mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
@@ -1136,7 +1126,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DirectMethodDisable( AzureIoTHubClie
     }
     else
     {
-        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_METHODS ];
+        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_METHODS ];
         mqttSubscription.qos = AzureIoTMQTTQoS0;
         mqttSubscription.pTopicFilter = AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
         mqttSubscription.topicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
@@ -1177,7 +1167,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinDisable( AzureIoTHubClient
     }
     else
     {
-        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ RECEIVE_CONTEXT_INDEX_TWIN ];
+        context = &xAzureIoTHubClientHandle->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ];
         memset( mqttSubscription, 0, sizeof( mqttSubscription ) );
         mqttSubscription[ 0 ].qos = AzureIoTMQTTQoS0;
         mqttSubscription[ 0 ].pTopicFilter = AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
