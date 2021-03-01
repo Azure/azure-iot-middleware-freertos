@@ -45,6 +45,8 @@
 #define azureiothubTOPIC_SUBSCRIBE_STATE_SUB            1
 #define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK         2
 
+#define azureiothubMETHOD_EMPTY_RESPONSE                "{}"
+
 /*-----------------------------------------------------------*/
 
 static void prvMQTTProcessIncomingPublish( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
@@ -638,10 +640,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHand
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
     }
     else if( az_result_failed( res = az_iot_hub_client_telemetry_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
-                                                                                     ( pxProperties != NULL ) ? &pxProperties->_internal.properties : NULL,
-                                                                                     xAzureIoTHubClientHandle->_internal.iot_hub_client_topic_buffer,
-                                                                                     sizeof( xAzureIoTHubClientHandle->_internal.iot_hub_client_topic_buffer ),
-                                                                                     &telemetry_topic_length ) ) )
+                                                                                    ( pxProperties != NULL ) ? &pxProperties->_internal.properties : NULL,
+                                                                                    xAzureIoTHubClientHandle->_internal.iot_hub_client_topic_buffer,
+                                                                                    sizeof( xAzureIoTHubClientHandle->_internal.iot_hub_client_topic_buffer ),
+                                                                                    &telemetry_topic_length ) ) )
     {
         AZLogError( ( "Failed to get telemetry topic : %08x \r\n", res ) );
         ret = AZURE_IOT_HUB_CLIENT_FAILED;
@@ -711,9 +713,18 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClien
             xMQTTPublishInfo.qos = AzureIoTMQTTQoS0;
             xMQTTPublishInfo.pTopicName = xAzureIoTHubClientHandle->_internal.iot_hub_client_topic_buffer;
             xMQTTPublishInfo.topicNameLength = ( uint16_t ) method_topic_length;
-            xMQTTPublishInfo.pPayload = ( const void * ) pucMethodPayload;
-            xMQTTPublishInfo.payloadLength = ulMethodPayloadLength;
 
+            if ( ( pucMethodPayload == NULL ) || ( ulMethodPayloadLength == 0 ) )
+            {
+                xMQTTPublishInfo.pPayload = ( const void * ) azureiothubMETHOD_EMPTY_RESPONSE;
+                xMQTTPublishInfo.payloadLength = sizeof( azureiothubMETHOD_EMPTY_RESPONSE ) - 1;
+            }
+            else
+            {
+                xMQTTPublishInfo.pPayload = ( const void * ) pucMethodPayload;
+                xMQTTPublishInfo.payloadLength = ulMethodPayloadLength;
+            }
+            
             /* Get a unique packet id. */
             usPublishPacketIdentifier = AzureIoTMQTT_GetPacketId( &( xAzureIoTHubClientHandle->_internal.xMQTTContext ) );
 
