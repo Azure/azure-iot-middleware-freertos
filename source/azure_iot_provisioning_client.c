@@ -809,7 +809,8 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SymmetricKeySet( A
     AzureIoTProvisioningClientResult_t ret;
 
     if( ( xAzureIoTProvisioningClientHandle == NULL ) ||
-        ( pucSymmetricKey == NULL ) || ( ulSymmetricKeyLength == 0 ) )
+        ( pucSymmetricKey == NULL ) || ( ulSymmetricKeyLength == 0 ) ||
+        ( xHmacFunction == NULL ) )
     {
         AZLogError( ( "Provisioning client symmetric key fail: Invalid argument" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
