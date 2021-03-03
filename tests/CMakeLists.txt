@@ -59,5 +59,23 @@ foreach(test ${unit_tests})
     ${test}
       PRIVATE
         -Wl,--gc-sections)
+  target_compile_options(
+    ${test}
+      PRIVATE -Werror
+              -Wall
+              -Wextra
+              -pedantic
+              -fmessage-length=0
+              -fsigned-char
+              -ffunction-sections
+              -fdata-sections
+              -Wunused
+              -Wuninitialized
+              -Wmissing-declarations
+              -Wconversion
+              -Wpointer-arith
+              -Wshadow
+              -Wlogical-op
+              -Wfloat-equal )
   add_test(${test} ${test})
 endforeach()

@@ -27,9 +27,9 @@
 
 typedef struct ReceviceTestData
 {
-    const uint8_t *pucTopic;
+    const uint8_t * pucTopic;
     uint32_t ulTopicLength;
-    const uint8_t *pucPayload;
+    const uint8_t * pucPayload;
     uint32_t ulPayloadLength;
     uint32_t ulCallbackFunctionId;
 } ReceviceTestData_t;
@@ -38,7 +38,7 @@ typedef struct ReceviceTestData
 extern AzureIoTMQTTPacketInfo_t xPacketInfo;
 extern AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 extern uint16_t usTestPacketId;
-extern const uint8_t *pucPublishPayload;
+extern const uint8_t * pucPublishPayload;
 
 static const uint8_t ucHostname[] = "unittest.azure-devices.net";
 static const uint8_t ucDeviceId[] = "testiothub";
@@ -53,39 +53,43 @@ static AzureIoTTransportInterface_t xTransportInterface = {
     .recv = (AzureIoTTransportRecv_t)0xACACACAC
 };
 static uint32_t uMallocAllocationCount = 0;
-static const uint8_t *pucReceivedPayload = NULL;
 static uint32_t ulReceivedCallbackFunctionId;
 static const ReceviceTestData_t xTestReceiveData[] = {
-    {.pucTopic = testCLOUD_MESSAGE_TOPIC,
+    {.pucTopic = (const uint8_t *)testCLOUD_MESSAGE_TOPIC,
      .ulTopicLength = sizeof(testCLOUD_MESSAGE_TOPIC) - 1,
-     .pucPayload = testCLOUD_MESSAGE,
+     .pucPayload = (const uint8_t *)testCLOUD_MESSAGE,
      .ulPayloadLength = sizeof(testCLOUD_MESSAGE) - 1,
      .ulCallbackFunctionId = testCLOUD_CALLBACK_ID},
-    {.pucTopic = testMETHOD_MESSAGE_TOPIC,
+    {.pucTopic = (const uint8_t *)testMETHOD_MESSAGE_TOPIC,
      .ulTopicLength = sizeof(testMETHOD_MESSAGE_TOPIC) - 1,
-     .pucPayload = testMETHOD_MESSAGE,
+     .pucPayload = (const uint8_t *)testMETHOD_MESSAGE,
      .ulPayloadLength = sizeof(testMETHOD_MESSAGE) - 1,
      .ulCallbackFunctionId = testMETHOD_CALLBACK_ID},
-    {.pucTopic = testTWIN_GET_MESSAGE_TOPIC,
+    {.pucTopic = (const uint8_t *)testTWIN_GET_MESSAGE_TOPIC,
      .ulTopicLength = sizeof(testTWIN_GET_MESSAGE_TOPIC) - 1,
-     .pucPayload = testTWIN_MESSAGE,
+     .pucPayload = (const uint8_t *)testTWIN_MESSAGE,
      .ulPayloadLength = sizeof(testTWIN_MESSAGE) - 1,
      .ulCallbackFunctionId = testTWIN_CALLBACK_ID},
-    {.pucTopic = testTWIN_DESIRED_MESSAGE_TOPIC,
+    {.pucTopic = (const uint8_t *)testTWIN_DESIRED_MESSAGE_TOPIC,
      .ulTopicLength = sizeof(testTWIN_DESIRED_MESSAGE_TOPIC) - 1,
-     .pucPayload = testTWIN_DESIRED_MESSAGE,
+     .pucPayload = (const uint8_t *)testTWIN_DESIRED_MESSAGE,
      .ulPayloadLength = sizeof(testTWIN_DESIRED_MESSAGE) - 1,
      .ulCallbackFunctionId = testTWIN_CALLBACK_ID}
 };
+/*-----------------------------------------------------------*/
+TickType_t xTaskGetTickCount(void);
+void * pvPortMalloc(size_t xWantedSize);
+void vPortFree(void * pv);
+int get_all_tests();
 
 TickType_t xTaskGetTickCount(void)
 {
     return 1;
 }
 
-void *pvPortMalloc(size_t xWantedSize)
+void * pvPortMalloc(size_t xWantedSize)
 {
-    void *ret = ((void *)mock());
+    void * ret = ((void *)mock());
 
     if (ret)
     {
@@ -96,7 +100,7 @@ void *pvPortMalloc(size_t xWantedSize)
     return ret;
 }
 
-void vPortFree(void *pv)
+void vPortFree(void * pv)
 {
     uMallocAllocationCount--;
     free(pv);
@@ -107,18 +111,26 @@ static uint64_t prvGetUnixTime(void)
     return 0xFFFFFFFFFFFFFFFF;
 }
 
-static uint32_t prvHmacFunction(const uint8_t *pucKey,
+static uint32_t prvHmacFunction(const uint8_t * pucKey,
                                 uint32_t ulKeyLength,
-                                const uint8_t *pucData,
+                                const uint8_t * pucData,
                                 uint32_t ulDataLength,
-                                uint8_t *pucOutput,
+                                uint8_t * pucOutput,
                                 uint32_t ulOutputLength,
-                                uint32_t *pucBytesCopied)
+                                uint32_t * pucBytesCopied)
 {
+    (void)pucKey;
+    (void)ulKeyLength;
+    (void)pucData;
+    (void)ulDataLength;
+    (void)pucOutput;
+    (void)ulOutputLength;
+    (void)pucBytesCopied;
+
     return ((uint32_t)mock());
 }
 
-static void prvSetupTestIoTHubClient(AzureIoTHubClient_t *pxTestIoTHubClient)
+static void prvSetupTestIoTHubClient(AzureIoTHubClient_t * pxTestIoTHubClient)
 {
     AzureIoTHubClientOptions_t xHubClientOptions = {0};
     uMallocAllocationCount = 0;
@@ -139,29 +151,38 @@ static void prvSetupTestIoTHubClient(AzureIoTHubClient_t *pxTestIoTHubClient)
                      AZURE_IOT_HUB_CLIENT_SUCCESS);
 }
 
-static void prvTestCloudMessage(struct AzureIoTHubClientCloudMessageRequest *pxMessage,
-                                void *pvContext)
+static void prvTestCloudMessage(struct AzureIoTHubClientCloudMessageRequest * pxMessage,
+                                void * pvContext)
 {
     /* Dummy function */
+    (void)pxMessage;
+    (void)pvContext;
+
     ulReceivedCallbackFunctionId = testCLOUD_CALLBACK_ID;
 }
 
-static void prvTestDirectMethod(struct AzureIoTHubClientMethodRequest *pxMessage,
-                                void *pvContext)
+static void prvTestDirectMethod(struct AzureIoTHubClientMethodRequest * pxMessage,
+                                void * pvContext)
 {
     /* Dummy function */
+    (void)pxMessage;
+    (void)pvContext;
+    
     ulReceivedCallbackFunctionId = testMETHOD_CALLBACK_ID;
 }
 
-static void prvTestDeviceTwin(struct AzureIoTHubClientTwinResponse *pxMessage,
-                              void *pvContext)
+static void prvTestDeviceTwin(struct AzureIoTHubClientTwinResponse * pxMessage,
+                              void * pvContext)
 {
     /* Dummy function */
+    (void)pxMessage;
+    (void)pvContext;
+
     ulReceivedCallbackFunctionId = testTWIN_CALLBACK_ID;
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTHubClient_Init_Failure(void **state)
+static void testAzureIoTHubClient_Init_Failure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTHubClientOptions_t xHubClientOptions = {0};
@@ -229,7 +250,7 @@ static void testAzureIoTHubClient_Init_Failure(void **state)
                          AZURE_IOT_HUB_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTHubClient_Init_Success(void **state)
+static void testAzureIoTHubClient_Init_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTHubClientOptions_t xHubClientOptions = {0};
@@ -248,7 +269,7 @@ static void testAzureIoTHubClient_Init_Success(void **state)
                      AZURE_IOT_HUB_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTHubClient_Deinit_Success(void **state)
+static void testAzureIoTHubClient_Deinit_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -257,7 +278,7 @@ static void testAzureIoTHubClient_Deinit_Success(void **state)
     AzureIoTHubClient_Deinit(&xTestIoTHubClient);
 }
 
-static void testAzureIoTHubClient_SymmetricKeySet_Failure(void **state)
+static void testAzureIoTHubClient_SymmetricKeySet_Failure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -276,7 +297,7 @@ static void testAzureIoTHubClient_SymmetricKeySet_Failure(void **state)
                          AZURE_IOT_HUB_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTHubClient_SymmetricKeySet_Success(void **state)
+static void testAzureIoTHubClient_SymmetricKeySet_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -288,7 +309,7 @@ static void testAzureIoTHubClient_SymmetricKeySet_Success(void **state)
                      AZURE_IOT_HUB_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTHubClient_Connect_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_Connect_InvalidArgFailure(void ** state)
 {
     (void)state;
 
@@ -300,7 +321,7 @@ static void testAzureIoTHubClient_Connect_InvalidArgFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_Connect_OOMFailure(void **state)
+static void testAzureIoTHubClient_Connect_OOMFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -328,7 +349,7 @@ static void testAzureIoTHubClient_Connect_OOMFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_Connect_MQTTConnectFailure(void **state)
+static void testAzureIoTHubClient_Connect_MQTTConnectFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -348,7 +369,7 @@ static void testAzureIoTHubClient_Connect_MQTTConnectFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_Connect_Success(void **state)
+static void testAzureIoTHubClient_Connect_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -369,7 +390,7 @@ static void testAzureIoTHubClient_Connect_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_Disconnect_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_Disconnect_InvalidArgFailure(void ** state)
 {
     uMallocAllocationCount = 0;
 
@@ -381,7 +402,7 @@ static void testAzureIoTHubClient_Disconnect_InvalidArgFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure(void **state)
+static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -397,7 +418,7 @@ static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_Disconnect_Success(void **state)
+static void testAzureIoTHubClient_Disconnect_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -413,7 +434,7 @@ static void testAzureIoTHubClient_Disconnect_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_TelemetrySend_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -431,7 +452,7 @@ static void testAzureIoTHubClient_TelemetrySend_InvalidArgFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_BigTopicFailure(void **state)
+static void testAzureIoTHubClient_TelemetrySend_BigTopicFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -451,7 +472,7 @@ static void testAzureIoTHubClient_TelemetrySend_BigTopicFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_SendFailure(void **state)
+static void testAzureIoTHubClient_TelemetrySend_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -469,7 +490,7 @@ static void testAzureIoTHubClient_TelemetrySend_SendFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_Success(void **state)
+static void testAzureIoTHubClient_TelemetrySend_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -487,7 +508,7 @@ static void testAzureIoTHubClient_TelemetrySend_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_ProcessLoop_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_ProcessLoop_InvalidArgFailure(void ** state)
 {
     uMallocAllocationCount = 0;
 
@@ -500,7 +521,7 @@ static void testAzureIoTHubClient_ProcessLoop_InvalidArgFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure(void **state)
+static void testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -517,7 +538,7 @@ static void testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_ProcessLoop_Success(void **state)
+static void testAzureIoTHubClient_ProcessLoop_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -534,7 +555,7 @@ static void testAzureIoTHubClient_ProcessLoop_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_CloudMessageSubscribe_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -555,7 +576,7 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_InvalidArgFailure(void *
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_SendFailure(void **state)
+static void testAzureIoTHubClient_CloudMessageSubscribe_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -573,7 +594,7 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_SendFailure(void **state
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_ReceiveFailure(void **state)
+static void testAzureIoTHubClient_CloudMessageSubscribe_ReceiveFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -592,7 +613,7 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_ReceiveFailure(void **st
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_Success(void **state)
+static void testAzureIoTHubClient_CloudMessageSubscribe_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -613,7 +634,7 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_DirectMethodSubscribe_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -634,7 +655,7 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_InvalidArgFailure(void *
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_SendFailure(void **state)
+static void testAzureIoTHubClient_DirectMethodSubscribe_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -652,7 +673,7 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_SendFailure(void **state
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_ReceiveFailure(void **state)
+static void testAzureIoTHubClient_DirectMethodSubscribe_ReceiveFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -671,7 +692,7 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_ReceiveFailure(void **st
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_Success(void **state)
+static void testAzureIoTHubClient_DirectMethodSubscribe_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -692,7 +713,7 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinSubscribe_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -713,7 +734,7 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_InvalidArgFailure(void **s
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_SendFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinSubscribe_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -731,7 +752,7 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_SendFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_ReceiveFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinSubscribe_ReceiveFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -750,7 +771,7 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_ReceiveFailure(void **stat
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_Success(void **state)
+static void testAzureIoTHubClient_DeviceTwinSubscribe_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -771,7 +792,7 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageUnsubscribe_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_CloudMessageUnsubscribe_InvalidArgFailure(void ** state)
 {
     uMallocAllocationCount = 0;
 
@@ -783,7 +804,7 @@ static void testAzureIoTHubClient_CloudMessageUnsubscribe_InvalidArgFailure(void
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageUnsubscribe_SendFailure(void **state)
+static void testAzureIoTHubClient_CloudMessageUnsubscribe_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -799,7 +820,7 @@ static void testAzureIoTHubClient_CloudMessageUnsubscribe_SendFailure(void **sta
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_CloudMessageUnsubscribe_Success(void **state)
+static void testAzureIoTHubClient_CloudMessageUnsubscribe_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -815,7 +836,7 @@ static void testAzureIoTHubClient_CloudMessageUnsubscribe_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodUnsubscribe_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_DirectMethodUnsubscribe_InvalidArgFailure(void ** state)
 {
     uMallocAllocationCount = 0;
 
@@ -827,7 +848,7 @@ static void testAzureIoTHubClient_DirectMethodUnsubscribe_InvalidArgFailure(void
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodUnsubscribe_SendFailure(void **state)
+static void testAzureIoTHubClient_DirectMethodUnsubscribe_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -843,7 +864,7 @@ static void testAzureIoTHubClient_DirectMethodUnsubscribe_SendFailure(void **sta
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DirectMethodUnsubscribe_Success(void **state)
+static void testAzureIoTHubClient_DirectMethodUnsubscribe_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -859,7 +880,7 @@ static void testAzureIoTHubClient_DirectMethodUnsubscribe_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinUnsubscribe_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinUnsubscribe_InvalidArgFailure(void ** state)
 {
     uMallocAllocationCount = 0;
 
@@ -871,7 +892,7 @@ static void testAzureIoTHubClient_DeviceTwinUnsubscribe_InvalidArgFailure(void *
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinUnsubscribe_SendFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinUnsubscribe_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -887,7 +908,7 @@ static void testAzureIoTHubClient_DeviceTwinUnsubscribe_SendFailure(void **state
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinUnsubscribe_Success(void **state)
+static void testAzureIoTHubClient_DeviceTwinUnsubscribe_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uMallocAllocationCount = 0;
@@ -903,7 +924,7 @@ static void testAzureIoTHubClient_DeviceTwinUnsubscribe_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_SendMethodResponse_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_SendMethodResponse_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
@@ -928,7 +949,7 @@ static void testAzureIoTHubClient_SendMethodResponse_InvalidArgFailure(void **st
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_SendMethodResponse_SendFailure(void **state)
+static void testAzureIoTHubClient_SendMethodResponse_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
@@ -950,7 +971,7 @@ static void testAzureIoTHubClient_SendMethodResponse_SendFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void **state)
+static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
@@ -964,7 +985,7 @@ static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void *
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSuccess);
-    pucPublishPayload = testEMPTY_JSON;
+    pucPublishPayload = (const uint8_t *)testEMPTY_JSON;
     assert_int_equal(AzureIoTHubClient_SendMethodResponse(&xTestIoTHubClient,
                                                           &req, 200, NULL, 0),
                      AZURE_IOT_HUB_CLIENT_SUCCESS);
@@ -972,7 +993,7 @@ static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void *
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_SendMethodResponse_Success(void **state)
+static void testAzureIoTHubClient_SendMethodResponse_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
@@ -995,7 +1016,7 @@ static void testAzureIoTHubClient_SendMethodResponse_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinReportedSend_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -1021,7 +1042,7 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_InvalidArgFailure(void 
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_NotSubscribeFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinReportedSend_NotSubscribeFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -1039,7 +1060,7 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_NotSubscribeFailure(voi
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_SendFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinReportedSend_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -1068,7 +1089,7 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_SendFailure(void **stat
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_Success(void **state)
+static void testAzureIoTHubClient_DeviceTwinReportedSend_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -1097,7 +1118,7 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinGet_InvalidArgFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinGet_InvalidArgFailure(void ** state)
 {
     uMallocAllocationCount = 0;
 
@@ -1109,10 +1130,9 @@ static void testAzureIoTHubClient_DeviceTwinGet_InvalidArgFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinGet_NotSubscribeFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinGet_NotSubscribeFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
-    uint32_t requestId = 0;
     uMallocAllocationCount = 0;
 
     (void)state;
@@ -1124,10 +1144,9 @@ static void testAzureIoTHubClient_DeviceTwinGet_NotSubscribeFailure(void **state
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinGet_SendFailure(void **state)
+static void testAzureIoTHubClient_DeviceTwinGet_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
-    uint32_t requestId = 0;
     uMallocAllocationCount = 0;
 
     (void)state;
@@ -1150,10 +1169,9 @@ static void testAzureIoTHubClient_DeviceTwinGet_SendFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_DeviceTwinGet_Success(void **state)
+static void testAzureIoTHubClient_DeviceTwinGet_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
-    uint32_t requestId = 0;
     uMallocAllocationCount = 0;
 
     (void)state;
@@ -1176,10 +1194,9 @@ static void testAzureIoTHubClient_DeviceTwinGet_Success(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTHubClient_ReceiveMessages_Success(void **state)
+static void testAzureIoTHubClient_ReceiveMessages_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
-    uint32_t requestId = 0;
     AzureIoTMQTTPublishInfo_t publishInfo;
     uMallocAllocationCount = 0;
 
@@ -1212,13 +1229,13 @@ static void testAzureIoTHubClient_ReceiveMessages_Success(void **state)
                                                            NULL, (uint32_t)-1),
                      AZURE_IOT_HUB_CLIENT_SUCCESS);
 
-    for (int index = 0; index < (sizeof(xTestReceiveData) / sizeof(ReceviceTestData_t)); index++)
+    for (size_t index = 0; index < (sizeof(xTestReceiveData) / sizeof(ReceviceTestData_t)); index++)
     {
         will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
         xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_PUBLISH;
         xDeserializedInfo.packetIdentifier = 1;
-        publishInfo.pTopicName = xTestReceiveData[index].pucTopic;
-        publishInfo.topicNameLength = xTestReceiveData[index].ulTopicLength;
+        publishInfo.pTopicName = (const char *)xTestReceiveData[index].pucTopic;
+        publishInfo.topicNameLength = (uint16_t)xTestReceiveData[index].ulTopicLength;
         publishInfo.pPayload = xTestReceiveData[index].pucPayload;
         publishInfo.payloadLength = xTestReceiveData[index].ulPayloadLength;
         xDeserializedInfo.pPublishInfo = &publishInfo;
