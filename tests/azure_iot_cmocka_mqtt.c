@@ -22,42 +22,60 @@ AzureIoTMQTTEventCallback_t xTestUserCallback = NULL;
 AzureIoTMQTTPacketInfo_t xPacketInfo;
 AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 uint16_t usTestPacketId = 1;
-const uint8_t *pucPublishPayload = NULL;
+const uint8_t * pucPublishPayload = NULL;
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Init(AzureIoTMQTTHandle_t pContext,
-                                       const AzureIoTTransportInterface_t *pTransportInterface,
+                                       const AzureIoTTransportInterface_t * pTransportInterface,
                                        AzureIoTMQTTGetCurrentTimeFunc_t getTimeFunction,
                                        AzureIoTMQTTEventCallback_t userCallback,
                                        uint8_t *pNetworkBuffer, uint32_t networkBufferLength)
 {
+    (void)pContext;
+    (void)pTransportInterface;
+    (void)getTimeFunction;
+    (void)pNetworkBuffer;
+    (void)networkBufferLength;
+
     xTestUserCallback = userCallback;
     return (AzureIoTMQTTStatus_t)mock();
 }
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Connect(AzureIoTMQTTHandle_t pContext,
-                                          const AzureIoTMQTTConnectInfo_t *pConnectInfo,
-                                          const AzureIoTMQTTPublishInfo_t *pWillInfo,
+                                          const AzureIoTMQTTConnectInfo_t * pConnectInfo,
+                                          const AzureIoTMQTTPublishInfo_t * pWillInfo,
                                           uint32_t timeoutMs,
                                           bool *pSessionPresent)
 {
+    (void)pContext;
+    (void)pConnectInfo;
+    (void)pWillInfo;
+    (void)timeoutMs;
+    (void)pSessionPresent;
+
     return (AzureIoTMQTTStatus_t)mock();
 }
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Disconnect(AzureIoTMQTTHandle_t pContext)
 {
+    (void)pContext;
+
     return (AzureIoTMQTTStatus_t)mock();
 }
 
 uint16_t AzureIoTMQTT_GetPacketId(AzureIoTMQTTHandle_t pContext)
 {
+    (void)pContext;
+
     return usTestPacketId;
 }
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Publish(AzureIoTMQTTHandle_t pContext,
-                                          const AzureIoTMQTTPublishInfo_t *pPublishInfo,
+                                          const AzureIoTMQTTPublishInfo_t * pPublishInfo,
                                           uint16_t packetId)
 {
-    return (AzureIoTMQTTStatus_t)mock();
+    (void)pContext;
+    (void)packetId;
+
     AzureIoTMQTTStatus_t ret = (AzureIoTMQTTStatus_t)mock();
 
     if (ret)
@@ -76,6 +94,9 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_Publish(AzureIoTMQTTHandle_t pContext,
 AzureIoTMQTTStatus_t AzureIoTMQTT_ProcessLoop(AzureIoTMQTTHandle_t pContext,
                                               uint32_t timeoutMs)
 {
+    (void)pContext;
+    (void)timeoutMs;
+
     AzureIoTMQTTStatus_t ret = (AzureIoTMQTTStatus_t)mock();
 
     if (ret)
@@ -92,17 +113,27 @@ AzureIoTMQTTStatus_t AzureIoTMQTT_ProcessLoop(AzureIoTMQTTHandle_t pContext,
 }
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Subscribe(AzureIoTMQTTHandle_t pContext,
-                                            const AzureIoTMQTTSubscribeInfo_t *pSubscriptionList,
+                                            const AzureIoTMQTTSubscribeInfo_t * pSubscriptionList,
                                             size_t subscriptionCount,
                                             uint16_t packetId)
 {
+    (void)pContext;
+    (void)pSubscriptionList;
+    (void)subscriptionCount;
+    (void)packetId;
+
     return (AzureIoTMQTTStatus_t)mock();
 }
 
 AzureIoTMQTTStatus_t AzureIoTMQTT_Unsubscribe(AzureIoTMQTTHandle_t pContext,
-                                              const AzureIoTMQTTSubscribeInfo_t *pSubscriptionList,
+                                              const AzureIoTMQTTSubscribeInfo_t * pSubscriptionList,
                                               size_t subscriptionCount,
                                               uint16_t packetId)
 {
+    (void)pContext;
+    (void)pSubscriptionList;
+    (void)subscriptionCount;
+    (void)packetId;
+
     return (AzureIoTMQTTStatus_t)mock();
 }

@@ -18,7 +18,7 @@
 extern AzureIoTMQTTPacketInfo_t xPacketInfo;
 extern AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 extern uint16_t usTestPacketId;
-extern const uint8_t *pucPublishPayload;
+extern const uint8_t * pucPublishPayload;
 
 static const uint8_t ucEndpoint[] = "unittest.azure-devices-provisioning.net";
 static const uint8_t ucIdScope[] = "0ne000A247E";
@@ -52,15 +52,21 @@ static const uint8_t ucFailureHubResponse[] = "{ \
 static uint8_t ucTopicBuffer[128];
 static uint32_t ulRequestId = 1;
 static uint64_t ulUnixTime = 0;
+/*-----------------------------------------------------------*/
+
+TickType_t xTaskGetTickCount(void);
+void * pvPortMalloc(size_t xWantedSize);
+void vPortFree(void * pv);
+int get_all_tests();
 
 TickType_t xTaskGetTickCount(void)
 {
     return 1;
 }
 
-void *pvPortMalloc(size_t xWantedSize)
+void * pvPortMalloc(size_t xWantedSize)
 {
-    void *ret = ((void *)mock());
+    void * ret = ((void *)mock());
 
     if (ret)
     {
@@ -71,7 +77,7 @@ void *pvPortMalloc(size_t xWantedSize)
     return ret;
 }
 
-void vPortFree(void *pv)
+void vPortFree(void * pv)
 {
     if (pv)
     {
@@ -85,29 +91,39 @@ static uint64_t prvGetUnixTime(void)
     return ulUnixTime;
 }
 
-static uint32_t prvHmacFunction(const uint8_t *pucKey,
+static uint32_t prvHmacFunction(const uint8_t * pucKey,
                                 uint32_t ulKeyLength,
-                                const uint8_t *pucData,
+                                const uint8_t * pucData,
                                 uint32_t ulDataLength,
-                                uint8_t *pucOutput,
+                                uint8_t * pucOutput,
                                 uint32_t ulOutputLength,
-                                uint32_t *pucBytesCopied)
+                                uint32_t * pucBytesCopied)
 {
+    (void)pucKey;
+    (void)ulKeyLength;
+    (void)pucData;
+    (void)ulDataLength;
+    (void)pucOutput;
+    (void)ulOutputLength;
+    (void)pucBytesCopied;
+
     return ((uint32_t)mock());
 }
 
 static void prvGenerateGoodResponse(AzureIoTMQTTPublishInfo_t * pxPublishInfo,
                                     uint32_t ulAssignedResponseAfter)
 {
+    int length;
     if (ulAssignedResponseAfter == 0)
     {
 
         xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_PUBLISH;
         xDeserializedInfo.packetIdentifier = 1;
-        pxPublishInfo->topicNameLength = snprintf(ucTopicBuffer, sizeof(ucTopicBuffer),
-                                                  "%s$rid=%u", testPROVISIONING_SERVICE_REPONSE_TOPIC,
-                                                  ulRequestId);
-        pxPublishInfo->pTopicName = ucTopicBuffer;
+        length = snprintf((char *)ucTopicBuffer, sizeof(ucTopicBuffer),
+                          "%s$rid=%u", testPROVISIONING_SERVICE_REPONSE_TOPIC,
+                          ulRequestId);
+        pxPublishInfo->topicNameLength = (uint16_t)length;
+        pxPublishInfo->pTopicName = (const char *)ucTopicBuffer;
         pxPublishInfo->pPayload = ucAssignedHubResponse;
         pxPublishInfo->payloadLength = sizeof(ucAssignedHubResponse) - 1;
         xDeserializedInfo.pPublishInfo = pxPublishInfo;
@@ -117,11 +133,12 @@ static void prvGenerateGoodResponse(AzureIoTMQTTPublishInfo_t * pxPublishInfo,
     {
         xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_PUBLISH;
         xDeserializedInfo.packetIdentifier = 1;
-        pxPublishInfo->topicNameLength = snprintf(ucTopicBuffer, sizeof(ucTopicBuffer),
-                                                  "%s$rid=%u&retry-after=%u",
-                                                  testPROVISIONING_SERVICE_REPONSE_TOPIC,
-                                                  ulRequestId, ulAssignedResponseAfter);
-        pxPublishInfo->pTopicName = ucTopicBuffer;
+        length = snprintf((char *)ucTopicBuffer, sizeof(ucTopicBuffer),
+                          "%s$rid=%u&retry-after=%u",
+                          testPROVISIONING_SERVICE_REPONSE_TOPIC,
+                          ulRequestId, ulAssignedResponseAfter);
+        pxPublishInfo->topicNameLength = (uint16_t)length;
+        pxPublishInfo->pTopicName = (const char *)ucTopicBuffer;
         pxPublishInfo->pPayload = ucAssigningHubResponse;
         pxPublishInfo->payloadLength = sizeof(ucAssigningHubResponse) - 1;
         xDeserializedInfo.pPublishInfo = pxPublishInfo;
@@ -131,19 +148,22 @@ static void prvGenerateGoodResponse(AzureIoTMQTTPublishInfo_t * pxPublishInfo,
 
 static void prvGenerateFailureResponse(AzureIoTMQTTPublishInfo_t * pxPublishInfo)
 {
+    int length;
+
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_PUBLISH;
     xDeserializedInfo.packetIdentifier = 1;
-    pxPublishInfo->topicNameLength = snprintf(ucTopicBuffer, sizeof(ucTopicBuffer),
-                                              "%s$rid=%u", testPROVISIONING_SERVICE_REPONSE_TOPIC,
-                                              ulRequestId);
-    pxPublishInfo->pTopicName = ucTopicBuffer;
+    length = snprintf((char *)ucTopicBuffer, sizeof(ucTopicBuffer),
+                      "%s$rid=%u", testPROVISIONING_SERVICE_REPONSE_TOPIC,
+                      ulRequestId);
+    pxPublishInfo->topicNameLength = (uint16_t)length;
+    pxPublishInfo->pTopicName = (const char *)ucTopicBuffer;
     pxPublishInfo->pPayload = ucFailureHubResponse;
     pxPublishInfo->payloadLength = sizeof(ucFailureHubResponse) - 1;
     xDeserializedInfo.pPublishInfo = pxPublishInfo;
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
 }
 
-static void prvSetupTestProvisioningClient(AzureIoTProvisioningClient_t *pxTestProvisioningClient)
+static void prvSetupTestProvisioningClient(AzureIoTProvisioningClient_t * pxTestProvisioningClient)
 {
     AzureIoTProvisioningClientOptions_t xProvisioningOptions = {0};
     uMallocAllocationCount = 0;
@@ -164,10 +184,9 @@ static void prvSetupTestProvisioningClient(AzureIoTProvisioningClient_t *pxTestP
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTProvisioningClient_Init_Failure(void **state)
+static void testAzureIoTProvisioningClient_Init_Failure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
-    AzureIoTProvisioningClientOptions_t xProvisioningOptions = {0};
 
     (void)state;
 
@@ -243,10 +262,9 @@ static void testAzureIoTProvisioningClient_Init_Failure(void **state)
                          AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTProvisioningClient_Init_Success(void **state)
+static void testAzureIoTProvisioningClient_Init_Success(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
-    AzureIoTProvisioningClientOptions_t xProvisioningOptions = {0};
 
     (void)state;
     will_return(AzureIoTMQTT_Init, AzureIoTMQTTSuccess);
@@ -261,7 +279,7 @@ static void testAzureIoTProvisioningClient_Init_Success(void **state)
                      AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTProvisioningClient_Deinit_Success(void **state)
+static void testAzureIoTProvisioningClient_Deinit_Success(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
 
@@ -280,7 +298,7 @@ static void testAzureIoTProvisioningClient_Deinit_Success(void **state)
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
 }
 
-static void testAzureIoTProvisioningClient_SymmetricKeySet_Failure(void **state)
+static void testAzureIoTProvisioningClient_SymmetricKeySet_Failure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
 
@@ -299,7 +317,7 @@ static void testAzureIoTProvisioningClient_SymmetricKeySet_Failure(void **state)
                          AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTProvisioningClient_SymmetricKeySet_Success(void **state)
+static void testAzureIoTProvisioningClient_SymmetricKeySet_Success(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
 
@@ -311,10 +329,9 @@ static void testAzureIoTProvisioningClient_SymmetricKeySet_Success(void **state)
                      AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 }
 
-static void testAzureIoTProvisioningClient_Register_ConnectFailure(void **state)
+static void testAzureIoTProvisioningClient_Register_ConnectFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
-    AzureIoTMQTTPublishInfo_t publishInfo;
     AzureIoTProvisioningClientResult_t ret;
     uMallocAllocationCount = 0;
 
@@ -337,10 +354,9 @@ static void testAzureIoTProvisioningClient_Register_ConnectFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTProvisioningClient_Register_SubscribeFailure(void **state)
+static void testAzureIoTProvisioningClient_Register_SubscribeFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
-    AzureIoTMQTTPublishInfo_t publishInfo;
     AzureIoTProvisioningClientResult_t ret;
     uMallocAllocationCount = 0;
 
@@ -369,10 +385,9 @@ static void testAzureIoTProvisioningClient_Register_SubscribeFailure(void **stat
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTProvisioningClient_Register_SubscribeAckFailure(void **state)
+static void testAzureIoTProvisioningClient_Register_SubscribeAckFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
-    AzureIoTMQTTPublishInfo_t publishInfo;
     AzureIoTProvisioningClientResult_t ret;
     uMallocAllocationCount = 0;
 
@@ -406,10 +421,9 @@ static void testAzureIoTProvisioningClient_Register_SubscribeAckFailure(void **s
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTProvisioningClient_Register_PublishFailure(void **state)
+static void testAzureIoTProvisioningClient_Register_PublishFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
-    AzureIoTMQTTPublishInfo_t publishInfo;
     AzureIoTProvisioningClientResult_t ret;
     uMallocAllocationCount = 0;
 
@@ -452,7 +466,7 @@ static void testAzureIoTProvisioningClient_Register_PublishFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void **state)
+static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t publishInfo;
@@ -510,7 +524,7 @@ static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void **s
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTProvisioningClient_Register_QueryFailure(void **state)
+static void testAzureIoTProvisioningClient_Register_QueryFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t publishInfo;
@@ -581,7 +595,7 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure(void **state)
     assert_int_equal(uMallocAllocationCount, 0);
 }
 
-static void testAzureIoTProvisioningClient_Register_Success(void **state)
+static void testAzureIoTProvisioningClient_Register_Success(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t publishInfo;
