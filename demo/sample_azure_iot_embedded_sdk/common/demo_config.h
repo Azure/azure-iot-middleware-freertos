@@ -52,9 +52,9 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * @note To disable Device Provisioning undef this macro
  *
  */
-#define ENABLE_DPS_SAMPLE
+#define democonfigENABLE_DPS_SAMPLE
 
-#ifdef ENABLE_DPS_SAMPLE
+#ifdef democonfigENABLE_DPS_SAMPLE
 
 /**
  * @brief Provisioning service endpoint.
@@ -62,7 +62,7 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#service-operations-endpoint
  * 
  */
-#define ENDPOINT                            "<YOUR DPS ENDPOINT HERE>"
+#define democonfigENDPOINT                  "<YOUR DPS ENDPOINT HERE>"
 
 /**
  * @brief Id scope of provisioning service.
@@ -70,7 +70,7 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#id-scope
  * 
  */
-#define ID_SCOPE                            "<YOUR ID SCOPE HERE>"
+#define democonfigID_SCOPE                  "<YOUR ID SCOPE HERE>"
 
 /**
  * @brief Registration Id of provisioning service
@@ -79,32 +79,32 @@ extern void vLoggingPrintf( const char * pcFormatString,
  *
  *  @note https://docs.microsoft.com/en-us/azure/iot-dps/concepts-service#registration-id
  */
-#define REGISTRATION_ID                     "<YOUR REGISTRATION ID HERE>"
+#define democonfigREGISTRATION_ID           "<YOUR REGISTRATION ID HERE>"
 
-#endif // ENABLE_DPS_SAMPLE
+#endif // democonfigENABLE_DPS_SAMPLE
 
 /**
  * @brief IoTHub device Id.
  *
  */
-#define DEVICE_ID                           "<YOUR DEVICE ID HERE>"
+#define democonfigDEVICE_ID                 "<YOUR DEVICE ID HERE>"
 
 /**
  * @brief IoTHub module Id.
  *
  */
-#define MODULE_ID                           ""
+#define democonfigMODULE_ID                 ""
 /**
  * @brief IoTHub hostname.
  *
  */
-#define HOSTNAME                            "<YOUR IOT HUB HOSTNAME HERE>"
+#define democonfigHOSTNAME                  "<YOUR IOT HUB HOSTNAME HERE>"
 
 /**
  * @brief Device symmetric key
  *
  */
-#define DEVICE_SYMMETRIC_KEY                "<Symmetric key>"
+#define democonfigDEVICE_SYMMETRIC_KEY      "<Symmetric key>"
 
 /**
  * @brief Client's X509 Certificate.
@@ -151,7 +151,7 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * for an MQTT broker that only has an IP address but no hostname. However,
  * SNI should be enabled whenever possible.
  */
-#define democonfigDISABLE_SNI    ( pdFALSE )
+#define democonfigDISABLE_SNI              ( pdFALSE )
 
 /**
  * @brief The name of the operating system that the application is running on.
@@ -168,19 +168,6 @@ extern void vLoggingPrintf( const char * pcFormatString,
 #define democonfigOS_VERSION                tskKERNEL_VERSION_NUMBER
 
 /**
- * @brief The name of the hardware platform the application is running on. The
- * current value is given as an example. Please update for your specific
- * hardware platform.
- */
-#define democonfigHARDWARE_PLATFORM_NAME    "WinSim"
-
-/**
- * @brief The name of the MQTT library used and its version, following an "@"
- * symbol.
- */
-#define democonfigMQTT_LIB                  "core-mqtt@1.0.0"
-
-/**
  * @brief Set the stack size of the main demo task.
  *
  * In the Windows port, this stack only holds a structure. The actual
@@ -192,5 +179,10 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * @brief Size of the network buffer for MQTT packets.
  */
 #define democonfigNETWORK_BUFFER_SIZE       ( 5 * 1024U )
+
+/**
+ * @brief IoTHub endpoint port.
+ */
+#define democonfigMQTT_BROKER_PORT          ( 8883 )
 
 #endif /* DEMO_CONFIG_H */
