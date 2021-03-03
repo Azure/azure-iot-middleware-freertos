@@ -11,16 +11,16 @@ In [demo_config.h](../common/demo_config.h), update the following values for eit
 
 ### DPS
 
-- `ENDPOINT`
-- `ID_SCOPE`
-- `REGISTRATION_ID`
-- `DEVICE_SYMMETRIC_KEY` OR `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM`
+- `democonfigENDPOINT`
+- `democonfigID_SCOPE`
+- `democonfigREGISTRATION_ID`
+- `democonfigDEVICE_SYMMETRIC_KEY` OR `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM`
 
 ### IoT Hub
 
-- `DEVICE_ID`
-- `HOSTNAME`
-- `DEVICE_SYMMETRIC_KEY` OR `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM`
+- `democonfigDEVICE_ID`
+- `democonfigHOSTNAME`
+- `democonfigDEVICE_SYMMETRIC_KEY` OR `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM`
 
 ## Update Device WiFi Credentials
 
