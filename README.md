@@ -16,10 +16,11 @@ More docs can be found in the [doc/](doc/) directory.
 
 ## Current Feature Matrix
 
-| Feature | Availability |
-| Azure IoT Hub | Available |
-| Azure IoT Device Provisioning | Available |
-| Azure IoT Plug and Play | Future Release |
+| Feature                       | Availability   |
+| :---------------------------: | :----------:   |
+| Azure IoT Hub                 |   Available    |
+| Azure IoT Device Provisioning |   Available    |
+| Azure IoT Plug and Play       | Future Release |
 
 ## Running Sample on Windows
 
