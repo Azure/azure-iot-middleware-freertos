@@ -4,7 +4,22 @@
 
 ![Linux Build](https://github.com/Azure/azure-iot-middleware-freertos/workflows/C/C++%20CI/badge.svg)
 
+The Azure FreeRTOS Middleware simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and adds MQTT . Below are key points of this project:
+
+- The Azure FreeRTOS Middleware operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are issued by the customer and handled by the SDK.
+- Customers control the TLS/TCP connection to the endpoint. The allows for flexibility between software or hardware implementations of either.
+- No background threads are created by the Azure FreeRTOS Middleware. Messages are sent and received synchronously.
+- Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).
+
+
 More docs can be found in the [doc/](doc/) directory.
+
+## Current Feature Matrix
+
+| Feature | Availability |
+| Azure IoT Hub | Available |
+| Azure IoT Device Provisioning | Available |
+| Azure IoT Plug and Play | Future Release |
 
 ## Running Sample on Windows
 
