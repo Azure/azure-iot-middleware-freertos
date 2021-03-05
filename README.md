@@ -15,12 +15,12 @@ The Azure FreeRTOS Middleware simplifies the connection of devices running FreeR
 - [Azure FreeRTOS Middleware](#azure-freertos-middleware)
   - [Table of Contents](#table-of-contents)
   - [Current Feature Matrix](#current-feature-matrix)
+  - [Repository Structure](#repository-structure)
   - [Porting](#porting)
   - [Running Sample on Windows](#running-sample-on-windows)
     - [Running the Sample With Device Provisioning](#running-the-sample-with-device-provisioning)
     - [Running the Sample Without Device Provisioning](#running-the-sample-without-device-provisioning)
   - [Running Sample on STM32L475 Discovery Board](#running-sample-on-stm32l475-discovery-board)
-  - [High Level](#high-level)
   - [Generating a Cert](#generating-a-cert)
   - [Known Shortcomings](#known-shortcomings)
   - [APIs May Need to be Added](#apis-may-need-to-be-added)
@@ -34,6 +34,18 @@ More docs can be found in the [doc/](doc/) directory.
 | Azure IoT Hub                 | :heavy_check_mark: |
 | Azure IoT Device Provisioning | :heavy_check_mark: |
 | Azure IoT Plug and Play       | Future Release     |
+
+## Repository Structure
+
+The source code for the middleware is located in `source/`.
+
+The following are submoduled in `libraries/` which the middleware takes dependency on:
+
+- `azure-sdk-for-c`
+- `coreMQTT`
+- `FreeRTOS`
+
+After cloning, make sure to run `git submodule update --init --recursive` to download the submodules.
 
 ## Porting
 
@@ -59,14 +71,6 @@ To work with the Azure FreeRTOS Middleware, the SDK requires the customer to sup
 ## Running Sample on STM32L475 Discovery Board
 
 Please see the doc [here](./demo/sample_azure_iot_embedded_sdk/stm32l475/ReadMe.md) to run on this board.
-
-## High Level
-
-The following are submoduled in `/libraries` which the middleware takes dependency on:
-
-- `azure-sdk-for-c`
-- `coreMQTT`
-- `FreeRTOS`
 
 The spiked middleware is contained in `/source` with the header file found [here](./source/include/azure_iot_hub_client.h).
 
