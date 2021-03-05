@@ -11,7 +11,9 @@ The Azure FreeRTOS Middleware simplifies the connection of devices running FreeR
 - No background threads are created by the Azure FreeRTOS Middleware. Messages are sent and received synchronously.
 - Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).
 
+## Table of Contents
 - [Azure FreeRTOS Middleware](#azure-freertos-middleware)
+  - [Table of Contents](#table-of-contents)
   - [Current Feature Matrix](#current-feature-matrix)
   - [Porting](#porting)
   - [Running Sample on Windows](#running-sample-on-windows)
