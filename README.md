@@ -4,7 +4,52 @@
 
 ![Linux Build](https://github.com/Azure/azure-iot-middleware-freertos/workflows/C/C++%20CI/badge.svg)
 
+The Azure FreeRTOS Middleware simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and adds MQTT client support. Below are key points of this project:
+
+- The Azure FreeRTOS Middleware operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are issued by the customer and handled by the SDK.
+- Customers control the TLS/TCP connection to the endpoint. This allows for flexibility between software or hardware implementations of either. For porting, please see the [porting](#porting) section below.
+- No background threads are created by the Azure FreeRTOS Middleware. Messages are sent and received synchronously.
+- Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).
+
+## Table of Contents
+- [Azure FreeRTOS Middleware](#azure-freertos-middleware)
+  - [Table of Contents](#table-of-contents)
+  - [Current Feature Matrix](#current-feature-matrix)
+  - [Repository Structure](#repository-structure)
+  - [Porting](#porting)
+  - [Running Sample on Windows](#running-sample-on-windows)
+    - [Running the Sample With Device Provisioning](#running-the-sample-with-device-provisioning)
+    - [Running the Sample Without Device Provisioning](#running-the-sample-without-device-provisioning)
+  - [Running Sample on STM32L475 Discovery Board](#running-sample-on-stm32l475-discovery-board)
+  - [Generating a Cert](#generating-a-cert)
+  - [Known Shortcomings](#known-shortcomings)
+  - [APIs May Need to be Added](#apis-may-need-to-be-added)
+
 More docs can be found in the [doc/](doc/) directory.
+
+## Current Feature Matrix
+
+| Feature                       | Availability       |
+| :---------------------------: | :----------------: |
+| Azure IoT Hub                 | :heavy_check_mark: |
+| Azure IoT Device Provisioning | :heavy_check_mark: |
+| Azure IoT Plug and Play       | Future Release     |
+
+## Repository Structure
+
+The source code for the middleware is located in `source/`.
+
+The following are submoduled in `libraries/` which the middleware takes dependency on:
+
+- `azure-sdk-for-c`
+- `coreMQTT`
+- `FreeRTOS`
+
+After cloning, make sure to run `git submodule update --init --recursive` to download the submodules.
+
+## Porting
+
+To work with the Azure FreeRTOS Middleware, the SDK requires the customer to supply a `send` and `recv` function to the MQTT layer. In depth documentation can be found in the header file [here](source/interface/azure_iot_transport_interface.h).
 
 ## Running Sample on Windows
 
@@ -26,14 +71,6 @@ More docs can be found in the [doc/](doc/) directory.
 ## Running Sample on STM32L475 Discovery Board
 
 Please see the doc [here](./demo/sample_azure_iot_embedded_sdk/stm32l475/ReadMe.md) to run on this board.
-
-## High Level
-
-The following are submoduled in `/libraries` which the middleware takes dependency on:
-
-- `azure-sdk-for-c`
-- `coreMQTT`
-- `FreeRTOS`
 
 The spiked middleware is contained in `/source` with the header file found [here](./source/include/azure_iot_hub_client.h).
 
