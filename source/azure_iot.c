@@ -13,7 +13,8 @@ static const char _azure_iot_base64_array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefg
 
 /*-----------------------------------------------------------*/
 
-static void prvAzureIoTLogListener( az_log_classification classification, az_span message )
+static void prvAzureIoTLogListener( az_log_classification classification,
+                                    az_span message )
 {
     ( void ) classification;
 
@@ -240,9 +241,9 @@ static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
 
 AzureIoTError_t AzureIoT_Init()
 {
-#if ( LIBRARY_LOG_LEVEL == LOG_INFO )
-    az_log_set_message_callback( prvAzureIoTLogListener );
-#endif
+    #if ( LIBRARY_LOG_LEVEL == LOG_INFO )
+        az_log_set_message_callback( prvAzureIoTLogListener );
+    #endif
 
     return AZURE_IOT_SUCCESS;
 }
@@ -262,7 +263,7 @@ AzureIoTError_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * px
     az_span propertyBufferSpan = az_span_create( pucBuffer, ( int32_t ) ulBufferLength );
     az_result result;
 
-    if ( pxMessageProperties == NULL )
+    if( pxMessageProperties == NULL )
     {
         AZLogError( ( "AzureIoTMessagePropertiesInit failed: Invalid argument \r\n" ) );
         return AZURE_IOT_INVALID_ARGUMENT;
@@ -270,6 +271,7 @@ AzureIoTError_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * px
 
     result = az_iot_message_properties_init( &pxMessageProperties->_internal.properties,
                                              propertyBufferSpan, ( int32_t ) ulWrittenLength );
+
     if( az_result_failed( result ) )
     {
         return AZURE_IOT_FAILED;
@@ -289,7 +291,7 @@ AzureIoTError_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * 
     az_span valueSpan = az_span_create( pucValue, ( int32_t ) ulValueLength );
     az_result result;
 
-    if ( pxMessageProperties == NULL )
+    if( pxMessageProperties == NULL )
     {
         AZLogError( ( "AzureIoTMessagePropertiesAppend failed: Invalid argument \r\n" ) );
         return AZURE_IOT_INVALID_ARGUMENT;
@@ -297,6 +299,7 @@ AzureIoTError_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * 
 
     result = az_iot_message_properties_append( &pxMessageProperties->_internal.properties,
                                                nameSpan, valueSpan );
+
     if( az_result_failed( result ) )
     {
         return AZURE_IOT_FAILED;
@@ -316,8 +319,8 @@ AzureIoTError_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * px
     az_span outValueSpan;
     az_result result;
 
-    if ( ( pxMessageProperties == NULL ) ||
-         ( ppucOutValue == NULL ) || ( pulOutValueLength == NULL ) )
+    if( ( pxMessageProperties == NULL ) ||
+        ( ppucOutValue == NULL ) || ( pulOutValueLength == NULL ) )
     {
         AZLogError( ( "AzureIoTMessagePropertiesFind failed: Invalid argument \r\n" ) );
         return AZURE_IOT_INVALID_ARGUMENT;
@@ -355,11 +358,11 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
     uint32_t encoded_hash_buf_size = 48;
     uint32_t binary_key_buf_size;
 
-    if ( ( xAzureIoTHMACFunction == NULL ) ||
-         ( pucKey == NULL ) || ( ulKeySize == 0 ) ||
-         ( pucMessage == NULL ) || ( ulMessageSize == 0 ) ||
-         ( pucBuffer == NULL ) || ( ulBufferLength == 0 ) ||
-         ( ppucOutput == NULL ) || ( pulOutputLength == NULL ) )
+    if( ( xAzureIoTHMACFunction == NULL ) ||
+        ( pucKey == NULL ) || ( ulKeySize == 0 ) ||
+        ( pucMessage == NULL ) || ( ulMessageSize == 0 ) ||
+        ( pucBuffer == NULL ) || ( ulBufferLength == 0 ) ||
+        ( ppucOutput == NULL ) || ( pulOutputLength == NULL ) )
     {
         AZLogError( ( "AzureIoT_Base64HMACCalculate failed: Invalid argument \r\n" ) );
         return AZURE_IOT_INVALID_ARGUMENT;
@@ -405,7 +408,7 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
     }
 
     *ppucOutput = ( uint8_t * ) ( encoded_hash_buf );
-    *pulOutputLength =  ( uint32_t ) strlen( encoded_hash_buf );
+    *pulOutputLength = ( uint32_t ) strlen( encoded_hash_buf );
 
     return AZURE_IOT_SUCCESS;
 }

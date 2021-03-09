@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// SPDX-License-Identifier: MIT
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
 
 /* Standard includes. */
 #include <string.h>
@@ -50,45 +50,45 @@
 /**
  * @brief The maximum number of retries for network operation with server.
  */
-#define sampleazureiotRETRY_MAX_ATTEMPTS                    ( 5U )
+#define sampleazureiotRETRY_MAX_ATTEMPTS                      ( 5U )
 
 /**
  * @brief The maximum back-off delay (in milliseconds) for retrying failed operation
  *  with server.
  */
-#define sampleazureiotRETRY_MAX_BACKOFF_DELAY_MS            ( 5000U )
+#define sampleazureiotRETRY_MAX_BACKOFF_DELAY_MS              ( 5000U )
 
 /**
  * @brief The base back-off delay (in milliseconds) to use for network operation retry
  * attempts.
  */
-#define sampleazureiotRETRY_BACKOFF_BASE_MS                 ( 500U )
+#define sampleazureiotRETRY_BACKOFF_BASE_MS                   ( 500U )
 
 /**
  * @brief Timeout for receiving CONNACK packet in milliseconds.
  */
-#define sampleazureiotCONNACK_RECV_TIMEOUT_MS               ( 1000U )
+#define sampleazureiotCONNACK_RECV_TIMEOUT_MS                 ( 1000U )
 
 /**
  * @brief The Telemetry message published in this example.
  */
-#define sampleazureiotMESSAGE                               "Hello World!"
+#define sampleazureiotMESSAGE                                 "Hello World!"
 
 /**
  * @brief The reported property payload to send to IoT Hub
  */
-#define sampleazureiotTWIN_PROPERTY                         "{ \"hello\": \"world\" }"
+#define sampleazureiotTWIN_PROPERTY                           "{ \"hello\": \"world\" }"
 
 /**
  * @brief Time in ticks to wait between each cycle of the demo implemented
  * by prvMQTTDemoTask().
  */
-#define sampleazureiotDELAY_BETWEEN_DEMO_ITERATIONS_TICKS   ( pdMS_TO_TICKS( 5000U ) )
+#define sampleazureiotDELAY_BETWEEN_DEMO_ITERATIONS_TICKS     ( pdMS_TO_TICKS( 5000U ) )
 
 /**
  * @brief Timeout for MQTT_ProcessLoop in milliseconds.
  */
-#define sampleazureiotPROCESS_LOOP_TIMEOUT_MS               ( 500U )
+#define sampleazureiotPROCESS_LOOP_TIMEOUT_MS                 ( 500U )
 
 /**
  * @brief Delay (in ticks) between consecutive cycles of MQTT publish operations in a
@@ -97,17 +97,17 @@
  * Note that the process loop also has a timeout, so the total time between
  * publishes is the sum of the two delays.
  */
-#define sampleazureiotDELAY_BETWEEN_PUBLISHES_TICKS         ( pdMS_TO_TICKS( 2000U ) )
+#define sampleazureiotDELAY_BETWEEN_PUBLISHES_TICKS           ( pdMS_TO_TICKS( 2000U ) )
 
 /**
  * @brief Transport timeout in milliseconds for transport send and receive.
  */
-#define sampleazureiotTRANSPORT_SEND_RECV_TIMEOUT_MS        ( 2000U )
+#define sampleazureiotTRANSPORT_SEND_RECV_TIMEOUT_MS          ( 2000U )
 
 /**
  * @brief Transport timeout in milliseconds for transport send and receive.
  */
-#define sampleazureiotProvisioning_Registration_TIMEOUT_MS  ( 20U )
+#define sampleazureiotProvisioning_Registration_TIMEOUT_MS    ( 20U )
 
 /*-----------------------------------------------------------*/
 
@@ -214,6 +214,7 @@ static uint64_t ulGlobalEntryTime = 1639093301;
 
         mbedtls_md_context_t ctx;
         mbedtls_md_type_t md_type = MBEDTLS_MD_SHA256;
+
         mbedtls_md_init( &ctx );
 
         if( mbedtls_md_setup( &ctx, mbedtls_md_info_from_type( md_type ), 1 ) ||
@@ -336,6 +337,7 @@ static void prvAzureDemoTask( void * pvParameters )
     uint32_t ulStatus;
     AzureIoTHubClientOptions_t xHubOptions = { 0 };
     AzureIoTMessageProperties_t xPropertyBag;
+
     #ifdef democonfigENABLE_DPS_SAMPLE
         uint8_t * pucIotHubHostname = NULL;
         uint8_t * pucIotHubDeviceId = NULL;
@@ -389,7 +391,7 @@ static void prvAzureDemoTask( void * pvParameters )
         xTransport.recv = TLS_FreeRTOS_recv;
 
         xHubOptions.pModuleId = ( const uint8_t * ) democonfigMODULE_ID;
-        xHubOptions.moduleIdLength = sizeof(democonfigMODULE_ID) - 1;
+        xHubOptions.moduleIdLength = sizeof( democonfigMODULE_ID ) - 1;
 
         /* Initialize MQTT library. */
         xResult = AzureIoTHubClient_Init( &xAzureIoTHubClient,
@@ -440,7 +442,7 @@ static void prvAzureDemoTask( void * pvParameters )
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         xResult = AzureIoT_MessagePropertiesAppend( &xPropertyBag, ( uint8_t * ) "name", sizeof( "name" ) - 1,
-                                                   ( uint8_t * ) "value", sizeof( "value" ) - 1 );
+                                                    ( uint8_t * ) "value", sizeof( "value" ) - 1 );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
         /****************** Publish and Keep Alive Loop. **********************/

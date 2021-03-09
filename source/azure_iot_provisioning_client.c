@@ -16,32 +16,32 @@
 #include "azure/core/az_version.h"
 
 #ifndef azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC
-    #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC        azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
+    #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
 #endif /* azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC */
 
 #ifndef azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS          azureiotKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS    azureiotKEEP_ALIVE_TIMEOUT_SECONDS
 #endif /* azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiotprovisioningCONNACK_RECV_TIMEOUT_MS
-    #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS             azureiotCONNACK_RECV_TIMEOUT_MS
+    #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS    azureiotCONNACK_RECV_TIMEOUT_MS
 #endif /* azureiotprovisioningCONNACK_RECV_TIMEOUT_MS */
 
 #ifndef azureiotprovisioningUSER_AGENT
-    #define azureiotprovisioningUSER_AGENT                          ""
+    #define azureiotprovisioningUSER_AGENT             ""
 #endif /* azureiotprovisioningUSER_AGENT */
 
-#define azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS                 ( 500U )
+#define azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS    ( 500U )
 
-#define azureiotprovisioningWF_STATE_INIT                           ( 0x0 )
-#define azureiotprovisioningWF_STATE_CONNECT                        ( 0x1 )
-#define azureiotprovisioningWF_STATE_SUBSCRIBE                      ( 0x2 )
-#define azureiotprovisioningWF_STATE_REQUEST                        ( 0x3 )
-#define azureiotprovisioningWF_STATE_RESPONSE                       ( 0x4 )
-#define azureiotprovisioningWF_STATE_SUBSCRIBING                    ( 0x5 )
-#define azureiotprovisioningWF_STATE_REQUESTING                     ( 0x6 )
-#define azureiotprovisioningWF_STATE_WAITING                        ( 0x7 )
-#define azureiotprovisioningWF_STATE_COMPLETE                       ( 0x8 )
+#define azureiotprovisioningWF_STATE_INIT              ( 0x0 )
+#define azureiotprovisioningWF_STATE_CONNECT           ( 0x1 )
+#define azureiotprovisioningWF_STATE_SUBSCRIBE         ( 0x2 )
+#define azureiotprovisioningWF_STATE_REQUEST           ( 0x3 )
+#define azureiotprovisioningWF_STATE_RESPONSE          ( 0x4 )
+#define azureiotprovisioningWF_STATE_SUBSCRIBING       ( 0x5 )
+#define azureiotprovisioningWF_STATE_REQUESTING        ( 0x6 )
+#define azureiotprovisioningWF_STATE_WAITING           ( 0x7 )
+#define azureiotprovisioningWF_STATE_COMPLETE          ( 0x8 )
 
 /*-----------------------------------------------------------*/
 
@@ -517,7 +517,7 @@ static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoT
         {
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload,
                     pPublishInfo->pPayload, pPublishInfo->payloadLength );
-            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length =  pPublishInfo->payloadLength;
+            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length = pPublishInfo->payloadLength;
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic,
                     pPublishInfo->pTopicName, pPublishInfo->topicNameLength );
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length = pPublishInfo->topicNameLength;
@@ -576,8 +576,8 @@ static uint32_t prvAzureIoTProvisioningClientTokenGet( AzureIoTProvisioningClien
     bytesUsed = ( uint32_t ) az_span_size( span );
 
     if( AzureIoT_Base64HMACCalculate( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_hmac_function,
-                                     pKey, keyLen, pSASBuffer, bytesUsed,
-                                     buffer, sizeof( buffer ), &pOutput, &outputLen ) )
+                                      pKey, keyLen, pSASBuffer, bytesUsed,
+                                      buffer, sizeof( buffer ), &pOutput, &outputLen ) )
     {
         AZLogError( ( "IoTProvisioning failed to encoded hash" ) );
         return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
@@ -619,7 +619,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_OptionsInit( Azure
 {
     AzureIoTProvisioningClientResult_t ret;
 
-    if ( pxProvisioningClientOptions == NULL )
+    if( pxProvisioningClientOptions == NULL )
     {
         AZLogError( ( "Provisioning failed to initialize options: Invalid argument \r\n" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
@@ -678,7 +678,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         xAzureIoTProvisioningClientHandle->_internal.registrationIdLength = ulRegistrationIdLength;
         xAzureIoTProvisioningClientHandle->_internal.getTimeFunction = xGetTimeFunction;
 
-        if ( pxProvisioningClientOptions )
+        if( pxProvisioningClientOptions )
         {
             options.user_agent = az_span_create( ( uint8_t * ) pxProvisioningClientOptions->pUserAgent, ( int32_t ) pxProvisioningClientOptions->userAgentLength );
         }
@@ -690,6 +690,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         core_result = az_iot_provisioning_client_init( &( xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core ),
                                                        endpoint_span, id_scope_span,
                                                        registration_id_span, &options );
+
         if( az_result_failed( core_result ) )
         {
             AZLogError( ( "Provisioning initialization failed: with core error : %08x", core_result ) );
@@ -830,7 +831,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SymmetricKeySet( A
 /*-----------------------------------------------------------*/
 
 AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                               uint32_t  * pulExtendedErrorCode )
+                                                                               uint32_t * pulExtendedErrorCode )
 {
     AzureIoTProvisioningClientResult_t ret;
 
@@ -840,7 +841,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_ExtendedCodeGet( A
         AZLogError( ( "Provisioning client extended code get failed : Invalid argument" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
-    else if ( xAzureIoTProvisioningClientHandle->_internal.workflowState != azureiotprovisioningWF_STATE_COMPLETE )
+    else if( xAzureIoTProvisioningClientHandle->_internal.workflowState != azureiotprovisioningWF_STATE_COMPLETE )
     {
         AZLogError( ( "Provisioning client state is not in complete state" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
