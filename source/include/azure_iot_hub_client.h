@@ -30,13 +30,13 @@ typedef enum AzureIoTHubMessageType
 
 typedef enum AzureIoTHubClientError
 {
-    AZURE_IOT_HUB_CLIENT_SUCCESS = 0,          /*/< Success. */
-    AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT,     /*/< Input argument does not comply with the expected range of values. */
-    AZURE_IOT_HUB_CLIENT_PENDING,              /*/< The status of the operation is pending. */
-    AZURE_IOT_HUB_CLIENT_OUT_OF_MEMORY,        /*/< The system is out of memory. */
-    AZURE_IOT_HUB_CLIENT_INIT_FAILED,          /*/< The initialization failed. */
-    AZURE_IOT_HUB_CLIENT_SUBACK_WAIT_TIMEOUT,  /*/< There was timeout while waiting for SUBACK. */
-    AZURE_IOT_HUB_CLIENT_FAILED,               /*/< There was a failure. */
+    AZURE_IOT_HUB_CLIENT_SUCCESS = 0,         /*/< Success. */
+    AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT,    /*/< Input argument does not comply with the expected range of values. */
+    AZURE_IOT_HUB_CLIENT_PENDING,             /*/< The status of the operation is pending. */
+    AZURE_IOT_HUB_CLIENT_OUT_OF_MEMORY,       /*/< The system is out of memory. */
+    AZURE_IOT_HUB_CLIENT_INIT_FAILED,         /*/< The initialization failed. */
+    AZURE_IOT_HUB_CLIENT_SUBACK_WAIT_TIMEOUT, /*/< There was timeout while waiting for SUBACK. */
+    AZURE_IOT_HUB_CLIENT_FAILED,              /*/< There was a failure. */
 } AzureIoTHubClientResult_t;
 
 typedef enum AzureIoTHubMessageStatus

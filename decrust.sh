@@ -11,3 +11,4 @@ uncrustify -c ./libraries/FreeRTOS/tools/uncrustify.cfg --no-backup --replace ./
 uncrustify -c ./libraries/FreeRTOS/tools/uncrustify.cfg --no-backup --replace ./source/azure_iot.c
 uncrustify -c ./libraries/FreeRTOS/tools/uncrustify.cfg --no-backup --replace ./source/azure_iot_hub_client.c
 uncrustify -c ./libraries/FreeRTOS/tools/uncrustify.cfg --no-backup --replace ./source/azure_iot_provisioning_client.c
+uncrustify -c ./libraries/FreeRTOS/tools/uncrustify.cfg --no-backup --replace ./demo/sample_azure_iot_embedded_sdk/DemoTasks/sample_azure_iot_embedded_sdk.c

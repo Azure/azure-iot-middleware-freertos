@@ -182,6 +182,6 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_HubGet( AzureIoTPr
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
 AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                               uint32_t  * pulExtendedErrorCode );
+                                                                               uint32_t * pulExtendedErrorCode );
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */
