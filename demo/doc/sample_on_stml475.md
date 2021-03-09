@@ -24,7 +24,7 @@ In [demo_config.h](../common/demo_config.h), update the following values for eit
 
 ## Update Device WiFi Credentials
 
-Update the WiFi SSID and password in [main.c](../../Common/stm32l475/main.c)
+Update the WiFi SSID and password in [main.c](../Common/stm32l475/main.c)
 
 - `WIFI_SSID`
 - `WIFI_PASSWORD`
@@ -34,7 +34,7 @@ Update the WiFi SSID and password in [main.c](../../Common/stm32l475/main.c)
 
 You can right click on the project to build and then select the bug icon in the top toolbar to debug the sample. You can then view the output from the device on the serial port by finding the correct COM port of your device and setting the BAUD to `115200`.
 
-![img](../../../doc/img/cube_demo.png)
+![img](../../doc/img/cube_demo.png)
 
 ## Generating a Cert
 
@@ -57,7 +57,7 @@ openssl x509 -noout -fingerprint -in device_ec_cert.pem | sed 's/://g'| sed 's/\
 
 There is a program [here](https://www.segger.com/downloads/jlink#STLink_Reflash) which can help you switch between ST-Link and J-Link debugging for your STM32L475. You can also feel free to switch debuggers in the STCube IDE by toggling at `Run -> Debug Configurations -> Debugger -> Debug Probe`
 
-![img](../../../doc/img/cube-debug.png)
+![img](../../doc/img/cube-debug.png)
 
 > WiFi issues in general
 
