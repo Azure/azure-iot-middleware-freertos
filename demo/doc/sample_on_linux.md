@@ -17,7 +17,7 @@
 1. Clone current repository.
 
     ```bash
-    git clone https://github.com/hihigupt/azure_freertos_middleware.git
+    git clone https://github.com/Azure/azure-iot-middleware-freertos.git
     ```
 
 1. Enter *demo/sample_azure_iot_embedded_sdk/linux*, and edit demo_config.h to point to your IoTHub endpoint.

@@ -13,7 +13,7 @@
 1. Open the [demo_config.h](./demo/sample_azure_iot_embedded_sdk/demo_config.h), comment out `democonfigENABLE_DPS_SAMPLE` and update the `democonfigDEVICE_ID`, `democonfigHOSTNAME`. 
 1. For authentication you can use `democonfigDEVICE_SYMMETRIC_KEY` for symmetric key or client side certificate `democonfigCLIENT_CERTIFICATE_PEM`, and `democonfigCLIENT_PRIVATE_KEY_PEM`. If you need help generating a cert and private key, see the below [Generating a Cert](#generating-a-cert) section.
 1. Build the solution and run.
-1. If the demo fails due to an unchosen network configuration, choose the appropriate one from the list in the terminal and change the value [here](https://github.com/hihigupt/azure_freertos_middleware/blob/e3bcba92e15d47f7f184ef3648782bf84bb84c7b/demo/sample_azure_iot_embedded_sdk/FreeRTOSConfig.h#L138).
+1. If the demo fails due to an unchosen network configuration, choose the appropriate one from the list in the terminal and change the value [here](https://github.com/Azure/azure-iot-middleware-freertos/blob/3b94096a1ec71be44833565db0e9efb7d150da41/demo/sample_azure_iot_embedded_sdk/windows/FreeRTOSConfig.h#L138).
 
 ## Generating a Cert
 
