@@ -24,13 +24,12 @@ static const uint8_t ucEndpoint[] = "unittest.azure-devices-provisioning.net";
 static const uint8_t ucIdScope[] = "0ne000A247E";
 static const uint8_t ucRegistrationId[] = "UnitTest";
 static const uint8_t ucSymmetricKey[] = "ABC12345";
-static uint8_t ucBuffer[100];
+static uint8_t ucBuffer[1024];
 static AzureIoTTransportInterface_t xTransportInterface = {
     .pNetworkContext = NULL,
     .send = (AzureIoTTransportSend_t)0xA5A5A5A5,
     .recv = (AzureIoTTransportRecv_t)0xACACACAC
 };
-static uint32_t uMallocAllocationCount = 0;
 static const uint8_t ucAssignedHubResponse[] = "{ \
     \"operationId\":\"4.002305f54fc89692.b1f11200-8776-4b5d-867b-dc21c4b59c12\",\"status\":\"assigned\",\"registrationState\": \
          {\"registrationId\":\"reg_id\",\"createdDateTimeUtc\":\"2019-12-27T19:51:41.6630592Z\",\"assignedHub\":\"test.azure-iothub.com\", \
@@ -55,35 +54,11 @@ static uint64_t ulUnixTime = 0;
 /*-----------------------------------------------------------*/
 
 TickType_t xTaskGetTickCount(void);
-void * pvPortMalloc(size_t xWantedSize);
-void vPortFree(void * pv);
 int get_all_tests();
 
 TickType_t xTaskGetTickCount(void)
 {
     return 1;
-}
-
-void * pvPortMalloc(size_t xWantedSize)
-{
-    void * ret = ((void *)mock());
-
-    if (ret)
-    {
-        uMallocAllocationCount++;
-        ret = malloc(xWantedSize);
-    }
-
-    return ret;
-}
-
-void vPortFree(void * pv)
-{
-    if (pv)
-    {
-        uMallocAllocationCount--;
-        free(pv);
-    }
 }
 
 static uint64_t prvGetUnixTime(void)
@@ -166,7 +141,6 @@ static void prvGenerateFailureResponse(AzureIoTMQTTPublishInfo_t * pxPublishInfo
 static void prvSetupTestProvisioningClient(AzureIoTProvisioningClient_t * pxTestProvisioningClient)
 {
     AzureIoTProvisioningClientOptions_t xProvisioningOptions = {0};
-    uMallocAllocationCount = 0;
 
     will_return(AzureIoTMQTT_Init, AzureIoTMQTTSuccess);
     assert_int_equal(AzureIoTProvisioningClient_Init(pxTestProvisioningClient,
@@ -248,6 +222,16 @@ static void testAzureIoTProvisioningClient_Init_Failure(void ** state)
                                                          NULL, ucBuffer, sizeof(ucBuffer),
                                                          prvGetUnixTime,
                                                          NULL),
+                         AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
+
+    /* Fail when smaller buffer is passed */
+    assert_int_not_equal(AzureIoTProvisioningClient_Init(&xTestProvisioningClient,
+                                                         &ucEndpoint[0], sizeof(ucEndpoint),
+                                                         &ucIdScope[0], sizeof(ucIdScope),
+                                                         &ucRegistrationId[0], sizeof(ucRegistrationId),
+                                                         NULL, ucBuffer, azureiotUSERNAME_MAX,
+                                                         prvGetUnixTime,
+                                                         &xTransportInterface),
                          AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     /* Fail init when AzureIoTMQTT_Init fails */
@@ -333,15 +317,12 @@ static void testAzureIoTProvisioningClient_Register_ConnectFailure(void ** state
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTProvisioningClientResult_t ret;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTServerRefused);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -350,23 +331,18 @@ static void testAzureIoTProvisioningClient_Register_ConnectFailure(void ** state
     assert_int_not_equal(ret, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 static void testAzureIoTProvisioningClient_Register_SubscribeFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTProvisioningClientResult_t ret;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -381,23 +357,18 @@ static void testAzureIoTProvisioningClient_Register_SubscribeFailure(void ** sta
     assert_int_not_equal(ret, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 static void testAzureIoTProvisioningClient_Register_SubscribeAckFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTProvisioningClientResult_t ret;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -417,23 +388,18 @@ static void testAzureIoTProvisioningClient_Register_SubscribeAckFailure(void ** 
     assert_int_not_equal(ret, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 static void testAzureIoTProvisioningClient_Register_PublishFailure(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTProvisioningClientResult_t ret;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -462,8 +428,6 @@ static void testAzureIoTProvisioningClient_Register_PublishFailure(void ** state
     assert_int_not_equal(ret, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void ** state)
@@ -471,15 +435,12 @@ static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void ** 
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t publishInfo;
     AzureIoTProvisioningClientResult_t ret;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -508,8 +469,6 @@ static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void ** 
 
     /* Registration response */
     prvGenerateFailureResponse(&publishInfo);
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     assert_int_equal(AzureIoTProvisioningClient_Register(&xTestProvisioningClient, 0),
                      AZURE_IOT_PROVISIONING_CLIENT_PENDING);
 
@@ -520,8 +479,6 @@ static void testAzureIoTProvisioningClient_Register_RegistrationFailure(void ** 
     assert_int_not_equal(ret, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 static void testAzureIoTProvisioningClient_Register_QueryFailure(void ** state)
@@ -529,15 +486,12 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure(void ** state)
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t publishInfo;
     AzureIoTProvisioningClientResult_t ret;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -566,8 +520,6 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure(void ** state)
 
     /* Registration response */
     prvGenerateGoodResponse(&publishInfo, 1);
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     assert_int_equal(AzureIoTProvisioningClient_Register(&xTestProvisioningClient, 0),
                      AZURE_IOT_PROVISIONING_CLIENT_PENDING);
 
@@ -591,23 +543,18 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure(void ** state)
     assert_int_not_equal(ret, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 static void testAzureIoTProvisioningClient_Register_Success(void ** state)
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t publishInfo;
-    uMallocAllocationCount = 0;
 
     (void)state;
 
     prvSetupTestProvisioningClient(&xTestProvisioningClient);
 
     /* Connect */
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     will_return(prvHmacFunction, 0);
     will_return(AzureIoTMQTT_Connect, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
@@ -636,8 +583,6 @@ static void testAzureIoTProvisioningClient_Register_Success(void ** state)
 
     /* Registration response */
     prvGenerateGoodResponse(&publishInfo, 1);
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     assert_int_equal(AzureIoTProvisioningClient_Register(&xTestProvisioningClient, 0),
                      AZURE_IOT_PROVISIONING_CLIENT_PENDING);
 
@@ -661,8 +606,6 @@ static void testAzureIoTProvisioningClient_Register_Success(void ** state)
 
     /* Restration response */
     prvGenerateGoodResponse(&publishInfo, 0);
-    will_return(pvPortMalloc, !NULL);
-    will_return(pvPortMalloc, !NULL);
     assert_int_equal(AzureIoTProvisioningClient_Register(&xTestProvisioningClient, 0),
                      AZURE_IOT_PROVISIONING_CLIENT_PENDING);
 
@@ -672,8 +615,6 @@ static void testAzureIoTProvisioningClient_Register_Success(void ** state)
                      AZURE_IOT_PROVISIONING_CLIENT_SUCCESS);
 
     AzureIoTProvisioningClient_Deinit(&xTestProvisioningClient);
-
-    assert_int_equal(uMallocAllocationCount, 0);
 }
 
 int get_all_tests()

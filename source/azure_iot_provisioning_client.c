@@ -43,6 +43,8 @@
 #define azureiotprovisioningWF_STATE_WAITING           ( 0x7 )
 #define azureiotprovisioningWF_STATE_COMPLETE          ( 0x8 )
 
+#define azureMAX( a, b )                                ( ( a ) > ( b ) ? ( a ) : ( b ) )
+
 /*-----------------------------------------------------------*/
 
 /**
@@ -140,28 +142,25 @@ static void prvAzureIoTProvisioningClientConnect( AzureIoTProvisioningClientHand
         return;
     }
 
-    if( ( xConnectInfo.pUserName = ( char * ) pvPortMalloc( azureiotUSERNAME_MAX ) ) == NULL )
-    {
-        AZLogError( ( "Failed to allocate memory\r\n" ) );
-        ret = AZURE_IOT_PROVISIONING_CLIENT_OUT_OF_MEMORY;
-    }
-    else if( az_result_failed( res = az_iot_provisioning_client_get_user_name( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
-                                                                               ( char * ) xConnectInfo.pUserName,
-                                                                               azureiotUSERNAME_MAX, &mqtt_user_name_length ) ) )
+    xConnectInfo.pUserName = ( const char * ) xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer;
+    xConnectInfo.pPassword =  xConnectInfo.pUserName + azureiotUSERNAME_MAX;
+
+    if( az_result_failed( res = az_iot_provisioning_client_get_user_name( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
+                                                                          ( char * ) xConnectInfo.pUserName,
+                                                                          azureiotUSERNAME_MAX, &mqtt_user_name_length ) ) )
     {
         AZLogError( ( "Failed to get username: %08x \r\n", res ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED;
     }
     /* Check if token refersh is set, then generate password */
     else if( ( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh ) &&
-             ( ( ( xConnectInfo.pPassword = ( char * ) pvPortMalloc( azureiotPASSWORD_MAX ) ) == NULL ) ||
-               ( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh( xAzureIoTProvisioningClientHandle,
-                                                                                                           xAzureIoTProvisioningClientHandle->_internal.getTimeFunction() + azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC,
-                                                                                                           xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key,
-                                                                                                           xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key_length,
-                                                                                                           ( uint8_t * ) xConnectInfo.pPassword,
-                                                                                                           azureiotPASSWORD_MAX,
-                                                                                                           &bytesCopied ) ) ) )
+             ( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_token_refresh( xAzureIoTProvisioningClientHandle,
+                                                                                                         xAzureIoTProvisioningClientHandle->_internal.getTimeFunction() + azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC,
+                                                                                                         xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key,
+                                                                                                         xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_symmetric_key_length,
+                                                                                                         ( uint8_t * ) xConnectInfo.pPassword,
+                                                                                                         azureiotPASSWORD_MAX,
+                                                                                                         &bytesCopied ) ) )
     {
         AZLogError( ( "Failed to generate auth token \r\n" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_FAILED;
@@ -193,16 +192,6 @@ static void prvAzureIoTProvisioningClientConnect( AzureIoTProvisioningClientHand
                          xAzureIoTProvisioningClientHandle->_internal.pEndpoint ) );
             ret = AZURE_IOT_PROVISIONING_CLIENT_SUCCESS;
         }
-    }
-
-    if( xConnectInfo.pUserName != NULL )
-    {
-        vPortFree( ( void * ) xConnectInfo.pUserName );
-    }
-
-    if( xConnectInfo.pPassword != NULL )
-    {
-        vPortFree( ( void * ) xConnectInfo.pPassword );
     }
 
     prvAzureIoTProvisioningClientUpdateState( xAzureIoTProvisioningClientHandle, ret );
@@ -272,16 +261,16 @@ static void prvAzureIoTProvisioningClientRequest( AzureIoTProvisioningClientHand
         if( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length == 0 )
         {
             core_result = az_iot_provisioning_client_register_get_publish_topic( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
-                                                                                 xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer,
-                                                                                 sizeof( xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer ),
+                                                                                 ( char * ) xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer,
+                                                                                 xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length,
                                                                                  &mqtt_topic_length );
         }
         else
         {
             core_result = az_iot_provisioning_client_query_status_get_publish_topic( &xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core,
                                                                                      xAzureIoTProvisioningClientHandle->_internal.register_response.operation_id,
-                                                                                     xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer,
-                                                                                     sizeof( xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer ),
+                                                                                     ( char * ) xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer,
+                                                                                     xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length,
                                                                                      &mqtt_topic_length );
         }
 
@@ -294,7 +283,7 @@ static void prvAzureIoTProvisioningClientRequest( AzureIoTProvisioningClientHand
         ( void ) memset( ( void * ) &xMQTTPublishInfo, 0x00, sizeof( xMQTTPublishInfo ) );
 
         xMQTTPublishInfo.qos = AzureIoTMQTTQoS0;
-        xMQTTPublishInfo.pTopicName = xAzureIoTProvisioningClientHandle->_internal.provisioning_topic_buffer;
+        xMQTTPublishInfo.pTopicName = ( const char * ) xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer;
         xMQTTPublishInfo.topicNameLength = ( uint16_t ) mqtt_topic_length;
         usPublishPacketIdentifier = AzureIoTMQTT_GetPacketId( &( xAzureIoTProvisioningClientHandle->_internal.xMQTTContext ) );
 
@@ -504,28 +493,29 @@ static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoT
 {
     if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_REQUESTING )
     {
-        vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload );
-        vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic );
-
-        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload =
-            ( uint8_t * ) pvPortMalloc( pPublishInfo->payloadLength );
-        xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic =
-            ( uint8_t * ) pvPortMalloc( pPublishInfo->topicNameLength );
-
-        if( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload &&
-            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic )
+        if( ( pPublishInfo->payloadLength + pPublishInfo->topicNameLength ) <=
+                xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length )
         {
+            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload =
+                xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer;
+            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length =
+                pPublishInfo->payloadLength;
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload,
                     pPublishInfo->pPayload, pPublishInfo->payloadLength );
-            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length = pPublishInfo->payloadLength;
+
+            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic =
+                xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload +
+                    xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length;
+            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length =
+                pPublishInfo->topicNameLength;
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic,
                     pPublishInfo->pTopicName, pPublishInfo->topicNameLength );
-            xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length = pPublishInfo->topicNameLength;
+
             prvAzureIoTProvisioningClientUpdateState( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_SUCCESS );
         }
         else
         {
-            prvAzureIoTProvisioningClientUpdateState( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_FAILED );
+            prvAzureIoTProvisioningClientUpdateState( xAzureIoTProvisioningClientHandle, AZURE_IOT_PROVISIONING_CLIENT_OUT_OF_MEMORY );
         }
     }
 }
@@ -666,9 +656,23 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         AZLogError( ( "Provisioning initialization failed: Invalid argument" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
+    else if ( ( ulBufferLength < azureiotTOPIC_MAX ) ||
+              ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) ||
+              ( ulBufferLength < azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX ) )
+    {
+        AZLogError( ( "Provisioning initialize failed: Not enough memory passed \r\n" ) );
+        ret = AZURE_IOT_PROVISIONING_CLIENT_OUT_OF_MEMORY;
+    }
     else
     {
         memset( xAzureIoTProvisioningClientHandle, 0, sizeof( AzureIoTProvisioningClient_t ) );
+
+        /* Setup scratch buffer to be used by middleware */
+        xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length =
+            azureMAX( azureMAX( ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ), azureiotTOPIC_MAX ), azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX );
+        xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer = pucBuffer;
+        pucBuffer += xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length;
+        ulBufferLength -= xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length;
 
         xAzureIoTProvisioningClientHandle->_internal.pEndpoint = pucEndpoint;
         xAzureIoTProvisioningClientHandle->_internal.endpointLength = ulEndpointLength;
@@ -721,8 +725,6 @@ void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzur
     }
     else
     {
-        vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload );
-        vPortFree( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic );
         xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload = NULL;
         xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic = NULL;
     }
