@@ -52,16 +52,3 @@ add_cmocka_test(azure_iot_provisioning_client_ut
   INCLUDE_DIRECTORIES
     ${CMOCKA_INCLUDE_DIR}
 )
-
-# list of unit tests
-# set(unit_tests
-#   azure_iot_hub_client_ut
-#   azure_iot_provisioning_client_ut)
-
-# foreach(test ${unit_tests})
-#   target_link_options(
-#     ${test}
-#       PRIVATE
-#         -Wl,--gc-sections)
-#   add_test(${test} ${test})
-# endforeach()
