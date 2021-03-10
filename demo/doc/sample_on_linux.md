@@ -1,6 +1,6 @@
 # Sample on Linux
 
-1. Install following softwares.
+## Download Programs
 
     ```bash
     sudo dpkg --add-architecture i386
@@ -14,21 +14,28 @@
         npm
     ```
 
-1. Clone current repository.
+## Sample Authentication and Configuration
 
-    ```bash
-    git clone https://github.com/Azure/azure-iot-middleware-freertos.git
-    ```
+Authentication values will be updated in the [demo_config.h](./demo/sample_azure_iot_embedded_sdk/demo_config.h) file.
 
-1. Enter *demo/sample_azure_iot_embedded_sdk/linux*, and edit demo_config.h to point to your IoTHub endpoint.
+For either Provisioning or IoT Hub samples, SAS key and X509 authentication are supported. Update either `democonfigDEVICE_SYMMETRIC_KEY` for symmetric key or client side certificate `democonfigCLIENT_CERTIFICATE_PEM` and `democonfigCLIENT_PRIVATE_KEY_PEM` for certificates. **Note: only one auth mechanism can be used at a time and the other unused macros should be commmented out.**
 
-    ```bash
-    cd demo/sample_azure_iot_embedded_sdk/linux
-    vim ../common/demo_config.h
-    make
-    ```
+If you need help generating a cert and private key, see the below [Generating a Cert](#generating-a-cert) section.
 
-1. Create virtual interface with dhcp (if not present).
+If you would like to use Device Provisioning, update the following values:
+
+- `democonfigENDPOINT`
+- `democonfigID_SCOPE`
+- `democonfigREGISTRATION_ID`
+
+If you would like to connect straight to IoT Hub, comment out `democonfigENABLE_DPS_SAMPLE` and update the following values:
+
+- `democonfigDEVICE_ID`
+- `democonfigHOSTNAME`
+
+## Virtual Interface
+
+Create virtual interface with dhcp (if not present).
 
     ```bash
     #! /bin/bash
@@ -69,10 +76,9 @@
     cat /etc/default/isc-dhcp-server
     ```
 
-1. Run sample with interface (veth1).
-*Note: edit FreeRTOSConfig.h  and configNETWORK_INTERFACE_TO_USE to index of veth1. User can find index by running sample once and it print index of all the interface.*
+## Run sample with interface (veth1)
 
-1. Run.
+*Note: edit FreeRTOSConfig.h  and configNETWORK_INTERFACE_TO_USE to index of veth1. User can find index by running sample once and it prints the index of all the interfaces.*
 
     ```bash
     sudo ./build/sample_azure_iot_embedded_sdk
@@ -93,4 +99,4 @@ If you need a working x509 certificate to get the samples working please see the
     openssl x509 -noout -fingerprint -in device_ec_cert.pem | sed 's/://g'| sed 's/\(SHA1 Fingerprint=\)//g' | tee fingerprint.txt
     ```
 
-    This will output a self signed client certificate with a private key. The `fingerprint.txt` is for your convenience when adding the device in IoT Hub and it asks for a Primary and Secondary Fingerprint. This value can be used for both fields.
+This will output a self signed client certificate with a private key. The `fingerprint.txt` is for your convenience when adding the device in IoT Hub and it asks for a Primary and Secondary Fingerprint. This value can be used for both fields.
