@@ -193,27 +193,27 @@ static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
         if( step == 0 )
         {
             /* Use first 6 bits of name character for index.  */
-            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( uint32_t ) name[ i ] ) >> 2 ];
+            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( uint8_t ) name[ i ] ) >> 2 ];
             step++;
         }
         else if( step == 1 )
         {
             /* Use last 2 bits of name character and first 4 bits of next name character for index.  */
-            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( ( ( uint32_t ) name[ i ] ) & 0x3 ) << 4 ) | ( ( ( uint32_t ) name[ i + 1 ] ) >> 4 ) ];
+            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( ( ( uint8_t ) name[ i ] ) & 0x3 ) << 4 ) | ( ( ( uint8_t ) name[ i + 1 ] ) >> 4 ) ];
             i++;
             step++;
         }
         else if( step == 2 )
         {
             /* Use last 4 bits of name character and first 2 bits of next name character for index.  */
-            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( ( ( uint32_t ) name[ i ] ) & 0xF ) << 2 ) | ( ( ( uint32_t ) name[ i + 1 ] ) >> 6 ) ];
+            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( ( ( uint8_t ) name[ i ] ) & 0xF ) << 2 ) | ( ( ( uint8_t ) name[ i + 1 ] ) >> 6 ) ];
             i++;
             step++;
         }
         else /* Step 3 */
         {
             /* Use last 6 bits of name character for index.  */
-            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( ( uint32_t ) name[ i ] ) & 0x3F ) ];
+            base64name[ j++ ] = ( char ) _azure_iot_base64_array[ ( ( ( uint8_t ) name[ i ] ) & 0x3F ) ];
             i++;
             step = 0;
         }
