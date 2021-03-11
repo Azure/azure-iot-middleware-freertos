@@ -5,31 +5,35 @@
 #define AZURE_IOT_CONFIG_DEFAULT_H
 
 #ifndef azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
-    #define azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC    ( 60 * 60U )
+    #define azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC        ( 60 * 60U )
 #endif
 
 #ifndef azureiotKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiotKEEP_ALIVE_TIMEOUT_SECONDS      ( 60U )
+    #define azureiotKEEP_ALIVE_TIMEOUT_SECONDS          ( 60U )
 #endif
 
 #ifndef azureiotCONNACK_RECV_TIMEOUT_MS
-    #define azureiotCONNACK_RECV_TIMEOUT_MS         ( 1000U )
+    #define azureiotCONNACK_RECV_TIMEOUT_MS             ( 1000U )
 #endif
 
 #ifndef azureiotSUBACK_WAIT_INTERVAL_MS
-    #define azureiotSUBACK_WAIT_INTERVAL_MS         ( 10U )
+    #define azureiotSUBACK_WAIT_INTERVAL_MS             ( 10U )
 #endif
 
 #ifndef azureiotUSERNAME_MAX
-    #define azureiotUSERNAME_MAX                    ( 128U )
+    #define azureiotUSERNAME_MAX                        ( 128U )
 #endif
 
 #ifndef azureiotPASSWORD_MAX
-    #define azureiotPASSWORD_MAX                    ( 256U )
+    #define azureiotPASSWORD_MAX                        ( 256U )
 #endif
 
 #ifndef azureiotTOPIC_MAX
-    #define azureiotTOPIC_MAX                       ( 128U )
+    #define azureiotTOPIC_MAX                           ( 128U )
+#endif
+
+#ifndef azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX
+    #define azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX   ( 512U )
 #endif
 
 /**
@@ -50,7 +54,7 @@
  * application-specific logging implementation that supports error logging.
  *
  * @note This logging macro is called in the AzureIoT Middleware library with parameters wrapped in
- * double parentheses to be ISO C89/C90 standard compliant. 
+ * double parentheses to be ISO C89/C90 standard compliant.
  *
  * <b>Default value</b>: Error logging is turned off, and no code is generated for calls
  * to the macro in the AzureIoT Middleware library on compilation.
@@ -69,8 +73,8 @@
  * application-specific logging implementation that supports warning logging.
  *
  * @note This logging macro is called in the AzureIoT Middleware library with parameters wrapped in
- * double parentheses to be ISO C89/C90 standard compliant. 
- * 
+ * double parentheses to be ISO C89/C90 standard compliant.
+ *
  * <b>Default value</b>: Warning logs are turned off, and no code is generated for calls
  * to the macro in the AzureIoT Middleware library on compilation.
  */
@@ -89,7 +93,7 @@
  *
  * @note This logging macro is called in the AzureIoT Middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
- * 
+ *
  * <b>Default value</b>: Info logging is turned off, and no code is generated for calls
  * to the macro in the AzureIoT Middleware library on compilation.
  */
