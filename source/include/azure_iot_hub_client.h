@@ -162,7 +162,8 @@ typedef struct AzureIoTHubClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        char iot_hub_client_topic_buffer[ azureiotTOPIC_MAX ];
+        uint8_t * iot_hub_client_scratch_buffer;
+        uint32_t iot_hub_client_scratch_buffer_length;
         az_iot_hub_client iot_hub_client_core;
 
         const uint8_t * hostname;
