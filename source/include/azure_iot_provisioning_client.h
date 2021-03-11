@@ -67,6 +67,8 @@ typedef struct AzureIoTProvisioningClient
 
         const uint8_t * azure_iot_provisioning_client_symmetric_key;
         uint32_t azure_iot_provisioning_client_symmetric_key_length;
+        const uint8_t * azure_iot_provisioning_client_registration_payload;
+        uint32_t azure_iot_provisioning_client_registration_payload_length;
 
         uint32_t ( * azure_iot_provisioning_client_token_refresh )( struct AzureIoTProvisioningClient * xAzureIoTProvisioningClientHandle,
                                                                     uint64_t ullExpiryTimeSecs,
@@ -184,5 +186,17 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_HubGet( AzureIoTPr
  */
 AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
                                                                                uint32_t * pulExtendedErrorCode );
+
+/**
+ * @brief Set registration payload
+ * @details This routine sets registration payload, which is JSON object.
+ *
+ * @param[in] prov_client_ptr A pointer to a #NX_AZURE_IOT_PROVISIONING_CLIENT.
+ * @param[in] pucPayload A pointer to registration payload.
+ * @param[in] ulPayloadLength Length of `payload`. Does not include the `NULL` terminator.
+ * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
+ */
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_RegistrationPayloadSet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+                                                                                      const uint8_t * pucPayload, uint32_t ulPayloadLength );
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */
