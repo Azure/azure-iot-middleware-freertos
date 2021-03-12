@@ -86,4 +86,5 @@ target_compile_options(
               -Wconversion
               -Wpointer-arith
               -Wshadow
+              -Wlogical-op
               -Wfloat-equal )
