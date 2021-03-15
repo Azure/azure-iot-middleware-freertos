@@ -36,6 +36,10 @@
     #define azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX   ( 512U )
 #endif
 
+#ifndef azureiotPROVISIONING_REQUEST_PAYLOAD_MAX
+    #define azureiotPROVISIONING_REQUEST_PAYLOAD_MAX    ( 512U )
+#endif
+
 /**
  * @brief Milliseconds per second.
  */
