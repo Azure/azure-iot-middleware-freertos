@@ -126,9 +126,10 @@ AzureIoTError_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * px
  * @param ulMessageSize The length of \p pucMessage.
  * @param pucBuffer An intermediary buffer to put the base64 decoded key.
  * @param ulBufferLength The length of \p pucBuffer.
- * @param ppucOutput The buffer into which the resulting HMAC256 hashed, base64 encoded message will
+ * @param pucOutput The buffer into which the resulting HMAC256 hashed, base64 encoded message will
  * be placed.
- * @param pulOutputLength The output length of \p ppucOutput.
+ * @param ulOutputSize Size of \p pucOutput.
+ * @param pulOutputLength The output length of \p pucOutput.
  * @return An #AzureIoTError_t with the result of the operation.
  */
 AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
@@ -138,7 +139,8 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
                                               uint32_t ulMessageSize,
                                               uint8_t * pucBuffer,
                                               uint32_t ulBufferLength,
-                                              uint8_t ** ppucOutput,
+                                              uint8_t * pucOutput,
+                                              uint32_t ulOutputSize,
                                               uint32_t * pulOutputLength );
 
 #endif /* AZURE_IOT_H */

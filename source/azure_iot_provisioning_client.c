@@ -597,12 +597,12 @@ static uint32_t prvAzureIoTProvisioningClientTokenGet( AzureIoTProvisioningClien
                                                        uint32_t sasBufferLen,
                                                        uint32_t * pSaSLength )
 {
-    uint8_t buffer[ 512 ];
+    uint8_t * pucHMACBuffer;
+    uint32_t ulHMACBufferLength = 48;
     az_span span = az_span_create( pSASBuffer, ( int32_t ) sasBufferLen );
-    uint8_t * pOutput;
-    uint32_t outputLen;
     az_result core_result;
     uint32_t bytesUsed;
+    uint32_t ulBufferLeft;
     size_t length;
 
     core_result = az_iot_provisioning_client_sas_get_signature( &( xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core ),
@@ -615,19 +615,28 @@ static uint32_t prvAzureIoTProvisioningClientTokenGet( AzureIoTProvisioningClien
     }
 
     bytesUsed = ( uint32_t ) az_span_size( span );
+    ulBufferLeft = sasBufferLen - bytesUsed;
 
+    if ( ulBufferLeft < ulHMACBufferLength )
+    {
+        AZLogError( ( "IoTProvisioning token generation failed with out of memory" ) );
+        return AZURE_IOT_PROVISIONING_CLIENT_OUT_OF_MEMORY;
+    }
+
+    ulBufferLeft -= ulHMACBufferLength;
+    pucHMACBuffer = pSASBuffer + sasBufferLen - ulHMACBufferLength;
     if( AzureIoT_Base64HMACCalculate( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_hmac_function,
                                       pKey, keyLen, pSASBuffer, bytesUsed,
-                                      buffer, sizeof( buffer ), &pOutput, &outputLen ) )
+                                      pSASBuffer + bytesUsed, ulBufferLeft, pucHMACBuffer, ulHMACBufferLength, &bytesUsed ) )
     {
         AZLogError( ( "IoTProvisioning failed to encoded hash" ) );
         return AZURE_IOT_PROVISIONING_CLIENT_FAILED;
     }
 
-    span = az_span_create( pOutput, ( int32_t ) outputLen );
+    span = az_span_create( pucHMACBuffer, ( int32_t ) bytesUsed );
     core_result = az_iot_provisioning_client_sas_get_password( &( xAzureIoTProvisioningClientHandle->_internal.iot_dps_client_core ),
                                                                span, expiryTimeSecs, AZ_SPAN_EMPTY,
-                                                               ( char * ) pSASBuffer, sasBufferLen, &length );
+                                                               ( char * ) pSASBuffer, sasBufferLen - ulHMACBufferLength, &length );
 
     if( az_result_failed( core_result ) )
     {
