@@ -263,12 +263,12 @@ static uint32_t prvAzureIoTHubClientTokenGet( struct AzureIoTHubClient * xAzureI
                                               uint32_t sasBufferLen,
                                               uint32_t * pSaSLength )
 {
-    uint8_t buffer[ 512 ];
+    uint8_t * pucHMACBuffer;
+    uint32_t ulHMACBufferLength = 48;
     az_span span = az_span_create( pSASBuffer, ( int32_t ) sasBufferLen );
-    uint8_t * pOutput;
-    uint32_t outputLen;
     az_result core_result;
     uint32_t bytesUsed;
+    uint32_t ulBufferLeft;
     size_t length;
 
     core_result = az_iot_hub_client_sas_get_signature( &( xAzureIoTHubClientHandle->_internal.iot_hub_client_core ),
@@ -281,19 +281,28 @@ static uint32_t prvAzureIoTHubClientTokenGet( struct AzureIoTHubClient * xAzureI
     }
 
     bytesUsed = ( uint32_t ) az_span_size( span );
+    ulBufferLeft = sasBufferLen - bytesUsed;
 
+    if ( ulBufferLeft < ulHMACBufferLength )
+    {
+        AZLogError( ( "IoTHub token generation failed with out of memory" ) );
+        return AZURE_IOT_HUB_CLIENT_OUT_OF_MEMORY;
+    }
+
+    ulBufferLeft -= ulHMACBufferLength;
+    pucHMACBuffer = pSASBuffer + sasBufferLen - ulHMACBufferLength;
     if( AzureIoT_Base64HMACCalculate( xAzureIoTHubClientHandle->_internal.azure_iot_hub_client_hmac_function,
                                       pKey, keyLen, pSASBuffer, bytesUsed,
-                                      buffer, sizeof( buffer ), &pOutput, &outputLen ) )
+                                      pSASBuffer + bytesUsed, ulBufferLeft, pucHMACBuffer, ulHMACBufferLength, &bytesUsed ) )
     {
         AZLogError( ( "IoTHub failed to encoded hash" ) );
         return AZURE_IOT_HUB_CLIENT_FAILED;
     }
 
-    span = az_span_create( pOutput, ( int32_t ) outputLen );
+    span = az_span_create( pucHMACBuffer, ( int32_t ) bytesUsed );
     core_result = az_iot_hub_client_sas_get_password( &( xAzureIoTHubClientHandle->_internal.iot_hub_client_core ),
                                                       expiryTimeSecs, span, AZ_SPAN_EMPTY,
-                                                      ( char * ) pSASBuffer, sasBufferLen, &length );
+                                                      ( char * ) pSASBuffer, sasBufferLen - ulHMACBufferLength, &length );
 
     if( az_result_failed( core_result ) )
     {

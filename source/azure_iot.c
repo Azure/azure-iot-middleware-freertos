@@ -348,21 +348,20 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
                                               uint32_t ulMessageSize,
                                               uint8_t * pucBuffer,
                                               uint32_t ulBufferLength,
-                                              uint8_t ** ppucOutput,
+                                              uint8_t * pucOutput,
+                                              uint32_t ulOutputSize,
                                               uint32_t * pulOutputLength )
 {
     AzureIoTError_t status;
     uint8_t * hash_buf;
     uint32_t hash_buf_size = 33;
-    char * encoded_hash_buf;
-    uint32_t encoded_hash_buf_size = 48;
     uint32_t binary_key_buf_size;
 
     if( ( xAzureIoTHMACFunction == NULL ) ||
         ( pucKey == NULL ) || ( ulKeySize == 0 ) ||
         ( pucMessage == NULL ) || ( ulMessageSize == 0 ) ||
         ( pucBuffer == NULL ) || ( ulBufferLength == 0 ) ||
-        ( ppucOutput == NULL ) || ( pulOutputLength == NULL ) )
+        ( pucOutput == NULL ) || ( pulOutputLength == NULL ) )
     {
         AZLogError( ( "AzureIoT_Base64HMACCalculate failed: Invalid argument \r\n" ) );
         return AZURE_IOT_INVALID_ARGUMENT;
@@ -379,12 +378,13 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
 
     ulBufferLength -= binary_key_buf_size;
 
-    if( ( hash_buf_size + encoded_hash_buf_size ) > ulBufferLength )
+    if( hash_buf_size > ulBufferLength )
     {
         return AZURE_IOT_STATUS_OOM;
     }
 
     hash_buf = pucBuffer + binary_key_buf_size;
+    memset( hash_buf, 0, hash_buf_size );
 
     if( xAzureIoTHMACFunction( pucBuffer, binary_key_buf_size,
                                pucMessage, ( uint32_t ) ulMessageSize,
@@ -393,22 +393,15 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
         return AZURE_IOT_FAILED;
     }
 
-    hash_buf_size = 33;
-    ulBufferLength -= hash_buf_size;
-    encoded_hash_buf = ( char * ) ( hash_buf + hash_buf_size );
-
-    /* Additional space is required by encoder.  */
-    hash_buf[ hash_buf_size - 1 ] = 0;
-    status = prvAzureIoTBase64Encode( hash_buf, hash_buf_size - 1,
-                                      encoded_hash_buf, encoded_hash_buf_size );
+    status = prvAzureIoTBase64Encode( hash_buf, hash_buf_size,
+                                      ( char * ) pucOutput, ulOutputSize );
 
     if( status )
     {
         return status;
     }
 
-    *ppucOutput = ( uint8_t * ) ( encoded_hash_buf );
-    *pulOutputLength = ( uint32_t ) strlen( encoded_hash_buf );
+    *pulOutputLength = ( uint32_t ) strlen( ( char * )pucOutput );
 
     return AZURE_IOT_SUCCESS;
 }
