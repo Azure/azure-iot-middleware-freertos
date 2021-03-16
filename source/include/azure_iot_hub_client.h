@@ -4,6 +4,8 @@
 /**
  * @file azure_iot_hub_client.h
  *
+ * @brief The middleware IoT Hub Client used to connect a device to Azure IoT Hub.
+ *
  */
 
 #ifndef AZURE_IOT_HUB_CLIENT_H
@@ -101,7 +103,7 @@ typedef struct AzureIoTHubClientTwinResponse
     const void * pvMessagePayload;            /**< The pointer to the message payload. */
     uint32_t ulPayloadLength;                 /**< The length of the message payload. */
 
-    uint32_t ulRequestId;                     /**< request id. */
+    uint32_t ulRequestId;                     /**< The request id for the twin response. */
 
     AzureIoTHubMessageStatus_t messageStatus; /**< The operation status. */
 
@@ -147,7 +149,7 @@ typedef struct AzureIoTHubClientOptions
     const uint8_t * pucModuleId;  /**< The module id to use for this device. */
     uint32_t ulModuleIdLength;    /**< The length of the module id. */
 
-    const uint8_t * pucModelId;   /**< The model ID used to identify the capabilities of a device based on the Digital Twin document. */
+    const uint8_t * pucModelId;   /**< The model id used to identify the capabilities of a device based on the Digital Twin document. */
     uint32_t ulModelIdLength;     /**< The length of the model id. */
 
     const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
@@ -242,7 +244,7 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandl
  * @param[in] xHmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SymmetricKeySet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                              const uint8_t * pucSymmetricKey,
                                                              uint32_t ulSymmetricKeyLength,
                                                              AzureIoTGetHMACFunc_t xHmacFunction );
