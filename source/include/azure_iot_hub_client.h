@@ -70,10 +70,10 @@ typedef enum AzureIoTHubMessageStatus
  */
 typedef struct AzureIoTHubClientCloudMessageRequest
 {
-    const void * pvMessagePayload;            /*/< The pointer to the message payload. */
-    uint32_t ulPayloadLength;                 /*/< The length of the message payload. */
+    const void * pvMessagePayload;           /*/< The pointer to the message payload. */
+    uint32_t ulPayloadLength;                /*/< The length of the message payload. */
 
-    AzureIoTMessageProperties_t properties; /*/< The bag of properties received with the message. */
+    AzureIoTMessageProperties_t xProperties; /*/< The bag of properties received with the message. */
 } AzureIoTHubClientCloudMessageRequest_t;
 
 /*
@@ -84,11 +84,11 @@ typedef struct AzureIoTHubClientMethodRequest
     const void * pvMessagePayload; /*/< The pointer to the message payload. */
     uint32_t ulPayloadLength;      /*/< The length of the message payload. */
 
-    const uint8_t * pucRequestId;   /*/< The pointer to the request id. */
+    const uint8_t * pucRequestId;  /*/< The pointer to the request id. */
     int16_t usRequestIdLength;     /*/< The length of the request id. */
 
-    const uint8_t * pucMethodName;  /*/< The name of the method to invoke. */
-    uint16_t usMethodNameLength;     /*/< The length of the method name. */
+    const uint8_t * pucMethodName; /*/< The name of the method to invoke. */
+    uint16_t usMethodNameLength;   /*/< The length of the method name. */
 } AzureIoTHubClientMethodRequest_t;
 
 /*
@@ -98,15 +98,15 @@ typedef struct AzureIoTHubClientTwinResponse
 {
     AzureIoTHubMessageType_t messageType;     /*/< The type of message received. */
 
-    const void * pvMessagePayload;              /*/< The pointer to the message payload. */
-    uint32_t ulPayloadLength;                   /*/< The length of the message payload. */
+    const void * pvMessagePayload;            /*/< The pointer to the message payload. */
+    uint32_t ulPayloadLength;                 /*/< The length of the message payload. */
 
-    uint32_t ulRequestId;                       /*/< request id. */
+    uint32_t ulRequestId;                     /*/< request id. */
 
     AzureIoTHubMessageStatus_t messageStatus; /*/< The operation status. */
 
-    const uint8_t * pucVersion;                  /*/< The pointer to the twin document version. */
-    uint16_t usVersionLength;                     /*/< The length of the twin document version. */
+    const uint8_t * pucVersion;               /*/< The pointer to the twin document version. */
+    uint16_t usVersionLength;                 /*/< The length of the twin document version. */
 } AzureIoTHubClientTwinResponse_t;
 
 /* Typedef for the CloudMessage callback */
@@ -126,18 +126,18 @@ typedef struct AzureIoTHubClientReceiveContext
 {
     struct
     {
-        uint16_t state;
-        uint16_t mqttSubPacketId;
-        uint32_t ( * process_function )( struct AzureIoTHubClientReceiveContext * pxContext,
-                                         AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                         void * pvPublishInfo );
+        uint16_t usState;
+        uint16_t usMqttSubPacketId;
+        uint32_t ( * pxProcessFunction )( struct AzureIoTHubClientReceiveContext * pxContext,
+                                          AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                          void * pvPublishInfo );
 
-        void * callback_context;
+        void * pvCallbackContext;
         union
         {
-            AzureIoTHubClientCloudMessageCallback_t vCloudMessageCallback;
-            AzureIoTHubClientMethodCallback_t vMethodCallback;
-            AzureIoTHubClientTwinCallback_t vTwinCallback;
+            AzureIoTHubClientCloudMessageCallback_t xCloudMessageCallback;
+            AzureIoTHubClientMethodCallback_t xMethodCallback;
+            AzureIoTHubClientTwinCallback_t xTwinCallback;
         } callbacks;
     } _internal;
 } AzureIoTHubClientReceiveContext_t;
