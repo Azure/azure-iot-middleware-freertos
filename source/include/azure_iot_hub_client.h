@@ -70,8 +70,8 @@ typedef enum AzureIoTHubMessageStatus
  */
 typedef struct AzureIoTHubClientCloudMessageRequest
 {
-    const void * messagePayload;            /*/< The pointer to the message payload. */
-    uint32_t payloadLength;                 /*/< The length of the message payload. */
+    const void * pvMessagePayload;            /*/< The pointer to the message payload. */
+    uint32_t ulPayloadLength;                 /*/< The length of the message payload. */
 
     AzureIoTMessageProperties_t properties; /*/< The bag of properties received with the message. */
 } AzureIoTHubClientCloudMessageRequest_t;
@@ -81,14 +81,14 @@ typedef struct AzureIoTHubClientCloudMessageRequest
  */
 typedef struct AzureIoTHubClientMethodRequest
 {
-    const void * messagePayload; /*/< The pointer to the message payload. */
-    uint32_t payloadLength;      /*/< The length of the message payload. */
+    const void * pvMessagePayload; /*/< The pointer to the message payload. */
+    uint32_t ulPayloadLength;      /*/< The length of the message payload. */
 
-    const uint8_t * requestId;   /*/< The pointer to the request id. */
-    int16_t requestIdLength;     /*/< The length of the request id. */
+    const uint8_t * pucRequestId;   /*/< The pointer to the request id. */
+    int16_t usRequestIdLength;     /*/< The length of the request id. */
 
-    const uint8_t * methodName;  /*/< The name of the method to invoke. */
-    size_t methodNameLength;     /*/< The length of the method name. */
+    const uint8_t * pucMethodName;  /*/< The name of the method to invoke. */
+    uint16_t usMethodNameLength;     /*/< The length of the method name. */
 } AzureIoTHubClientMethodRequest_t;
 
 /*
@@ -98,15 +98,15 @@ typedef struct AzureIoTHubClientTwinResponse
 {
     AzureIoTHubMessageType_t messageType;     /*/< The type of message received. */
 
-    const void * messagePayload;              /*/< The pointer to the message payload. */
-    uint32_t payloadLength;                   /*/< The length of the message payload. */
+    const void * pvMessagePayload;              /*/< The pointer to the message payload. */
+    uint32_t ulPayloadLength;                   /*/< The length of the message payload. */
 
-    uint32_t requestId;                       /*/< request id. */
+    uint32_t ulRequestId;                       /*/< request id. */
 
     AzureIoTHubMessageStatus_t messageStatus; /*/< The operation status. */
 
-    const uint8_t * version;                  /*/< The pointer to the twin document version. */
-    size_t versionLength;                     /*/< The length of the twin document version. */
+    const uint8_t * pucVersion;                  /*/< The pointer to the twin document version. */
+    uint16_t usVersionLength;                     /*/< The length of the twin document version. */
 } AzureIoTHubClientTwinResponse_t;
 
 /* Typedef for the CloudMessage callback */
@@ -135,23 +135,23 @@ typedef struct AzureIoTHubClientReceiveContext
         void * callback_context;
         union
         {
-            AzureIoTHubClientCloudMessageCallback_t cloudMessageCallback;
-            AzureIoTHubClientMethodCallback_t methodCallback;
-            AzureIoTHubClientTwinCallback_t twinCallback;
+            AzureIoTHubClientCloudMessageCallback_t vCloudMessageCallback;
+            AzureIoTHubClientMethodCallback_t vMethodCallback;
+            AzureIoTHubClientTwinCallback_t vTwinCallback;
         } callbacks;
     } _internal;
 } AzureIoTHubClientReceiveContext_t;
 
 typedef struct AzureIoTHubClientOptions
 {
-    const uint8_t * pModuleId;  /*/ The module id to use for this device. */
-    uint32_t moduleIdLength;    /*/ The length of the module id. */
+    const uint8_t * pucModuleId;  /*/ The module id to use for this device. */
+    uint32_t ulModuleIdLength;    /*/ The length of the module id. */
 
-    const uint8_t * pModelId;   /*/ The model ID used to identify the capabilities of a device based on the Digital Twin document. */
-    uint32_t modelIdLength;     /*/ The length of the model id. */
+    const uint8_t * pucModelId;   /*/ The model ID used to identify the capabilities of a device based on the Digital Twin document. */
+    uint32_t ulModelIdLength;     /*/ The length of the model id. */
 
-    const uint8_t * pUserAgent; /*/ The user agent to use for this device. */
-    uint32_t userAgentLength;   /*/ The length of the user agent. */
+    const uint8_t * pucUserAgent; /*/ The user agent to use for this device. */
+    uint32_t ulUserAgentLength;   /*/ The length of the user agent. */
 } AzureIoTHubClientOptions_t;
 
 typedef struct AzureIoTHubClient
@@ -160,16 +160,16 @@ typedef struct AzureIoTHubClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        uint8_t * iot_hub_client_scratch_buffer;
-        uint32_t iot_hub_client_scratch_buffer_length;
-        az_iot_hub_client iot_hub_client_core;
+        uint8_t * pucAzureIoTHubClientScratchBuffer;
+        uint32_t ulAzureIoTHubClientScratchBufferLength;
+        az_iot_hub_client xAzureIoTHubClientCore;
 
-        const uint8_t * hostname;
-        uint32_t hostnameLength;
-        const uint8_t * deviceId;
-        uint32_t deviceIdLength;
-        const uint8_t * azure_iot_hub_client_symmetric_key;
-        uint32_t azure_iot_hub_client_symmetric_key_length;
+        const uint8_t * pucHostname;
+        uint32_t ulHostnameLength;
+        const uint8_t * pucDeviceId;
+        uint32_t ulDeviceIdLength;
+        const uint8_t * pucAzureIoTHubClientSymmetricKey;
+        uint32_t ulAzureIoTHubClientSymmetricKeyLength;
 
         uint32_t ( * azure_iot_hub_client_token_refresh )( struct AzureIoTHubClient * xAzureIoTHubClientHandle,
                                                            uint64_t ullExpiryTimeSecs,
@@ -178,10 +178,10 @@ typedef struct AzureIoTHubClient
                                                            uint8_t * pucSASBuffer,
                                                            uint32_t ulSasBufferLen,
                                                            uint32_t * pulSaSLength );
-        AzureIoTGetHMACFunc_t azure_iot_hub_client_hmac_function;
-        AzureIoTGetCurrentTimeFunc_t azure_iot_hub_client_time_function;
+        AzureIoTGetHMACFunc_t pxAzureIoTHubClientHMACFunction;
+        AzureIoTGetCurrentTimeFunc_t xAzureIoTHubClientTimeFunction;
 
-        uint32_t currentRequestId;
+        uint32_t ulCurrentRequestId;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ 3 ];
     } _internal;
