@@ -21,8 +21,8 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIotHubCloudMessage = 1,              /*/< The message is a Cloud message. */
-    eAzureIotHubDirectMethodMessage,          /*/< The message is a direct method message. */
+    eAzureIotHubCloudMessage = 1,            /*/< The message is a Cloud message. */
+    eAzureIotHubDirectMethodMessage,         /*/< The message is a direct method message. */
     AzureIotHubTwinGetMessage,               /*/< The message is a twin get response (payload contains the twin document). */
     eAzureIotHubTwinReportedResponseMessage, /*/< The message is a twin reported property status response. */
     eAzureIotHubTwinDesiredPropertyMessage,  /*/< The message is a twin desired property message (incoming from the service). */
@@ -30,13 +30,13 @@ typedef enum AzureIoTHubMessageType
 
 typedef enum AzureIoTHubClientError
 {
-    eAzureIotHubClientSuccess = 0,         /*/< Success. */
-    eAzureIotHubClientInvalidArgument,    /*/< Input argument does not comply with the expected range of values. */
-    eAzureIotHubClientPending,             /*/< The status of the operation is pending. */
+    eAzureIotHubClientSuccess = 0,       /*/< Success. */
+    eAzureIotHubClientInvalidArgument,   /*/< Input argument does not comply with the expected range of values. */
+    eAzureIotHubClientPending,           /*/< The status of the operation is pending. */
     eAzureIotHubClientOutOfMemory,       /*/< The system is out of memory. */
-    eAzureIotHubClientInitFailed,         /*/< The initialization failed. */
+    eAzureIotHubClientInitFailed,        /*/< The initialization failed. */
     eAzureIotHubClientSubackWaitTimeout, /*/< There was timeout while waiting for SUBACK. */
-    eAzureIotHubClientFailed,              /*/< There was a failure. */
+    eAzureIotHubClientFailed,            /*/< There was a failure. */
 } AzureIoTHubClientResult_t;
 
 typedef enum AzureIoTHubMessageStatus
