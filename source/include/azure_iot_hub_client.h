@@ -162,7 +162,8 @@ typedef struct AzureIoTHubClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        char iot_hub_client_topic_buffer[ azureiotTOPIC_MAX ];
+        uint8_t * iot_hub_client_scratch_buffer;
+        uint32_t iot_hub_client_scratch_buffer_length;
         az_iot_hub_client iot_hub_client_core;
 
         const uint8_t * hostname;
@@ -395,7 +396,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubC
  * @brief Request to get the device twin document.
  *
  * The answer to the request will be returned via the #AzureIoTHubClientTwinCallback_t which was passed
- * in the AzureIoTHubClient_DeviceTwinSubscribe() call. The type of message will be #AzureIotHubTwinGetMessage
+ * in the AzureIoTHubClient_DeviceTwinSubscribe() call. The type of message will be #AZURE_IOT_HUB_TWIN_GET_MESSAGE
  * and the payload (on success) will be the twin document.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
