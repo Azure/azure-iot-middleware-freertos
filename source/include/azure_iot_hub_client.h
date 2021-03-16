@@ -14,8 +14,8 @@
 
 #include "azure_iot.h"
 
-#include "azure_iot_mqtt.h"
 #include "azure_iot_mqtt_port.h"
+#include "azure_iot_transport_interface.h"
 
 typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
