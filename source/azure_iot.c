@@ -241,7 +241,7 @@ static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
 
 AzureIoTError_t AzureIoT_Init()
 {
-    #if ( LIBRARY_LOG_LEVEL == LOG_INFO )
+    #if ( LIBRARY_LOG_LEVEL >= LOG_INFO )
         az_log_set_message_callback( prvAzureIoTLogListener );
     #endif
 

@@ -32,8 +32,8 @@
     #define azureiotTOPIC_MAX                           ( 128U )
 #endif
 
-#ifndef azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX
-    #define azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX   ( 512U )
+#ifndef azureiotPROVISIONING_RESPONSE_MAX
+    #define azureiotPROVISIONING_RESPONSE_MAX           ( 512U )
 #endif
 
 #ifndef azureiotPROVISIONING_REQUEST_PAYLOAD_MAX

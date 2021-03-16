@@ -99,7 +99,7 @@ static uint32_t prvStartProvisioning( az_span * pxEndpoint,
     TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIoTProvisioningClientResult_t xResult;
     AzureIoTTransportInterface_t xTransport;
-    NetworkCredentials_t xNetworkCredentials;
+    NetworkCredentials_t xNetworkCredentials = { 0 };
     uint32_t ulHostnameLength = ( uint32_t ) az_span_size( *pxHostname );
     uint32_t ulDeviceIdLength = ( uint32_t ) az_span_size( *pxDeviceId );
 

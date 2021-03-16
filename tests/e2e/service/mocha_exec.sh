@@ -40,6 +40,10 @@ echo -e "Compiling typescripts to js"
 npm run build
 echo -e "Done compiling typescripts to js"
 
+echo -e "Cleaning expired e2e resources"
+IOTHUB_CONNECTION_STRING=$IOTHUB_CONNECTION_STRING npm run cleanup
+echo -e "Done Cleaning expired e2e resources"
+
 echo -e "Running tests"
 IOTHUB_CONNECTION_STRING=$IOTHUB_CONNECTION_STRING DEVICE_TEST_EXE=$DEVICE_TEST_EXE \
 IOT_PROVISIONING_CONNECTION_STRING=${IOT_PROVISIONING_CONNECTION_STRING:-""} \
