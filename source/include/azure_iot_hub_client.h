@@ -19,22 +19,22 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIotHubCloudMessage = 1,            /* < The message is a Cloud message. */
-    eAzureIotHubDirectMethodMessage,         /* < The message is a direct method message. */
-    eAzureIotHubTwinGetMessage,              /* < The message is a twin get response (payload contains the twin document). */
-    eAzureIotHubTwinReportedResponseMessage, /* < The message is a twin reported property status response. */
-    eAzureIotHubTwinDesiredPropertyMessage,  /* < The message is a twin desired property message (incoming from the service). */
+    eAzureIotHubCloudMessage = 1,            /**< The message is a Cloud message. */
+    eAzureIotHubDirectMethodMessage,         /**< The message is a direct method message. */
+    eAzureIotHubTwinGetMessage,              /**< The message is a twin get response (payload contains the twin document). */
+    eAzureIotHubTwinReportedResponseMessage, /**< The message is a twin reported property status response. */
+    eAzureIotHubTwinDesiredPropertyMessage,  /**< The message is a twin desired property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
 
 typedef enum AzureIoTHubClientError
 {
-    eAzureIotHubClientSuccess = 0,       /* < Success. */
-    eAzureIotHubClientInvalidArgument,   /* < Input argument does not comply with the expected range of values. */
-    eAzureIotHubClientPending,           /* < The status of the operation is pending. */
-    eAzureIotHubClientOutOfMemory,       /* < The system is out of memory. */
-    eAzureIotHubClientInitFailed,        /* < The initialization failed. */
-    eAzureIotHubClientSubackWaitTimeout, /* < There was timeout while waiting for SUBACK. */
-    eAzureIotHubClientFailed,            /* < There was a failure. */
+    eAzureIotHubClientSuccess = 0,       /**< Success. */
+    eAzureIotHubClientInvalidArgument,   /**< Input argument does not comply with the expected range of values. */
+    eAzureIotHubClientPending,           /**< The status of the operation is pending. */
+    eAzureIotHubClientOutOfMemory,       /**< The system is out of memory. */
+    eAzureIotHubClientInitFailed,        /**< The initialization failed. */
+    eAzureIotHubClientSubackWaitTimeout, /**< There was timeout while waiting for SUBACK. */
+    eAzureIotHubClientFailed,            /**< There was a failure. */
 } AzureIoTHubClientResult_t;
 
 typedef enum AzureIoTHubMessageStatus
@@ -70,10 +70,10 @@ typedef enum AzureIoTHubMessageStatus
  */
 typedef struct AzureIoTHubClientCloudMessageRequest
 {
-    const void * pvMessagePayload;           /* < The pointer to the message payload. */
-    uint32_t ulPayloadLength;                /* < The length of the message payload. */
+    const void * pvMessagePayload;           /**< The pointer to the message payload. */
+    uint32_t ulPayloadLength;                /**< The length of the message payload. */
 
-    AzureIoTMessageProperties_t xProperties; /* < The bag of properties received with the message. */
+    AzureIoTMessageProperties_t xProperties; /**< The bag of properties received with the message. */
 } AzureIoTHubClientCloudMessageRequest_t;
 
 /*
@@ -81,14 +81,14 @@ typedef struct AzureIoTHubClientCloudMessageRequest
  */
 typedef struct AzureIoTHubClientMethodRequest
 {
-    const void * pvMessagePayload; /* < The pointer to the message payload. */
-    uint32_t ulPayloadLength;      /* < The length of the message payload. */
+    const void * pvMessagePayload; /**< The pointer to the message payload. */
+    uint32_t ulPayloadLength;      /**< The length of the message payload. */
 
-    const uint8_t * pucRequestId;  /* < The pointer to the request id. */
-    int16_t usRequestIdLength;     /* < The length of the request id. */
+    const uint8_t * pucRequestId;  /**< The pointer to the request id. */
+    int16_t usRequestIdLength;     /**< The length of the request id. */
 
-    const uint8_t * pucMethodName; /* < The name of the method to invoke. */
-    uint16_t usMethodNameLength;   /* < The length of the method name. */
+    const uint8_t * pucMethodName; /**< The name of the method to invoke. */
+    uint16_t usMethodNameLength;   /**< The length of the method name. */
 } AzureIoTHubClientMethodRequest_t;
 
 /*
@@ -96,17 +96,17 @@ typedef struct AzureIoTHubClientMethodRequest
  */
 typedef struct AzureIoTHubClientTwinResponse
 {
-    AzureIoTHubMessageType_t messageType;     /* < The type of message received. */
+    AzureIoTHubMessageType_t messageType;     /**< The type of message received. */
 
-    const void * pvMessagePayload;            /* < The pointer to the message payload. */
-    uint32_t ulPayloadLength;                 /* < The length of the message payload. */
+    const void * pvMessagePayload;            /**< The pointer to the message payload. */
+    uint32_t ulPayloadLength;                 /**< The length of the message payload. */
 
-    uint32_t ulRequestId;                     /* < request id. */
+    uint32_t ulRequestId;                     /**< request id. */
 
-    AzureIoTHubMessageStatus_t messageStatus; /* < The operation status. */
+    AzureIoTHubMessageStatus_t messageStatus; /**< The operation status. */
 
-    const uint8_t * pucVersion;               /* < The pointer to the twin document version. */
-    uint16_t usVersionLength;                 /* < The length of the twin document version. */
+    const uint8_t * pucVersion;               /**< The pointer to the twin document version. */
+    uint16_t usVersionLength;                 /**< The length of the twin document version. */
 } AzureIoTHubClientTwinResponse_t;
 
 /* Typedef for the CloudMessage callback */
@@ -144,14 +144,14 @@ typedef struct AzureIoTHubClientReceiveContext
 
 typedef struct AzureIoTHubClientOptions
 {
-    const uint8_t * pucModuleId;  /*/ The module id to use for this device. */
-    uint32_t ulModuleIdLength;    /*/ The length of the module id. */
+    const uint8_t * pucModuleId;  /**< The module id to use for this device. */
+    uint32_t ulModuleIdLength;    /**< The length of the module id. */
 
-    const uint8_t * pucModelId;   /*/ The model ID used to identify the capabilities of a device based on the Digital Twin document. */
-    uint32_t ulModelIdLength;     /*/ The length of the model id. */
+    const uint8_t * pucModelId;   /**< The model ID used to identify the capabilities of a device based on the Digital Twin document. */
+    uint32_t ulModelIdLength;     /**< The length of the model id. */
 
-    const uint8_t * pucUserAgent; /*/ The user agent to use for this device. */
-    uint32_t ulUserAgentLength;   /*/ The length of the user agent. */
+    const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
+    uint32_t ulUserAgentLength;   /**< The length of the user agent. */
 } AzureIoTHubClientOptions_t;
 
 typedef struct AzureIoTHubClient
