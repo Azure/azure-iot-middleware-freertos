@@ -44,6 +44,8 @@ static void test_entry( void ** state )
                                                           &xNetworkContext ),
                       TLS_TRANSPORT_SUCCESS );
 
+    assert_int_equal( AzureIoT_Init(), AZURE_IOT_SUCCESS);
+
     /* Sends an MQTT Connect packet over the already established TLS connection,
      * and waits for connection acknowledgment (CONNACK) packet. */
     LogInfo( ( "Creating an MQTT connection to %s.\r\n", ppcArgv[ 1 ] ) );

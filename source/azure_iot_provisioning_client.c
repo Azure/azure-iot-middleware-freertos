@@ -545,17 +545,17 @@ static void prvMQTTProcessResponse( AzureIoTProvisioningClientHandle_t xAzureIoT
     if( xAzureIoTProvisioningClientHandle->_internal.workflowState == azureiotprovisioningWF_STATE_REQUESTING )
     {
         if( ( pPublishInfo->payloadLength + pPublishInfo->topicNameLength ) <=
-            xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length )
+            sizeof( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response ) )
         {
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload =
-                xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer;
+                xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response;
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length =
                 pPublishInfo->payloadLength;
             memcpy( xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload,
                     pPublishInfo->pPayload, pPublishInfo->payloadLength );
 
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic =
-                xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload +
+                xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response +
                 xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_payload_length;
             xAzureIoTProvisioningClientHandle->_internal.azure_iot_provisioning_client_last_response_topic_length =
                 pPublishInfo->topicNameLength;
@@ -708,8 +708,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         ret = AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT;
     }
     else if( ( ulBufferLength < ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX ) ) ||
-             ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) ||
-             ( ulBufferLength < azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX ) )
+             ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) )
     {
         AZLogError( ( "Provisioning initialize failed: Not enough memory passed \r\n" ) );
         ret = AZURE_IOT_PROVISIONING_CLIENT_OUT_OF_MEMORY;
@@ -720,7 +719,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
 
         /* Setup scratch buffer to be used by middleware */
         xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length =
-            azureMAX( azureMAX( ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ), azureiotTOPIC_MAX ), azureiotPROVISIONING_RESPONSE_PAYLOAD_MAX );
+            azureMAX( ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ), ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX ) );
         xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer = pucBuffer;
         pucBuffer += xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length;
         ulBufferLength -= xAzureIoTProvisioningClientHandle->_internal.provisioning_scratch_buffer_length;

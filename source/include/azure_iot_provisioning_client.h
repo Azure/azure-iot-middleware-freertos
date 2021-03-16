@@ -44,6 +44,7 @@ typedef struct AzureIoTProvisioningClient
 
         uint8_t * provisioning_scratch_buffer;
         uint32_t provisioning_scratch_buffer_length;
+        uint8_t azure_iot_provisioning_client_last_response[azureiotPROVISIONING_RESPONSE_MAX];
         uint8_t * azure_iot_provisioning_client_last_response_payload;
         size_t azure_iot_provisioning_client_last_response_payload_length;
         uint8_t * azure_iot_provisioning_client_last_response_topic;
