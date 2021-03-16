@@ -209,7 +209,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
  *         - `&` : `%26`
  * @param[in] ulDeviceIdLength The length of the device id.
  * @param[in] pxHubClientOptions The #AzureIoTHubClientOptions_t for the IoT Hub client instance.
- * @param[in] pucBuffer The buffer to use for MQTT messages.
+ * @param[in] pucBuffer The static buffer to use for middleware operations and MQTT messages.
  * @param[in] ulBufferLength The length of the \p pucBuffer.
  * @param[in] xGetTimeFunction A function pointer to a function which gives the current epoch time.
  * @param[in] pxTransportInterface The transport interface to use for the MQTT library.
