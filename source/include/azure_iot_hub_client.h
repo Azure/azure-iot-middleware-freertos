@@ -19,7 +19,7 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIotHubCloudMessage = 1,            /**< The message is a Cloud message. */
+    eAzureIotHubCloudMessage = 1,            /**< The message is a cloud message. */
     eAzureIotHubDirectMethodMessage,         /**< The message is a direct method message. */
     eAzureIotHubTwinGetMessage,              /**< The message is a twin get response (payload contains the twin document). */
     eAzureIotHubTwinReportedResponseMessage, /**< The message is a twin reported property status response. */
@@ -109,7 +109,7 @@ typedef struct AzureIoTHubClientTwinResponse
     uint16_t usVersionLength;                 /**< The length of the twin document version. */
 } AzureIoTHubClientTwinResponse_t;
 
-/* Typedef for the CloudMessage callback */
+/* Typedef for the cloud message callback */
 typedef void ( * AzureIoTHubClientCloudMessageCallback_t ) ( struct AzureIoTHubClientCloudMessageRequest * pxMessage,
                                                              void * pvContext );
 
