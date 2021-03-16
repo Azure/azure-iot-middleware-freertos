@@ -21,7 +21,7 @@ typedef enum AzureIoTHubMessageType
 {
     eAzureIotHubCloudMessage = 1,            /*/< The message is a Cloud message. */
     eAzureIotHubDirectMethodMessage,         /*/< The message is a direct method message. */
-    eAzureIotHubTwinGetMessage,               /*/< The message is a twin get response (payload contains the twin document). */
+    eAzureIotHubTwinGetMessage,              /*/< The message is a twin get response (payload contains the twin document). */
     eAzureIotHubTwinReportedResponseMessage, /*/< The message is a twin reported property status response. */
     eAzureIotHubTwinDesiredPropertyMessage,  /*/< The message is a twin desired property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
@@ -71,7 +71,7 @@ typedef enum AzureIoTHubMessageStatus
 typedef struct AzureIoTHubClientCloudMessageRequest
 {
     const void * messagePayload;            /*/< The pointer to the message payload. */
-    uint32_t payloadLength;                   /*/< The length of the message payload. */
+    uint32_t payloadLength;                 /*/< The length of the message payload. */
 
     AzureIoTMessageProperties_t properties; /*/< The bag of properties received with the message. */
 } AzureIoTHubClientCloudMessageRequest_t;
@@ -82,10 +82,10 @@ typedef struct AzureIoTHubClientCloudMessageRequest
 typedef struct AzureIoTHubClientMethodRequest
 {
     const void * messagePayload; /*/< The pointer to the message payload. */
-    uint32_t payloadLength;        /*/< The length of the message payload. */
+    uint32_t payloadLength;      /*/< The length of the message payload. */
 
     const uint8_t * requestId;   /*/< The pointer to the request id. */
-    int16_t requestIdLength;      /*/< The length of the request id. */
+    int16_t requestIdLength;     /*/< The length of the request id. */
 
     const uint8_t * methodName;  /*/< The name of the method to invoke. */
     size_t methodNameLength;     /*/< The length of the method name. */
@@ -99,7 +99,7 @@ typedef struct AzureIoTHubClientTwinResponse
     AzureIoTHubMessageType_t messageType;     /*/< The type of message received. */
 
     const void * messagePayload;              /*/< The pointer to the message payload. */
-    uint32_t payloadLength;                     /*/< The length of the message payload. */
+    uint32_t payloadLength;                   /*/< The length of the message payload. */
 
     uint32_t requestId;                       /*/< request id. */
 
