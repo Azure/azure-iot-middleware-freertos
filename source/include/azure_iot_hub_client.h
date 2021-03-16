@@ -9,8 +9,6 @@
 #ifndef AZURE_IOT_HUB_CLIENT_H
 #define AZURE_IOT_HUB_CLIENT_H
 
-/* Transport interface include. */
-#include "FreeRTOS.h"
 
 #include "azure_iot.h"
 
@@ -23,7 +21,7 @@ typedef enum AzureIoTHubMessageType
 {
     eAzureIotHubCloudMessage = 1,            /*/< The message is a Cloud message. */
     eAzureIotHubDirectMethodMessage,         /*/< The message is a direct method message. */
-    AzureIotHubTwinGetMessage,               /*/< The message is a twin get response (payload contains the twin document). */
+    eAzureIotHubTwinGetMessage,               /*/< The message is a twin get response (payload contains the twin document). */
     eAzureIotHubTwinReportedResponseMessage, /*/< The message is a twin reported property status response. */
     eAzureIotHubTwinDesiredPropertyMessage,  /*/< The message is a twin desired property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
@@ -73,7 +71,7 @@ typedef enum AzureIoTHubMessageStatus
 typedef struct AzureIoTHubClientCloudMessageRequest
 {
     const void * messagePayload;            /*/< The pointer to the message payload. */
-    size_t payloadLength;                   /*/< The length of the message payload. */
+    uint32_t payloadLength;                   /*/< The length of the message payload. */
 
     AzureIoTMessageProperties_t properties; /*/< The bag of properties received with the message. */
 } AzureIoTHubClientCloudMessageRequest_t;
@@ -84,10 +82,10 @@ typedef struct AzureIoTHubClientCloudMessageRequest
 typedef struct AzureIoTHubClientMethodRequest
 {
     const void * messagePayload; /*/< The pointer to the message payload. */
-    size_t payloadLength;        /*/< The length of the message payload. */
+    uint32_t payloadLength;        /*/< The length of the message payload. */
 
     const uint8_t * requestId;   /*/< The pointer to the request id. */
-    size_t requestIdLength;      /*/< The length of the request id. */
+    int16_t requestIdLength;      /*/< The length of the request id. */
 
     const uint8_t * methodName;  /*/< The name of the method to invoke. */
     size_t methodNameLength;     /*/< The length of the method name. */
@@ -101,7 +99,7 @@ typedef struct AzureIoTHubClientTwinResponse
     AzureIoTHubMessageType_t messageType;     /*/< The type of message received. */
 
     const void * messagePayload;              /*/< The pointer to the message payload. */
-    size_t payloadLength;                     /*/< The length of the message payload. */
+    uint32_t payloadLength;                     /*/< The length of the message payload. */
 
     uint32_t requestId;                       /*/< request id. */
 
@@ -396,7 +394,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubC
  * @brief Request to get the device twin document.
  *
  * The answer to the request will be returned via the #AzureIoTHubClientTwinCallback_t which was passed
- * in the AzureIoTHubClient_DeviceTwinSubscribe() call. The type of message will be #AZURE_IOT_HUB_TWIN_GET_MESSAGE
+ * in the AzureIoTHubClient_DeviceTwinSubscribe() call. The type of message will be #eAzureIotHubTwinGetMessage
  * and the payload (on success) will be the twin document.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
