@@ -267,7 +267,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClientHandle_t x
                                                      uint32_t ulTimeoutMilliseconds );
 
 /**
- * @brief Disconnect from the IoT Hub endpoint
+ * @brief Disconnect from the IoT Hub endpoint.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
