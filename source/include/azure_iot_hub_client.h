@@ -86,8 +86,8 @@ typedef struct AzureIoTHubClientMethodRequest
     const void * pvMessagePayload; /**< The pointer to the message payload. */
     uint32_t ulPayloadLength;      /**< The length of the message payload. */
 
-    const uint8_t * pucRequestId;  /**< The pointer to the request id. */
-    int16_t usRequestIdLength;     /**< The length of the request id. */
+    const uint8_t * pucRequestId;  /**< The pointer to the request ID. */
+    int16_t usRequestIdLength;     /**< The length of the request ID. */
 
     const uint8_t * pucMethodName; /**< The name of the method to invoke. */
     uint16_t usMethodNameLength;   /**< The length of the method name. */
@@ -103,7 +103,7 @@ typedef struct AzureIoTHubClientTwinResponse
     const void * pvMessagePayload;            /**< The pointer to the message payload. */
     uint32_t ulPayloadLength;                 /**< The length of the message payload. */
 
-    uint32_t ulRequestId;                     /**< The request id for the twin response. */
+    uint32_t ulRequestId;                     /**< The request ID for the twin response. */
 
     AzureIoTHubMessageStatus_t messageStatus; /**< The operation status. */
 
@@ -146,11 +146,11 @@ typedef struct AzureIoTHubClientReceiveContext
 
 typedef struct AzureIoTHubClientOptions
 {
-    const uint8_t * pucModuleId;  /**< The module id to use for this device. */
-    uint32_t ulModuleIdLength;    /**< The length of the module id. */
+    const uint8_t * pucModuleId;  /**< The module ID to use for this device. */
+    uint32_t ulModuleIdLength;    /**< The length of the module ID. */
 
-    const uint8_t * pucModelId;   /**< The model id used to identify the capabilities of a device based on the Digital Twin document. */
-    uint32_t ulModelIdLength;     /**< The length of the model id. */
+    const uint8_t * pucModelId;   /**< The model ID used to identify the capabilities of a device based on the Digital Twin document. */
+    uint32_t ulModelIdLength;     /**< The length of the model ID. */
 
     const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
     uint32_t ulUserAgentLength;   /**< The length of the user agent. */
@@ -203,13 +203,13 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
  * @param[out] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @param[in] pucHostname The IoT Hub Hostname.
  * @param[in] ulHostnameLength The length of the IoT Hub Hostname.
- * @param[in] pucDeviceId The Device ID. If the ID contains any of the following characters, they must
+ * @param[in] pucDeviceId The device ID. If the ID contains any of the following characters, they must
  * be percent-encoded as follows:
  *         - `/` : `%2F`
  *         - `%` : `%25`
  *         - `#` : `%23`
  *         - `&` : `%26`
- * @param[in] ulDeviceIdLength The length of the device id.
+ * @param[in] ulDeviceIdLength The length of the device ID.
  * @param[in] pxHubClientOptions The #AzureIoTHubClientOptions_t for the IoT Hub client instance.
  * @param[in] pucBuffer The static buffer to use for middleware operations and MQTT messages.
  * @param[in] ulBufferLength The length of the \p pucBuffer.
