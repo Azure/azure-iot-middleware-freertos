@@ -40,7 +40,7 @@ typedef enum AzureIoTResult
  * @brief The bag of properties associated with a message.
  *
  */
-typedef struct AzureIoTHubClientMessageProperties
+typedef struct AzureIoTMessageProperties
 {
     struct
     {
@@ -73,10 +73,10 @@ void AzureIoT_Deinit();
 /**
  * @brief Initialize
  *
- * @param pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
- * @param pucBuffer The pointer to the buffer.
- * @param ulWrittenLength The length of the properties already written (if applicable).
- * @param ulBufferLength The length of \p pucBuffer.
+ * @param[out] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
+ * @param[out] pucBuffer The pointer to the buffer.
+ * @param[in] ulWrittenLength The length of the properties already written (if applicable).
+ * @param[in] ulBufferLength The length of \p pucBuffer.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * pxMessageProperties,
@@ -87,11 +87,11 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
 /**
  * @brief Append a property name and value
  *
- * @param pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
- * @param pucName The name of the property to append.
- * @param ulNameLength The length of \p pucName.
- * @param pucValue The value of the property to append.
- * @param ulValueLength The length of \p pucValue.
+ * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
+ * @param[in] pucName The name of the property to append.
+ * @param[in] ulNameLength The length of \p pucName.
+ * @param[in] pucValue The value of the property to append.
+ * @param[in] ulValueLength The length of \p pucValue.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * pxMessageProperties,
@@ -103,11 +103,11 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
 /**
  * @brief Find a property in the message property bag.
  *
- * @param pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
- * @param pucName The name of the property to find.
- * @param nameLength Length of the property name.
- * @param ppucOutValue The output pointer to the value.
- * @param pulOutValueLength The length of \p ppucOutValue.
+ * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
+ * @param[in] pucName The name of the property to find.
+ * @param[in] nameLength Length of the property name.
+ * @param[out] ppucOutValue The output pointer to the value.
+ * @param[out] pulOutValueLength The length of \p ppucOutValue.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * pxMessageProperties,
@@ -121,16 +121,16 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
  *
  * @note This is used within Azure IoT Hub and Device Provisioning APIs should a symmetric key be set.
  *
- * @param xAzureIoTHMACFunction The #AzureIoTGetHMACFunc_t function to use for HMAC256 hashing.
- * @param pucKey A pointer to the base64 encoded key.
- * @param ulKeySize The length of the \p pucKey.
- * @param pucMessage A pointer to the message to be hashed.
- * @param ulMessageSize The length of \p pucMessage.
- * @param pucBuffer An intermediary buffer to put the base64 decoded key.
- * @param ulBufferLength The length of \p pucBuffer.
- * @param ppucOutput The buffer into which the resulting HMAC256 hashed, base64 encoded message will
+ * @param[in] xAzureIoTHMACFunction The #AzureIoTGetHMACFunc_t function to use for HMAC256 hashing.
+ * @param[in] pucKey A pointer to the base64 encoded key.
+ * @param[in] ulKeySize The length of the \p pucKey.
+ * @param[in] pucMessage A pointer to the message to be hashed.
+ * @param[in] ulMessageSize The length of \p pucMessage.
+ * @param[in] pucBuffer An intermediary buffer to put the base64 decoded key.
+ * @param[in] ulBufferLength The length of \p pucBuffer.
+ * @param[out] ppucOutput The buffer into which the resulting HMAC256 hashed, base64 encoded message will
  * be placed.
- * @param pulOutputLength The output length of \p ppucOutput.
+ * @param[out] pulOutputLength The output length of \p ppucOutput.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
