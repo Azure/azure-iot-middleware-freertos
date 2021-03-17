@@ -5,8 +5,8 @@
  * @file azure_iot.h
  *
  * @brief Azure IoT FreeRTOS middleware common APIs and structs
- * 
- * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.) 
+ *
+ * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
  * prefixed with an underscore ('_') directly in your application code. These symbols
  * are part of Azure SDK's internal implementation; we do not document these symbols
  * and they are subject to change in future versions of the SDK which would break your code.
@@ -36,7 +36,7 @@ typedef enum AzureIoTResult
 {
     eAzureIoTSuccess = 0,        /**< Success. */
     eAzureIoTInvalidArgument,    /**< Input argument does not comply with the expected range of values. */
-    eAzureIoTStatusOom,          /**< The system is out of memory. */
+    eAzureIoTStatusOutOfMemory,  /**< The system is out of memory. */
     eAzureIoTStatusItemNotFound, /**< The item was not found. */
     eAzureIoTFailed,             /**< There was a failure. */
 } AzureIoTResult_t;
@@ -100,9 +100,9 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * pxMessageProperties,
-                                                   uint8_t * pucName,
+                                                   const uint8_t * pucName,
                                                    uint32_t ulNameLength,
-                                                   uint8_t * pucValue,
+                                                   const uint8_t * pucValue,
                                                    uint32_t ulValueLength );
 
 /**
@@ -116,9 +116,9 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * pxMessageProperties,
-                                                 uint8_t * pucName,
+                                                 const uint8_t * pucName,
                                                  uint32_t ulNameLength,
-                                                 uint8_t ** ppucOutValue,
+                                                 const uint8_t ** ppucOutValue,
                                                  uint32_t * pulOutValueLength );
 
 /**
