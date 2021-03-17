@@ -6,6 +6,11 @@
  *
  * @brief The middleware IoT Hub Client used to connect a device to Azure IoT Hub.
  *
+ * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
+ * prefixed with an underscore ('_') directly in your application code. These symbols
+ * are part of Azure SDK's internal implementation; we do not document these symbols
+ * and they are subject to change in future versions of the SDK which would break your code.
+ *
  */
 
 #ifndef AZURE_IOT_HUB_CLIENT_H
@@ -173,14 +178,14 @@ typedef struct AzureIoTHubClient
         const uint8_t * pucAzureIoTHubClientSymmetricKey;
         uint32_t ulAzureIoTHubClientSymmetricKeyLength;
 
-        uint32_t ( * azure_iot_hub_client_token_refresh )( struct AzureIoTHubClient * xAzureIoTHubClientHandle,
-                                                           uint64_t ullExpiryTimeSecs,
-                                                           const uint8_t * ucKey,
-                                                           uint32_t ulKeyLen,
-                                                           uint8_t * pucSASBuffer,
-                                                           uint32_t ulSasBufferLen,
-                                                           uint32_t * pulSaSLength );
-        AzureIoTGetHMACFunc_t pxAzureIoTHubClientHMACFunction;
+        uint32_t ( * pxAzureIoTHubClientTokenRefresh )( struct AzureIoTHubClient * pxAzureIoTHubClientHandle,
+                                                        uint64_t ullExpiryTimeSecs,
+                                                        const uint8_t * ucKey,
+                                                        uint32_t ulKeyLen,
+                                                        uint8_t * pucSASBuffer,
+                                                        uint32_t ulSasBufferLen,
+                                                        uint32_t * pulSaSLength );
+        AzureIoTGetHMACFunc_t xAzureIoTHubClientHMACFunction;
         AzureIoTGetCurrentTimeFunc_t xAzureIoTHubClientTimeFunction;
 
         uint32_t ulCurrentRequestId;
@@ -290,7 +295,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHand
  * `PING` messages.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
- * @param[in] ulTimeoutMilliseconds Minimum time (in millisecond) for the loop to run. If `0` is passed, it will only run once.
+ * @param[in] ulTimeoutMilliseconds Minimum time (in milliseconds) for the loop to run. If `0` is passed, it will only run once.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
