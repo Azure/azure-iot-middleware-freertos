@@ -76,7 +76,7 @@ AzureIoTResult_t AzureIoT_Init();
 void AzureIoT_Deinit();
 
 /**
- * @brief Initialize
+ * @brief Initialize the message properties.
  *
  * @param[out] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[out] pucBuffer The pointer to the buffer.
@@ -90,7 +90,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
                                                  uint32_t ulBufferLength );
 
 /**
- * @brief Append a property name and value
+ * @brief Append a property name and value.
  *
  * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[in] pucName The name of the property to append.
