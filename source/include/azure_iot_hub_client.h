@@ -21,50 +21,50 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIotHubCloudMessage = 1,            /**< The message is a cloud message. */
-    eAzureIotHubDirectMethodMessage,         /**< The message is a direct method message. */
-    eAzureIotHubTwinGetMessage,              /**< The message is a twin get response (payload contains the twin document). */
-    eAzureIotHubTwinReportedResponseMessage, /**< The message is a twin reported property status response. */
-    eAzureIotHubTwinDesiredPropertyMessage,  /**< The message is a twin desired property message (incoming from the service). */
+    eAzureIoTHubCloudMessage = 1,            /**< The message is a cloud message. */
+    eAzureIoTHubDirectMethodMessage,         /**< The message is a direct method message. */
+    eAzureIoTHubTwinGetMessage,              /**< The message is a twin get response (payload contains the twin document). */
+    eAzureIoTHubTwinReportedResponseMessage, /**< The message is a twin reported property status response. */
+    eAzureIoTHubTwinDesiredPropertyMessage,  /**< The message is a twin desired property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
 
-typedef enum AzureIoTHubClientError
+typedef enum AzureIoTHubClientResult
 {
-    eAzureIotHubClientSuccess = 0,       /**< Success. */
-    eAzureIotHubClientInvalidArgument,   /**< Input argument does not comply with the expected range of values. */
-    eAzureIotHubClientPending,           /**< The status of the operation is pending. */
-    eAzureIotHubClientOutOfMemory,       /**< The system is out of memory. */
-    eAzureIotHubClientInitFailed,        /**< The initialization failed. */
-    eAzureIotHubClientSubackWaitTimeout, /**< There was timeout while waiting for SUBACK. */
-    eAzureIotHubClientFailed,            /**< There was a failure. */
+    eAzureIoTHubClientSuccess = 0,       /**< Success. */
+    eAzureIoTHubClientInvalidArgument,   /**< Input argument does not comply with the expected range of values. */
+    eAzureIoTHubClientPending,           /**< The status of the operation is pending. */
+    eAzureIoTHubClientOutOfMemory,       /**< The system is out of memory. */
+    eAzureIoTHubClientInitFailed,        /**< The initialization failed. */
+    eAzureIoTHubClientSubackWaitTimeout, /**< There was timeout while waiting for SUBACK. */
+    eAzureIoTHubClientFailed,            /**< There was a failure. */
 } AzureIoTHubClientResult_t;
 
 typedef enum AzureIoTHubMessageStatus
 {
     /* Default, unset value */
-    eAzureIotStatusUnknown = 0,
+    eAzureIoTStatusUnknown = 0,
 
     /* Service success codes */
-    eAzureIotStatusOk = 200,
-    eAzureIotStatusAccepted = 202,
-    eAzureIotStatusNoContent = 204,
+    eAzureIoTStatusOk = 200,
+    eAzureIoTStatusAccepted = 202,
+    eAzureIoTStatusNoContent = 204,
 
     /* Service error codes */
-    eAzureIotStatusBadRequest = 400,
-    eAzureIotStatusUnauthorized = 401,
-    eAzureIotStatusForbidden = 403,
-    eAzureIotStatusNotFound = 404,
-    eAzureIotStatusNotAllowed = 405,
-    eAzureIotStatusNotConflict = 409,
-    eAzureIotStatusPreconditionFailed = 412,
-    eAzureIotStatusRequestTooLarge = 413,
-    eAzureIotStatusUnsupportedType = 415,
-    eAzureIotStatusThrottled = 429,
-    eAzureIotStatusClientClosed = 499,
-    eAzureIotStatusServerError = 500,
-    eAzureIotStatusBadGateway = 502,
-    eAzureIotStatusServiceUnavailable = 503,
-    eAzureIotStatusTimeout = 504,
+    eAzureIoTStatusBadRequest = 400,
+    eAzureIoTStatusUnauthorized = 401,
+    eAzureIoTStatusForbidden = 403,
+    eAzureIoTStatusNotFound = 404,
+    eAzureIoTStatusNotAllowed = 405,
+    eAzureIoTStatusNotConflict = 409,
+    eAzureIoTStatusPreconditionFailed = 412,
+    eAzureIoTStatusRequestTooLarge = 413,
+    eAzureIoTStatusUnsupportedType = 415,
+    eAzureIoTStatusThrottled = 429,
+    eAzureIoTStatusClientClosed = 499,
+    eAzureIoTStatusServerError = 500,
+    eAzureIoTStatusBadGateway = 502,
+    eAzureIoTStatusServiceUnavailable = 503,
+    eAzureIoTStatusTimeout = 504,
 } AzureIoTHubMessageStatus_t;
 
 /*
@@ -396,7 +396,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinReportedSend( AzureIoTHubC
  * @brief Request to get the device twin document.
  *
  * The answer to the request will be returned via the #AzureIoTHubClientTwinCallback_t which was passed
- * in the AzureIoTHubClient_DeviceTwinSubscribe() call. The type of message will be #eAzureIotHubTwinGetMessage
+ * in the AzureIoTHubClient_DeviceTwinSubscribe() call. The type of message will be #eAzureIoTHubTwinGetMessage
  * and the payload (on success) will be the twin document.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
