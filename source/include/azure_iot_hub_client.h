@@ -27,7 +27,7 @@ typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIoTHubCloudMessage = 1,            /**< The message is a cloud message. */
+    eAzureIoTHubCloudToDeviceMessage = 1,            /**< The message is a cloud message. */
     eAzureIoTHubDirectMethodMessage,         /**< The message is a direct method message. */
     eAzureIoTHubTwinGetMessage,              /**< The message is a twin get response (payload contains the twin document). */
     eAzureIoTHubTwinReportedResponseMessage, /**< The message is a twin reported property status response. */
@@ -76,13 +76,13 @@ typedef enum AzureIoTHubMessageStatus
 /**
  * @brief IoT Hub Cloud Message Request struct.
  */
-typedef struct AzureIoTHubClientCloudMessageRequest
+typedef struct AzureIoTHubClientCloudToDeviceMessageRequest
 {
     const void * pvMessagePayload;           /**< The pointer to the message payload. */
     uint32_t ulPayloadLength;                /**< The length of the message payload. */
 
     AzureIoTMessageProperties_t xProperties; /**< The bag of properties received with the message. */
-} AzureIoTHubClientCloudMessageRequest_t;
+} AzureIoTHubClientCloudToDeviceMessageRequest_t;
 
 /**
  * @brief IoT Hub Method Request struct.
@@ -121,7 +121,7 @@ typedef struct AzureIoTHubClientTwinResponse
  * @brief Cloud message callback to be invoked when a cloud message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  */
-typedef void ( * AzureIoTHubClientCloudMessageCallback_t ) ( struct AzureIoTHubClientCloudMessageRequest * pxMessage,
+typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( struct AzureIoTHubClientCloudToDeviceRequest * pxMessage,
                                                              void * pvContext );
 
 /**
@@ -152,7 +152,7 @@ typedef struct AzureIoTHubClientReceiveContext
         void * pvCallbackContext;
         union
         {
-            AzureIoTHubClientCloudMessageCallback_t xCloudMessageCallback;
+            AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback;
             AzureIoTHubClientMethodCallback_t xMethodCallback;
             AzureIoTHubClientTwinCallback_t xTwinCallback;
         } callbacks;
@@ -317,13 +317,13 @@ AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle
  * @brief Subscribe to cloud to device messages.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
- * @param[in] xCloudMessageCallback The #AzureIoTHubClientCloudMessageCallback_t to invoke when a CloudMessage messages arrive.
+ * @param[in] xCloudToDeviceCallback The #AzureIoTHubClientCloudToDeviceMessageCallback_t to invoke when a CloudToDevice messages arrive.
  * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
  * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for subscribe operation to complete.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudMessage( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                   AzureIoTHubClientCloudMessageCallback_t xCloudMessageCallback,
+AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
+                                                                   AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback,
                                                                    void * prvCallbackContext,
                                                                    uint32_t ulTimeoutMilliseconds );
 
@@ -361,7 +361,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceTwin( AzureIoTHubClie
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudMessage( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
+AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
 
 /**
  * @brief Unsubscribe from direct methods.
