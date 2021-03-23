@@ -9,7 +9,7 @@ set(CMAKE_C_STANDARD 99)
 
 # Add modules and include compiler options/switches
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake-modules")
-include(eng/cmake/global_compile_options.txt)
+# include(eng/cmake/global_compile_options.txt)
 
 # Options for building the lib
 option(build_samples "Build the samples for the Azure IoT Middleware for FreeRTOS" OFF)

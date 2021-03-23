@@ -11,14 +11,15 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 
-#if defined( __cplusplus ) || ( defined( __STDC_VERSION__ ) && ( __STDC_VERSION__ >= 199901L ) )
-    #include <stdbool.h>
-#elif !defined( bool ) && !defined( false ) && !defined( true )
-    #define bool     int8_t
-    #define false    ( int8_t ) 0
-    #define true     ( int8_t ) 1
-#endif
+// #if defined( __cplusplus ) || ( defined( __STDC_VERSION__ ) && ( __STDC_VERSION__ >= 199901L ) )
+//     #include <stdbool.h>
+// #elif !defined( bool ) && !defined( false ) && !defined( true )
+//     #define bool     int8_t
+//     #define false    ( int8_t ) 0
+//     #define true     ( int8_t ) 1
+// #endif
 
 #include "azure_iot_transport_interface.h"
 
