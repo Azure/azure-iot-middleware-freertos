@@ -34,11 +34,11 @@
 
 typedef enum AzureIoTResult
 {
-    eAzureIoTSuccess = 0,        /**< Success. */
-    eAzureIoTInvalidArgument,    /**< Input argument does not comply with the expected range of values. */
-    eAzureIoTStatusOutOfMemory,  /**< The system is out of memory. */
-    eAzureIoTStatusItemNotFound, /**< The item was not found. */
-    eAzureIoTFailed,             /**< There was a failure. */
+    eAzureIoTSuccess = 0,     /**< Success. */
+    eAzureIoTInvalidArgument, /**< Input argument does not comply with the expected range of values. */
+    eAzureIoTOutOfMemory,     /**< The system is out of memory. */
+    eAzureIoTItemNotFound,    /**< The item was not found. */
+    eAzureIoTFailed,          /**< There was a failure. */
 } AzureIoTResult_t;
 
 /**
@@ -61,16 +61,16 @@ typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
                                               uint32_t ulDataLength,
                                               uint8_t * pucOutput,
                                               uint32_t ulOutputLength,
-                                              uint32_t * pucBytesCopied );
+                                              uint32_t * pulBytesCopied );
 
 /**
- * @brief Initialize Azure IoT
+ * @brief Initialize Azure IoT middleware.
  *
  */
 AzureIoTResult_t AzureIoT_Init();
 
 /**
- * @brief Deinitialize Azure IoT
+ * @brief Deinitialize Azure IoT middleware.
  *
  */
 void AzureIoT_Deinit();
@@ -90,7 +90,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
                                                  uint32_t ulBufferLength );
 
 /**
- * @brief Append a property name and value.
+ * @brief Append a property name and value to a message.
  *
  * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[in] pucName The name of the property to append.
@@ -111,7 +111,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
  * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[in] pucName The name of the property to find.
  * @param[in] nameLength Length of the property name.
- * @param[out] ppucOutValue The output pointer to the value.
+ * @param[out] ppucOutValue The output pointer to the property value.
  * @param[out] pulOutValueLength The length of \p ppucOutValue.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
@@ -124,12 +124,12 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
 /**
  * @brief As part of symmetric key authentication, HMAC256 a buffer of bytes and base64 encode the result.
  *
- * @note This is used within Azure IoT Hub and Device Provisioning APIs should a symmetric key be set.
+ * @note This is used within Azure IoT Hub and Device Provisioning APIs if a symmetric key is set.
  *
  * @param[in] xAzureIoTHMACFunction The #AzureIoTGetHMACFunc_t function to use for HMAC256 hashing.
  * @param[in] pucKey A pointer to the base64 encoded key.
  * @param[in] ulKeySize The length of the \p pucKey.
- * @param[in] pucMessage A pointer to the message to be hashed.
+ * @param[in] pucMessage A pointer to the blob to be hashed.
  * @param[in] ulMessageSize The length of \p pucMessage.
  * @param[in] pucBuffer An intermediary buffer to put the base64 decoded key.
  * @param[in] ulBufferLength The length of \p pucBuffer.
