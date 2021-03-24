@@ -60,17 +60,18 @@ typedef enum AzureIoTMQTTSubAckStatus
 
 typedef enum AzureIoTMQTTResult
 {
-    eAzureIoTMQTTSuccess = 0,     /** Function completed successfully. */
-    eAzureIoTMQTTBadParameter,    /** At least one parameter was invalid. */
-    eAzureIoTMQTTNoMemory,        /** A provided buffer was too small. */
-    eAzureIoTMQTTSendFailed,      /** The transport send function failed. */
-    eAzureIoTMQTTRecvFailed,      /** The transport receive function failed. */
-    eAzureIoTMQTTBadResponse,     /** An invalid packet was received from the server. */
-    eAzureIoTMQTTServerRefused,   /** The server refused a CONNECT or SUBSCRIBE. */
-    eAzureIoTMQTTNoDataAvailable, /** No data available from the transport interface. */
-    eAzureIoTMQTTIllegalState,    /** An illegal state in the state record. */
-    eAzureIoTMQTTStateCollision,  /** A collision with an existing state record entry. */
-    eAzureIoTMQTTKeepAliveTimeout /** Timeout while waiting for PINGRESP. */
+    eAzureIoTMQTTSuccess = 0,      /** Function completed successfully. */
+    eAzureIoTMQTTBadParameter,     /** At least one parameter was invalid. */
+    eAzureIoTMQTTNoMemory,         /** A provided buffer was too small. */
+    eAzureIoTMQTTSendFailed,       /** The transport send function failed. */
+    eAzureIoTMQTTRecvFailed,       /** The transport receive function failed. */
+    eAzureIoTMQTTBadResponse,      /** An invalid packet was received from the server. */
+    eAzureIoTMQTTServerRefused,    /** The server refused a CONNECT or SUBSCRIBE. */
+    eAzureIoTMQTTNoDataAvailable,  /** No data available from the transport interface. */
+    eAzureIoTMQTTIllegalState,     /** An illegal state in the state record. */
+    eAzureIoTMQTTStateCollision,   /** A collision with an existing state record entry. */
+    eAzureIoTMQTTKeepAliveTimeout, /** Timeout while waiting for PINGRESP. */
+    eAzureIoTMQTTFailed            /** Function failed with Unknown Error. */
 } AzureIoTMQTTResult_t;
 
 typedef struct AzureIoTMQTTConnectInfo
@@ -230,7 +231,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
                                         AzureIoTMQTTGetCurrentTimeFunc_t xGetTimeFunction,
                                         AzureIoTMQTTEventCallback_t xUserCallback,
                                         uint8_t * pucNetworkBuffer,
-                                        uint32_t ulNetworkBufferLength );
+                                        size_t ulNetworkBufferLength );
 
 
 /**
