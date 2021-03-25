@@ -79,7 +79,7 @@ typedef struct AzureIoTMQTTConnectInfo
     /**
      * @brief Whether to establish a new, clean session or resume a previous session.
      */
-    uint8_t xCleanSession;
+    uint8_t ucCleanSession;
 
     /**
      * @brief MQTT keep alive period, in seconds.
@@ -124,7 +124,7 @@ typedef struct AzureIoTMQTTSubscribeInfo
     /**
      * @brief Quality of Service for subscription.
      */
-    AzureIoTMQTTQoS_t xQOS;
+    AzureIoTMQTTQoS_t xQoS;
 
     /**
      * @brief Topic filter to subscribe to.
@@ -147,12 +147,12 @@ typedef struct AzureIoTMQTTPublishInfo
     /**
      * @brief Whether this is a retained message.
      */
-    uint8_t xRetain;
+    uint8_t ucRetain;
 
     /**
      * @brief Whether this is a duplicate publish message.
      */
-    uint8_t xDup;
+    uint8_t ucDup;
 
     /**
      * @brief Topic name on which the message is published.
@@ -222,7 +222,7 @@ typedef void ( * AzureIoTMQTTEventCallback_t )( AzureIoTMQTTHandle_t pContext,
  * @param[in] xUserCallback The user callback to use with the context to
  * notify about incoming packet events.
  * @param[in] pucNetworkBuffer Network buffer provided for the context.
- * @param[in] ulNetworkBufferLength Length of network buffer.
+ * @param[in] xNetworkBufferLength Length of network buffer.
  *
  * @return An #AzureIoTMQTTResult_t with the result of the operation.
  */
@@ -231,7 +231,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
                                         AzureIoTMQTTGetCurrentTimeFunc_t xGetTimeFunction,
                                         AzureIoTMQTTEventCallback_t xUserCallback,
                                         uint8_t * pucNetworkBuffer,
-                                        size_t ulNetworkBufferLength );
+                                        size_t xNetworkBufferLength );
 
 
 /**
@@ -246,7 +246,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
  * @param[in] pxConnectInfo MQTT CONNECT packet information.
  * @param[in] pxWillInfo Last Will and Testament. Pass NULL if Last Will and Testament is not used.
  * @param[in] ulMilliseconds Maximum time in milliseconds to wait for a CONNACK packet.
- * @param[out] pxSessionPresent Whether a previous session was present.
+ * @param[out] pucSessionPresent Whether a previous session was present.
  * Only relevant if not establishing a clean session.
  * 
  * @return An #AzureIoTMQTTResult_t with the result of the operation.
@@ -255,7 +255,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
                                            const AzureIoTMQTTPublishInfo_t * pxWillInfo,
                                            uint32_t ulMilliseconds,
-                                           uint8_t * pxSessionPresent );
+                                           uint8_t * pucSessionPresent );
 
 /**
  * @brief Sends MQTT SUBSCRIBE for the given list of topic filters to

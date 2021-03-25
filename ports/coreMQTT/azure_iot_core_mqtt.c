@@ -104,9 +104,9 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
                                         AzureIoTMQTTGetCurrentTimeFunc_t xGetTimeFunction,
                                         AzureIoTMQTTEventCallback_t xUserCallback,
                                         uint8_t * pucNetworkBuffer,
-                                        size_t ulNetworkBufferLength )
+                                        size_t xNetworkBufferLength )
 {
-    MQTTFixedBuffer_t xBuffer = { pucNetworkBuffer, ulNetworkBufferLength };
+    MQTTFixedBuffer_t xBuffer = { pucNetworkBuffer, xNetworkBufferLength };
     MQTTStatus_t xResult;
 
     /* Check memory equivalence, but ordering is not guaranteed */
@@ -130,7 +130,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
                                            const AzureIoTMQTTPublishInfo_t * pxWillInfo,
                                            uint32_t ulMilliseconds,
-                                           uint8_t * pxSessionPresent )
+                                           uint8_t * pucSessionPresent )
 {
     bool xSessionPresent;
     MQTTStatus_t xResult;
@@ -140,9 +140,9 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                              ( const MQTTPublishInfo_t * ) pxWillInfo,
                              ulMilliseconds, &xSessionPresent );
     
-    if ( pxSessionPresent )
+    if ( pucSessionPresent )
     {
-        *pxSessionPresent = ( uint8_t ) xSessionPresent;
+        *pucSessionPresent = ( uint8_t ) xSessionPresent;
     }
     
     return prvTranslateToAzureIoTMQTTResult( xResult );
