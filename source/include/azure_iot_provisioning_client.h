@@ -22,6 +22,8 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+#define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
+
 typedef struct AzureIoTProvisioningClient * AzureIoTProvisioningClientHandle_t;
 
 typedef enum AzureIoTProvisioningClientResult
