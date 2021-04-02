@@ -22,7 +22,7 @@ static void prvAzureIoTLogListener( az_log_classification classification,
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTError_t prvAzureIoTBase64Decode( char * base64name,
+static AzureIoTResult_t prvAzureIoTBase64Decode( char * base64name,
                                                 uint32_t length,
                                                 uint8_t * name,
                                                 uint32_t name_size,
@@ -48,7 +48,7 @@ static AzureIoTError_t prvAzureIoTBase64Decode( char * base64name,
 
     if( name_size < length )
     {
-        return AZURE_IOT_STATUS_OOM;
+        return eAzureIoTOutOfMemory;
     }
 
     /* Setup index into the ASCII name.  */
@@ -141,11 +141,11 @@ static AzureIoTError_t prvAzureIoTBase64Decode( char * base64name,
     name[ j ] = 0;
     *bytes_copied = j;
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
+static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * name,
                                                 uint32_t length,
                                                 char * base64name,
                                                 uint32_t base64name_size )
@@ -177,7 +177,7 @@ static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
 
     if( base64name_size <= length )
     {
-        return AZURE_IOT_STATUS_OOM;
+        return eAzureIoTOutOfMemory;
     }
 
     /* Setup index into the base64name.  */
@@ -235,17 +235,17 @@ static AzureIoTError_t prvAzureIoTBase64Encode( uint8_t * name,
     /* Put a NULL character in.  */
     base64name[ j ] = 0;
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTError_t AzureIoT_Init()
+AzureIoTResult_t AzureIoT_Init()
 {
     #if ( LIBRARY_LOG_LEVEL >= LOG_INFO )
         az_log_set_message_callback( prvAzureIoTLogListener );
     #endif
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
@@ -255,9 +255,9 @@ void AzureIoT_Deinit()
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTError_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * pxMessageProperties,
+AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * pxMessageProperties,
                                                 uint8_t * pucBuffer,
-                                                uint32_t ulWrittenLength,
+                                                uint32_t ulAlreadyWrittenLength,
                                                 uint32_t ulBufferLength )
 {
     az_span propertyBufferSpan = az_span_create( pucBuffer, ( int32_t ) ulBufferLength );
@@ -266,25 +266,25 @@ AzureIoTError_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * px
     if( pxMessageProperties == NULL )
     {
         AZLogError( ( "AzureIoTMessagePropertiesInit failed: Invalid argument \r\n" ) );
-        return AZURE_IOT_INVALID_ARGUMENT;
+        return eAzureIoTInvalidArgument;
     }
 
-    result = az_iot_message_properties_init( &pxMessageProperties->_internal.properties,
-                                             propertyBufferSpan, ( int32_t ) ulWrittenLength );
+    result = az_iot_message_properties_init( &pxMessageProperties->_internal.xProperties,
+                                             propertyBufferSpan, ( int32_t ) ulAlreadyWrittenLength );
 
     if( az_result_failed( result ) )
     {
-        return AZURE_IOT_FAILED;
+        return eAzureIoTFailed;
     }
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTError_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * pxMessageProperties,
-                                                  uint8_t * pucName,
+AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * pxMessageProperties,
+                                                  const uint8_t * pucName,
                                                   uint32_t ulNameLength,
-                                                  uint8_t * pucValue,
+                                                  const uint8_t * pucValue,
                                                   uint32_t ulValueLength )
 {
     az_span nameSpan = az_span_create( pucName, ( int32_t ) ulNameLength );
@@ -294,25 +294,25 @@ AzureIoTError_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t * 
     if( pxMessageProperties == NULL )
     {
         AZLogError( ( "AzureIoTMessagePropertiesAppend failed: Invalid argument \r\n" ) );
-        return AZURE_IOT_INVALID_ARGUMENT;
+        return eAzureIoTInvalidArgument;
     }
 
-    result = az_iot_message_properties_append( &pxMessageProperties->_internal.properties,
+    result = az_iot_message_properties_append( &pxMessageProperties->_internal.xProperties,
                                                nameSpan, valueSpan );
 
     if( az_result_failed( result ) )
     {
-        return AZURE_IOT_FAILED;
+        return eAzureIoTFailed;
     }
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTError_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * pxMessageProperties,
-                                                uint8_t * pucName,
+AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * pxMessageProperties,
+                                                const uint8_t * pucName,
                                                 uint32_t ulNameLength,
-                                                uint8_t ** ppucOutValue,
+                                                const uint8_t ** ppucOutValue,
                                                 uint32_t * pulOutValueLength )
 {
     az_span nameSpan = az_span_create( pucName, ( int32_t ) ulNameLength );
@@ -323,25 +323,25 @@ AzureIoTError_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * px
         ( ppucOutValue == NULL ) || ( pulOutValueLength == NULL ) )
     {
         AZLogError( ( "AzureIoTMessagePropertiesFind failed: Invalid argument \r\n" ) );
-        return AZURE_IOT_INVALID_ARGUMENT;
+        return eAzureIoTInvalidArgument;
     }
 
-    result = az_iot_message_properties_find( &pxMessageProperties->_internal.properties,
+    result = az_iot_message_properties_find( &pxMessageProperties->_internal.xProperties,
                                              nameSpan, &outValueSpan );
 
     if( az_result_failed( result ) )
     {
-        return AZURE_IOT_STATUS_ITEM_NOT_FOUND;
+        return eAzureIoTItemNotFound;
     }
 
     *ppucOutValue = az_span_ptr( outValueSpan );
     *pulOutValueLength = ( uint32_t ) az_span_size( outValueSpan );
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
+AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
                                               const uint8_t * pucKey,
                                               uint32_t ulKeySize,
                                               const uint8_t * pucMessage,
@@ -352,7 +352,7 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
                                               uint32_t ulOutputSize,
                                               uint32_t * pulOutputLength )
 {
-    AzureIoTError_t status;
+    AzureIoTResult_t status;
     uint8_t * hash_buf;
     uint32_t hash_buf_size = 33;
     uint32_t binary_key_buf_size;
@@ -364,7 +364,7 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
         ( pucOutput == NULL ) || ( pulOutputLength == NULL ) )
     {
         AZLogError( ( "AzureIoT_Base64HMACCalculate failed: Invalid argument \r\n" ) );
-        return AZURE_IOT_INVALID_ARGUMENT;
+        return eAzureIoTInvalidArgument;
     }
 
     binary_key_buf_size = ulBufferLength;
@@ -380,7 +380,7 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
 
     if( hash_buf_size > ulBufferLength )
     {
-        return AZURE_IOT_STATUS_OOM;
+        return eAzureIoTOutOfMemory;
     }
 
     hash_buf = pucBuffer + binary_key_buf_size;
@@ -390,7 +390,7 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
                                pucMessage, ( uint32_t ) ulMessageSize,
                                hash_buf, hash_buf_size, &hash_buf_size ) )
     {
-        return AZURE_IOT_FAILED;
+        return eAzureIoTFailed;
     }
 
     status = prvAzureIoTBase64Encode( hash_buf, hash_buf_size,
@@ -403,6 +403,6 @@ AzureIoTError_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMA
 
     *pulOutputLength = ( uint32_t ) strlen( ( char * )pucOutput );
 
-    return AZURE_IOT_SUCCESS;
+    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
