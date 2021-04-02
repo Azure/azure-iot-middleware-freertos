@@ -31,7 +31,6 @@
 #include "FreeRTOS.h"
 
 #include "azure/az_iot.h"
-#include "azure/internal/az_iot_internal.h"
 
 typedef enum AzureIoTResult
 {
