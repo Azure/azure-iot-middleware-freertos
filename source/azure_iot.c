@@ -174,7 +174,8 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
 static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucName,
                                                  uint32_t ulLength,
                                                  char * pcBase64name,
-                                                 uint32_t base64name_size )
+                                                 uint32_t base64name_size,
+                                                 uint32_t * pulOutputLength )
 {
     uint32_t ulPad;
     uint32_t i, j;
@@ -261,6 +262,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucName,
 
     /* Put a NULL character in.  */
     pcBase64name[ j ] = 0;
+    *pulOutputLength = j;
 
     return eAzureIoTSuccess;
 }
@@ -420,15 +422,16 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return eAzureIoTFailed;
     }
 
+    uint32_t ulBase64OutputLength;
     xStatus = prvAzureIoTBase64Encode( pucHashBuf, ulHashBufSize,
-                                       ( char * ) pucOutput, ulOutputSize );
+                                       ( char * ) pucOutput, ulOutputSize, &ulBase64OutputLength );
 
     if( xStatus )
     {
         return xStatus;
     }
 
-    *pulOutputLength = ( uint32_t ) strlen( ( char * ) pucOutput );
+    *pulOutputLength = ( uint32_t ) ulBase64OutputLength;
 
     return eAzureIoTSuccess;
 }
