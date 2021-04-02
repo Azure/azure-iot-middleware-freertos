@@ -16,10 +16,10 @@
 #ifndef AZURE_IOT_H
 #define AZURE_IOT_H
 
-/* AZURE_IOT_DO_NOT_USE_CUSTOM_CONFIG allows building the azure iot library
+/* AZURE_IOT_CUSTOM_CONFIG allows building the azure iot library
  * without a custom config. If a custom config is provided, the
- * AZURE_IOT_DO_NOT_USE_CUSTOM_CONFIG macro should not be defined. */
-#ifndef AZURE_IOT_DO_NOT_USE_CUSTOM_CONFIG
+ * AZURE_IOT_CUSTOM_CONFIG macro should not be defined. */
+#ifdef AZURE_IOT_CUSTOM_CONFIG
     /* Include custom config file before other headers. */
     #include "azure_iot_config.h"
 #endif
@@ -31,6 +31,7 @@
 #include "FreeRTOS.h"
 
 #include "azure/az_iot.h"
+#include "azure/internal/az_iot_internal.h"
 
 typedef enum AzureIoTResult
 {
@@ -66,17 +67,30 @@ typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
 /**
  * @brief Initialize Azure IoT middleware.
  *
+ * @note This should be called once per process.
+ *
  */
 AzureIoTResult_t AzureIoT_Init();
 
 /**
  * @brief Deinitialize Azure IoT middleware.
  *
+ * @note This should be called once per process.
+ *
  */
 void AzureIoT_Deinit();
 
 /**
  * @brief Initialize the message properties.
+ *
+ * @note The properties init API will not encode properties. In order to support
+ *       the following characters, they must be percent-encoded (RFC3986) as follows:
+ *         - `/` : `%2F`
+ *         - `%` : `%25`
+ *         - `#` : `%23`
+ *         - `&` : `%26`
+ *       Only these characters would have to be encoded. If you would like to avoid the need to
+ *       encode the names/values, avoid using these characters in names and values.
  *
  * @param[out] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[out] pucBuffer The pointer to the buffer.
@@ -86,11 +100,20 @@ void AzureIoT_Deinit();
  */
 AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * pxMessageProperties,
                                                  uint8_t * pucBuffer,
-                                                 uint32_t ulWrittenLength,
+                                                 uint32_t ulAlreadyWrittenLength,
                                                  uint32_t ulBufferLength );
 
 /**
  * @brief Append a property name and value to a message.
+ *
+ * @note The properties init API will not encode properties. In order to support
+ *       the following characters, they must be percent-encoded (RFC3986) as follows:
+ *         - `/` : `%2F`
+ *         - `%` : `%25`
+ *         - `#` : `%23`
+ *         - `&` : `%26`
+ *       Only these characters would have to be encoded. If you would like to avoid the need to
+ *       encode the names/values, avoid using these characters in names and values.
  *
  * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[in] pucName The name of the property to append.
