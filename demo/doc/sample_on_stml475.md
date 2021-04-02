@@ -24,7 +24,7 @@ In [demo_config.h](../sample_azure_iot_embedded_sdk/common/demo_config.h), updat
 
 ## Update Device WiFi Credentials
 
-Update the WiFi SSID and password in [main.c](../Common/stm32l475/main.c)
+Update the WiFi SSID and password in [main.c](../Common/stm32l4_l4+/main.c)
 
 - `WIFI_SSID`
 - `WIFI_PASSWORD`
