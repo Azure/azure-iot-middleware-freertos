@@ -3,27 +3,44 @@
 
 /**
  * @file azure_iot.c
- * @brief -------.
+ *
+ * @brief Common Azure IoT code for FreeRTOS middleware.
  *
  */
 
+#include <stdio.h>
+
 #include "azure_iot.h"
+
+#define AZURE_BASE64_HASH_BUFFER_SIZE 33
 
 static const char _cAzureIoTBase64Array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Set the log listener in the embedded SDK.
+ *
+ * */
 static void prvAzureIoTLogListener( az_log_classification xClassification,
                                     az_span xMessage )
 {
     ( void ) xClassification;
-    /*In case logs are stripped out, suppress unused parameter error. */
+    /* In case logs are stripped out, suppress unused parameter error. */
     ( void ) xMessage;
 
     AZLogInfo( ( "%.*s", az_span_size( xMessage ), az_span_ptr( xMessage ) ) );
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Decode Base64 bytes.
+ *
+ * TODO: Remove in favor of embedded SDK implementation.
+ *
+ * */
 static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
                                                  uint32_t ulLength,
                                                  uint8_t * pucName,
@@ -147,6 +164,13 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Encode Base64 bytes.
+ *
+ * TODO: Remove in favor of embedded SDK implementation.
+ *
+ * */
 static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucName,
                                                  uint32_t ulLength,
                                                  char * pcBase64name,
@@ -155,7 +179,6 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucName,
     uint32_t ulPad;
     uint32_t i, j;
     uint32_t ulStep;
-
 
     /* Adjust the length to represent the base64 name.  */
     ulLength = ( ( ulLength * 8 ) / 6 );
@@ -255,7 +278,7 @@ AzureIoTResult_t AzureIoT_Init()
 
 void AzureIoT_Deinit()
 {
-    AZLogDebug( ( "AzureIoT_Deinit called \r\n" ) );
+    AZLogDebug( ( "AzureIoT_Deinit called" ) );
 }
 /*-----------------------------------------------------------*/
 
@@ -269,7 +292,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
 
     if( pxMessageProperties == NULL )
     {
-        AZLogError( ( "AzureIoTMessagePropertiesInit failed: Invalid argument \r\n" ) );
+        AZLogError( ( "AzureIoTMessagePropertiesInit failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
@@ -297,7 +320,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
 
     if( pxMessageProperties == NULL )
     {
-        AZLogError( ( "AzureIoTMessagePropertiesAppend failed: Invalid argument \r\n" ) );
+        AZLogError( ( "AzureIoTMessagePropertiesAppend failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
@@ -320,26 +343,26 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
                                                  uint32_t * pulOutValueLength )
 {
     az_span xNameSpan = az_span_create( ( uint8_t * ) pucName, ( int32_t ) ulNameLength );
-    az_span outValueSpan;
+    az_span xOutValueSpan;
     az_result xResult;
 
     if( ( pxMessageProperties == NULL ) ||
         ( ppucOutValue == NULL ) || ( pulOutValueLength == NULL ) )
     {
-        AZLogError( ( "AzureIoTMessagePropertiesFind failed: Invalid argument \r\n" ) );
+        AZLogError( ( "AzureIoTMessagePropertiesFind failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
     xResult = az_iot_message_properties_find( &pxMessageProperties->_internal.xProperties,
-                                              xNameSpan, &outValueSpan );
+                                              xNameSpan, &xOutValueSpan );
 
     if( az_result_failed( xResult ) )
     {
         return eAzureIoTItemNotFound;
     }
 
-    *ppucOutValue = az_span_ptr( outValueSpan );
-    *pulOutValueLength = ( uint32_t ) az_span_size( outValueSpan );
+    *ppucOutValue = az_span_ptr( xOutValueSpan );
+    *pulOutValueLength = ( uint32_t ) az_span_size( xOutValueSpan );
 
     return eAzureIoTSuccess;
 }
@@ -358,7 +381,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
 {
     AzureIoTResult_t xStatus;
     uint8_t * pucHashBuf;
-    uint32_t ulHashBufSize = 33;
+    uint32_t ulHashBufSize = AZURE_BASE64_HASH_BUFFER_SIZE;
     uint32_t ulBinaryKeyBufSize;
 
     if( ( xAzureIoTHMACFunction == NULL ) ||
@@ -367,7 +390,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         ( pucBuffer == NULL ) || ( ulBufferLength == 0 ) ||
         ( pucOutput == NULL ) || ( pulOutputLength == NULL ) )
     {
-        AZLogError( ( "AzureIoT_Base64HMACCalculate failed: Invalid argument \r\n" ) );
+        AZLogError( ( "AzureIoT_Base64HMACCalculate failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
