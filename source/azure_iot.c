@@ -17,6 +17,8 @@ static void prvAzureIoTLogListener( az_log_classification classification,
                                     az_span message )
 {
     ( void ) classification;
+    //In case logs are stripped out, suppress unused parameter error.
+    ( void ) message;
 
     AZLogInfo( ( "%.*s", az_span_size( message ), az_span_ptr( message ) ) );
 }
@@ -287,8 +289,8 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
                                                   const uint8_t * pucValue,
                                                   uint32_t ulValueLength )
 {
-    az_span nameSpan = az_span_create( pucName, ( int32_t ) ulNameLength );
-    az_span valueSpan = az_span_create( pucValue, ( int32_t ) ulValueLength );
+    az_span nameSpan = az_span_create( (uint8_t * ) pucName, ( int32_t ) ulNameLength );
+    az_span valueSpan = az_span_create( (uint8_t * ) pucValue, ( int32_t ) ulValueLength );
     az_result result;
 
     if( pxMessageProperties == NULL )
@@ -315,7 +317,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
                                                 const uint8_t ** ppucOutValue,
                                                 uint32_t * pulOutValueLength )
 {
-    az_span nameSpan = az_span_create( pucName, ( int32_t ) ulNameLength );
+    az_span nameSpan = az_span_create( (uint8_t * ) pucName, ( int32_t ) ulNameLength );
     az_span outValueSpan;
     az_result result;
 

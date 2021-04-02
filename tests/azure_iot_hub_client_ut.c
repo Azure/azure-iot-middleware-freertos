@@ -390,8 +390,8 @@ static void testAzureIoTHubClient_TelemetrySend_BigTopicFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTMessageProperties_t properties = {
-        ._internal.properties._internal.current_property_index = 0,
-        ._internal.properties._internal.properties_written = sizeof( ucBuffer ) + 1
+        ._internal.xProperties._internal.current_property_index = 0,
+        ._internal.xProperties._internal.properties_written = sizeof( ucBuffer ) + 1
     };
 
     (void)state;
