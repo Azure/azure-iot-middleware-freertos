@@ -17,9 +17,9 @@
 #define AZURE_IOT_H
 
 /* AZURE_IOT_CUSTOM_CONFIG allows building the azure iot library
- * without a custom config. If a custom config is provided, the
- * AZURE_IOT_CUSTOM_CONFIG macro should not be defined. */
-#ifdef AZURE_IOT_CUSTOM_CONFIG
+ * with a custom config. If a custom config is provided, the
+ * AZURE_IOT_CUSTOM_CONFIG macro should be defined. */
+#ifndef AZURE_IOT_CUSTOM_CONFIG
     /* Include custom config file before other headers. */
     #include "azure_iot_config.h"
 #endif
