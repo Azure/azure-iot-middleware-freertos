@@ -31,7 +31,7 @@ struct NetworkContext
 };
 
 uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * xAzureIoTHubClientHandle );
-void vHandleCloudMessage( AzureIoTHubClientCloudMessageRequest_t * message,
+void vHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * message,
                           void * context );
 void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * message,
                           void * context );

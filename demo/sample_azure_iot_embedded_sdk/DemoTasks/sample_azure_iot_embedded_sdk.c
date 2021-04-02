@@ -237,14 +237,14 @@ static uint64_t ulGlobalEntryTime = 1639093301;
 
 #endif // democonfigDEVICE_SYMMETRIC_KEY
 
-static void prvHandleCloudMessage( AzureIoTHubClientCloudMessageRequest_t * pxMessage,
+static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
                                    void * pvContext )
 {
     ( void ) pvContext;
 
     LogInfo( ( "Cloud message payload : %.*s \r\n",
                pxMessage->payloadLength,
-               pxMessage->messagePayload ) );
+               pxMessage->pvMessagePayload ) );
 }
 
 static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
@@ -252,12 +252,12 @@ static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
 {
     LogInfo( ( "Method payload : %.*s \r\n",
                pxMessage->payloadLength,
-               pxMessage->messagePayload ) );
+               pxMessage->pvMessagePayload ) );
 
     AzureIoTHubClient_t * xHandle = ( AzureIoTHubClient_t * ) pvContext;
 
     if( AzureIoTHubClient_SendMethodResponse( xHandle, pxMessage, 200,
-                                              NULL, 0 ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                              NULL, 0 ) != eAzureIoTHubClientSuccess )
     {
         LogInfo( ( "Error sending method response\r\n" ) );
     }
@@ -288,7 +288,7 @@ static void prvHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMess
 
     LogInfo( ( "Twin document payload : %.*s \r\n",
                pxMessage->payloadLength,
-               pxMessage->messagePayload ) );
+               pxMessage->pvMessagePayload ) );
 }
 
 static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCredentials )
@@ -401,14 +401,14 @@ static void prvAzureDemoTask( void * pvParameters )
                                           ucSharedBuffer, sizeof( ucSharedBuffer ),
                                           prvGetUnixTime,
                                           &xTransport );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         #ifdef democonfigDEVICE_SYMMETRIC_KEY
-            xResult = AzureIoTHubClient_SymmetricKeySet( &xAzureIoTHubClient,
+            xResult = AzureIoTHubClient_SetSymmetricKey( &xAzureIoTHubClient,
                                                          ( const uint8_t * ) democonfigDEVICE_SYMMETRIC_KEY,
                                                          sizeof( democonfigDEVICE_SYMMETRIC_KEY ) - 1,
                                                          calculateHMAC );
-            configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+            configASSERT( xResult == eAzureIoTHubClientSuccess );
         #endif // democonfigDEVICE_SYMMETRIC_KEY
 
         /* Sends an MQTT Connect packet over the already established TLS connection,
@@ -417,33 +417,33 @@ static void prvAzureDemoTask( void * pvParameters )
 
         xResult = AzureIoTHubClient_Connect( &xAzureIoTHubClient,
                                              false, sampleazureiotCONNACK_RECV_TIMEOUT_MS );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         /**************************** Enable features. ******************************/
 
-        xResult = AzureIoTHubClient_CloudMessageSubscribe( &xAzureIoTHubClient, prvHandleCloudMessage,
+        xResult = AzureIoTHubClient_SubscribeCloudToDeviceMessage( &xAzureIoTHubClient, prvHandleCloudMessage,
                                                            &xAzureIoTHubClient, ULONG_MAX );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
-        xResult = AzureIoTHubClient_DirectMethodSubscribe( &xAzureIoTHubClient, prvHandleDirectMethod,
+        xResult = AzureIoTHubClient_SubscribeDirectMethod( &xAzureIoTHubClient, prvHandleDirectMethod,
                                                            &xAzureIoTHubClient, ULONG_MAX );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
-        xResult = AzureIoTHubClient_DeviceTwinSubscribe( &xAzureIoTHubClient, prvHandleDeviceTwinMessage,
+        xResult = AzureIoTHubClient_SubscribeDeviceTwin( &xAzureIoTHubClient, prvHandleDeviceTwinMessage,
                                                          &xAzureIoTHubClient, ULONG_MAX );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         /* Get the device twin on boot */
         xResult = AzureIoTHubClient_DeviceTwinGet( &xAzureIoTHubClient );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         /* Create a bag of properties for the telemetry */
         xResult = AzureIoT_MessagePropertiesInit( &xPropertyBag, ucPropertyBuffer, 0, sizeof( xPropertyBag ) );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         xResult = AzureIoT_MessagePropertiesAppend( &xPropertyBag, ( uint8_t * ) "name", sizeof( "name" ) - 1,
                                                     ( uint8_t * ) "value", sizeof( "value" ) - 1 );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         /****************** Publish and Keep Alive Loop. **********************/
         /* Publish messages with QoS1, send and process Keep alive messages. */
@@ -453,12 +453,12 @@ static void prvAzureDemoTask( void * pvParameters )
                                                        ( const uint8_t * ) sampleazureiotMESSAGE,
                                                        sizeof( sampleazureiotMESSAGE ) - 1,
                                                        &xPropertyBag );
-            configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+            configASSERT( xResult == eAzureIoTHubClientSuccess );
 
             LogInfo( ( "Attempt to receive publish message from IoTHub.\r\n" ) );
             xResult = AzureIoTHubClient_ProcessLoop( &xAzureIoTHubClient,
                                                      sampleazureiotPROCESS_LOOP_TIMEOUT_MS );
-            configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+            configASSERT( xResult == eAzureIoTHubClientSuccess );
 
             if( ulPublishCount % 2 == 0 )
             {
@@ -467,7 +467,7 @@ static void prvAzureDemoTask( void * pvParameters )
                                                                     ( const uint8_t * ) sampleazureiotTWIN_PROPERTY,
                                                                     sizeof( sampleazureiotTWIN_PROPERTY ) - 1,
                                                                     NULL );
-                configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+                configASSERT( xResult == eAzureIoTHubClientSuccess );
             }
 
             /* Leave Connection Idle for some time. */
@@ -478,20 +478,20 @@ static void prvAzureDemoTask( void * pvParameters )
         /**************************** Disconnect. *****************************/
 
         xResult = AzureIoTHubClient_DeviceTwinUnsubscribe( &xAzureIoTHubClient );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
-        xResult = AzureIoTHubClient_DirectMethodUnsubscribe( &xAzureIoTHubClient );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        xResult = AzureIoTHubClient_UnsubscribeDirectMethod( &xAzureIoTHubClient );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
-        xResult = AzureIoTHubClient_CloudMessageUnsubscribe( &xAzureIoTHubClient );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        xResult = AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( &xAzureIoTHubClient );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         /* Send an MQTT Disconnect packet over the already connected TLS over
          * TCP connection. There is no corresponding response for the disconnect
          * packet. After sending disconnect, client must close the network
          * connection. */
         xResult = AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
-        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+        configASSERT( xResult == eAzureIoTHubClientSuccess );
 
         /* Close the network connection.  */
         TLS_FreeRTOS_Disconnect( &xNetworkContext );

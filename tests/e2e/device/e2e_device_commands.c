@@ -72,7 +72,7 @@ static void prvFreeTwinData( AzureIoTHubClientTwinResponse_t * pxTwinData )
 {
     if( pxTwinData )
     {
-        vPortFree( ( void * ) pxTwinData->messagePayload );
+        vPortFree( ( void * ) pxTwinData->pvMessagePayload );
         vPortFree( ( void * ) pxTwinData );
     }
 }
@@ -81,7 +81,7 @@ static void prvFreeMethodData( AzureIoTHubClientMethodRequest_t * pxMethodData )
 {
     if( pxMethodData )
     {
-        vPortFree( ( void * ) pxMethodData->messagePayload );
+        vPortFree( ( void * ) pxMethodData->pvMessagePayload );
         vPortFree( ( void * ) pxMethodData->methodName );
         vPortFree( ( void * ) pxMethodData->requestId );
         vPortFree( ( void * ) pxMethodData );
@@ -377,7 +377,7 @@ static uint32_t prvE2ETestSendTelemertyCommandExecute( E2E_TEST_COMMAND_HANDLE x
             ( AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
                                                az_span_ptr( xPayloadSpan ),
                                                az_span_size( xPayloadSpan ),
-                                               &xProperties ) != AZURE_IOT_HUB_CLIENT_SUCCESS ) )
+                                               &xProperties ) != eAzureIoTHubClientSuccess ) )
         {
             ulStatus = e2etestE2E_TEST_FAILED;
             LogError( ( "Telemetry message send failed!", ulStatus ) );
@@ -400,7 +400,7 @@ static uint32_t prvE2ETestEchoCommandExecute( E2E_TEST_COMMAND_HANDLE xCMD,
     if( ( xStatus = AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
                                                      xCMD->pulReceivedData,
                                                      xCMD->ulReceivedDataLength,
-                                                     NULL ) ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                                     NULL ) ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "Telemetry message send failed!, error code %d", xStatus ) );
     }
@@ -468,7 +468,7 @@ static uint32_t prvE2ETestDeviceProvisioningCommandExecute( E2E_TEST_COMMAND_HAN
 
     if( AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
                                          ucMessageBuffer, ulMessageLength,
-                                         NULL ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                         NULL ) != eAzureIoTHubClientSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Fail to send telemetry" );
     }
@@ -485,13 +485,13 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     if( AzureIoTHubClient_DeviceTwinReportedSend( xAzureIoTHubClientHandle,
                                                   xCMD->pulReceivedData,
                                                   xCMD->ulReceivedDataLength,
-                                                  &ulRequestId ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                                  &ulRequestId ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "Failed to send reported properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
     }
     else if( AzureIoTHubClient_ProcessLoop( xAzureIoTHubClientHandle,
-                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "recevice timeout" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -507,7 +507,7 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     else if( AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
                                               xCMD->pulReceivedData,
                                               xCMD->ulReceivedDataLength,
-                                              NULL ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                              NULL ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "Failed to send response" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -528,13 +528,13 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
 {
     uint32_t ulStatus;
 
-    if( AzureIoTHubClient_DeviceTwinGet( xAzureIoTHubClientHandle ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+    if( AzureIoTHubClient_DeviceTwinGet( xAzureIoTHubClientHandle ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "Failed to request twin properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
     }
     else if( AzureIoTHubClient_ProcessLoop( xAzureIoTHubClientHandle,
-                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "recevice timeout" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -545,9 +545,9 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
         ulStatus = e2etestE2E_TEST_FAILED;
     }
     else if( AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
-                                              pxTwinMessage->messagePayload,
+                                              pxTwinMessage->pvMessagePayload,
                                               pxTwinMessage->payloadLength,
-                                              NULL ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                              NULL ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "Failed to send response" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -580,12 +580,12 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
 
     if( ( pxTwinMessage == NULL ) &&
         ( AzureIoTHubClient_ProcessLoop( xAzureIoTHubClientHandle,
-                                         e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != AZURE_IOT_HUB_CLIENT_SUCCESS ) )
+                                         e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTHubClientSuccess ) )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to receive desired properties" );
     }
 
-    xJsonSpan = az_span_create( ( uint8_t * ) pxTwinMessage->messagePayload, pxTwinMessage->payloadLength );
+    xJsonSpan = az_span_create( ( uint8_t * ) pxTwinMessage->pvMessagePayload, pxTwinMessage->payloadLength );
     ulStatus = prvGetValueForKey( xJsonSpan, az_span_ptr( xKey ), &xValueReceived );
     RETURN_IF_FAILED( ulStatus, "failed to find desired_property_key!" );
 
@@ -603,7 +603,7 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
     if( AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
                                          ucScratchBuffer2,
                                          strlen( ucScratchBuffer2 ),
-                                         NULL ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                         NULL ) != eAzureIoTHubClientSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to send response" );
     }
@@ -715,7 +715,7 @@ static uint32_t prvE2ETestParseCommand( uint8_t * pucData,
     return( status );
 }
 
-void vHandleCloudMessage( AzureIoTHubClientCloudMessageRequest_t * message,
+void vHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * message,
                           void * pvContext )
 {
     if( ucC2DCommandData == NULL )
@@ -725,7 +725,7 @@ void vHandleCloudMessage( AzureIoTHubClientCloudMessageRequest_t * message,
 
         if( ucC2DCommandData != NULL )
         {
-            memcpy( ucC2DCommandData, message->messagePayload, message->payloadLength );
+            memcpy( ucC2DCommandData, message->pvMessagePayload, message->payloadLength );
         }
     }
 }
@@ -764,11 +764,11 @@ void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * message,
 
         if( message->payloadLength != 0 )
         {
-            pxMethodCommandData->messagePayload = pvPortMalloc( message->payloadLength );
+            pxMethodCommandData->pvMessagePayload = pvPortMalloc( message->payloadLength );
 
-            if( pxMethodCommandData->messagePayload != NULL )
+            if( pxMethodCommandData->pvMessagePayload != NULL )
             {
-                memcpy( ( void * ) pxMethodCommandData->messagePayload, message->messagePayload, message->payloadLength );
+                memcpy( ( void * ) pxMethodCommandData->pvMessagePayload, message->pvMessagePayload, message->payloadLength );
             }
         }
     }
@@ -787,11 +787,11 @@ void vHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * message,
 
         if( message->payloadLength != 0 )
         {
-            pxTwinMessage->messagePayload = pvPortMalloc( message->payloadLength );
+            pxTwinMessage->pvMessagePayload = pvPortMalloc( message->payloadLength );
 
-            if( pxTwinMessage->messagePayload != NULL )
+            if( pxTwinMessage->pvMessagePayload != NULL )
             {
-                memcpy( ( void * ) pxTwinMessage->messagePayload, message->messagePayload, message->payloadLength );
+                memcpy( ( void * ) pxTwinMessage->pvMessagePayload, message->pvMessagePayload, message->payloadLength );
             }
         }
     }
@@ -810,7 +810,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * xAzureIoTHubClientHan
     if( AzureIoTHubClient_TelemetrySend( xAzureIoTHubClientHandle,
                                          e2etestE2E_TEST_CONNECTED_MESSAGE,
                                          sizeof( e2etestE2E_TEST_CONNECTED_MESSAGE ) - 1,
-                                         NULL ) != AZURE_IOT_HUB_CLIENT_SUCCESS )
+                                         NULL ) != eAzureIoTHubClientSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Report connected failed!" );
     }
@@ -853,7 +853,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * xAzureIoTHubClientHan
             pxMethodCommandData = NULL;
 
             if( ( ulStatus = prvE2ETestInitializeCMD( pucMethodData->methodName,
-                                                      pucMethodData->messagePayload,
+                                                      pucMethodData->pvMessagePayload,
                                                       pucMethodData->payloadLength, &xCMD ) ) )
             {
                 LogError( ( "Failed to parse the command, error code : %d", ulStatus ) );
@@ -861,7 +861,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * xAzureIoTHubClientHan
             }
             else
             {
-                pucMethodData->messagePayload = NULL;
+                pucMethodData->pvMessagePayload = NULL;
 
                 if( ( ulStatus = xCMD.execute( &xCMD, xAzureIoTHubClientHandle ) ) != e2etestE2E_TEST_SUCCESS )
                 {

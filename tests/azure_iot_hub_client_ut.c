@@ -121,14 +121,14 @@ static void prvSetupTestIoTHubClient(AzureIoTHubClient_t * pxTestIoTHubClient)
                                             sizeof(ucBuffer),
                                             prvGetUnixTime,
                                             &xTransportInterface),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
-    assert_int_equal(AzureIoTHubClient_SymmetricKeySet(pxTestIoTHubClient,
+                     eAzureIoTHubClientSuccess);
+    assert_int_equal(AzureIoTHubClient_SetSymmetricKey(pxTestIoTHubClient,
                                                        ucSymmetricKey, sizeof(ucSymmetricKey) - 1,
                                                        prvHmacFunction),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void prvTestCloudMessage(struct AzureIoTHubClientCloudMessageRequest * pxMessage,
+static void prvTestCloudMessage(struct AzureIoTHubClientCloudToDeviceMessageRequest * pxMessage,
                                 void * pvContext)
 {
     /* Dummy function */
@@ -175,7 +175,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 sizeof(ucBuffer),
                                                 prvGetUnixTime,
                                                 &xTransportInterface),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* Fail init when null deviceId passed */
     assert_int_not_equal(AzureIoTHubClient_Init(&xTestIoTHubClient,
@@ -186,7 +186,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 sizeof(ucBuffer),
                                                 prvGetUnixTime,
                                                 &xTransportInterface),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* Fail init when null buffer passed */
     assert_int_not_equal(AzureIoTHubClient_Init(&xTestIoTHubClient,
@@ -196,7 +196,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 NULL, 0,
                                                 prvGetUnixTime,
                                                 &xTransportInterface),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* Fail init when null AzureIoTGetCurrentTimeFunc_t passed */
     assert_int_not_equal(AzureIoTHubClient_Init(&xTestIoTHubClient,
@@ -205,7 +205,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 &xHubClientOptions,
                                                 ucBuffer, sizeof(ucBuffer),
                                                 NULL, &xTransportInterface),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* Fail init when null Transport passed */
     assert_int_not_equal(AzureIoTHubClient_Init(&xTestIoTHubClient,
@@ -214,7 +214,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 &xHubClientOptions,
                                                 ucBuffer, sizeof(ucBuffer),
                                                 prvGetUnixTime, NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* Fail when smaller buffer is passed */
     assert_int_not_equal(AzureIoTHubClient_Init(&xTestIoTHubClient,
@@ -223,7 +223,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 &xHubClientOptions,
                                                 ucBuffer, azureiotUSERNAME_MAX,
                                                 prvGetUnixTime, &xTransportInterface),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* Fail init when AzureIoTMQTT_Init fails */
     will_return(AzureIoTMQTT_Init, AzureIoTMQTTNoMemory);
@@ -233,7 +233,7 @@ static void testAzureIoTHubClient_Init_Failure(void ** state)
                                                 &xHubClientOptions,
                                                 ucBuffer, sizeof(ucBuffer),
                                                 prvGetUnixTime, &xTransportInterface),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Init_Success(void ** state)
@@ -252,7 +252,7 @@ static void testAzureIoTHubClient_Init_Success(void ** state)
                                             sizeof(ucBuffer),
                                             prvGetUnixTime,
                                             &xTransportInterface),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Deinit_Success(void ** state)
@@ -264,35 +264,35 @@ static void testAzureIoTHubClient_Deinit_Success(void ** state)
     AzureIoTHubClient_Deinit(&xTestIoTHubClient);
 }
 
-static void testAzureIoTHubClient_SymmetricKeySet_Failure(void ** state)
+static void testAzureIoTHubClient_SetSymmetricKey_Failure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
     (void)state;
 
-    /* Fail AzureIoTHubClient_SymmetricKeySet when null symmetric key is passed */
-    assert_int_not_equal(AzureIoTHubClient_SymmetricKeySet(&xTestIoTHubClient,
+    /* Fail AzureIoTHubClient_SetSymmetricKey when null symmetric key is passed */
+    assert_int_not_equal(AzureIoTHubClient_SetSymmetricKey(&xTestIoTHubClient,
                                                            NULL, 0,
                                                            prvHmacFunction),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
-    /* Fail AzureIoTHubClient_SymmetricKeySet when null hashing function is passed */
-    assert_int_not_equal(AzureIoTHubClient_SymmetricKeySet(&xTestIoTHubClient,
+    /* Fail AzureIoTHubClient_SetSymmetricKey when null hashing function is passed */
+    assert_int_not_equal(AzureIoTHubClient_SetSymmetricKey(&xTestIoTHubClient,
                                                            ucSymmetricKey, sizeof(ucSymmetricKey) - 1,
                                                            NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_SymmetricKeySet_Success(void ** state)
+static void testAzureIoTHubClient_SetSymmetricKey_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
     (void)state;
 
-    assert_int_equal(AzureIoTHubClient_SymmetricKeySet(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SetSymmetricKey(&xTestIoTHubClient,
                                                        ucSymmetricKey, sizeof(ucSymmetricKey) - 1,
                                                        prvHmacFunction),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Connect_InvalidArgFailure(void ** state)
@@ -302,7 +302,7 @@ static void testAzureIoTHubClient_Connect_InvalidArgFailure(void ** state)
     assert_int_not_equal(AzureIoTHubClient_Connect(NULL,
                                                    false,
                                                    60),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Connect_MQTTConnectFailure(void ** state)
@@ -318,7 +318,7 @@ static void testAzureIoTHubClient_Connect_MQTTConnectFailure(void ** state)
     assert_int_not_equal(AzureIoTHubClient_Connect(&xTestIoTHubClient,
                                                    false,
                                                    60),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Connect_Success(void ** state)
@@ -334,7 +334,7 @@ static void testAzureIoTHubClient_Connect_Success(void ** state)
     assert_int_equal(AzureIoTHubClient_Connect(&xTestIoTHubClient,
                                                false,
                                                60),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Disconnect_InvalidArgFailure(void ** state)
@@ -342,7 +342,7 @@ static void testAzureIoTHubClient_Disconnect_InvalidArgFailure(void ** state)
     (void)state;
 
     assert_int_not_equal(AzureIoTHubClient_Disconnect(NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure(void ** state)
@@ -355,7 +355,7 @@ static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure(void ** state
 
     will_return(AzureIoTMQTT_Disconnect, AzureIoTMQTTIllegalState);
     assert_int_not_equal(AzureIoTHubClient_Disconnect(&xTestIoTHubClient),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_Disconnect_Success(void ** state)
@@ -368,10 +368,10 @@ static void testAzureIoTHubClient_Disconnect_Success(void ** state)
 
     will_return(AzureIoTMQTT_Disconnect, AzureIoTMQTTSuccess);
     assert_int_equal(AzureIoTHubClient_Disconnect(&xTestIoTHubClient),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_InvalidArgFailure(void ** state)
+static void testAzureIoTHubClient_SendTelemetry_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -380,13 +380,13 @@ static void testAzureIoTHubClient_TelemetrySend_InvalidArgFailure(void ** state)
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     /* NULL handler */
-    assert_int_not_equal(AzureIoTHubClient_TelemetrySend(NULL,
+    assert_int_not_equal(AzureIoTHubClient_SendTelemetry(NULL,
                                                          ucTestTelemetryPayload,
                                                          sizeof(ucTestTelemetryPayload) - 1, NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_BigTopicFailure(void ** state)
+static void testAzureIoTHubClient_SendTelemetry_BigTopicFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTMessageProperties_t properties = {
@@ -398,13 +398,13 @@ static void testAzureIoTHubClient_TelemetrySend_BigTopicFailure(void ** state)
 
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
-    assert_int_not_equal(AzureIoTHubClient_TelemetrySend(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SendTelemetry(&xTestIoTHubClient,
                                                          ucTestTelemetryPayload,
                                                          sizeof(ucTestTelemetryPayload) - 1, &properties),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_SendFailure(void ** state)
+static void testAzureIoTHubClient_SendTelemetry_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -413,13 +413,13 @@ static void testAzureIoTHubClient_TelemetrySend_SendFailure(void ** state)
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSendFailed);
-    assert_int_not_equal(AzureIoTHubClient_TelemetrySend(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SendTelemetry(&xTestIoTHubClient,
                                                          ucTestTelemetryPayload,
                                                          sizeof(ucTestTelemetryPayload) - 1, NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_TelemetrySend_Success(void ** state)
+static void testAzureIoTHubClient_SendTelemetry_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -428,10 +428,10 @@ static void testAzureIoTHubClient_TelemetrySend_Success(void ** state)
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSuccess);
-    assert_int_equal(AzureIoTHubClient_TelemetrySend(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SendTelemetry(&xTestIoTHubClient,
                                                      ucTestTelemetryPayload,
                                                      sizeof(ucTestTelemetryPayload) - 1, NULL),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_ProcessLoop_InvalidArgFailure(void ** state)
@@ -440,7 +440,7 @@ static void testAzureIoTHubClient_ProcessLoop_InvalidArgFailure(void ** state)
 
     assert_int_not_equal(AzureIoTHubClient_ProcessLoop(NULL,
                                                        1234),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure(void ** state)
@@ -453,7 +453,7 @@ static void testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTRecvFailed);
     assert_int_not_equal(AzureIoTHubClient_ProcessLoop(&xTestIoTHubClient,
                                                        1234),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_ProcessLoop_Success(void ** state)
@@ -467,28 +467,28 @@ static void testAzureIoTHubClient_ProcessLoop_Success(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     assert_int_equal(AzureIoTHubClient_ProcessLoop(&xTestIoTHubClient,
                                                    1234),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_InvalidArgFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeCloudToDeviceMessage_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
     (void)state;
 
     /* NULL handler */
-    assert_int_not_equal(AzureIoTHubClient_CloudMessageSubscribe(NULL,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeCloudToDeviceMessage(NULL,
                                                                  prvTestCloudMessage,
                                                                  NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* NULL function callback */
-    assert_int_not_equal(AzureIoTHubClient_CloudMessageSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeCloudToDeviceMessage(&xTestIoTHubClient,
                                                                  NULL, NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_SendFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeCloudToDeviceMessage_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -497,13 +497,13 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_SendFailure(void ** stat
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSendFailed);
-    assert_int_not_equal(AzureIoTHubClient_CloudMessageSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeCloudToDeviceMessage(&xTestIoTHubClient,
                                                                  prvTestCloudMessage,
                                                                  NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_ReceiveFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeCloudToDeviceMessage_ReceiveFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -513,13 +513,13 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_ReceiveFailure(void ** s
 
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTRecvFailed);
-    assert_int_not_equal(AzureIoTHubClient_CloudMessageSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeCloudToDeviceMessage(&xTestIoTHubClient,
                                                                  prvTestCloudMessage,
                                                                  NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_CloudMessageSubscribe_Success(void ** state)
+static void testAzureIoTHubClient_SubscribeCloudToDeviceMessage_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -531,31 +531,31 @@ static void testAzureIoTHubClient_CloudMessageSubscribe_Success(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_CloudMessageSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeCloudToDeviceMessage(&xTestIoTHubClient,
                                                              prvTestCloudMessage,
                                                              NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_InvalidArgFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeDirectMethod_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
     (void)state;
 
     /* NULL handler */
-    assert_int_not_equal(AzureIoTHubClient_DirectMethodSubscribe(NULL,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDirectMethod(NULL,
                                                                  prvTestDirectMethod,
                                                                  NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* NULL function callback */
-    assert_int_not_equal(AzureIoTHubClient_DirectMethodSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDirectMethod(&xTestIoTHubClient,
                                                                  NULL, NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_SendFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeDirectMethod_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -564,13 +564,13 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_SendFailure(void ** stat
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSendFailed);
-    assert_int_not_equal(AzureIoTHubClient_DirectMethodSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDirectMethod(&xTestIoTHubClient,
                                                                  prvTestDirectMethod,
                                                                  NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_ReceiveFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeDirectMethod_ReceiveFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -580,13 +580,13 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_ReceiveFailure(void ** s
 
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTRecvFailed);
-    assert_int_not_equal(AzureIoTHubClient_DirectMethodSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDirectMethod(&xTestIoTHubClient,
                                                                  prvTestDirectMethod,
                                                                  NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DirectMethodSubscribe_Success(void ** state)
+static void testAzureIoTHubClient_SubscribeDirectMethod_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -598,30 +598,30 @@ static void testAzureIoTHubClient_DirectMethodSubscribe_Success(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_DirectMethodSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDirectMethod(&xTestIoTHubClient,
                                                              prvTestDirectMethod,
                                                              NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_InvalidArgFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeDeviceTwin_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     (void)state;
 
     /* NULL handler */
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinSubscribe(NULL,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDeviceTwin(NULL,
                                                                prvTestDeviceTwin,
                                                                NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* NULL function callback */
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                                NULL, NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_SendFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeDeviceTwin_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -630,13 +630,13 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_SendFailure(void ** state)
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSendFailed);
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                                prvTestDeviceTwin,
                                                                NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_ReceiveFailure(void ** state)
+static void testAzureIoTHubClient_SubscribeDeviceTwin_ReceiveFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -646,13 +646,13 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_ReceiveFailure(void ** sta
 
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTRecvFailed);
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                                prvTestDeviceTwin,
                                                                NULL, (uint32_t)-1),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinSubscribe_Success(void ** state)
+static void testAzureIoTHubClient_SubscribeDeviceTwin_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -664,55 +664,21 @@ static void testAzureIoTHubClient_DeviceTwinSubscribe_Success(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                            prvTestDeviceTwin,
                                                            NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_CloudMessageUnsubscribe_InvalidArgFailure(void ** state)
+static void testAzureIoTHubClient_UnsubscribeCloudToDeviceMessage_InvalidArgFailure(void ** state)
 {
     (void)state;
 
-    assert_int_not_equal(AzureIoTHubClient_CloudMessageUnsubscribe(NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+    assert_int_not_equal(AzureIoTHubClient_UnsubscribeCloudToDeviceMessage(NULL),
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_CloudMessageUnsubscribe_SendFailure(void ** state)
-{
-    AzureIoTHubClient_t xTestIoTHubClient;
-
-    (void)state;
-
-    prvSetupTestIoTHubClient(&xTestIoTHubClient);
-
-    will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSendFailed);
-    assert_int_not_equal(AzureIoTHubClient_CloudMessageUnsubscribe(&xTestIoTHubClient),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
-}
-
-static void testAzureIoTHubClient_CloudMessageUnsubscribe_Success(void ** state)
-{
-    AzureIoTHubClient_t xTestIoTHubClient;
-
-    (void)state;
-
-    prvSetupTestIoTHubClient(&xTestIoTHubClient);
-
-    will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSuccess);
-    assert_int_equal(AzureIoTHubClient_CloudMessageUnsubscribe(&xTestIoTHubClient),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
-}
-
-static void testAzureIoTHubClient_DirectMethodUnsubscribe_InvalidArgFailure(void ** state)
-{
-    (void)state;
-
-    assert_int_not_equal(AzureIoTHubClient_DirectMethodUnsubscribe(NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
-}
-
-static void testAzureIoTHubClient_DirectMethodUnsubscribe_SendFailure(void ** state)
+static void testAzureIoTHubClient_UnsubscribeCloudToDeviceMessage_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -721,11 +687,11 @@ static void testAzureIoTHubClient_DirectMethodUnsubscribe_SendFailure(void ** st
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSendFailed);
-    assert_int_not_equal(AzureIoTHubClient_DirectMethodUnsubscribe(&xTestIoTHubClient),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+    assert_int_not_equal(AzureIoTHubClient_UnsubscribeCloudToDeviceMessage(&xTestIoTHubClient),
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DirectMethodUnsubscribe_Success(void ** state)
+static void testAzureIoTHubClient_UnsubscribeCloudToDeviceMessage_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -734,8 +700,42 @@ static void testAzureIoTHubClient_DirectMethodUnsubscribe_Success(void ** state)
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSuccess);
-    assert_int_equal(AzureIoTHubClient_DirectMethodUnsubscribe(&xTestIoTHubClient),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+    assert_int_equal(AzureIoTHubClient_UnsubscribeCloudToDeviceMessage(&xTestIoTHubClient),
+                     eAzureIoTHubClientSuccess);
+}
+
+static void testAzureIoTHubClient_UnsubscribeDirectMethod_InvalidArgFailure(void ** state)
+{
+    (void)state;
+
+    assert_int_not_equal(AzureIoTHubClient_UnsubscribeDirectMethod(NULL),
+                         eAzureIoTHubClientSuccess);
+}
+
+static void testAzureIoTHubClient_UnsubscribeDirectMethod_SendFailure(void ** state)
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+
+    (void)state;
+
+    prvSetupTestIoTHubClient(&xTestIoTHubClient);
+
+    will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSendFailed);
+    assert_int_not_equal(AzureIoTHubClient_UnsubscribeDirectMethod(&xTestIoTHubClient),
+                         eAzureIoTHubClientSuccess);
+}
+
+static void testAzureIoTHubClient_UnsubscribeDirectMethod_Success(void ** state)
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+
+    (void)state;
+
+    prvSetupTestIoTHubClient(&xTestIoTHubClient);
+
+    will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSuccess);
+    assert_int_equal(AzureIoTHubClient_UnsubscribeDirectMethod(&xTestIoTHubClient),
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinUnsubscribe_InvalidArgFailure(void ** state)
@@ -743,7 +743,7 @@ static void testAzureIoTHubClient_DeviceTwinUnsubscribe_InvalidArgFailure(void *
     (void)state;
 
     assert_int_not_equal(AzureIoTHubClient_DeviceTwinUnsubscribe(NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinUnsubscribe_SendFailure(void ** state)
@@ -756,7 +756,7 @@ static void testAzureIoTHubClient_DeviceTwinUnsubscribe_SendFailure(void ** stat
 
     will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSendFailed);
     assert_int_not_equal(AzureIoTHubClient_DeviceTwinUnsubscribe(&xTestIoTHubClient),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinUnsubscribe_Success(void ** state)
@@ -769,7 +769,7 @@ static void testAzureIoTHubClient_DeviceTwinUnsubscribe_Success(void ** state)
 
     will_return(AzureIoTMQTT_Unsubscribe, AzureIoTMQTTSuccess);
     assert_int_equal(AzureIoTHubClient_DeviceTwinUnsubscribe(&xTestIoTHubClient),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_SendMethodResponse_InvalidArgFailure(void ** state)
@@ -777,8 +777,8 @@ static void testAzureIoTHubClient_SendMethodResponse_InvalidArgFailure(void ** s
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
     AzureIoTHubClientMethodRequest_t req = {
-        .requestId = &req_id,
-        .requestIdLength = sizeof(req_id)};
+        .pucRequestID = &req_id,
+        .usRequestIDLength = sizeof(req_id)};
 
     (void)state;
 
@@ -786,12 +786,12 @@ static void testAzureIoTHubClient_SendMethodResponse_InvalidArgFailure(void ** s
     assert_int_not_equal(AzureIoTHubClient_SendMethodResponse(NULL,
                                                               &req, 200, ucTestMethodResponsePayload,
                                                               sizeof(ucTestMethodResponsePayload)),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
     /* NULL Request */
     assert_int_not_equal(AzureIoTHubClient_SendMethodResponse(&xTestIoTHubClient,
                                                               NULL, 200, ucTestMethodResponsePayload,
                                                               sizeof(ucTestMethodResponsePayload)),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_SendMethodResponse_SendFailure(void ** state)
@@ -799,8 +799,8 @@ static void testAzureIoTHubClient_SendMethodResponse_SendFailure(void ** state)
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
     AzureIoTHubClientMethodRequest_t req = {
-        .requestId = &req_id,
-        .requestIdLength = sizeof(req_id)};
+        .pucRequestID = &req_id,
+        .usRequestIDLength = sizeof(req_id)};
 
     (void)state;
 
@@ -810,7 +810,7 @@ static void testAzureIoTHubClient_SendMethodResponse_SendFailure(void ** state)
     assert_int_not_equal(AzureIoTHubClient_SendMethodResponse(&xTestIoTHubClient,
                                                               &req, 200, ucTestMethodResponsePayload,
                                                               sizeof(ucTestMethodResponsePayload)),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void ** state)
@@ -818,8 +818,8 @@ static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void *
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
     AzureIoTHubClientMethodRequest_t req = {
-        .requestId = &req_id,
-        .requestIdLength = sizeof(req_id)};
+        .pucRequestID = &req_id,
+        .usRequestIDLength = sizeof(req_id)};
 
     (void)state;
 
@@ -829,7 +829,7 @@ static void testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess(void *
     pucPublishPayload = (const uint8_t *)testEMPTY_JSON;
     assert_int_equal(AzureIoTHubClient_SendMethodResponse(&xTestIoTHubClient,
                                                           &req, 200, NULL, 0),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_SendMethodResponse_Success(void ** state)
@@ -837,8 +837,8 @@ static void testAzureIoTHubClient_SendMethodResponse_Success(void ** state)
     AzureIoTHubClient_t xTestIoTHubClient;
     uint8_t req_id = 1;
     AzureIoTHubClientMethodRequest_t req = {
-        .requestId = &req_id,
-        .requestIdLength = sizeof(req_id)};
+        .pucRequestID = &req_id,
+        .usRequestIDLength = sizeof(req_id)};
 
     (void)state;
 
@@ -849,10 +849,10 @@ static void testAzureIoTHubClient_SendMethodResponse_Success(void ** state)
     assert_int_equal(AzureIoTHubClient_SendMethodResponse(&xTestIoTHubClient,
                                                           &req, 200, ucTestMethodResponsePayload,
                                                           sizeof(ucTestMethodResponsePayload) - 1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_InvalidArgFailure(void ** state)
+static void testAzureIoTHubClient_SendDeviceTwinReported_InvalidArgFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -862,20 +862,20 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_InvalidArgFailure(void 
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     /* NULL handler */
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinReportedSend(NULL,
+    assert_int_not_equal(AzureIoTHubClient_SendDeviceTwinReported(NULL,
                                                                   ucTestTwinReportedPayload,
                                                                   sizeof(ucTestTwinReportedPayload) - 1,
                                                                   &requestId),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
     /* NULL reported payload */
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinReportedSend(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SendDeviceTwinReported(&xTestIoTHubClient,
                                                                   NULL, 0,
                                                                   &requestId),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_NotSubscribeFailure(void ** state)
+static void testAzureIoTHubClient_SendDeviceTwinReported_NotSubscribeFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -884,14 +884,14 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_NotSubscribeFailure(voi
 
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinReportedSend(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SendDeviceTwinReported(&xTestIoTHubClient,
                                                                   ucTestTwinReportedPayload,
                                                                   sizeof(ucTestTwinReportedPayload) - 1,
                                                                   &requestId),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_SendFailure(void ** state)
+static void testAzureIoTHubClient_SendDeviceTwinReported_SendFailure(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -904,21 +904,21 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_SendFailure(void ** sta
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                            prvTestDeviceTwin,
                                                            NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSendFailed);
     pucPublishPayload = ucTestTwinReportedPayload;
-    assert_int_not_equal(AzureIoTHubClient_DeviceTwinReportedSend(&xTestIoTHubClient,
+    assert_int_not_equal(AzureIoTHubClient_SendDeviceTwinReported(&xTestIoTHubClient,
                                                                   ucTestTwinReportedPayload,
                                                                   sizeof(ucTestTwinReportedPayload) - 1,
                                                                   &requestId),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
-static void testAzureIoTHubClient_DeviceTwinReportedSend_Success(void ** state)
+static void testAzureIoTHubClient_SendDeviceTwinReported_Success(void ** state)
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     uint32_t requestId = 0;
@@ -931,18 +931,18 @@ static void testAzureIoTHubClient_DeviceTwinReportedSend_Success(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                            prvTestDeviceTwin,
                                                            NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSuccess);
     pucPublishPayload = ucTestTwinReportedPayload;
-    assert_int_equal(AzureIoTHubClient_DeviceTwinReportedSend(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SendDeviceTwinReported(&xTestIoTHubClient,
                                                               ucTestTwinReportedPayload,
                                                               sizeof(ucTestTwinReportedPayload) - 1,
                                                               &requestId),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinGet_InvalidArgFailure(void ** state)
@@ -950,7 +950,7 @@ static void testAzureIoTHubClient_DeviceTwinGet_InvalidArgFailure(void ** state)
     (void)state;
 
     assert_int_not_equal(AzureIoTHubClient_DeviceTwinGet(NULL),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinGet_NotSubscribeFailure(void ** state)
@@ -961,7 +961,7 @@ static void testAzureIoTHubClient_DeviceTwinGet_NotSubscribeFailure(void ** stat
     prvSetupTestIoTHubClient(&xTestIoTHubClient);
 
     assert_int_not_equal(AzureIoTHubClient_DeviceTwinGet(&xTestIoTHubClient),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinGet_SendFailure(void ** state)
@@ -976,15 +976,15 @@ static void testAzureIoTHubClient_DeviceTwinGet_SendFailure(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                            prvTestDeviceTwin,
                                                            NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSendFailed);
     pucPublishPayload = NULL;
     assert_int_not_equal(AzureIoTHubClient_DeviceTwinGet(&xTestIoTHubClient),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_DeviceTwinGet_Success(void ** state)
@@ -999,15 +999,15 @@ static void testAzureIoTHubClient_DeviceTwinGet_Success(void ** state)
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
     xPacketInfo.type = AZURE_IOT_MQTT_PACKET_TYPE_SUBACK;
     xDeserializedInfo.packetIdentifier = usTestPacketId;
-    assert_int_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                            prvTestDeviceTwin,
                                                            NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     will_return(AzureIoTMQTT_Publish, AzureIoTMQTTSuccess);
     pucPublishPayload = NULL;
     assert_int_equal(AzureIoTHubClient_DeviceTwinGet(&xTestIoTHubClient),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 }
 
 static void testAzureIoTHubClient_ReceiveMessages_Success(void ** state)
@@ -1023,26 +1023,26 @@ static void testAzureIoTHubClient_ReceiveMessages_Success(void ** state)
     xDeserializedInfo.packetIdentifier = usTestPacketId;
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
-    assert_int_equal(AzureIoTHubClient_CloudMessageSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeCloudToDeviceMessage(&xTestIoTHubClient,
                                                              prvTestCloudMessage,
                                                              NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     xDeserializedInfo.packetIdentifier = ++usTestPacketId;
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
-    assert_int_equal(AzureIoTHubClient_DirectMethodSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDirectMethod(&xTestIoTHubClient,
                                                              prvTestDirectMethod,
                                                              NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     xDeserializedInfo.packetIdentifier = ++usTestPacketId;
     will_return(AzureIoTMQTT_Subscribe, AzureIoTMQTTSuccess);
     will_return(AzureIoTMQTT_ProcessLoop, AzureIoTMQTTSuccess);
-    assert_int_equal(AzureIoTHubClient_DeviceTwinSubscribe(&xTestIoTHubClient,
+    assert_int_equal(AzureIoTHubClient_SubscribeDeviceTwin(&xTestIoTHubClient,
                                                            prvTestDeviceTwin,
                                                            NULL, (uint32_t)-1),
-                     AZURE_IOT_HUB_CLIENT_SUCCESS);
+                     eAzureIoTHubClientSuccess);
 
     for (size_t index = 0; index < (sizeof(xTestReceiveData) / sizeof(ReceviceTestData_t)); index++)
     {
@@ -1057,7 +1057,7 @@ static void testAzureIoTHubClient_ReceiveMessages_Success(void ** state)
         ulReceivedCallbackFunctionId = 0;
 
         assert_int_equal(AzureIoTHubClient_ProcessLoop(&xTestIoTHubClient, 60),
-                         AZURE_IOT_HUB_CLIENT_SUCCESS);
+                         eAzureIoTHubClientSuccess);
 
         assert_int_equal(ulReceivedCallbackFunctionId, xTestReceiveData[index].ulCallbackFunctionId);
     }
@@ -1069,39 +1069,39 @@ int get_all_tests()
         cmocka_unit_test(testAzureIoTHubClient_Init_Failure),
         cmocka_unit_test(testAzureIoTHubClient_Init_Success),
         cmocka_unit_test(testAzureIoTHubClient_Deinit_Success),
-        cmocka_unit_test(testAzureIoTHubClient_SymmetricKeySet_Failure),
-        cmocka_unit_test(testAzureIoTHubClient_SymmetricKeySet_Success),
+        cmocka_unit_test(testAzureIoTHubClient_SetSymmetricKey_Failure),
+        cmocka_unit_test(testAzureIoTHubClient_SetSymmetricKey_Success),
         cmocka_unit_test(testAzureIoTHubClient_Connect_InvalidArgFailure),
         cmocka_unit_test(testAzureIoTHubClient_Connect_MQTTConnectFailure),
         cmocka_unit_test(testAzureIoTHubClient_Connect_Success),
         cmocka_unit_test(testAzureIoTHubClient_Disconnect_InvalidArgFailure),
         cmocka_unit_test(testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure),
         cmocka_unit_test(testAzureIoTHubClient_Disconnect_Success),
-        cmocka_unit_test(testAzureIoTHubClient_TelemetrySend_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_TelemetrySend_BigTopicFailure),
-        cmocka_unit_test(testAzureIoTHubClient_TelemetrySend_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_TelemetrySend_Success),
+        cmocka_unit_test(testAzureIoTHubClient_SendTelemetry_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SendTelemetry_BigTopicFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SendTelemetry_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SendTelemetry_Success),
         cmocka_unit_test(testAzureIoTHubClient_ProcessLoop_InvalidArgFailure),
         cmocka_unit_test(testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure),
         cmocka_unit_test(testAzureIoTHubClient_ProcessLoop_Success),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageSubscribe_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageSubscribe_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageSubscribe_ReceiveFailure),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageSubscribe_Success),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodSubscribe_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodSubscribe_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodSubscribe_ReceiveFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodSubscribe_Success),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinSubscribe_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinSubscribe_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinSubscribe_ReceiveFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinSubscribe_Success),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageUnsubscribe_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageUnsubscribe_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_CloudMessageUnsubscribe_Success),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodUnsubscribe_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodUnsubscribe_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DirectMethodUnsubscribe_Success),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeCloudToDeviceMessage_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeCloudToDeviceMessage_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeCloudToDeviceMessage_ReceiveFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeCloudToDeviceMessage_Success),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDirectMethod_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDirectMethod_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDirectMethod_ReceiveFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDirectMethod_Success),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDeviceTwin_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDeviceTwin_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDeviceTwin_ReceiveFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SubscribeDeviceTwin_Success),
+        cmocka_unit_test(testAzureIoTHubClient_UnsubscribeCloudToDeviceMessage_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_UnsubscribeCloudToDeviceMessage_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_UnsubscribeCloudToDeviceMessage_Success),
+        cmocka_unit_test(testAzureIoTHubClient_UnsubscribeDirectMethod_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_UnsubscribeDirectMethod_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_UnsubscribeDirectMethod_Success),
         cmocka_unit_test(testAzureIoTHubClient_DeviceTwinUnsubscribe_InvalidArgFailure),
         cmocka_unit_test(testAzureIoTHubClient_DeviceTwinUnsubscribe_SendFailure),
         cmocka_unit_test(testAzureIoTHubClient_DeviceTwinUnsubscribe_Success),
@@ -1109,10 +1109,10 @@ int get_all_tests()
         cmocka_unit_test(testAzureIoTHubClient_SendMethodResponse_SendFailure),
         cmocka_unit_test(testAzureIoTHubClient_SendMethodResponse_EmptyResponseSuccess),
         cmocka_unit_test(testAzureIoTHubClient_SendMethodResponse_Success),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinReportedSend_InvalidArgFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinReportedSend_NotSubscribeFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinReportedSend_SendFailure),
-        cmocka_unit_test(testAzureIoTHubClient_DeviceTwinReportedSend_Success),
+        cmocka_unit_test(testAzureIoTHubClient_SendDeviceTwinReported_InvalidArgFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SendDeviceTwinReported_NotSubscribeFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SendDeviceTwinReported_SendFailure),
+        cmocka_unit_test(testAzureIoTHubClient_SendDeviceTwinReported_Success),
         cmocka_unit_test(testAzureIoTHubClient_DeviceTwinGet_InvalidArgFailure),
         cmocka_unit_test(testAzureIoTHubClient_DeviceTwinGet_NotSubscribeFailure),
         cmocka_unit_test(testAzureIoTHubClient_DeviceTwinGet_SendFailure),

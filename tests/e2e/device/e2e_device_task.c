@@ -65,40 +65,40 @@ static void test_entry( void ** state )
                                               ucSharedBuffer, sizeof( ucSharedBuffer ),
                                               ulGetUnixTime,
                                               &xTransport ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
 
-    assert_int_equal( AzureIoTHubClient_SymmetricKeySet( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SetSymmetricKey( &xAzureIoTHubClient,
                                                          ( const uint8_t * ) ppcArgv[ 4 ],
                                                          strlen( ppcArgv[ 4 ] ),
                                                          ulCalculateHMAC ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
     assert_int_equal( AzureIoTHubClient_Connect( &xAzureIoTHubClient,
                                                  false,
                                                  e2etestCONNACK_RECV_TIMEOUT_MS ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
-    assert_int_equal( AzureIoTHubClient_CloudMessageSubscribe( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SubscribeCloudToDeviceMessage( &xAzureIoTHubClient,
                                                                vHandleCloudMessage,
                                                                &xAzureIoTHubClient,
                                                                ULONG_MAX ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
-    assert_int_equal( AzureIoTHubClient_DirectMethodSubscribe( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SubscribeDirectMethod( &xAzureIoTHubClient,
                                                                vHandleDirectMethod,
                                                                &xAzureIoTHubClient,
                                                                ULONG_MAX ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
-    assert_int_equal( AzureIoTHubClient_DeviceTwinSubscribe( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SubscribeDeviceTwin( &xAzureIoTHubClient,
                                                              vHandleDeviceTwinMessage,
                                                              &xAzureIoTHubClient,
                                                              ULONG_MAX ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
     assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
     AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
     AzureIoTHubClient_Deinit( &xAzureIoTHubClient );
