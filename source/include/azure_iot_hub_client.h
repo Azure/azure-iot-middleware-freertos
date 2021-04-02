@@ -93,7 +93,7 @@ typedef struct AzureIoTHubClientMethodRequest
     uint32_t ulPayloadLength;      /**< The length of the message payload. */
 
     const uint8_t * pucRequestID;  /**< The pointer to the request ID. */
-    int16_t usRequestIDLength;     /**< The length of the request ID. */
+    uint16_t usRequestIDLength;    /**< The length of the request ID. */
 
     const uint8_t * pucMethodName; /**< The name of the method to invoke. */
     uint16_t usMethodNameLength;   /**< The length of the method name. */
@@ -121,21 +121,21 @@ typedef struct AzureIoTHubClientTwinResponse
  * @brief Cloud message callback to be invoked when a cloud message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  */
-typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( struct AzureIoTHubClientCloudToDeviceRequest * pxMessage,
+typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
                                                                      void * pvContext );
 
 /**
  * @brief Method callback to be invoked when a method request is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  */
-typedef void ( * AzureIoTHubClientMethodCallback_t ) ( struct AzureIoTHubClientMethodRequest * pxMessage,
+typedef void ( * AzureIoTHubClientMethodCallback_t ) ( AzureIoTHubClientMethodRequest_t * pxMessage,
                                                        void * pvContext );
 
 /**
  * @brief Twin callback to be invoked when a twin message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  */
-typedef void ( * AzureIoTHubClientTwinCallback_t ) ( struct AzureIoTHubClientTwinResponse * pxMessage,
+typedef void ( * AzureIoTHubClientTwinCallback_t ) ( AzureIoTHubClientTwinResponse_t * pxMessage,
                                                      void * pvContext );
 
 /* Receive context to be used internally to the processing of messages */
@@ -183,9 +183,9 @@ typedef struct AzureIoTHubClient
         az_iot_hub_client xAzureIoTHubClientCore;
 
         const uint8_t * pucHostname;
-        uin16_t ulHostnameLength;
+        uint16_t ulHostnameLength;
         const uint8_t * pucDeviceID;
-        uin16_t ulDeviceIDLength;
+        uint16_t ulDeviceIDLength;
         const uint8_t * pucAzureIoTHubClientSymmetricKey;
         uint32_t ulAzureIoTHubClientSymmetricKeyLength;
 
@@ -424,6 +424,6 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendDeviceTwinReported( AzureIoTHubC
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_DeviceTwinGet( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
+AzureIoTHubClientResult_t AzureIoTHubClient_GetDeviceTwin( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle );
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */
