@@ -21,13 +21,13 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
-#define hubclientSUBSCRIBE_FEATURE_COUNT 3
+#define hubclientSUBSCRIBE_FEATURE_COUNT    3
 
 typedef struct AzureIoTHubClient * AzureIoTHubClientHandle_t;
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIoTHubCloudToDeviceMessage = 1,            /**< The message is a cloud message. */
+    eAzureIoTHubCloudToDeviceMessage = 1,    /**< The message is a cloud message. */
     eAzureIoTHubDirectMethodMessage,         /**< The message is a direct method message. */
     eAzureIoTHubTwinGetMessage,              /**< The message is a twin get response (payload contains the twin document). */
     eAzureIoTHubTwinReportedResponseMessage, /**< The message is a twin reported property status response. */
@@ -122,7 +122,7 @@ typedef struct AzureIoTHubClientTwinResponse
  *
  */
 typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( struct AzureIoTHubClientCloudToDeviceRequest * pxMessage,
-                                                             void * pvContext );
+                                                                     void * pvContext );
 
 /**
  * @brief Method callback to be invoked when a method request is received in the call to AzureIoTHubClient_ProcessLoop().
@@ -161,10 +161,11 @@ typedef struct AzureIoTHubClientReceiveContext
 
 typedef struct AzureIoTHubClientOptions
 {
-    const uint8_t * pucModuleID;  /**< The module ID to use for this device. */
+    const uint8_t * pucModuleID;  /**< The optional module ID to use for this device. */
     uint32_t ulModuleIDLength;    /**< The length of the module ID. */
 
-    const uint8_t * pucModelID;   /**< The model ID used to identify the capabilities of a device based on the Digital Twin document. */
+    const uint8_t * pucModelID;   /**< The Azure Digital Twin Definition Language model ID used to
+                                   *   identify the capabilities of this device based on the Digital Twin document. */
     uint32_t ulModelIDLength;     /**< The length of the model ID. */
 
     const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
@@ -177,14 +178,14 @@ typedef struct AzureIoTHubClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        uint8_t * pucAzureIoTHubClientScratchBuffer;
-        uint32_t ulAzureIoTHubClientScratchBufferLength;
+        uint8_t * pucAzureIoTHubClientWorkingBuffer;
+        uint32_t ulAzureIoTHubClientWorkingBufferLength;
         az_iot_hub_client xAzureIoTHubClientCore;
 
         const uint8_t * pucHostname;
-        uint32_t ulHostnameLength;
+        uin16_t ulHostnameLength;
         const uint8_t * pucDeviceID;
-        uint32_t ulDeviceIDLength;
+        uin16_t ulDeviceIDLength;
         const uint8_t * pucAzureIoTHubClientSymmetricKey;
         uint32_t ulAzureIoTHubClientSymmetricKeyLength;
 
@@ -226,7 +227,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
  *         - `&` : `%26`
  * @param[in] ulDeviceIDLength The length of the device ID.
  * @param[in] pxHubClientOptions The #AzureIoTHubClientOptions_t for the IoT Hub client instance.
- * @param[in] pucBuffer The static buffer to use for middleware operations and MQTT messages.
+ * @param[in] pucBuffer The static buffer to use for middleware operations and MQTT messages until AzureIoTHubClient_Deinit is called.
  * @param[in] ulBufferLength The length of the \p pucBuffer.
  * @param[in] xGetTimeFunction A function pointer to a function which gives the current epoch time.
  * @param[in] pxTransportInterface The #AzureIoTTransportInterface_t to use for the MQTT library.
@@ -234,9 +235,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
                                                   const uint8_t * pucHostname,
-                                                  uint32_t ulHostnameLength,
+                                                  uint16_t ulHostnameLength,
                                                   const uint8_t * pucDeviceID,
-                                                  uint32_t ulDeviceIDLength,
+                                                  uint16_t ulDeviceIDLength,
                                                   AzureIoTHubClientOptions_t * pxHubClientOptions,
                                                   uint8_t * pucBuffer,
                                                   uint32_t ulBufferLength,
@@ -252,7 +253,7 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClientHandle_t xAzureIoTHubClientHandl
 
 /**
  * @brief Set the symmetric key to use for authentication.
- * 
+ *
  * @note If using X509 authentication, this is not needed and should not be used.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
@@ -323,9 +324,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClientHandle
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( AzureIoTHubClientHandle_t xAzureIoTHubClientHandle,
-                                                                   AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback,
-                                                                   void * prvCallbackContext,
-                                                                   uint32_t ulTimeoutMilliseconds );
+                                                                           AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback,
+                                                                           void * prvCallbackContext,
+                                                                           uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Subscribe to direct methods.
@@ -397,7 +398,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClien
 
 /**
  * @brief Send reported device twin properties to Azure IoT Hub.
- * 
+ *
  * @note AzureIoTHubClient_SubscribeDeviceTwin() must be called before calling this function.
  *
  * @param[in] xAzureIoTHubClientHandle The #AzureIoTHubClientHandle_t to use for this call.
@@ -413,7 +414,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendDeviceTwinReported( AzureIoTHubC
 
 /**
  * @brief Request to get the device twin document.
- * 
+ *
  * @note AzureIoTHubClient_SubscribeDeviceTwin() must be called before calling this function.
  *
  * The response to the request will be returned via the #AzureIoTHubClientTwinCallback_t which was passed
