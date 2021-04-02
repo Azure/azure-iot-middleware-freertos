@@ -1,0 +1,18 @@
+name: Linux CI Tests
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Submodules Init
+      uses: snickerbockers/submodules-init@v4
+    - name: Configure
+      run: .github/scripts/install_softwares.sh
+    - name: Unit Tests
+      run: cd tests ; cmake -Bbuild .; cmake --build build; cd build; ctest -T test
+    - name: Code Coverage
+      run: cd tests/build; gcovr -r $(pwd) -f ../../source/*.c
