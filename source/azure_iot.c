@@ -12,7 +12,7 @@
 
 #include "azure_iot.h"
 
-#define azureiotHASH_BUFFER_SIZE 33
+#define azureiotBASE64_HASH_BUFFER_SIZE 33
 
 static const char _cAzureIoTBase64Array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -383,7 +383,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
 {
     AzureIoTResult_t xStatus;
     uint8_t * pucHashBuf;
-    uint32_t ulHashBufSize = azureiotHASH_BUFFER_SIZE;
+    uint32_t ulHashBufSize = azureiotBASE64_HASH_BUFFER_SIZE;
     uint32_t ulBinaryKeyBufSize;
 
     if( ( xAzureIoTHMACFunction == NULL ) ||
