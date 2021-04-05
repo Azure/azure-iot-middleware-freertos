@@ -143,7 +143,7 @@ static uint32_t prvAzureIoTHubClientCloudMessageProcess( AzureIoTHubClientReceiv
     {
         message.messagePayload = mqttPublishInfo->pPayload;
         message.payloadLength = mqttPublishInfo->payloadLength;
-        message.properties._internal.properties = out_request.properties;
+        message.properties._internal.xProperties = out_request.properties;
         context->_internal.callbacks.cloudMessageCallback( &message,
                                                            context->_internal.callback_context );
     }
@@ -654,7 +654,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_TelemetrySend( AzureIoTHubClientHand
         ret = AZURE_IOT_HUB_CLIENT_INVALID_ARGUMENT;
     }
     else if( az_result_failed( res = az_iot_hub_client_telemetry_get_publish_topic( &xAzureIoTHubClientHandle->_internal.iot_hub_client_core,
-                                                                                    ( pxProperties != NULL ) ? &pxProperties->_internal.properties : NULL,
+                                                                                    ( pxProperties != NULL ) ? &pxProperties->_internal.xProperties : NULL,
                                                                                     ( char * ) xAzureIoTHubClientHandle->_internal.iot_hub_client_scratch_buffer,
                                                                                     xAzureIoTHubClientHandle->_internal.iot_hub_client_scratch_buffer_length,
                                                                                     &telemetry_topic_length ) ) )

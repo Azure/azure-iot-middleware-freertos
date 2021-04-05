@@ -304,7 +304,7 @@ static uint32_t prvAddAllProperties( az_json_reader * pxState,
                                                   ucScratchBuffer,
                                                   ulPropertyNameLength,
                                                   ucScratchBuffer + ulPropertyNameLength,
-                                                  ulPropertyValueLength ) != AZURE_IOT_SUCCESS )
+                                                  ulPropertyValueLength ) != eAzureIoTSuccess )
             {
                 RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to add property" );
             }
@@ -337,7 +337,7 @@ static uint32_t prvE2ETestSendTelemertyCommandExecute( E2E_TEST_COMMAND_HANDLE x
     if( AzureIoT_MessagePropertiesInit( &xProperties,
                                         ucScratchBuffer2,
                                         0,
-                                        sizeof( ucScratchBuffer2 ) ) != AZURE_IOT_SUCCESS )
+                                        sizeof( ucScratchBuffer2 ) ) != eAzureIoTSuccess )
     {
         ulStatus = e2etestE2E_TEST_FAILED;
         LogError( ( "Failed to init properties, error code : %d", ulStatus ) );
