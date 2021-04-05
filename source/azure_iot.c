@@ -41,31 +41,31 @@ static void prvAzureIoTLogListener( az_log_classification xClassification,
  * TODO: Remove in favor of embedded SDK implementation.
  *
  * */
-static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
-                                                 uint32_t ulLength,
-                                                 uint8_t * pucName,
-                                                 uint32_t ulNameSize,
-                                                 uint32_t * pulBytesCopied )
+static AzureIoTResult_t prvAzureIoTBase64Decode( const char * pcEncodedBytes,
+                                                 uint32_t ulEncodedBytesLength,
+                                                 uint8_t * pucDecodedBytes,
+                                                 uint32_t ulDecodedBytesLength,
+                                                 uint32_t * pulOutDecodedBytesLength )
 {
     uint32_t i, j;
     uint32_t ulValue1, ulValue2;
     uint32_t ulStep;
-    uint32_t ulSourceLength = ulLength;
+    uint32_t ulSourceLength = ulEncodedBytesLength;
 
-    /* Adjust the ulLength to represent the ASCII name.  */
-    ulLength = ( ( ulLength * 6 ) / 8 );
+    /* Adjust the ulEncodedBytesLength to represent the ASCII name.  */
+    ulEncodedBytesLength = ( ( ulEncodedBytesLength * 6 ) / 8 );
 
-    if( pcBase64name[ ulSourceLength - 1 ] == '=' )
+    if( pcEncodedBytes[ ulSourceLength - 1 ] == '=' )
     {
-        if( pcBase64name[ ulSourceLength - 2 ] == '=' )
+        if( pcEncodedBytes[ ulSourceLength - 2 ] == '=' )
         {
-            ulLength--;
+            ulEncodedBytesLength--;
         }
 
-        ulLength--;
+        ulEncodedBytesLength--;
     }
 
-    if( ulNameSize < ulLength )
+    if( ulDecodedBytesLength < ulEncodedBytesLength )
     {
         return eAzureIoTOutOfMemory;
     }
@@ -77,26 +77,26 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
     ulStep = 0;
     i = 0;
 
-    while( ( j < ulLength ) && ( pcBase64name[ i ] ) && ( pcBase64name[ i ] != '=' ) )
+    while( ( j < ulEncodedBytesLength ) && ( pcEncodedBytes[ i ] ) && ( pcEncodedBytes[ i ] != '=' ) )
     {
         /* Derive values of the Base64 name.  */
-        if( ( pcBase64name[ i ] >= 'A' ) && ( pcBase64name[ i ] <= 'Z' ) )
+        if( ( pcEncodedBytes[ i ] >= 'A' ) && ( pcEncodedBytes[ i ] <= 'Z' ) )
         {
-            ulValue1 = ( uint32_t ) ( pcBase64name[ i ] - 'A' );
+            ulValue1 = ( uint32_t ) ( pcEncodedBytes[ i ] - 'A' );
         }
-        else if( ( pcBase64name[ i ] >= 'a' ) && ( pcBase64name[ i ] <= 'z' ) )
+        else if( ( pcEncodedBytes[ i ] >= 'a' ) && ( pcEncodedBytes[ i ] <= 'z' ) )
         {
-            ulValue1 = ( uint32_t ) ( pcBase64name[ i ] - 'a' ) + 26;
+            ulValue1 = ( uint32_t ) ( pcEncodedBytes[ i ] - 'a' ) + 26;
         }
-        else if( ( pcBase64name[ i ] >= '0' ) && ( pcBase64name[ i ] <= '9' ) )
+        else if( ( pcEncodedBytes[ i ] >= '0' ) && ( pcEncodedBytes[ i ] <= '9' ) )
         {
-            ulValue1 = ( uint32_t ) ( pcBase64name[ i ] - '0' ) + 52;
+            ulValue1 = ( uint32_t ) ( pcEncodedBytes[ i ] - '0' ) + 52;
         }
-        else if( pcBase64name[ i ] == '+' )
+        else if( pcEncodedBytes[ i ] == '+' )
         {
             ulValue1 = 62;
         }
-        else if( pcBase64name[ i ] == '/' )
+        else if( pcEncodedBytes[ i ] == '/' )
         {
             ulValue1 = 63;
         }
@@ -106,23 +106,23 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
         }
 
         /* Derive value for the next character.  */
-        if( ( pcBase64name[ i + 1 ] >= 'A' ) && ( pcBase64name[ i + 1 ] <= 'Z' ) )
+        if( ( pcEncodedBytes[ i + 1 ] >= 'A' ) && ( pcEncodedBytes[ i + 1 ] <= 'Z' ) )
         {
-            ulValue2 = ( uint32_t ) ( pcBase64name[ i + 1 ] - 'A' );
+            ulValue2 = ( uint32_t ) ( pcEncodedBytes[ i + 1 ] - 'A' );
         }
-        else if( ( pcBase64name[ i + 1 ] >= 'a' ) && ( pcBase64name[ i + 1 ] <= 'z' ) )
+        else if( ( pcEncodedBytes[ i + 1 ] >= 'a' ) && ( pcEncodedBytes[ i + 1 ] <= 'z' ) )
         {
-            ulValue2 = ( uint32_t ) ( pcBase64name[ i + 1 ] - 'a' ) + 26;
+            ulValue2 = ( uint32_t ) ( pcEncodedBytes[ i + 1 ] - 'a' ) + 26;
         }
-        else if( ( pcBase64name[ i + 1 ] >= '0' ) && ( pcBase64name[ i + 1 ] <= '9' ) )
+        else if( ( pcEncodedBytes[ i + 1 ] >= '0' ) && ( pcEncodedBytes[ i + 1 ] <= '9' ) )
         {
-            ulValue2 = ( uint32_t ) ( pcBase64name[ i + 1 ] - '0' ) + 52;
+            ulValue2 = ( uint32_t ) ( pcEncodedBytes[ i + 1 ] - '0' ) + 52;
         }
-        else if( pcBase64name[ i + 1 ] == '+' )
+        else if( pcEncodedBytes[ i + 1 ] == '+' )
         {
             ulValue2 = 62;
         }
-        else if( pcBase64name[ i + 1 ] == '/' )
+        else if( pcEncodedBytes[ i + 1 ] == '/' )
         {
             ulValue2 = 63;
         }
@@ -135,21 +135,21 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
         if( ulStep == 0 )
         {
             /* Use first value and first 2 bits of second value.  */
-            pucName[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 0x3f ) << 2 ) | ( ( ulValue2 >> 4 ) & 3 ) );
+            pucDecodedBytes[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 0x3f ) << 2 ) | ( ( ulValue2 >> 4 ) & 3 ) );
             i++;
             ulStep++;
         }
         else if( ulStep == 1 )
         {
             /* Use last 4 bits of first value and first 4 bits of next value.  */
-            pucName[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 0xF ) << 4 ) | ( ulValue2 >> 2 ) );
+            pucDecodedBytes[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 0xF ) << 4 ) | ( ulValue2 >> 2 ) );
             i++;
             ulStep++;
         }
         else if( ulStep == 2 )
         {
             /* Use first 2 bits and following 6 bits of next value.  */
-            pucName[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 3 ) << 6 ) | ( ulValue2 & 0x3f ) );
+            pucDecodedBytes[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 3 ) << 6 ) | ( ulValue2 & 0x3f ) );
             i++;
             i++;
             ulStep = 0;
@@ -157,8 +157,8 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
     }
 
     /* Put a NULL character in.  */
-    pucName[ j ] = 0;
-    *pulBytesCopied = j;
+    pucDecodedBytes[ j ] = 0;
+    *pulOutDecodedBytesLength = j;
 
     return eAzureIoTSuccess;
 }
@@ -171,77 +171,77 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( char * pcBase64name,
  * TODO: Remove in favor of embedded SDK implementation.
  *
  * */
-static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucName,
-                                                 uint32_t ulLength,
-                                                 char * pcBase64name,
-                                                 uint32_t base64name_size,
-                                                 uint32_t * pulOutputLength )
+static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
+                                                 uint32_t ulBytesLength,
+                                                 char * pcEncodedBytes,
+                                                 uint32_t ulEncodedBytesLength,
+                                                 uint32_t * pulOutEncodedBytesLength )
 {
     uint32_t ulPad;
     uint32_t i, j;
     uint32_t ulStep;
 
     /* Adjust the length to represent the base64 name.  */
-    ulLength = ( ( ulLength * 8 ) / 6 );
+    ulBytesLength = ( ( ulBytesLength * 8 ) / 6 );
 
     /* Default padding to none.  */
     ulPad = 0;
 
     /* Determine if an extra conversion is needed.  */
-    if( ( ulLength * 6 ) % 24 )
+    if( ( ulBytesLength * 6 ) % 24 )
     {
         /* Some padding is needed.  */
 
         /* Calculate the number of pad characters.  */
-        ulPad = ( ulLength * 6 ) % 24;
+        ulPad = ( ulBytesLength * 6 ) % 24;
         ulPad = ( 24 - ulPad ) / 6;
         ulPad = ulPad - 1;
 
-        /* Adjust the ulLength to pickup the character fraction.  */
-        ulLength++;
+        /* Adjust the ulBytesLength to pickup the character fraction.  */
+        ulBytesLength++;
     }
 
-    if( base64name_size <= ulLength )
+    if( ulEncodedBytesLength <= ulBytesLength )
     {
         return eAzureIoTOutOfMemory;
     }
 
-    /* Setup index into the pcBase64name.  */
+    /* Setup index into the pcEncodedBytes.  */
     j = 0;
 
-    /* Compute the pcBase64name.  */
+    /* Compute the pcEncodedBytes.  */
     ulStep = 0;
     i = 0;
 
-    while( j < ulLength )
+    while( j < ulBytesLength )
     {
         /* Determine which step we are in.  */
         if( ulStep == 0 )
         {
             /* Use first 6 bits of name character for index.  */
-            pcBase64name[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( uint8_t ) pucName[ i ] ) >> 2 ];
+            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( uint8_t ) pucBytes[ i ] ) >> 2 ];
             ulStep++;
         }
         else if( ulStep == 1 )
         {
             /* Use last 2 bits of name character and first 4 bits of next name character for index.  */
-            pcBase64name[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucName[ i ] ) & 0x3 ) << 4 ) |
-                                                                  ( ( ( uint8_t ) pucName[ i + 1 ] ) >> 4 ) ];
+            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3 ) << 4 ) |
+                                                                  ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 4 ) ];
             i++;
             ulStep++;
         }
         else if( ulStep == 2 )
         {
             /* Use last 4 bits of name character and first 2 bits of next name character for index.  */
-            pcBase64name[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucName[ i ] ) & 0xF ) << 2 ) |
-                                                                  ( ( ( uint8_t ) pucName[ i + 1 ] ) >> 6 ) ];
+            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0xF ) << 2 ) |
+                                                                  ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 6 ) ];
             i++;
             ulStep++;
         }
         else /* Step 3 */
         {
             /* Use last 6 bits of name character for index.  */
-            pcBase64name[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( uint8_t ) pucName[ i ] ) & 0x3F ) ];
+            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3F ) ];
             i++;
             ulStep = 0;
         }
@@ -254,15 +254,15 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucName,
     }
 
     /* Now add the PAD characters.  */
-    while( ( ulPad-- ) && ( j < base64name_size ) )
+    while( ( ulPad-- ) && ( j < ulEncodedBytesLength ) )
     {
-        /* Pad pcBase64name with '=' characters.  */
-        pcBase64name[ j++ ] = '=';
+        /* Pad pcEncodedBytes with '=' characters.  */
+        pcEncodedBytes[ j++ ] = '=';
     }
 
     /* Put a NULL character in.  */
-    pcBase64name[ j ] = 0;
-    *pulOutputLength = j;
+    pcEncodedBytes[ j ] = 0;
+    *pulOutEncodedBytesLength = j;
 
     return eAzureIoTSuccess;
 }
