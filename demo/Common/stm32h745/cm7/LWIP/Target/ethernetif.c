@@ -103,13 +103,17 @@ uint8_t Rx_Buff[ETH_RX_DESC_CNT][ETH_RX_BUFFER_SIZE] __attribute__((section(".Rx
 /* USER CODE END 2 */
 
 osSemaphoreId RxPktSemaphore = NULL; /* Semaphore to signal incoming packets */
+/* Memory Pool Declaration */
+osPoolDef_t RxPool = {
+  .pool_sz = 10,
+  .item_sz = sizeof(struct pbuf_custom) + ETH_RX_BUFFER_SIZE,
+  .pool = NULL
+};
+osPoolId RXPoolId;
 
 /* Global Ethernet handle */
 ETH_HandleTypeDef heth;
 ETH_TxPacketConfig TxConfig;
-
-/* Memory Pool Declaration */
-LWIP_MEMPOOL_DECLARE(RX_POOL, 10, sizeof(struct pbuf_custom), "Zero-copy RX PBUF pool");
 
 /* Private function prototypes -----------------------------------------------*/
 int32_t ETH_PHY_IO_Init(void);
@@ -331,9 +335,6 @@ static void low_level_init(struct netif *netif)
   TxConfig.CRCPadCtrl = ETH_CRC_PAD_INSERT;
 
   /* End ETH HAL Init */
-  
-  /* Initialize the RX POOL */
-  LWIP_MEMPOOL_INIT(RX_POOL);
 
 #if LWIP_ARP || LWIP_ETHERNET 
 
@@ -367,6 +368,9 @@ static void low_level_init(struct netif *netif)
   /* create a binary semaphore used for informing ethernetif of frame reception */
   osSemaphoreDef(SEM);
   RxPktSemaphore = osSemaphoreCreate(osSemaphore(SEM) , 1 );
+
+  /* create a Memory pool for RX frames */
+  RXPoolId = osPoolCreate(&RxPool);
 
   /* create the task that handles the ETH_MAC */
 /* USER CODE BEGIN OS_THREAD_DEF_CREATE_CMSIS_RTOS_V1 */
@@ -514,6 +518,7 @@ static struct pbuf * low_level_input(struct netif *netif)
   ETH_BufferTypeDef RxBuff;
   uint32_t framelength = 0;
   struct pbuf_custom* custom_pbuf;
+  void* payload;
   
   if (HAL_ETH_GetRxDataBuffer(&heth, &RxBuff) == HAL_OK) 
   {
@@ -527,10 +532,12 @@ static struct pbuf * low_level_input(struct netif *netif)
     SCB_InvalidateDCache_by_Addr((uint32_t *)RxBuff.buffer, framelength);
 #endif
 
-    custom_pbuf  = (struct pbuf_custom*)LWIP_MEMPOOL_ALLOC(RX_POOL);
+    custom_pbuf  = (struct pbuf_custom*)osPoolAlloc(RXPoolId);
+    payload = custom_pbuf + sizeof(struct pbuf_custom);
     custom_pbuf->custom_free_function = pbuf_free_custom;
+    memcpy(payload, RxBuff.buffer, framelength);
 
-    p = pbuf_alloced_custom(PBUF_RAW, framelength, PBUF_REF, custom_pbuf, RxBuff.buffer, ETH_RX_BUFFER_SIZE);
+    p = pbuf_alloced_custom(PBUF_RAW, framelength, PBUF_REF, custom_pbuf, payload, ETH_RX_BUFFER_SIZE);
   }
   
   
@@ -652,14 +659,7 @@ err_t ethernetif_init(struct netif *netif)
   */
 void pbuf_free_custom(struct pbuf *p)
 {
-  struct pbuf_custom* custom_pbuf = (struct pbuf_custom*)p;
-  
-#if !defined(DUAL_CORE) || defined(CORE_CM7)
-  /* Invalidate data cache: lwIP and/or application may have written into buffer */
-  SCB_InvalidateDCache_by_Addr((uint32_t *)p->payload, p->tot_len);
-#endif
-  
-  LWIP_MEMPOOL_FREE(RX_POOL, custom_pbuf);
+  osPoolFree(RXPoolId, (void*)p);
 }
 
 /* USER CODE BEGIN 6 */
