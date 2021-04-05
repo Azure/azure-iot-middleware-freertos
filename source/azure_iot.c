@@ -294,7 +294,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
 
     if( pxMessageProperties == NULL )
     {
-        AZLogError( ( "AzureIoTMessagePropertiesInit failed: Invalid argument" ) );
+        AZLogError( ( "AzureIoT_MessagePropertiesInit failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
@@ -322,7 +322,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
 
     if( pxMessageProperties == NULL )
     {
-        AZLogError( ( "AzureIoTMessagePropertiesAppend failed: Invalid argument" ) );
+        AZLogError( ( "AzureIoT_MessagePropertiesAppend failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
@@ -351,7 +351,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
     if( ( pxMessageProperties == NULL ) ||
         ( ppucOutValue == NULL ) || ( pulOutValueLength == NULL ) )
     {
-        AZLogError( ( "AzureIoTMessagePropertiesFind failed: Invalid argument" ) );
+        AZLogError( ( "AzureIoT_MessagePropertiesFind failed: Invalid argument" ) );
         return eAzureIoTInvalidArgument;
     }
 
