@@ -524,9 +524,15 @@ static AzureIoTProvisioningClientResult_t prvProvClientRunWorkflow( AzureIoTProv
 
         prvProvClientTriggerAction( xProvClientHandle );
 
-        if( ( xResult =
-                  AzureIoTMQTT_ProcessLoop( &( xProvClientHandle->_internal.xMQTTContext ),
-                                            ulWaitTime ) ) != eAzureIoTMQTTSuccess )
+        if( ( xProvClientHandle->_internal.ulWorkflowState == azureiotprovisioningWF_STATE_COMPLETE ) )
+        {
+            AZLogDebug( ( "AzureIoTProvisioning is in complete state, with status :%d",
+                          xProvClientHandle->_internal.ulLastOperationResult ) );
+            break;
+        }
+        else if ( ( xResult =
+                        AzureIoTMQTT_ProcessLoop( &( xProvClientHandle->_internal.xMQTTContext ),
+                                                  ulWaitTime ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "AzureIoTProvisioning  failed to process loop: ProcessLoopDuration=%u, Error=%d",
                           ulTimeoutMilliseconds, xResult ) );

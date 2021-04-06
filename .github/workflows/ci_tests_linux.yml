@@ -1,0 +1,16 @@
+name: Linux CI Tests
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Submodules Init
+      uses: snickerbockers/submodules-init@v4
+    - name: Configure
+      run: .github/scripts/install_software.sh
+    - name: Check-in Tests
+      run: .github/scripts/ci_tests.sh
