@@ -421,6 +421,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return xStatus;
     }
 
+    /* Decoded key is less than total decoded buffer size */
     ulBufferLength -= ulBinaryKeyBufSize;
 
     if( ulHashBufSize > ulBufferLength )
