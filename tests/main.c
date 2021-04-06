@@ -4,13 +4,15 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdint.h>
-
-extern uint32_t ulGetAllTests();
-void vLoggingPrintf( const char * pcFormatString, ... );
-
 /*-----------------------------------------------------------*/
 
-void vLoggingPrintf( const char * pcFormatString, ... )
+extern uint32_t ulGetAllTests();
+void vLoggingPrintf( const char * pcFormatString,
+                     ... );
+/*-----------------------------------------------------------*/
+
+void vLoggingPrintf( const char * pcFormatString,
+                     ... )
 {
     va_list arg;
 
@@ -28,3 +30,4 @@ int main( int argc,
 
     return ( int ) ulGetAllTests();
 }
+/*-----------------------------------------------------------*/

@@ -11,8 +11,6 @@ jobs:
     - name: Submodules Init
       uses: snickerbockers/submodules-init@v4
     - name: Configure
-      run: .github/scripts/install_softwares.sh
-    - name: Unit Tests
-      run: cd tests ; cmake -Bbuild .; cmake --build build; cd build; ctest -T test
-    - name: Code Coverage
-      run: cd tests/build; gcovr -r $(pwd) -f ../../source/*.c
+      run: .github/scripts/install_software.sh
+    - name: Check-in Tests
+      run: .github/scripts/ci_tests.sh

@@ -18,12 +18,14 @@
 
 #include "azure_iot_mqtt.h"
 #include "azure_iot_mqtt_port.h"
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTEventCallback_t xTestUserCallback = NULL;
 AzureIoTMQTTPacketInfo_t xPacketInfo;
 AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 uint16_t usTestPacketId = 1;
 const uint8_t * pucPublishPayload = NULL;
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
                                         const AzureIoTTransportInterface_t * pxTransportInterface,
@@ -41,6 +43,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
     xTestUserCallback = xUserCallback;
     return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
@@ -56,6 +59,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
 
     return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Subscribe( AzureIoTMQTTHandle_t xContext,
                                              const AzureIoTMQTTSubscribeInfo_t * pxSubscriptionList,
@@ -69,6 +73,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Subscribe( AzureIoTMQTTHandle_t xContext,
 
     return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Publish( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTPublishInfo_t * pxPublishInfo,
@@ -91,6 +96,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Publish( AzureIoTMQTTHandle_t xContext,
 
     return xReturn;
 }
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Unsubscribe( AzureIoTMQTTHandle_t xContext,
                                                const AzureIoTMQTTSubscribeInfo_t * pxSubscriptionList,
@@ -104,6 +110,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Unsubscribe( AzureIoTMQTTHandle_t xContext,
 
     return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Disconnect( AzureIoTMQTTHandle_t xContext )
 {
@@ -111,7 +118,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Disconnect( AzureIoTMQTTHandle_t xContext )
 
     return ( AzureIoTMQTTResult_t ) mock();
 }
-
+/*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_ProcessLoop( AzureIoTMQTTHandle_t xContext,
                                                uint32_t ulMilliseconds )
@@ -133,6 +140,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_ProcessLoop( AzureIoTMQTTHandle_t xContext,
 
     return xReturn;
 }
+/*-----------------------------------------------------------*/
 
 uint16_t AzureIoTMQTT_GetPacketId( AzureIoTMQTTHandle_t xContext )
 {
