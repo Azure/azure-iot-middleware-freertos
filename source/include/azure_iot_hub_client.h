@@ -190,7 +190,7 @@ typedef struct AzureIoTHubClient
         const uint8_t * pucAzureIoTHubClientSymmetricKey;
         uint32_t ulAzureIoTHubClientSymmetricKeyLength;
 
-        uint32_t ( * pxAzureIoTHubClientTokenRefresh )( struct AzureIoTHubClient * pxAzureIoTHubClient,
+        uint32_t ( * pxAzureIoTHubClientTokenRefresh )( AzureIoTHubClient * pxAzureIoTHubClient,
                                                         uint64_t ullExpiryTimeSecs,
                                                         const uint8_t * ucKey,
                                                         uint32_t ulKeyLen,

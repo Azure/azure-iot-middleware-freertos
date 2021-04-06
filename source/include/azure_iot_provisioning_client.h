@@ -24,9 +24,6 @@
 
 #define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
 
-/* Forward declaration of Azure IoT Provisioning Client */
-typedef struct AzureIoTProvisioningClient AzureIoTProvisioningClient_t;
-
 typedef enum AzureIoTProvisioningClientResult
 {
     eAzureIoTProvisioningSuccess = 0,           /** Success. */
@@ -64,7 +61,7 @@ typedef struct AzureIoTProvisioningClient
         const uint8_t * pucRegistrationPayload;
         uint32_t ulRegistrationPayloadLength;
 
-        uint32_t ( * pxTokenRefresh )( struct AzureIoTProvisioningClient * pxAzureIoTProvisioningClientHandle,
+        uint32_t ( * pxTokenRefresh )( struct AzureIoTProvisioningClient * pxAzureIoTProvisioningClient,
                                        uint64_t ullExpiryTimeSecs,
                                        const uint8_t * ucKey,
                                        uint32_t ulKeyLen,
