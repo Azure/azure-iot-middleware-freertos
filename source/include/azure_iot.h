@@ -32,6 +32,11 @@
 
 #include "azure/az_iot.h"
 
+/**
+ * @brief Milliseconds per FreeRTOS tick.
+ */
+#define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )
+
 typedef enum AzureIoTResult
 {
     eAzureIoTSuccess = 0,     /**< Success. */
