@@ -12,7 +12,7 @@
 
 #include "azure_iot.h"
 
-#define azureiotBASE64_HASH_BUFFER_SIZE 33
+#define azureiotBASE64_HASH_BUFFER_SIZE    33
 
 static const char _cAzureIoTBase64Array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -236,7 +236,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
         {
             /* Use last 2 bits of encoded bytes character and first 4 bits of next encoded bytes character for index.  */
             pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3 ) << 4 ) |
-                                                                  ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 4 ) ];
+                                                                    ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 4 ) ];
             i++;
             ulStep++;
         }
@@ -244,7 +244,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
         {
             /* Use last 4 bits of encoded bytes character and first 2 bits of next encoded bytes character for index.  */
             pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0xF ) << 2 ) |
-                                                                  ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 6 ) ];
+                                                                    ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 6 ) ];
             i++;
             ulStep++;
         }
@@ -399,6 +399,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
 {
     AzureIoTResult_t xStatus;
     uint8_t * pucHashBuf;
+    uint8_t * pucDecodedKeyBuf = pucBuffer;
     uint32_t ulHashBufSize = azureiotBASE64_HASH_BUFFER_SIZE;
     uint32_t ulBinaryKeyBufSize;
 
@@ -412,9 +413,8 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return eAzureIoTInvalidArgument;
     }
 
-    ulBinaryKeyBufSize = ulBufferLength;
     xStatus = prvAzureIoTBase64Decode( ( char * ) pucKey, ulKeySize,
-                                       pucBuffer, ulBinaryKeyBufSize, &ulBinaryKeyBufSize );
+                                       pucDecodedKeyBuf, ulBufferLength, &ulBinaryKeyBufSize );
 
     if( xStatus )
     {
@@ -428,10 +428,10 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return eAzureIoTOutOfMemory;
     }
 
-    pucHashBuf = pucBuffer + ulBinaryKeyBufSize;
+    pucHashBuf = pucDecodedKeyBuf + ulBinaryKeyBufSize;
     memset( pucHashBuf, 0, ulHashBufSize );
 
-    if( xAzureIoTHMACFunction( pucBuffer, ulBinaryKeyBufSize,
+    if( xAzureIoTHMACFunction( pucDecodedKeyBuf, ulBinaryKeyBufSize,
                                pucMessage, ( uint32_t ) ulMessageSize,
                                pucHashBuf, ulHashBufSize, &ulHashBufSize ) )
     {
