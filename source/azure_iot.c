@@ -38,6 +38,8 @@ static void prvAzureIoTLogListener( az_log_classification xClassification,
  *
  * Decode Base64 bytes.
  *
+ * Note: pucDecodedBytes buffer needs enough space for a NULL terminator.
+ *
  * TODO: Remove in favor of embedded SDK implementation.
  *
  * */
@@ -156,6 +158,12 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( const char * pcEncodedBytes,
         }
     }
 
+    /* Need space for a NULL terminator */
+    if( j >= ulDecodedBytesLength )
+    {
+        return eAzureIoTOutOfMemory;
+    }
+
     /* Put a NULL character in.  */
     pucDecodedBytes[ j ] = 0;
     *pulOutDecodedBytesLength = j;
@@ -167,6 +175,8 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( const char * pcEncodedBytes,
 /**
  *
  * Encode Base64 bytes.
+ *
+ * Note: pcEncodedBytes buffer needs enough space for a NULL terminator.
  *
  * TODO: Remove in favor of embedded SDK implementation.
  *
@@ -218,13 +228,13 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
         /* Determine which step we are in.  */
         if( ulStep == 0 )
         {
-            /* Use first 6 bits of name character for index.  */
+            /* Use first 6 bits of encoded bytes character for index.  */
             pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( uint8_t ) pucBytes[ i ] ) >> 2 ];
             ulStep++;
         }
         else if( ulStep == 1 )
         {
-            /* Use last 2 bits of name character and first 4 bits of next name character for index.  */
+            /* Use last 2 bits of encoded bytes character and first 4 bits of next encoded bytes character for index.  */
             pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3 ) << 4 ) |
                                                                   ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 4 ) ];
             i++;
@@ -232,7 +242,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
         }
         else if( ulStep == 2 )
         {
-            /* Use last 4 bits of name character and first 2 bits of next name character for index.  */
+            /* Use last 4 bits of encoded bytes character and first 2 bits of next encoded bytes character for index.  */
             pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0xF ) << 2 ) |
                                                                   ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 6 ) ];
             i++;
@@ -240,7 +250,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
         }
         else /* Step 3 */
         {
-            /* Use last 6 bits of name character for index.  */
+            /* Use last 6 bits of encoded bytes character for index.  */
             pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3F ) ];
             i++;
             ulStep = 0;
@@ -258,6 +268,12 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
     {
         /* Pad pcEncodedBytes with '=' characters.  */
         pcEncodedBytes[ j++ ] = '=';
+    }
+
+    /* Need space for a NULL terminator */
+    if( j >= ulEncodedBytesLength )
+    {
+        return eAzureIoTOutOfMemory;
     }
 
     /* Put a NULL character in.  */
