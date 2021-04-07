@@ -138,6 +138,7 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
     az_iot_hub_client_c2d_request xOutEmbeddedRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pTopicName, xMQTTPublishInfo->topicNameLength );
 
+    /* Failed means no topic match */
     if( az_result_failed( az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                       xTopicSpan, &xOutEmbeddedRequest ) ) )
     {
@@ -181,6 +182,7 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
     az_iot_hub_client_method_request xOutEmbeddedRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pTopicName, xMQTTPublishInfo->topicNameLength );
 
+    /* Failed means no topic match */
     if( az_result_failed( az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                           xTopicSpan, &xOutEmbeddedRequest ) ) )
     {
@@ -227,6 +229,7 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pTopicName, xMQTTPublishInfo->topicNameLength );
     uint32_t xRequestID = 0;
 
+    /* Failed means no topic match */
     if( az_result_failed( az_iot_hub_client_twin_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                        xTopicSpan, &xOutRequest ) ) )
     {
