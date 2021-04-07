@@ -24,6 +24,9 @@
 
 #define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
 
+#define azureiotPROVISIONING_NO_WAIT        ( 0 )
+#define azureiotPROVISIONING_WAIT_FOREVER   ( ( uint32_t )0xFFFFFFFF )
+
 typedef enum AzureIoTProvisioningClientResult
 {
     eAzureIoTProvisioningSuccess = 0,           /** Success. */
