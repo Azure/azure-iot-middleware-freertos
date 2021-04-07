@@ -45,6 +45,7 @@ typedef enum AzureIoTHubClientResult
     eAzureIoTHubClientSubackWaitTimeout, /**< There was timeout while waiting for SUBACK. */
     eAzureIoTHubClientTopicNotSubscribed,/**< Topic not subscribed. */
     eAzureIoTHubClientPublishFailed,     /**< Failed to publish. */
+    eAzureIoTHubClientTopicNoMatch,      /**< The received message was not for the currently processed feature. */
     eAzureIoTHubClientFailed,            /**< There was a failure. */
 } AzureIoTHubClientResult_t;
 

@@ -142,7 +142,7 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
     if( az_result_failed( az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                       xTopicSpan, &xOutEmbeddedRequest ) ) )
     {
-        return eAzureIoTHubClientFailed;
+        return eAzureIoTHubClientTopicNoMatch;
     }
 
     /* Process incoming Publish. */
@@ -186,7 +186,7 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
     if( az_result_failed( az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                           xTopicSpan, &xOutEmbeddedRequest ) ) )
     {
-        return eAzureIoTHubClientFailed;
+        return eAzureIoTHubClientTopicNoMatch;
     }
 
     /* Process incoming Publish. */
@@ -233,7 +233,7 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
     if( az_result_failed( az_iot_hub_client_twin_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                        xTopicSpan, &xOutRequest ) ) )
     {
-        return eAzureIoTHubClientFailed;
+        return eAzureIoTHubClientTopicNoMatch;
     }
 
     /* Process incoming Publish. */
