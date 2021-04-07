@@ -41,6 +41,11 @@
 
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Handle any incoming publish messages.
+ *
+ * */
 static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                            AzureIoTMQTTPublishInfo_t * pxPublishInfo )
 {
@@ -64,30 +69,39 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Handle any incoming suback messages.
+ *
+ * */
 static void prvMQTTProcessResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                     AzureIoTMQTTPacketInfo_t * pxIncomingPacket,
                                     uint16_t usPacketId )
 {
     uint32_t ulIndex;
+
+    configASSERT( pxIncomingPacket != NULL );
     AzureIoTHubClientReceiveContext_t * pxContext;
 
-    if( ( pxIncomingPacket->type & 0xF0U ) == AZURE_IOT_MQTT_PACKET_TYPE_SUBACK )
+    for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
-        for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
-        {
-            pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ ulIndex ];
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ ulIndex ];
 
-            if( pxContext->_internal.usMqttSubPacketID == usPacketId )
-            {
-                /* TODO: inspect packet to see is ack was successful*/
-                pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
-                break;
-            }
+        if( pxContext->_internal.usMqttSubPacketID == usPacketId )
+        {
+            /* TODO: inspect packet to see is ack was successful*/
+            pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
+            break;
         }
     }
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Process incoming MQTT events.
+ *
+ * */
 static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
                               AzureIoTMQTTPacketInfo_t * pxPacketInfo,
                               AzureIoTMQTTDeserializedInfo_t * pxDeserializedInfo )
@@ -110,6 +124,11 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Check/Process messages for incoming Cloud to Device messages.
+ *
+ * */
 static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_t * pxContext,
                                                 AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                 void * pxPublishInfo )
@@ -148,6 +167,11 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Check/Process messages for incoming direct method messages.
+ *
+ * */
 static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiveContext_t * pxContext,
                                                          AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                          void * pxPublishInfo )
@@ -188,6 +212,11 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Check/Process messages for incoming device twin messages.
+ *
+ * */
 static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveContext_t * pxContext,
                                                        AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                        void * pxPublishInfo )
@@ -251,6 +280,11 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *
+ * Time callback for MQTT initialization.
+ *
+ * */
 static uint32_t prvGetTimeMs( void )
 {
     TickType_t xTickCount = 0;
