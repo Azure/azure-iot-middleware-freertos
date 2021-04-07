@@ -8,11 +8,12 @@
  *
  */
 
-#include <stdio.h>
+#include <string.h>
 
 #include "azure_iot.h"
 
-#define azureiotBASE64_HASH_BUFFER_SIZE    33
+/* Using SHA256 hash - needs 32 bytes */
+#define azureiotBASE64_HASH_BUFFER_SIZE    ( 33 )
 
 static const char _cAzureIoTBase64Array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
@@ -296,7 +297,6 @@ AzureIoTResult_t AzureIoT_Init()
 
 void AzureIoT_Deinit()
 {
-    AZLogDebug( ( "AzureIoT_Deinit called" ) );
 }
 /*-----------------------------------------------------------*/
 
@@ -402,6 +402,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
     uint8_t * pucDecodedKeyBuf = pucBuffer;
     uint32_t ulHashBufSize = azureiotBASE64_HASH_BUFFER_SIZE;
     uint32_t ulBinaryKeyBufSize;
+    uint32_t ulBase64OutputLength;
 
     if( ( xAzureIoTHMACFunction == NULL ) ||
         ( pucKey == NULL ) || ( ulKeySize == 0 ) ||
@@ -439,7 +440,6 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return eAzureIoTFailed;
     }
 
-    uint32_t ulBase64OutputLength;
     xStatus = prvAzureIoTBase64Encode( pucHashBuf, ulHashBufSize,
                                        ( char * ) pucOutput, ulOutputSize, &ulBase64OutputLength );
 
