@@ -19,4 +19,4 @@ echo -e "Running unit tests"
 ctest -j $TEST_JOB_COUNT -C "debug" -VV --output-on-failure --schedule-random -T test
 
 echo -e "Code coverage"
-gcovr -r $(pwd) -f ../source/*.c
+gcovr -r $(pwd) -f ../source/.*.c
