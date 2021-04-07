@@ -35,9 +35,9 @@
 /*
  * Topic subscribe state
  */
-#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE       0
-#define azureiothubTOPIC_SUBSCRIBE_STATE_SUB        1
-#define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK     2
+#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE       ( 0x0 )
+#define azureiothubTOPIC_SUBSCRIBE_STATE_SUB        ( 0x1 )
+#define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK     ( 0x2 )
 
 /*-----------------------------------------------------------*/
 
@@ -73,7 +73,7 @@ static void prvMQTTProcessResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
 
     if( ( pxIncomingPacket->type & 0xF0U ) == AZURE_IOT_MQTT_PACKET_TYPE_SUBACK )
     {
-        for( index = 0; index < ( sizeof( pxAzureIoTHubClient->_internal.xReceiveContext ) / sizeof( pxAzureIoTHubClient->_internal.xReceiveContext[ 0 ] ) ); index++ )
+        for( index = 0; index < azureiothubSUBSCRIBE_FEATURE_COUNT; index++ )
         {
             context = &pxAzureIoTHubClient->_internal.xReceiveContext[ index ];
 
@@ -122,10 +122,10 @@ static uint32_t prvAzureIoTHubClientCloudMessageProcess( AzureIoTHubClientReceiv
     }
 
     /* Process incoming Publish. */
-    AZLogInfo( ( "Cloud message QoS : %d\n", mqttPublishInfo->qos ) );
+    AZLogInfo( ( "Cloud message QoS : %d.", mqttPublishInfo->qos ) );
 
     /* Verify the received publish is for the we have subscribed to. */
-    AZLogInfo( ( "Cloud message topic: %.*s  with payload : %.*s",
+    AZLogInfo( ( "Cloud message topic: %.*s  with payload : %.*s.",
                  mqttPublishInfo->topicNameLength,
                  mqttPublishInfo->pTopicName,
                  mqttPublishInfo->payloadLength,
@@ -160,10 +160,10 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
     }
 
     /* Process incoming Publish. */
-    AZLogInfo( ( "Direct method QoS : %d\n", mqttPublishInfo->qos ) );
+    AZLogInfo( ( "Direct method QoS : %d.", mqttPublishInfo->qos ) );
 
     /* Verify the received publish is for the we have subscribed to. */
-    AZLogInfo( ( "Direct method topic: %.*s  with method payload : %.*s",
+    AZLogInfo( ( "Direct method topic: %.*s  with method payload : %.*s.",
                  mqttPublishInfo->topicNameLength,
                  mqttPublishInfo->pTopicName,
                  mqttPublishInfo->payloadLength,
@@ -201,10 +201,10 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
     }
 
     /* Process incoming Publish. */
-    AZLogInfo( ( "Twin Incoming QoS : %d\n", mqttPublishInfo->qos ) );
+    AZLogInfo( ( "Twin Incoming QoS : %d.", mqttPublishInfo->qos ) );
 
     /* Verify the received publish is for the we have subscribed to. */
-    AZLogInfo( ( "Twin topic: %.*s. with payload : %.*s",
+    AZLogInfo( ( "Twin topic: %.*s. with payload : %.*s.",
                  mqttPublishInfo->topicNameLength,
                  mqttPublishInfo->pTopicName,
                  mqttPublishInfo->payloadLength,
@@ -268,7 +268,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
 
     if( pxHubClientOptions == NULL )
     {
-        AZLogError( ( "Failed to initialize options: Invalid argument \r\n" ) );
+        AZLogError( ( "Failed to initialize options: Invalid argument." ) );
         ret = eAzureIoTHubClientInvalidArgument;
     }
     else
@@ -299,6 +299,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
 {
     AzureIoTHubClientResult_t ret;
     az_iot_hub_client_options options;
+    uint8_t * pucNetworkBuffer;
+    uint32_t ulNetworkBufferLength;
 
     if( ( pxAzureIoTHubClient == NULL ) ||
         ( pucHostname == NULL ) || ( ulHostnameLength == 0 ) ||
@@ -306,13 +308,13 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
         ( pucBuffer == NULL ) || ( ulBufferLength == 0 ) ||
         ( xGetTimeFunction == NULL ) || ( pxTransportInterface == NULL ) )
     {
-        AZLogError( ( "Failed to initialize: Invalid argument \r\n" ) );
+        AZLogError( ( "Failed to initialize: Invalid argument." ) );
         ret = eAzureIoTHubClientInvalidArgument;
     }
     else if ( ( ulBufferLength < azureiotTOPIC_MAX ) ||
               ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) )
     {
-        AZLogError( ( "Failed to initialize: Not enough memory passed \r\n" ) );
+        AZLogError( ( "Failed to initialize: Not enough memory passed." ) );
         ret = eAzureIoTHubClientOutOfMemory;
     }
     else
@@ -323,8 +325,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
         pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength =
             ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) > azureiotTOPIC_MAX ? ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) : azureiotTOPIC_MAX;
         pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer = pucBuffer;
-        pucBuffer += pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength;
-        ulBufferLength -= pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength;
+        pucNetworkBuffer = pucBuffer + pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength;
+        ulNetworkBufferLength = ulBufferLength - pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength;
 
         /* Initialize Azure IoT Hub Client */
         az_span hostname_span = az_span_create( ( uint8_t * ) pucHostname, ( int32_t ) ulHostnameLength );
@@ -346,15 +348,15 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
         if( az_result_failed( az_iot_hub_client_init( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                       hostname_span, device_id_span, &options ) ) )
         {
-            AZLogError( ( "Failed to initialize az_iot_hub_client_init \r\n" ) );
+            AZLogError( ( "Failed to initialize az_iot_hub_client_init." ) );
             ret = eAzureIoTHubClientInitFailed;
         }
         /* Initialize AzureIoTMQTT library. */
         else if( ( AzureIoTMQTT_Init( &( pxAzureIoTHubClient->_internal.xMQTTContext ), pxTransportInterface,
                                                 prvGetTimeMs, prvEventCallback,
-                                                pucBuffer, ulBufferLength ) ) != AzureIoTMQTTSuccess )
+                                                pucNetworkBuffer, ulNetworkBufferLength ) ) != AzureIoTMQTTSuccess )
         {
-            AZLogError( ( "Failed to initialize AzureIoTMQTT_Init \r\n" ) );
+            AZLogError( ( "Failed to initialize AzureIoTMQTT_Init." ) );
             ret = eAzureIoTHubClientInitFailed;
         }
         else
@@ -392,7 +394,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
 
     if( pxAzureIoTHubClient == NULL )
     {
-        AZLogError( ( "Failed to connect: Invalid argument \r\n" ) );
+        AZLogError( ( "Failed to connect: Invalid argument." ) );
         ret = eAzureIoTHubClientInvalidArgument;
     }
     else
@@ -405,7 +407,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
                                                                      ( char * ) xConnectInfo.pUserName, azureiotUSERNAME_MAX,
                                                                      &mqtt_user_name_length ) ) )
         {
-            AZLogError( ( "Failed to get username: %08x\r\n", res ) );
+            AZLogError( ( "Failed to get username: %08x.", res ) );
             ret = eAzureIoTHubClientFailed;
         }
         /* Check if token refresh is set, then generate password */
@@ -417,7 +419,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
                                                                                            ( uint8_t * ) xConnectInfo.pPassword, azureiotPASSWORD_MAX,
                                                                                            &bytesCopied ) ) )
         {
-            AZLogError( ( "Failed to generate auth token \r\n" ) );
+            AZLogError( ( "Failed to generate auth token." ) );
             ret = eAzureIoTHubClientFailed;
         }
         else
@@ -429,15 +431,14 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
             xConnectInfo.keepAliveSeconds = azureiothubKEEP_ALIVE_TIMEOUT_SECONDS;
             xConnectInfo.passwordLength = ( uint16_t ) bytesCopied;
 
-            /* Send MQTT CONNECT packet to broker. LWT is not used in this demo, so it
-             * is passed as NULL. */
+            /* Send MQTT CONNECT packet to broker. Last Will and Testament is not used. */
             if( ( xResult = AzureIoTMQTT_Connect( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
                                                   &xConnectInfo,
                                                   NULL,
                                                   ulTimeoutMilliseconds,
                                                   &xSessionPresent ) ) != AzureIoTMQTTSuccess )
             {
-                AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%d \r\n",
+                AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%d.",
                               pxAzureIoTHubClient->_internal.ulHostnameLength, pxAzureIoTHubClient->_internal.pucHostname,
                               xResult ) );
                 ret = eAzureIoTHubClientFailed;
@@ -445,7 +446,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
             else
             {
                 /* Successfully established a MQTT connection with the broker. */
-                AZLogInfo( ( "An MQTT connection is established with %.*s.\r\n", pxAzureIoTHubClient->_internal.ulHostnameLength,
+                AZLogInfo( ( "An MQTT connection is established with %.*s.", pxAzureIoTHubClient->_internal.ulHostnameLength,
                              ( const char * ) pxAzureIoTHubClient->_internal.pucHostname ) );
                 ret = eAzureIoTHubClientSuccess;
             }
@@ -464,18 +465,18 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
 
     if( pxAzureIoTHubClient == NULL )
     {
-        AZLogError( ( "Failed to disconnect: Invalid argument \r\n" ) );
+        AZLogError( ( "Failed to disconnect: Invalid argument." ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
     if( ( xResult = AzureIoTMQTT_Disconnect( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) ) != AzureIoTMQTTSuccess )
     {
-        AZLogError( ( "Failed to disconnect: %d\r\n", xResult ) );
+        AZLogError( ( "Failed to disconnect: %d.", xResult ) );
         ret = eAzureIoTHubClientFailed;
     }
     else
     {
-        AZLogInfo( ( "Disconnecting the MQTT connection with %.*s.\r\n", pxAzureIoTHubClient->_internal.ulHostnameLength,
+        AZLogInfo( ( "Disconnecting the MQTT connection with %.*s.", pxAzureIoTHubClient->_internal.ulHostnameLength,
                      ( const char * ) pxAzureIoTHubClient->_internal.pucHostname ) );
         ret = eAzureIoTHubClientSuccess;
     }
@@ -498,7 +499,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
 
     if( pxAzureIoTHubClient == NULL )
     {
-        AZLogError( ( "Failed to send telemetry: Invalid argument \r\n" ) );
+        AZLogError( ( "Failed to send telemetry: Invalid argument." ) );
         ret = eAzureIoTHubClientInvalidArgument;
     }
     else if( az_result_failed( res = az_iot_hub_client_telemetry_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
@@ -507,7 +508,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
                                                                                     pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength,
                                                                                     &telemetry_topic_length ) ) )
     {
-        AZLogError( ( "Failed to get telemetry topic : %08x \r\n", res ) );
+        AZLogError( ( "Failed to get telemetry topic : %08x.", res ) );
         ret = eAzureIoTHubClientFailed;
     }
     else
@@ -525,7 +526,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         if( ( xResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
                                               &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != AzureIoTMQTTSuccess )
         {
-            AZLogError( ( "Failed to publish telementry : Error=%d \r\n", xResult ) );
+            AZLogError( ( "Failed to publish telementry : Error=%d.", xResult ) );
             ret = eAzureIoTHubClientFailed;
         }
         else
