@@ -77,42 +77,6 @@ TickType_t xTaskGetTickCount( void )
 }
 /*-----------------------------------------------------------*/
 
-/* TODO: remove once azure_iot.c is merged */
-AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHMACFunction,
-                                               const uint8_t * pucKey,
-                                               uint32_t ulKeySize,
-                                               const uint8_t * pucMessage,
-                                               uint32_t ulMessageSize,
-                                               uint8_t * pucBuffer,
-                                               uint32_t ulBufferLength,
-                                               uint8_t * pucOutput,
-                                               uint32_t ulOutputSize,
-                                               uint32_t * pulOutputLength )
-{
-    ( void ) xAzureIoTHMACFunction;
-    ( void ) pucKey;
-    ( void ) ulKeySize;
-    ( void ) pucMessage;
-    ( void ) ulMessageSize;
-    ( void ) pucBuffer;
-    ( void ) ulBufferLength;
-    ( void ) pucOutput;
-    ( void ) ulOutputSize;
-    ( void ) pulOutputLength;
-
-    if( prvHmacFunction( pucKey, ulKeySize, pucMessage, ulMessageSize,
-                         pucBuffer, ulBufferLength, pulOutputLength ) )
-    {
-        return eAzureIoTOutOfMemory;
-    }
-
-    memcpy( pucOutput, "abcd", sizeof( "abcd" ) );
-    *pulOutputLength = sizeof( "abcd" ) - 1;
-
-    return eAzureIoTSuccess;
-}
-/*-----------------------------------------------------------*/
-
 static uint64_t prvGetUnixTime( void )
 {
     return ullUnixTime;
