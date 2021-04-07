@@ -106,7 +106,7 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
 }
 /*-----------------------------------------------------------*/
 
-static uint32_t prvAzureIoTHubClientCloudMessageProcess( AzureIoTHubClientReceiveContext_t * context,
+static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_t * context,
                                                          AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                          void * pxPublishInfo )
 {
