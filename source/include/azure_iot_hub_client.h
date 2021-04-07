@@ -21,7 +21,7 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
-#define hubclientSUBSCRIBE_FEATURE_COUNT    3
+#define azureiothubSUBSCRIBE_FEATURE_COUNT    3
 
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
@@ -204,7 +204,7 @@ typedef struct AzureIoTHubClient
 
         uint32_t ulCurrentRequestID;
 
-        AzureIoTHubClientReceiveContext_t xReceiveContext[ hubclientSUBSCRIBE_FEATURE_COUNT ];
+        AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     } _internal;
 } AzureIoTHubClient_t;
 
