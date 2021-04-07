@@ -95,13 +95,17 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
     /* First element in AzureIoTHubClientHandle */
     AzureIoTHubClient_t * pxAzureIoTHubClient = ( AzureIoTHubClient_t * ) pxMQTTContext;
 
-    if( ( pxPacketInfo->type & 0xF0U ) == AZURE_IOT_MQTT_PACKET_TYPE_PUBLISH )
+    if( ( pxPacketInfo->type & 0xF0U ) == azureiotmqttPACKET_TYPE_PUBLISH )
     {
         prvMQTTProcessIncomingPublish( pxAzureIoTHubClient, pxDeserializedInfo->pPublishInfo );
     }
-    else
+    else if( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK )
     {
         prvMQTTProcessResponse( pxAzureIoTHubClient, pxPacketInfo, pxDeserializedInfo->packetIdentifier );
+    }
+    else
+    {
+        AZLogDebug( ( "AzureIoTHubClient received packet of type: %d", pxPacketInfo->ucType ) );
     }
 }
 /*-----------------------------------------------------------*/
