@@ -25,6 +25,7 @@ endif()
 
 # Middleware source
 add_library(az_iot_middleware_freertos
+  ${AZ_IOT_REPO_ROOT}/source/azure_iot.c
   ${AZ_IOT_REPO_ROOT}/source/azure_iot_provisioning_client.c
 )
 
