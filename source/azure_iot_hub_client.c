@@ -7,12 +7,12 @@
  */
 
 #include "azure_iot_hub_client.h"
-#include "azure_iot_mqtt.h"
 
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "azure_iot_mqtt.h"
 #include "azure/az_iot.h"
 #include "azure/core/az_version.h"
 
@@ -50,9 +50,9 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
                                            AzureIoTMQTTPublishInfo_t * pxPublishInfo )
 {
     uint32_t ulIndex;
+    AzureIoTHubClientReceiveContext_t * pxContext;
 
     configASSERT( pxPublishInfo != NULL );
-    AzureIoTHubClientReceiveContext_t * pxContext;
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
@@ -74,14 +74,14 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
  * Handle any incoming suback messages.
  *
  * */
-static void prvMQTTProcessResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
+static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                     AzureIoTMQTTPacketInfo_t * pxIncomingPacket,
                                     uint16_t usPacketId )
 {
     uint32_t ulIndex;
+    AzureIoTHubClientReceiveContext_t * pxContext;
 
     configASSERT( pxIncomingPacket != NULL );
-    AzureIoTHubClientReceiveContext_t * pxContext;
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
@@ -115,7 +115,7 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
     }
     else if( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK )
     {
-        prvMQTTProcessResponse( pxAzureIoTHubClient, pxPacketInfo, pxDeserializedInfo->packetIdentifier );
+        prvMQTTProcessSuback( pxAzureIoTHubClient, pxPacketInfo, pxDeserializedInfo->packetIdentifier );
     }
     else
     {
@@ -148,7 +148,7 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
     /* Process incoming Publish. */
     AZLogInfo( ( "Cloud xCloudToDeviceMessage QoS : %d.", xMQTTPublishInfo->qos ) );
 
-    /* Verify the received publish is for the we have subscribed to. */
+    /* Verify the received publish is for the feature we have subscribed to. */
     AZLogInfo( ( "Cloud xCloudToDeviceMessage topic: %.*s  with payload : %.*s.",
                  xMQTTPublishInfo->topicNameLength,
                  xMQTTPublishInfo->pTopicName,
@@ -192,7 +192,7 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
     /* Process incoming Publish. */
     AZLogInfo( ( "Direct method QoS : %d.", xMQTTPublishInfo->qos ) );
 
-    /* Verify the received publish is for the we have subscribed to. */
+    /* Verify the received publish is for the feature we have subscribed to. */
     AZLogInfo( ( "Direct method topic: %.*s  with method payload : %.*s.",
                  xMQTTPublishInfo->topicNameLength,
                  xMQTTPublishInfo->pTopicName,
@@ -239,7 +239,7 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
     /* Process incoming Publish. */
     AZLogInfo( ( "Twin Incoming QoS : %d.", xMQTTPublishInfo->qos ) );
 
-    /* Verify the received publish is for the we have subscribed to. */
+    /* Verify the received publish is for the feature we have subscribed to. */
     AZLogInfo( ( "Twin topic: %.*s. with payload : %.*s.",
                  xMQTTPublishInfo->topicNameLength,
                  xMQTTPublishInfo->pTopicName,
@@ -339,6 +339,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
                                                   const AzureIoTTransportInterface_t * pxTransportInterface )
 {
     AzureIoTHubClientResult_t xResult;
+    AzureIoTMQTTStatus_t xMQTTResult;
     az_iot_hub_client_options xHubOptions;
     uint8_t * pucNetworkBuffer;
     uint32_t ulNetworkBufferLength;
@@ -395,11 +396,11 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
             xResult = eAzureIoTHubClientInitFailed;
         }
         /* Initialize AzureIoTMQTT library. */
-        else if( ( AzureIoTMQTT_Init( &( pxAzureIoTHubClient->_internal.xMQTTContext ), pxTransportInterface,
+        else if( ( xMQTTResult = AzureIoTMQTT_Init( &( pxAzureIoTHubClient->_internal.xMQTTContext ), pxTransportInterface,
                                       prvGetTimeMs, prvEventCallback,
                                       pucNetworkBuffer, ulNetworkBufferLength ) ) != AzureIoTMQTTSuccess )
         {
-            AZLogError( ( "Failed to initialize AzureIoTMQTT_Init." ) );
+            AZLogError( ( "Failed to initialize AzureIoTMQTT_Init: %08x.", xMQTTResult ) );
             xResult = eAzureIoTHubClientInitFailed;
         }
         else
