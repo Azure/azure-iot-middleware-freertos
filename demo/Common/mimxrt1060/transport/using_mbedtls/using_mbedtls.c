@@ -759,40 +759,37 @@ int32_t TLS_FreeRTOS_recv( NetworkContext_t * pNetworkContext,
                            size_t bytesToRecv )
 {
     TlsTransportParams_t * pTlsTransportParams = NULL;
-    int32_t tlsStatus = 0;
+    size_t xRead = 0;
+    int32_t lResult = 0;
 
     configASSERT( ( pNetworkContext != NULL ) && ( pNetworkContext->pParams != NULL ) );
 
     pTlsTransportParams = pNetworkContext->pParams;
-    tlsStatus = ( int32_t ) mbedtls_ssl_read( &( pTlsTransportParams->sslContext.context ),
-                                              pBuffer,
-                                              bytesToRecv );
-
-    if( ( tlsStatus == MBEDTLS_ERR_SSL_TIMEOUT ) ||
-        ( tlsStatus == MBEDTLS_ERR_SSL_WANT_READ ) ||
-        ( tlsStatus == MBEDTLS_ERR_SSL_WANT_WRITE ) )
+    do
     {
-        LogDebug( ( "Failed to read data. However, a read can be retried on this error. "
-                    "mbedTLSError= %s : %s.",
-                    mbedtlsHighLevelCodeOrDefault( tlsStatus ),
-                    mbedtlsLowLevelCodeOrDefault( tlsStatus ) ) );
+        lResult = mbedtls_ssl_read( &( pTlsTransportParams->sslContext.context ),
+                                    pBuffer + xRead,
+                                    bytesToRecv - xRead );
 
-        /* Mark these set of errors as a timeout. The libraries may retry read
-         * on these errors. */
-        tlsStatus = 0;
-    }
-    else if( tlsStatus < 0 )
+        if( lResult > 0 )
+        {
+            /* Got data, so update the tally and keep looping. */
+            xRead += ( size_t )lResult;
+        }
+    } while ( lResult == MBEDTLS_ERR_SSL_WANT_READ );
+    
+    if( lResult >= 0 )
     {
-        LogError( ( "Failed to read data: mbedTLSError= %s : %s.",
-                    mbedtlsHighLevelCodeOrDefault( tlsStatus ),
-                    mbedtlsLowLevelCodeOrDefault( tlsStatus ) ) );
+        lResult = ( int ) xRead;
     }
     else
     {
-        /* Empty else marker. */
+        LogError( ( "Failed to read data: mbedTLSError= %s : %s.",
+                    mbedtlsHighLevelCodeOrDefault( lResult ),
+                    mbedtlsLowLevelCodeOrDefault( lResult ) ) );
     }
 
-    return tlsStatus;
+    return lResult;
 }
 /*-----------------------------------------------------------*/
 
@@ -801,39 +798,49 @@ int32_t TLS_FreeRTOS_send( NetworkContext_t * pNetworkContext,
                            size_t bytesToSend )
 {
     TlsTransportParams_t * pTlsTransportParams = NULL;
-    int32_t tlsStatus = 0;
+    size_t xWritten = 0;
+    int32_t lResult = 0;
 
     configASSERT( ( pNetworkContext != NULL ) && ( pNetworkContext->pParams != NULL ) );
 
     pTlsTransportParams = pNetworkContext->pParams;
-    tlsStatus = ( int32_t ) mbedtls_ssl_write( &( pTlsTransportParams->sslContext.context ),
-                                               pBuffer,
-                                               bytesToSend );
 
-    if( ( tlsStatus == MBEDTLS_ERR_SSL_TIMEOUT ) ||
-        ( tlsStatus == MBEDTLS_ERR_SSL_WANT_READ ) ||
-        ( tlsStatus == MBEDTLS_ERR_SSL_WANT_WRITE ) )
+    while( xWritten < bytesToSend )
     {
-        LogDebug( ( "Failed to send data. However, send can be retried on this error. "
-                    "mbedTLSError= %s : %s.",
-                    mbedtlsHighLevelCodeOrDefault( tlsStatus ),
-                    mbedtlsLowLevelCodeOrDefault( tlsStatus ) ) );
+        lResult = mbedtls_ssl_write( &( pTlsTransportParams->sslContext.context ),
+                                     pBuffer + xWritten,
+                                     bytesToSend - xWritten );
 
-        /* Mark these set of errors as a timeout. The libraries may retry send
-         * on these errors. */
-        tlsStatus = 0;
+        if( lResult > 0 )
+        {
+            /* Sent data, so update the tally and keep looping. */
+            xWritten += ( size_t ) lResult;
+        }
+        else if( ( lResult == 0 ) || ( lResult == -pdFREERTOS_ERRNO_ENOSPC ) )
+        {
+            /* No data sent. The secure sockets
+            * API supports non-blocking send, so stop the loop but don't
+            * flag an error. */
+        	lResult = 0;
+            break;
+        }
+        else if( MBEDTLS_ERR_SSL_WANT_WRITE != lResult )
+        {
+            break;
+        }
     }
-    else if( tlsStatus < 0 )
+
+    if( lResult >= 0 )
     {
-        LogError( ( "Failed to send data:  mbedTLSError= %s : %s.",
-                    mbedtlsHighLevelCodeOrDefault( tlsStatus ),
-                    mbedtlsLowLevelCodeOrDefault( tlsStatus ) ) );
+        lResult = ( int32_t ) xWritten;
     }
     else
     {
-        /* Empty else marker. */
+        LogError( ( "Failed to send data:  mbedTLSError= %s : %s.",
+                    mbedtlsHighLevelCodeOrDefault( lResult ),
+                    mbedtlsLowLevelCodeOrDefault( lResult ) ) );
     }
 
-    return tlsStatus;
+    return lResult;
 }
 /*-----------------------------------------------------------*/
