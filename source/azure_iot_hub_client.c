@@ -53,6 +53,7 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
     AzureIoTHubClientReceiveContext_t * pxContext;
 
     configASSERT( pxPublishInfo != NULL );
+    configASSERT( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_PUBLISH );
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
@@ -88,6 +89,7 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     AzureIoTHubClientReceiveContext_t * pxContext;
 
     configASSERT( pxIncomingPacket != NULL );
+    configASSERT( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK );
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
@@ -145,38 +147,43 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
                                                 AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                 void * pxPublishInfo )
 {
+    AzureIoTHubClientResult_t xResult;
     AzureIoTHubClientCloudToDeviceMessageRequest_t xCloudToDeviceMessage = { 0 };
     AzureIoTMQTTPublishInfo_t * xMQTTPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pxPublishInfo;
+    az_result xCoreResult;
     az_iot_hub_client_c2d_request xOutEmbeddedRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
 
     /* Failed means no topic match */
-    if( az_result_failed( az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                      xTopicSpan, &xOutEmbeddedRequest ) ) )
+    if( az_result_failed( xCoreResult = az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                    xTopicSpan, &xOutEmbeddedRequest ) ) )
     {
-        return eAzureIoTHubClientTopicNoMatch;
+        AZLogWarn( ( "Cloud to device topic parsing failed: 0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientTopicNoMatch;
+    }
+    else
+    {
+        /* Verify the received publish is for the feature we have subscribed to. */
+        AZLogDebug( ( "Cloud xCloudToDeviceMessage topic: %.*s  with payload : %.*s.",
+                      xMQTTPublishInfo->usTopicNameLength,
+                      xMQTTPublishInfo->pcTopicName,
+                      xMQTTPublishInfo->xPayloadLength,
+                      xMQTTPublishInfo->pvPayload ) );
+
+        if( pxContext->_internal.callbacks.xCloudToDeviceMessageCallback )
+        {
+            xCloudToDeviceMessage.pvMessagePayload = xMQTTPublishInfo->pvPayload;
+            xCloudToDeviceMessage.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
+            xCloudToDeviceMessage.xProperties._internal.xProperties = xOutEmbeddedRequest.properties;
+
+            AZLogDebug( ( "Invoking Cloud to Device Callback." ) );
+            pxContext->_internal.callbacks.xCloudToDeviceMessageCallback( &xCloudToDeviceMessage,
+                                                                          pxContext->_internal.pvCallbackContext );
+            AZLogDebug( ( "Returned from Cloud to Device Callback." ) );
+        }
     }
 
-    /* Verify the received publish is for the feature we have subscribed to. */
-    AZLogDebug( ( "Cloud xCloudToDeviceMessage topic: %.*s  with payload : %.*s.",
-                  xMQTTPublishInfo->usTopicNameLength,
-                  xMQTTPublishInfo->pcTopicName,
-                  xMQTTPublishInfo->xPayloadLength,
-                  xMQTTPublishInfo->pvPayload ) );
-
-    if( pxContext->_internal.callbacks.xCloudToDeviceMessageCallback )
-    {
-        xCloudToDeviceMessage.pvMessagePayload = xMQTTPublishInfo->pvPayload;
-        xCloudToDeviceMessage.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
-        xCloudToDeviceMessage.xProperties._internal.xProperties = xOutEmbeddedRequest.properties;
-
-        AZLogDebug( ( "Invoking Cloud to Device Callback." ) );
-        pxContext->_internal.callbacks.xCloudToDeviceMessageCallback( &xCloudToDeviceMessage,
-                                                                      pxContext->_internal.pvCallbackContext );
-        AZLogDebug( ( "Returned from Cloud to Device Callback." ) );
-    }
-
-    return eAzureIoTHubClientSuccess;
+    return xResult;
 }
 /*-----------------------------------------------------------*/
 
@@ -189,40 +196,47 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
                                                          AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                          void * pxPublishInfo )
 {
+    AzureIoTHubClientResult_t xResult;
     AzureIoTHubClientMethodRequest_t xMethodRequest = { 0 };
     AzureIoTMQTTPublishInfo_t * xMQTTPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pxPublishInfo;
+    az_result xCoreResult;
     az_iot_hub_client_method_request xOutEmbeddedRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
 
     /* Failed means no topic match */
-    if( az_result_failed( az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                          xTopicSpan, &xOutEmbeddedRequest ) ) )
+    if( az_result_failed( xCoreResult = az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                        xTopicSpan, &xOutEmbeddedRequest ) ) )
     {
-        return eAzureIoTHubClientTopicNoMatch;
+        AZLogWarn( ( "Direct method topic parsing failed: 0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientTopicNoMatch;
+    }
+    else
+    {
+        /* Verify the received publish is for the feature we have subscribed to. */
+        AZLogDebug( ( "Direct method topic: %.*s  with method payload : %.*s.",
+                      xMQTTPublishInfo->usTopicNameLength,
+                      xMQTTPublishInfo->pcTopicName,
+                      xMQTTPublishInfo->xPayloadLength,
+                      xMQTTPublishInfo->pvPayload ) );
+
+        if( pxContext->_internal.callbacks.xMethodCallback )
+        {
+            xMethodRequest.pvMessagePayload = xMQTTPublishInfo->pvPayload;
+            xMethodRequest.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
+            xMethodRequest.pucMethodName = az_span_ptr( xOutEmbeddedRequest.name );
+            xMethodRequest.usMethodNameLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.name );
+            xMethodRequest.pucRequestID = az_span_ptr( xOutEmbeddedRequest.request_id );
+            xMethodRequest.usRequestIDLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.request_id );
+
+            AZLogDebug( ( "Invoking Methods Callback." ) );
+            pxContext->_internal.callbacks.xMethodCallback( &xMethodRequest, pxContext->_internal.pvCallbackContext );
+            AZLogDebug( ( "Returned from Methods Callback." ) );
+
+            xResult = eAzureIoTHubClientSuccess;
+        }
     }
 
-    /* Verify the received publish is for the feature we have subscribed to. */
-    AZLogDebug( ( "Direct method topic: %.*s  with method payload : %.*s.",
-                  xMQTTPublishInfo->usTopicNameLength,
-                  xMQTTPublishInfo->pcTopicName,
-                  xMQTTPublishInfo->xPayloadLength,
-                  xMQTTPublishInfo->pvPayload ) );
-
-    if( pxContext->_internal.callbacks.xMethodCallback )
-    {
-        xMethodRequest.pvMessagePayload = xMQTTPublishInfo->pvPayload;
-        xMethodRequest.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
-        xMethodRequest.pucMethodName = az_span_ptr( xOutEmbeddedRequest.name );
-        xMethodRequest.usMethodNameLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.name );
-        xMethodRequest.pucRequestID = az_span_ptr( xOutEmbeddedRequest.request_id );
-        xMethodRequest.usRequestIDLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.request_id );
-
-        AZLogDebug( ( "Invoking Methods Callback." ) );
-        pxContext->_internal.callbacks.xMethodCallback( &xMethodRequest, pxContext->_internal.pvCallbackContext );
-        AZLogDebug( ( "Returned from Methods Callback." ) );
-    }
-
-    return eAzureIoTHubClientSuccess;
+    return xResult;
 }
 /*-----------------------------------------------------------*/
 
@@ -235,63 +249,79 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
                                                        AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                        void * pxPublishInfo )
 {
+    AzureIoTHubClientResult_t xResult;
     AzureIoTHubClientTwinResponse_t xTwinResponse = { 0 };
     AzureIoTMQTTPublishInfo_t * xMQTTPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pxPublishInfo;
+    az_result xCoreResult;
     az_iot_hub_client_twin_response xOutRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
     uint32_t ulRequestID = 0;
 
     /* Failed means no topic match */
-    if( az_result_failed( az_iot_hub_client_twin_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                       xTopicSpan, &xOutRequest ) ) )
+    xCoreResult = az_iot_hub_client_twin_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                               xTopicSpan, &xOutRequest );
+
+    if( az_result_failed( xCoreResult ) )
     {
-        return eAzureIoTHubClientTopicNoMatch;
+        AZLogWarn( ( "Twin topic parsing failed: 0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientTopicNoMatch;
     }
-
-    /* Verify the received publish is for the feature we have subscribed to. */
-    AZLogDebug( ( "Twin topic: %.*s. with payload : %.*s.",
-                  xMQTTPublishInfo->usTopicNameLength,
-                  xMQTTPublishInfo->pcTopicName,
-                  xMQTTPublishInfo->xPayloadLength,
-                  xMQTTPublishInfo->pvPayload ) );
-
-    if( pxContext->_internal.callbacks.xTwinCallback )
+    else
     {
-        if( az_span_size( xOutRequest.request_id ) == 0 )
-        {
-            xTwinResponse.messageType = eAzureIoTHubTwinDesiredPropertyMessage;
-        }
-        else
-        {
-            if( az_result_failed( az_span_atou32( xOutRequest.request_id, &ulRequestID ) ) )
-            {
-                return eAzureIoTHubClientFailed;
-            }
+        /* Verify the received publish is for the feature we have subscribed to. */
+        AZLogDebug( ( "Twin topic: %.*s. with payload : %.*s.",
+                      xMQTTPublishInfo->usTopicNameLength,
+                      xMQTTPublishInfo->pcTopicName,
+                      xMQTTPublishInfo->xPayloadLength,
+                      xMQTTPublishInfo->pvPayload ) );
 
-            if( ulRequestID & 0x01 )
+        xResult = eAzureIoTHubClientSuccess;
+
+        if( pxContext->_internal.callbacks.xTwinCallback )
+        {
+            if( az_span_size( xOutRequest.request_id ) == 0 )
             {
-                xTwinResponse.messageType = eAzureIoTHubTwinReportedResponseMessage;
+                xTwinResponse.messageType = eAzureIoTHubTwinDesiredPropertyMessage;
             }
             else
             {
-                xTwinResponse.messageType = eAzureIoTHubTwinGetMessage;
+                if( az_result_succeeded( xCoreResult = az_span_atou32( xOutRequest.request_id, &ulRequestID ) ) )
+                {
+                    if( ulRequestID & 0x01 )
+                    {
+                        xTwinResponse.messageType = eAzureIoTHubTwinReportedResponseMessage;
+                    }
+                    else
+                    {
+                        xTwinResponse.messageType = eAzureIoTHubTwinGetMessage;
+                    }
+                }
+                else
+                {
+                    /* Failed to parse the message */
+                    AZLogError( ( "Request ID parsing failed: 0x%08x", xCoreResult ) );
+                    xResult = eAzureIoTHubClientFailed;
+                }
+            }
+
+            if( xResult == eAzureIoTHubClientSuccess )
+            {
+                xTwinResponse.pvMessagePayload = xMQTTPublishInfo->pvPayload;
+                xTwinResponse.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
+                xTwinResponse.messageStatus = xOutRequest.status;
+                xTwinResponse.pucVersion = az_span_ptr( xOutRequest.version );
+                xTwinResponse.usVersionLength = ( uint16_t ) az_span_size( xOutRequest.version );
+                xTwinResponse.ulRequestID = ulRequestID;
+
+                AZLogDebug( ( "Invoking Twin Callback." ) );
+                pxContext->_internal.callbacks.xTwinCallback( &xTwinResponse,
+                                                              pxContext->_internal.pvCallbackContext );
+                AZLogDebug( ( "Returning from Twin Callback." ) );
             }
         }
-
-        xTwinResponse.pvMessagePayload = xMQTTPublishInfo->pvPayload;
-        xTwinResponse.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
-        xTwinResponse.messageStatus = xOutRequest.status;
-        xTwinResponse.pucVersion = az_span_ptr( xOutRequest.version );
-        xTwinResponse.usVersionLength = ( uint16_t ) az_span_size( xOutRequest.version );
-        xTwinResponse.ulRequestID = ulRequestID;
-
-        AZLogDebug( ( "Invoking Twin Callback." ) );
-        pxContext->_internal.callbacks.xTwinCallback( &xTwinResponse,
-                                                      pxContext->_internal.pvCallbackContext );
-        AZLogDebug( ( "Returning from Twin Callback." ) );
     }
 
-    return eAzureIoTHubClientSuccess;
+    return xResult;
 }
 /*-----------------------------------------------------------*/
 
@@ -352,6 +382,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
 {
     AzureIoTHubClientResult_t xResult;
     AzureIoTMQTTResult_t xMQTTResult;
+    az_result xCoreResult;
     az_iot_hub_client_options xHubOptions;
     uint8_t * pucNetworkBuffer;
     uint32_t ulNetworkBufferLength;
@@ -401,10 +432,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
             xHubOptions.user_agent = az_span_create( ( uint8_t * ) azureiothubUSER_AGENT, sizeof( azureiothubUSER_AGENT ) - 1 );
         }
 
-        if( az_result_failed( az_iot_hub_client_init( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                      xHostnameSpan, xDeviceIDSpan, &xHubOptions ) ) )
+        if( az_result_failed( xCoreResult = az_iot_hub_client_init( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                    xHostnameSpan, xDeviceIDSpan, &xHubOptions ) ) )
         {
-            AZLogError( ( "Failed to initialize az_iot_hub_client_init." ) );
+            AZLogError( ( "Failed to initialize az_iot_hub_client_init: 0x%08x.", xCoreResult ) );
             xResult = eAzureIoTHubClientInitFailed;
         }
         /* Initialize AzureIoTMQTT library. */
@@ -469,7 +500,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
         /* Check if token refresh is set, then generate password */
         else if( ( pxAzureIoTHubClient->_internal.pxAzureIoTHubClientTokenRefresh ) &&
                  ( pxAzureIoTHubClient->_internal.pxAzureIoTHubClientTokenRefresh( pxAzureIoTHubClient,
-                                                                                   pxAzureIoTHubClient->_internal.xAzureIoTHubClientTimeFunction() + azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC,
+                                                                                   pxAzureIoTHubClient->_internal.xAzureIoTHubClientTimeFunction() +
+                                                                                   azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC,
                                                                                    pxAzureIoTHubClient->_internal.pucAzureIoTHubClientSymmetricKey,
                                                                                    pxAzureIoTHubClient->_internal.ulAzureIoTHubClientSymmetricKeyLength,
                                                                                    ( uint8_t * ) xConnectInfo.pcPassword, azureiotPASSWORD_MAX,
