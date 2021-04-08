@@ -65,6 +65,12 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
         {
             break;
         }
+
+        /* If reached the end of the list and haven't found a context, log none found */
+        if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT - 1 )
+        {
+            AZLogInfo( ( "No receive context found for incoming publish." ) );
+        }
     }
 }
 /*-----------------------------------------------------------*/
@@ -92,6 +98,12 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
             /* TODO: inspect packet to see is ack was successful*/
             pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
             break;
+        }
+
+        /* If reached the end of the list and haven't found a context, log none found */
+        if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT - 1 )
+        {
+            AZLogInfo( ( "No receive context found for incoming suback." ) );
         }
     }
 }
@@ -157,8 +169,11 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
         xCloudToDeviceMessage.pvMessagePayload = xMQTTPublishInfo->pvPayload;
         xCloudToDeviceMessage.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
         xCloudToDeviceMessage.xProperties._internal.xProperties = xOutEmbeddedRequest.properties;
+
+        AZLogDebug( ( "Invoking Cloud to Device Callback." ) );
         pxContext->_internal.callbacks.xCloudToDeviceMessageCallback( &xCloudToDeviceMessage,
                                                                       pxContext->_internal.pvCallbackContext );
+        AZLogDebug( ( "Returned from Cloud to Device Callback." ) );
     }
 
     return eAzureIoTHubClientSuccess;
@@ -201,7 +216,10 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
         xMethodRequest.usMethodNameLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.name );
         xMethodRequest.pucRequestID = az_span_ptr( xOutEmbeddedRequest.request_id );
         xMethodRequest.usRequestIDLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.request_id );
+
+        AZLogDebug( ( "Invoking Methods Callback." ) );
         pxContext->_internal.callbacks.xMethodCallback( &xMethodRequest, pxContext->_internal.pvCallbackContext );
+        AZLogDebug( ( "Returned from Methods Callback." ) );
     }
 
     return eAzureIoTHubClientSuccess;
@@ -266,8 +284,11 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
         xTwinResponse.pucVersion = az_span_ptr( xOutRequest.version );
         xTwinResponse.usVersionLength = ( uint16_t ) az_span_size( xOutRequest.version );
         xTwinResponse.ulRequestID = ulRequestID;
+
+        AZLogDebug( ( "Invoking Twin Callback." ) );
         pxContext->_internal.callbacks.xTwinCallback( &xTwinResponse,
                                                       pxContext->_internal.pvCallbackContext );
+        AZLogDebug( ( "Returning from Twin Callback." ) );
     }
 
     return eAzureIoTHubClientSuccess;
@@ -500,10 +521,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
     if( pxAzureIoTHubClient == NULL )
     {
         AZLogError( ( "Failed to disconnect: Invalid argument." ) );
-        return eAzureIoTHubClientInvalidArgument;
+        xResult = eAzureIoTHubClientInvalidArgument;
     }
-
-    if( ( xMQTTResult = AzureIoTMQTT_Disconnect( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) ) != eAzureIoTMQTTSuccess )
+    else if( ( xMQTTResult = AzureIoTMQTT_Disconnect( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) ) != eAzureIoTMQTTSuccess )
     {
         AZLogError( ( "Failed to disconnect: 0x%08x.", xMQTTResult ) );
         xResult = eAzureIoTHubClientFailed;
@@ -561,7 +581,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
                                                   &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to publish telementry: 0x%08x.", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientPublishFailed;
         }
         else
         {
