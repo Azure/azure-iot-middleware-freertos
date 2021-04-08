@@ -1,14 +1,24 @@
-# Project
+# Azure FreeRTOS Middleware
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+**THIS REPO IS IN ACTIVE DEVELOPMENT AND NOT GA READY. APIS ARE SUBJECT TO CHANGE WITHOUT NOTICE UNTIL AN OFFICIAL RELEASE HAS BEEN PUBLISHED.**
 
-As the maintainer of this project, please make a few updates:
+The Azure FreeRTOS Middleware simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and adds MQTT client support. Below are key points of this project:
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+- The Azure FreeRTOS Middleware operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are issued by the customer and handled by the SDK.
+- Customers control the TLS/TCP connection to the endpoint. This allows for flexibility between software or hardware implementations of either. For porting, please see the [porting](#porting) section below.
+- No background threads are created by the Azure FreeRTOS Middleware. Messages are sent and received synchronously.
+- Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).
+
+## Repo Structure
+
+As this repo is under development, the `main` branch is limited until tested and thoroughly reviewed code has been merged. For the most cutting edge developments, please see the `sdk_spike` branch [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/sdk_spike). There we have samples for several devices including:
+
+- STM32L475
+- STM32L4+
+- STM32H745
+- NXP RT1060
+- Linux
+- Windows
 
 ## Contributing
 
