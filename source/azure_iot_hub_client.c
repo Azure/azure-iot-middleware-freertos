@@ -469,12 +469,12 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClient_t * pxAzureIoTHubClient )
 
 AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                      bool xCleanSession,
+                                                     bool * pxOutSessionPresent,
                                                      uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTConnectInfo_t xConnectInfo = { 0 };
     AzureIoTHubClientResult_t xResult;
     AzureIoTMQTTResult_t xMQTTResult;
-    bool xSessionPresent;
     uint32_t ulPasswordLength = 0;
     size_t xMQTTUserNameLength;
     az_result xCoreResult;
@@ -524,7 +524,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
                                                       &xConnectInfo,
                                                       NULL,
                                                       ulTimeoutMilliseconds,
-                                                      &xSessionPresent ) ) != eAzureIoTMQTTSuccess )
+                                                      &pxOutSessionPresent ) ) != eAzureIoTMQTTSuccess )
             {
                 AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=0x%08x.",
                               pxAzureIoTHubClient->_internal.ulHostnameLength, ( const char * ) pxAzureIoTHubClient->_internal.pucHostname,
