@@ -119,7 +119,7 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
     }
     else
     {
-        AZLogDebug( ( "AzureIoTHubClient received packet of type: %d", pxPacketInfo->ucType ) );
+        AZLogDebug( ( "AzureIoTHubClient received packet of type: 0x%08x", pxPacketInfo->ucType ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -473,8 +473,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
                                                       ulTimeoutMilliseconds,
                                                       &xSessionPresent ) ) != eAzureIoTMQTTSuccess )
             {
-                AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=%d.",
-                              pxAzureIoTHubClient->_internal.ulHostnameLength, pxAzureIoTHubClient->_internal.pucHostname,
+                AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTTStatus=0x%08x.",
+                              pxAzureIoTHubClient->_internal.ulHostnameLength, ( const char * ) pxAzureIoTHubClient->_internal.pucHostname,
                               xMQTTResult ) );
                 xResult = eAzureIoTHubClientFailed;
             }
@@ -505,7 +505,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
 
     if( ( xMQTTResult = AzureIoTMQTT_Disconnect( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) ) != eAzureIoTMQTTSuccess )
     {
-        AZLogError( ( "Failed to disconnect: %d.", xMQTTResult ) );
+        AZLogError( ( "Failed to disconnect: 0x%08x.", xMQTTResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
     else
@@ -542,7 +542,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
                                                                                             pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength,
                                                                                             &xTelemetryTopicLength ) ) )
     {
-        AZLogError( ( "Failed to get telemetry topic : 0x%08x.", xCoreResult ) );
+        AZLogError( ( "Failed to get telemetry topic: 0x%08x.", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
     else
@@ -560,7 +560,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
                                                   &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
-            AZLogError( ( "Failed to publish telementry : Error=%d.", xMQTTResult ) );
+            AZLogError( ( "Failed to publish telementry: 0x%08x.", xMQTTResult ) );
             xResult = eAzureIoTHubClientFailed;
         }
         else
