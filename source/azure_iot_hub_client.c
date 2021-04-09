@@ -53,7 +53,6 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
     AzureIoTHubClientReceiveContext_t * pxContext;
 
     configASSERT( pxPublishInfo != NULL );
-    configASSERT( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_PUBLISH );
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
@@ -89,7 +88,7 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     AzureIoTHubClientReceiveContext_t * pxContext;
 
     configASSERT( pxIncomingPacket != NULL );
-    configASSERT( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK );
+    configASSERT( ( pxIncomingPacket->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK );
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
