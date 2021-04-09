@@ -65,12 +65,12 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
         {
             break;
         }
+    }
 
-        /* If reached the end of the list and haven't found a context, log none found */
-        if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT - 1 )
-        {
-            AZLogInfo( ( "No receive context found for incoming publish." ) );
-        }
+    /* If reached the end of the list and haven't found a context, log none found */
+    if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT )
+    {
+        AZLogInfo( ( "No receive context found for incoming publish." ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -98,14 +98,15 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
         {
             /* TODO: inspect packet to see is ack was successful*/
             pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
+            AZLogInfo( ( "Suback receive context found: 0x%08x", ulIndex ) );
             break;
         }
+    }
 
-        /* If reached the end of the list and haven't found a context, log none found */
-        if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT - 1 )
-        {
-            AZLogInfo( ( "No receive context found for incoming suback." ) );
-        }
+    /* If reached the end of the list and haven't found a context, log none found */
+    if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT )
+    {
+        AZLogInfo( ( "No receive context found for incoming suback." ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -154,8 +155,10 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
 
     /* Failed means no topic match */
-    if( az_result_failed( xCoreResult = az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                    xTopicSpan, &xOutEmbeddedRequest ) ) )
+    xCoreResult = az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                              xTopicSpan, &xOutEmbeddedRequest );
+
+    if( az_result_failed( xCoreResult ) )
     {
         AZLogWarn( ( "Cloud to device topic parsing failed: 0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientTopicNoMatch;
@@ -203,8 +206,10 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
 
     /* Failed means no topic match */
-    if( az_result_failed( xCoreResult = az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                        xTopicSpan, &xOutEmbeddedRequest ) ) )
+    xCoreResult = az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                  xTopicSpan, &xOutEmbeddedRequest );
+
+    if( az_result_failed( xCoreResult ) )
     {
         AZLogWarn( ( "Direct method topic parsing failed: 0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientTopicNoMatch;
@@ -355,6 +360,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
     }
     else
     {
+        memset( pxHubClientOptions, 0, sizeof( AzureIoTHubClientOptions_t ) );
         pxHubClientOptions->pucModelID = NULL;
         pxHubClientOptions->ulModelIDLength = 0;
         pxHubClientOptions->pucModuleID = NULL;
