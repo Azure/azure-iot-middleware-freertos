@@ -24,9 +24,9 @@ else()
 endif()
 
 # Middleware source
+file(GLOB AZ_IOT_MIDDLEWARE_FREERTOS_SRC ${AZ_IOT_REPO_ROOT}/source/*.c)
 add_library(az_iot_middleware_freertos
-  ${AZ_IOT_REPO_ROOT}/source/azure_iot.c
-  ${AZ_IOT_REPO_ROOT}/source/azure_iot_provisioning_client.c
+  ${AZ_IOT_MIDDLEWARE_FREERTOS_SRC}
 )
 
 target_compile_options(az_iot_middleware_freertos
@@ -68,6 +68,7 @@ target_link_libraries(az_iot_middleware_freertos PUBLIC az_iot_hub az_iot_provis
 # list of unit tests
 set(unit_tests
   azure_iot_provisioning_client_ut
+  azure_iot_ut
 )
 
 # initialization_unit_tests
@@ -75,6 +76,11 @@ add_executable(
   azure_iot_provisioning_client_ut
   ${PROJECT_SOURCE_DIR}/azure_iot_cmocka_mqtt.c
   ${PROJECT_SOURCE_DIR}/azure_iot_provisioning_client_ut.c
+)
+
+add_executable(
+  azure_iot_ut
+  ${PROJECT_SOURCE_DIR}/azure_iot_ut.c
 )
 
 foreach(test ${unit_tests})
