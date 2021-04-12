@@ -492,7 +492,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
     else
     {
         /* Use working buffer for username/password */
-        xConnectInfo.pcUserName = ( const char * ) pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer;
+        xConnectInfo.pcUserName = pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer;
         xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotUSERNAME_MAX;
 
         if( az_result_failed( xCoreResult = az_iot_hub_client_get_user_name( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
@@ -518,7 +518,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
         else
         {
             xConnectInfo.ucCleanSession = xCleanSession;
-            xConnectInfo.pcClientIdentifier = ( const char * ) pxAzureIoTHubClient->_internal.pucDeviceID;
+            xConnectInfo.pcClientIdentifier = pxAzureIoTHubClient->_internal.pucDeviceID;
             xConnectInfo.usClientIdentifierLength = ( uint16_t ) pxAzureIoTHubClient->_internal.ulDeviceIDLength;
             xConnectInfo.usUserNameLength = ( uint16_t ) xMQTTUserNameLength;
             xConnectInfo.usKeepAliveSeconds = azureiothubKEEP_ALIVE_TIMEOUT_SECONDS;
@@ -605,7 +605,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     else
     {
         xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS1;
-        xMQTTPublishInfo.pcTopicName = ( const char * ) pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer;
+        xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer;
         xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTelemetryTopicLength;
         xMQTTPublishInfo.pvPayload = ( const void * ) pucTelemetryData;
         xMQTTPublishInfo.xPayloadLength = ulTelemetryDataLength;
