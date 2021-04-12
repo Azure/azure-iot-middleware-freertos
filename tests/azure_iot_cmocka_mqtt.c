@@ -49,13 +49,13 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
                                            const AzureIoTMQTTPublishInfo_t * pxWillInfo,
                                            uint32_t ulMilliseconds,
-                                           uint8_t * pucSessionPresent )
+                                           bool * pxSessionPresent )
 {
     ( void ) xContext;
     ( void ) pxConnectInfo;
     ( void ) pxWillInfo;
     ( void ) ulMilliseconds;
-    ( void ) pucSessionPresent;
+    ( void ) pxSessionPresent;
 
     return ( AzureIoTMQTTResult_t ) mock();
 }
