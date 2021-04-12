@@ -517,7 +517,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
         }
         else
         {
-            xConnectInfo.ucCleanSession = xCleanSession;
+            xConnectInfo.xCleanSession = xCleanSession;
             xConnectInfo.pcClientIdentifier = pxAzureIoTHubClient->_internal.pucDeviceID;
             xConnectInfo.usClientIdentifierLength = ( uint16_t ) pxAzureIoTHubClient->_internal.ulDeviceIDLength;
             xConnectInfo.usUserNameLength = ( uint16_t ) xMQTTUserNameLength;
