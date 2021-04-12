@@ -130,20 +130,14 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
                                            const AzureIoTMQTTPublishInfo_t * pxWillInfo,
                                            uint32_t ulMilliseconds,
-                                           uint8_t * pucSessionPresent )
+                                           bool * pxSessionPresent )
 {
-    bool xSessionPresent;
     MQTTStatus_t xResult;
 
     xResult =  MQTT_Connect( xContext,
                              ( const MQTTConnectInfo_t * ) pxConnectInfo,
                              ( const MQTTPublishInfo_t * ) pxWillInfo,
-                             ulMilliseconds, &xSessionPresent );
-    
-    if ( pucSessionPresent )
-    {
-        *pucSessionPresent = ( uint8_t ) xSessionPresent;
-    }
+                             ulMilliseconds, pxSessionPresent );
     
     return prvTranslateToAzureIoTMQTTResult( xResult );
 }
