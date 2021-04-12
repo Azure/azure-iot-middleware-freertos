@@ -414,11 +414,11 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
         memset( ( void * ) pxAzureIoTHubClient, 0, sizeof( AzureIoTHubClient_t ) );
 
         /* Setup working buffer to be used by middleware */
-        pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength =
+        pxAzureIoTHubClient->_internal.ulWorkingBufferLength =
             ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) > azureiotTOPIC_MAX ? ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) : azureiotTOPIC_MAX;
-        pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer = pucBuffer;
-        pucNetworkBuffer = pucBuffer + pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength;
-        ulNetworkBufferLength = ulBufferLength - pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength;
+        pxAzureIoTHubClient->_internal.pucWorkingBuffer = pucBuffer;
+        pucNetworkBuffer = pucBuffer + pxAzureIoTHubClient->_internal.ulWorkingBufferLength;
+        ulNetworkBufferLength = ulBufferLength - pxAzureIoTHubClient->_internal.ulWorkingBufferLength;
 
         /* Initialize Azure IoT Hub Client */
         xHostnameSpan = az_span_create( ( uint8_t * ) pucHostname, ( int32_t ) ulHostnameLength );
@@ -457,7 +457,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
             pxAzureIoTHubClient->_internal.ulDeviceIDLength = ulDeviceIdLength;
             pxAzureIoTHubClient->_internal.pucHostname = pucHostname;
             pxAzureIoTHubClient->_internal.ulHostnameLength = ulHostnameLength;
-            pxAzureIoTHubClient->_internal.xAzureIoTHubClientTimeFunction = xGetTimeFunction;
+            pxAzureIoTHubClient->_internal.xTimeFunction = xGetTimeFunction;
             xResult = eAzureIoTHubClientSuccess;
         }
     }
@@ -492,7 +492,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
     else
     {
         /* Use working buffer for username/password */
-        xConnectInfo.pcUserName = pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer;
+        xConnectInfo.pcUserName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
         xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotUSERNAME_MAX;
 
         if( az_result_failed( xCoreResult = az_iot_hub_client_get_user_name( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
@@ -503,14 +503,14 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
             xResult = eAzureIoTHubClientFailed;
         }
         /* Check if token refresh is set, then generate password */
-        else if( ( pxAzureIoTHubClient->_internal.pxAzureIoTHubClientTokenRefresh ) &&
-                 ( pxAzureIoTHubClient->_internal.pxAzureIoTHubClientTokenRefresh( pxAzureIoTHubClient,
-                                                                                   pxAzureIoTHubClient->_internal.xAzureIoTHubClientTimeFunction() +
-                                                                                   azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC,
-                                                                                   pxAzureIoTHubClient->_internal.pucAzureIoTHubClientSymmetricKey,
-                                                                                   pxAzureIoTHubClient->_internal.ulAzureIoTHubClientSymmetricKeyLength,
-                                                                                   ( uint8_t * ) xConnectInfo.pcPassword, azureiotPASSWORD_MAX,
-                                                                                   &ulPasswordLength ) ) )
+        else if( ( pxAzureIoTHubClient->_internal.pxTokenRefresh ) &&
+                 ( pxAzureIoTHubClient->_internal.pxTokenRefresh( pxAzureIoTHubClient,
+                                                                  pxAzureIoTHubClient->_internal.xTimeFunction() +
+                                                                  azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC,
+                                                                  pxAzureIoTHubClient->_internal.pucSymmetricKey,
+                                                                  pxAzureIoTHubClient->_internal.ulSymmetricKeyLength,
+                                                                  ( uint8_t * ) xConnectInfo.pcPassword, azureiotPASSWORD_MAX,
+                                                                  &ulPasswordLength ) ) )
         {
             AZLogError( ( "Failed to generate SAS token." ) );
             xResult = eAzureIoTHubClientFailed;
@@ -595,8 +595,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     }
     else if( az_result_failed( xCoreResult = az_iot_hub_client_telemetry_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                             ( pxProperties != NULL ) ? &pxProperties->_internal.xProperties : NULL,
-                                                                                            ( char * ) pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer,
-                                                                                            pxAzureIoTHubClient->_internal.ulAzureIoTHubClientWorkingBufferLength,
+                                                                                            ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                            pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
                                                                                             &xTelemetryTopicLength ) ) )
     {
         AZLogError( ( "Failed to get telemetry topic: 0x%08x.", xCoreResult ) );
@@ -605,7 +605,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     else
     {
         xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS1;
-        xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucAzureIoTHubClientWorkingBuffer;
+        xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
         xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTelemetryTopicLength;
         xMQTTPublishInfo.pvPayload = ( const void * ) pucTelemetryData;
         xMQTTPublishInfo.xPayloadLength = ulTelemetryDataLength;

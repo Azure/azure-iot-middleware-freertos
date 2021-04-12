@@ -182,26 +182,26 @@ typedef struct AzureIoTHubClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        uint8_t * pucAzureIoTHubClientWorkingBuffer;
-        uint32_t ulAzureIoTHubClientWorkingBufferLength;
+        uint8_t * pucWorkingBuffer;
+        uint32_t ulWorkingBufferLength;
         az_iot_hub_client xAzureIoTHubClientCore;
 
         const uint8_t * pucHostname;
         uint16_t ulHostnameLength;
         const uint8_t * pucDeviceID;
         uint16_t ulDeviceIDLength;
-        const uint8_t * pucAzureIoTHubClientSymmetricKey;
-        uint32_t ulAzureIoTHubClientSymmetricKeyLength;
+        const uint8_t * pucSymmetricKey;
+        uint32_t ulSymmetricKeyLength;
 
-        uint32_t ( * pxAzureIoTHubClientTokenRefresh )( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                        uint64_t ullExpiryTimeSecs,
-                                                        const uint8_t * ucKey,
-                                                        uint32_t ulKeyLen,
-                                                        uint8_t * pucSASBuffer,
-                                                        uint32_t ulSasBufferLen,
-                                                        uint32_t * pulSaSLength );
-        AzureIoTGetHMACFunc_t xAzureIoTHubClientHMACFunction;
-        AzureIoTGetCurrentTimeFunc_t xAzureIoTHubClientTimeFunction;
+        uint32_t ( * pxTokenRefresh )( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                       uint64_t ullExpiryTimeSecs,
+                                       const uint8_t * ucKey,
+                                       uint32_t ulKeyLen,
+                                       uint8_t * pucSASBuffer,
+                                       uint32_t ulSasBufferLen,
+                                       uint32_t * pulSaSLength );
+        AzureIoTGetHMACFunc_t xHMACFunction;
+        AzureIoTGetCurrentTimeFunc_t xTimeFunction;
 
         uint32_t ulCurrentRequestID;
 
