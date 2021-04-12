@@ -15,6 +15,7 @@
 
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
 
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
@@ -33,15 +34,6 @@
 #define azureiotmqttPACKET_TYPE_PINGREQ        ( ( uint8_t ) 0xC0U )  /** @brief PINGREQ (client-to-server). */
 #define azureiotmqttPACKET_TYPE_PINGRESP       ( ( uint8_t ) 0xD0U )  /** @brief PINGRESP (server-to-client). */
 #define azureiotmqttPACKET_TYPE_DISCONNECT     ( ( uint8_t ) 0xE0U )  /** @brief DISCONNECT (client-to-server). */
-
-#define azureiotmqttNOT_CLEAN_SESSION          ( ( uint8_t ) 0x0 )    /** @brief Not MQTT clean session. */
-#define azureiotmqttCLEAN_SESSION              ( ( uint8_t ) 0x1 )    /** @brief MQTT clean session. */
-
-#define azureiotmqttNOT_RETAINED_MESSAGE       ( ( uint8_t ) 0x0 )    /** @brief Message not retained, when publishing. */
-#define azureiotmqttRETAINED_MESSAGE           ( ( uint8_t ) 0x1 )    /** @brief Message is retained, when publishing. */
-
-#define azureiotmqttNOT_DUPLICATE_MESSAGE      ( ( uint8_t ) 0x0 )    /** @brief Not Duplicate publish message. */
-#define azureiotmqttDUPLICATE_MESSAGE          ( ( uint8_t ) 0x1 )    /** @brief MQTT clean session. */
 
 typedef enum AzureIoTMQTTQoS
 {
@@ -79,7 +71,7 @@ typedef struct AzureIoTMQTTConnectInfo
     /**
      * @brief Whether to establish a new, clean session or resume a previous session.
      */
-    uint8_t ucCleanSession;
+    bool xCleanSession;
 
     /**
      * @brief MQTT keep alive period, in seconds.
@@ -147,12 +139,12 @@ typedef struct AzureIoTMQTTPublishInfo
     /**
      * @brief Whether this is a retained message.
      */
-    uint8_t ucRetain;
+    bool xRetain;
 
     /**
      * @brief Whether this is a duplicate publish message.
      */
-    uint8_t ucDup;
+    bool xDup;
 
     /**
      * @brief Topic name on which the message is published.
@@ -246,7 +238,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
  * @param[in] pxConnectInfo MQTT CONNECT packet information.
  * @param[in] pxWillInfo Last Will and Testament. Pass NULL if Last Will and Testament is not used.
  * @param[in] ulMilliseconds Maximum time in milliseconds to wait for a CONNACK packet.
- * @param[out] pucSessionPresent Whether a previous session was present.
+ * @param[out] pxSessionPresent Whether a previous session was present.
  * Only relevant if not establishing a clean session.
  * 
  * @return An #AzureIoTMQTTResult_t with the result of the operation.
@@ -255,7 +247,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
                                            const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
                                            const AzureIoTMQTTPublishInfo_t * pxWillInfo,
                                            uint32_t ulMilliseconds,
-                                           uint8_t * pucSessionPresent );
+                                           bool * pxSessionPresent );
 
 /**
  * @brief Sends MQTT SUBSCRIBE for the given list of topic filters to

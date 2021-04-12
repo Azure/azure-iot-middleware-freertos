@@ -144,7 +144,7 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
     AzureIoTMQTTConnectInfo_t xConnectInfo = { 0 };
     AzureIoTProvisioningClientResult_t xResult;
     AzureIoTMQTTResult_t xMQTTResult;
-    uint8_t ucSessionPresent;
+    bool xSessionPresent;
     uint32_t ulPasswordLength = 0;
     size_t xMQTTUsernameLength;
     az_result xCoreResult;
@@ -182,7 +182,7 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
     }
     else
     {
-        xConnectInfo.ucCleanSession = true;
+        xConnectInfo.xCleanSession = true;
         xConnectInfo.pcClientIdentifier = pxAzureProvClient->_internal.pucRegistrationID;
         xConnectInfo.usClientIdentifierLength = ( uint16_t ) pxAzureProvClient->_internal.ulRegistrationIDLength;
         xConnectInfo.usUserNameLength = ( uint16_t ) xMQTTUsernameLength;
@@ -191,7 +191,7 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
 
         if( ( xMQTTResult = AzureIoTMQTT_Connect( &( pxAzureProvClient->_internal.xMQTTContext ),
                                                   &xConnectInfo, NULL, azureiotprovisioningCONNACK_RECV_TIMEOUT_MS,
-                                                  &ucSessionPresent ) ) != eAzureIoTMQTTSuccess )
+                                                  &xSessionPresent ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "AzureIoTProvisioning failed to establish MQTT connection: Server=%.*s, MQTTStatus=%d ",
                           pxAzureProvClient->_internal.ulEndpointLength,
