@@ -16,16 +16,6 @@
 #define testCLOUD_CALLBACK_ID     1
 #define testMETHOD_CALLBACK_ID    2
 #define testTWIN_CALLBACK_ID      3
-#define testEMPTY_JSON            "{}"
-
-typedef struct ReceviceTestData
-{
-    const uint8_t * pucTopic;
-    uint32_t ulTopicLength;
-    const uint8_t * pucPayload;
-    uint32_t ulPayloadLength;
-    uint32_t ulCallbackFunctionId;
-} ReceviceTestData_t;
 
 /* Data exported by cmocka port for MQTT */
 extern AzureIoTMQTTPacketInfo_t xPacketInfo;
@@ -83,74 +73,85 @@ static void testAzureIoTHubClient_Init_Failure( void ** state )
 
     ( void ) state;
 
+    /* Fail init when client is NULL */
+    assert_int_equal( AzureIoTHubClient_Init( NULL,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              ucBuffer,
+                                              sizeof( ucBuffer ),
+                                              prvGetUnixTime,
+                                              &xTransportInterface ),
+                      eAzureIoTHubClientInvalidArgument );
+
     /* Fail init when null hostname passed */
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  NULL, 0,
-                                                  ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                  &xHubClientOptions,
-                                                  ucBuffer,
-                                                  sizeof( ucBuffer ),
-                                                  prvGetUnixTime,
-                                                  &xTransportInterface ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              NULL, 0,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              ucBuffer,
+                                              sizeof( ucBuffer ),
+                                              prvGetUnixTime,
+                                              &xTransportInterface ),
+                      eAzureIoTHubClientInvalidArgument );
 
     /* Fail init when null deviceId passed */
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  ucHostname, sizeof( ucHostname ) - 1,
-                                                  NULL, 0,
-                                                  &xHubClientOptions,
-                                                  ucBuffer,
-                                                  sizeof( ucBuffer ),
-                                                  prvGetUnixTime,
-                                                  &xTransportInterface ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              NULL, 0,
+                                              &xHubClientOptions,
+                                              ucBuffer,
+                                              sizeof( ucBuffer ),
+                                              prvGetUnixTime,
+                                              &xTransportInterface ),
+                      eAzureIoTHubClientInvalidArgument );
 
     /* Fail init when null buffer passed */
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  ucHostname, sizeof( ucHostname ) - 1,
-                                                  ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                  &xHubClientOptions,
-                                                  NULL, 0,
-                                                  prvGetUnixTime,
-                                                  &xTransportInterface ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              NULL, 0,
+                                              prvGetUnixTime,
+                                              &xTransportInterface ),
+                      eAzureIoTHubClientInvalidArgument );
 
     /* Fail init when null AzureIoTGetCurrentTimeFunc_t passed */
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  ucHostname, sizeof( ucHostname ) - 1,
-                                                  ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                  &xHubClientOptions,
-                                                  ucBuffer, sizeof( ucBuffer ),
-                                                  NULL, &xTransportInterface ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              ucBuffer, sizeof( ucBuffer ),
+                                              NULL, &xTransportInterface ),
+                      eAzureIoTHubClientInvalidArgument );
 
     /* Fail init when null Transport passed */
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  ucHostname, sizeof( ucHostname ) - 1,
-                                                  ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                  &xHubClientOptions,
-                                                  ucBuffer, sizeof( ucBuffer ),
-                                                  prvGetUnixTime, NULL ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              ucBuffer, sizeof( ucBuffer ),
+                                              prvGetUnixTime, NULL ),
+                      eAzureIoTHubClientInvalidArgument );
 
     /* Fail when smaller buffer is passed */
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  ucHostname, sizeof( ucHostname ) - 1,
-                                                  ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                  &xHubClientOptions,
-                                                  ucBuffer, azureiotUSERNAME_MAX,
-                                                  prvGetUnixTime, &xTransportInterface ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              ucBuffer, azureiotUSERNAME_MAX,
+                                              prvGetUnixTime, &xTransportInterface ),
+                      eAzureIoTHubClientOutOfMemory );
 
     /* Fail init when AzureIoTMQTT_Init fails */
     will_return( AzureIoTMQTT_Init, eAzureIoTMQTTNoMemory );
-    assert_int_not_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
-                                                  ucHostname, sizeof( ucHostname ) - 1,
-                                                  ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                                  &xHubClientOptions,
-                                                  ucBuffer, sizeof( ucBuffer ),
-                                                  prvGetUnixTime, &xTransportInterface ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
+                                              ucHostname, sizeof( ucHostname ) - 1,
+                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
+                                              &xHubClientOptions,
+                                              ucBuffer, sizeof( ucBuffer ),
+                                              prvGetUnixTime, &xTransportInterface ),
+                      eAzureIoTHubClientInitFailed );
 }
 
 static void testAzureIoTHubClient_Init_Success( void ** state )
@@ -196,6 +197,8 @@ static void testAzureIoTHubClient_Deinit_Success( void ** state )
 
     ( void ) state;
 
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
     AzureIoTHubClient_Deinit( &xTestIoTHubClient );
 }
 
@@ -217,24 +220,32 @@ static void testAzureIoTHubClient_OptionsInit_Success( void ** state )
 
 static void testAzureIoTHubClient_Connect_InvalidArgFailure( void ** state )
 {
-    ( void ) state;
-
+    AzureIoTHubClient_t xTestIoTHubClient;
     bool xSessionPresent;
 
-    assert_int_not_equal( AzureIoTHubClient_Connect( NULL,
-                                                     false,
-                                                     &xSessionPresent,
-                                                     60 ),
-                          eAzureIoTHubClientSuccess );
+    ( void ) state;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    assert_int_equal( AzureIoTHubClient_Connect( NULL,
+                                                 false,
+                                                 &xSessionPresent,
+                                                 60 ),
+                      eAzureIoTHubClientInvalidArgument );
+
+    assert_int_equal( AzureIoTHubClient_Connect( &xTestIoTHubClient,
+                                                 false,
+                                                 NULL,
+                                                 60 ),
+                      eAzureIoTHubClientInvalidArgument );
 }
 
 static void testAzureIoTHubClient_Connect_MQTTConnectFailure( void ** state )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
+    bool xSessionPresent;
 
     ( void ) state;
-
-    bool xSessionPresent;
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
@@ -249,10 +260,9 @@ static void testAzureIoTHubClient_Connect_MQTTConnectFailure( void ** state )
 static void testAzureIoTHubClient_Connect_Success( void ** state )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
+    bool xSessionPresent;
 
     ( void ) state;
-
-    bool xSessionPresent;
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
