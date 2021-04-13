@@ -21,7 +21,7 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
-#define hubclientSUBSCRIBE_FEATURE_COUNT    3
+#define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
@@ -37,15 +37,16 @@ typedef enum AzureIoTHubMessageType
 
 typedef enum AzureIoTHubClientResult
 {
-    eAzureIoTHubClientSuccess = 0,       /**< Success. */
-    eAzureIoTHubClientInvalidArgument,   /**< Input argument does not comply with the expected range of values. */
-    eAzureIoTHubClientPending,           /**< The status of the operation is pending. */
-    eAzureIoTHubClientOutOfMemory,       /**< The system is out of memory. */
-    eAzureIoTHubClientInitFailed,        /**< The initialization failed. */
-    eAzureIoTHubClientSubackWaitTimeout, /**< There was timeout while waiting for SUBACK. */
-    eAzureIoTHubClientTopicNotSubscribed,/**< Topic not subscribed. */
-    eAzureIoTHubClientPublishFailed,     /**< Failed to publish. */
-    eAzureIoTHubClientFailed,            /**< There was a failure. */
+    eAzureIoTHubClientSuccess = 0,        /**< Success. */
+    eAzureIoTHubClientInvalidArgument,    /**< Input argument does not comply with the expected range of values. */
+    eAzureIoTHubClientPending,            /**< The status of the operation is pending. */
+    eAzureIoTHubClientOutOfMemory,        /**< The system is out of memory. */
+    eAzureIoTHubClientInitFailed,         /**< The initialization failed. */
+    eAzureIoTHubClientSubackWaitTimeout,  /**< There was timeout while waiting for SUBACK. */
+    eAzureIoTHubClientTopicNotSubscribed, /**< Topic not subscribed. */
+    eAzureIoTHubClientPublishFailed,      /**< Failed to publish. */
+    eAzureIoTHubClientTopicNoMatch,       /**< The received message was not for the currently processed feature. */
+    eAzureIoTHubClientFailed,             /**< There was a failure. */
 } AzureIoTHubClientResult_t;
 
 typedef enum AzureIoTHubMessageStatus
@@ -181,30 +182,30 @@ typedef struct AzureIoTHubClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        uint8_t * pucAzureIoTHubClientWorkingBuffer;
-        uint32_t ulAzureIoTHubClientWorkingBufferLength;
+        uint8_t * pucWorkingBuffer;
+        uint32_t ulWorkingBufferLength;
         az_iot_hub_client xAzureIoTHubClientCore;
 
         const uint8_t * pucHostname;
         uint16_t ulHostnameLength;
         const uint8_t * pucDeviceID;
         uint16_t ulDeviceIDLength;
-        const uint8_t * pucAzureIoTHubClientSymmetricKey;
-        uint32_t ulAzureIoTHubClientSymmetricKeyLength;
+        const uint8_t * pucSymmetricKey;
+        uint32_t ulSymmetricKeyLength;
 
-        uint32_t ( * pxAzureIoTHubClientTokenRefresh )( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                        uint64_t ullExpiryTimeSecs,
-                                                        const uint8_t * ucKey,
-                                                        uint32_t ulKeyLen,
-                                                        uint8_t * pucSASBuffer,
-                                                        uint32_t ulSasBufferLen,
-                                                        uint32_t * pulSaSLength );
-        AzureIoTGetHMACFunc_t xAzureIoTHubClientHMACFunction;
-        AzureIoTGetCurrentTimeFunc_t xAzureIoTHubClientTimeFunction;
+        uint32_t ( * pxTokenRefresh )( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                       uint64_t ullExpiryTimeSecs,
+                                       const uint8_t * ucKey,
+                                       uint32_t ulKeyLen,
+                                       uint8_t * pucSASBuffer,
+                                       uint32_t ulSasBufferLen,
+                                       uint32_t * pulSaSLength );
+        AzureIoTGetHMACFunc_t xHMACFunction;
+        AzureIoTGetCurrentTimeFunc_t xTimeFunction;
 
         uint32_t ulCurrentRequestID;
 
-        AzureIoTHubClientReceiveContext_t xReceiveContext[ hubclientSUBSCRIBE_FEATURE_COUNT ];
+        AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     } _internal;
 } AzureIoTHubClient_t;
 
@@ -274,12 +275,15 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t
  * @brief Connect via MQTT to the IoT Hub endpoint.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] cleanSession A boolean dictating whether to connect with a clean session or not.
+ * @param[in] xCleanSession A boolean dictating whether to connect with a clean session or not.
+ * @param[in] pxOutSessionPresent Whether a previous session was present.
+ * Only relevant if not establishing a clean session.
  * @param[in] ulTimeoutMilliseconds The maximum time in milliseconds to wait for a CONNACK.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                     bool cleanSession,
+                                                     bool xCleanSession,
+                                                     bool * pxOutSessionPresent,
                                                      uint32_t ulTimeoutMilliseconds );
 
 /**
