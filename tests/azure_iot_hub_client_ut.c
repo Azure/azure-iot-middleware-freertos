@@ -43,10 +43,14 @@ TickType_t xTaskGetTickCount( void )
     return 1;
 }
 
+/*-----------------------------------------------------------*/
+
 static uint64_t prvGetUnixTime( void )
 {
     return 0xFFFFFFFFFFFFFFFF;
 }
+
+/*-----------------------------------------------------------*/
 
 static void prvSetupTestIoTHubClient( AzureIoTHubClient_t * pxTestIoTHubClient )
 {
