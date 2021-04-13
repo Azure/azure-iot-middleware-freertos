@@ -70,7 +70,8 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
     /* If reached the end of the list and haven't found a context, log none found */
     if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT )
     {
-        AZLogInfo( ( "No receive context found for incoming publish." ) );
+        AZLogInfo( ( "No receive context found for incoming publish on topic: %.*s",
+                     pxPublishInfo->usTopicNameLength, pxPublishInfo->pcTopicName ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -154,18 +155,16 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
     az_iot_hub_client_c2d_request xOutEmbeddedRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
 
-    /* Failed means no topic match */
+    /* Failed means no topic match. This means the message is not for cloud to device messaging. */
     xCoreResult = az_iot_hub_client_c2d_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                               xTopicSpan, &xOutEmbeddedRequest );
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogWarn( ( "Cloud to device topic parsing failed: 0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientTopicNoMatch;
     }
     else
     {
-        /* Verify the received publish is for the feature we have subscribed to. */
         AZLogDebug( ( "Cloud xCloudToDeviceMessage topic: %.*s  with payload : %.*s.",
                       xMQTTPublishInfo->usTopicNameLength,
                       xMQTTPublishInfo->pcTopicName,
@@ -182,6 +181,8 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
             pxContext->_internal.callbacks.xCloudToDeviceMessageCallback( &xCloudToDeviceMessage,
                                                                           pxContext->_internal.pvCallbackContext );
             AZLogDebug( ( "Returned from Cloud to Device Callback." ) );
+
+            xResult = eAzureIoTHubClientSuccess;
         }
     }
 
@@ -205,18 +206,16 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
     az_iot_hub_client_method_request xOutEmbeddedRequest;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
 
-    /* Failed means no topic match */
+    /* Failed means no topic match. This means the message is not for direct method. */
     xCoreResult = az_iot_hub_client_methods_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                   xTopicSpan, &xOutEmbeddedRequest );
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogWarn( ( "Direct method topic parsing failed: 0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientTopicNoMatch;
     }
     else
     {
-        /* Verify the received publish is for the feature we have subscribed to. */
         AZLogDebug( ( "Direct method topic: %.*s  with method payload : %.*s.",
                       xMQTTPublishInfo->usTopicNameLength,
                       xMQTTPublishInfo->pcTopicName,
@@ -232,7 +231,7 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
             xMethodRequest.pucRequestID = az_span_ptr( xOutEmbeddedRequest.request_id );
             xMethodRequest.usRequestIDLength = ( uint16_t ) az_span_size( xOutEmbeddedRequest.request_id );
 
-            AZLogDebug( ( "Invoking Methods Callback." ) );
+            AZLogDebug( ( "Invoking Method Callback." ) );
             pxContext->_internal.callbacks.xMethodCallback( &xMethodRequest, pxContext->_internal.pvCallbackContext );
             AZLogDebug( ( "Returned from Methods Callback." ) );
 
@@ -261,18 +260,16 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
     uint32_t ulRequestID = 0;
 
-    /* Failed means no topic match */
+    /* Failed means no topic match. This means the message is not for twin messaging. */
     xCoreResult = az_iot_hub_client_twin_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                xTopicSpan, &xOutRequest );
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogWarn( ( "Twin topic parsing failed: 0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientTopicNoMatch;
     }
     else
     {
-        /* Verify the received publish is for the feature we have subscribed to. */
         AZLogDebug( ( "Twin topic: %.*s. with payload : %.*s.",
                       xMQTTPublishInfo->usTopicNameLength,
                       xMQTTPublishInfo->pcTopicName,
@@ -622,6 +619,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         }
         else
         {
+            AZLogInfo( ( "Successfully sent telemetry message." ) );
             xResult = eAzureIoTHubClientSuccess;
         }
     }
