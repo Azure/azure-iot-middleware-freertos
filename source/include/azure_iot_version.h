@@ -1,5 +1,5 @@
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// SPDX-License-Identifier: MIT
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
 
 /**
  * @file azure_iot_version.h
@@ -15,20 +15,20 @@
 #ifndef AZURE_IOT_VERSION_H
 #define AZURE_IOT_VERSION_H
 
-/// The version in string format used for telemetry following the `semver.org` standard
-/// (https://semver.org).
-#define azureiotVERSION_STRING "0.0.1-alpha"
+/*/ The version in string format used for telemetry following the `semver.org` standard */
+/*/ (https://semver.org). */
+#define azureiotVERSION_STRING        "0.0.1-alpha"
 
-/// Major numeric identifier.
-#define azureiotVERSION_MAJOR 0
+/*/ Major numeric identifier. */
+#define azureiotVERSION_MAJOR         0
 
-/// Minor numeric identifier.
-#define azureiotVERSION_MINOR 0
+/*/ Minor numeric identifier. */
+#define azureiotVERSION_MINOR         0
 
-/// Patch numeric identifier.
-#define azureiotVERSION_PATCH 1
+/*/ Patch numeric identifier. */
+#define azureiotVERSION_PATCH         1
 
-/// Optional pre-release identifier. SDK is in a pre-release state when present.
-#define azureiotVERSION_PRERELEASE "alpha"
+/*/ Optional pre-release identifier. SDK is in a pre-release state when present. */
+#define azureiotVERSION_PRERELEASE    "alpha"
 
-#endif // AZURE_IOT_VERSION_H
+#endif /* AZURE_IOT_VERSION_H */
