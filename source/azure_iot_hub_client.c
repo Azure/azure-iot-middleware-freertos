@@ -35,10 +35,20 @@
 /*
  * Topic subscribe state
  */
-#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE      ( 0x0 )
-#define azureiothubTOPIC_SUBSCRIBE_STATE_SUB       ( 0x1 )
-#define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK    ( 0x2 )
+#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE       ( 0x0 )
+#define azureiothubTOPIC_SUBSCRIBE_STATE_SUB        ( 0x1 )
+#define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK     ( 0x2 )
 
+/*
+ * Indexes of the receive context buffer for each feature
+ */
+#define azureiothubRECEIVE_CONTEXT_INDEX_C2D        ( 0 )
+#define azureiothubRECEIVE_CONTEXT_INDEX_METHODS    ( 1 )
+#define azureiothubRECEIVE_CONTEXT_INDEX_TWIN       ( 2 )
+
+#define azureiothubMETHOD_EMPTY_RESPONSE            "{}"
+
+#define azureiothubMAX_SIZE_FOR_UINT32              ( 10 )
 /*-----------------------------------------------------------*/
 
 /**
@@ -346,6 +356,110 @@ static uint32_t prvGetTimeMs( void )
 }
 /*-----------------------------------------------------------*/
 
+/**
+ * Get the next request Id available. Currently we are using
+ * odd for TwinReported property and even for TwinGet.
+ *
+ * */
+static AzureIoTHubClientResult_t prvGetTwinRequestId( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                      az_span xSpan,
+                                                      bool xOddSeq,
+                                                      uint32_t * pulRequestId,
+                                                      az_span * pxSpan )
+{
+    AzureIoTHubClientResult_t xResult;
+    az_span xRemainder;
+    az_result xCoreResult;
+
+    /* Check the last request Id used, and do increment of 2 or 1 based on xOddSeq */
+    if( xOddSeq == ( bool ) ( pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID & 0x01 ) )
+    {
+        pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID += 2;
+    }
+    else
+    {
+        pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID += 1;
+    }
+
+    if( pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID == 0 )
+    {
+        pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID = 2;
+    }
+
+    xCoreResult = az_span_u32toa( xSpan, pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID, &xRemainder );
+
+    if( az_result_failed( xCoreResult ) )
+    {
+        AZLogError( ( "Couldn't convert request id to span" ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        *pxSpan = az_span_slice( *pxSpan, 0, az_span_size( *pxSpan ) - az_span_size( xRemainder ) );
+
+        if( pulRequestId )
+        {
+            *pulRequestId = pxAzureIoTHubClient->_internal.ulCurrentTwinRequestID;
+        }
+
+        xResult = eAzureIoTHubClientSuccess;
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+/**
+ * Do blocking wait for sub-ack of particular receive context.
+ *
+ **/
+static AzureIoTHubClientResult_t prvWaitForSubAck( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                   AzureIoTHubClientReceiveContext_t * pxContext,
+                                                   uint32_t ulTimeoutMilliseconds )
+{
+    AzureIoTHubClientResult_t xResult = eAzureIoTHubClientSubackWaitTimeout;
+    uint32_t ulWaitTime;
+
+    AZLogDebug( ( "Waiting for sub ack id: %d", pxContext->_internal.usMqttSubPacketID ) );
+
+    do
+    {
+        if( pxContext->_internal.usState == azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
+        {
+            xResult = eAzureIoTHubClientSuccess;
+            break;
+        }
+
+        if( ulTimeoutMilliseconds > azureiothubSUBACK_WAIT_INTERVAL_MS )
+        {
+            ulTimeoutMilliseconds -= azureiothubSUBACK_WAIT_INTERVAL_MS;
+            ulWaitTime = azureiothubSUBACK_WAIT_INTERVAL_MS;
+        }
+        else
+        {
+            ulWaitTime = ulTimeoutMilliseconds;
+            ulTimeoutMilliseconds = 0;
+        }
+
+        if( AzureIoTMQTT_ProcessLoop( &pxAzureIoTHubClient->_internal.xMQTTContext, ulWaitTime ) != eAzureIoTMQTTSuccess )
+        {
+            xResult = eAzureIoTHubClientFailed;
+            break;
+        }
+    } while( ulTimeoutMilliseconds );
+
+    if( pxContext->_internal.usState == azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
+
+    AZLogDebug( ( "Done waiting for sub ack id: %d, result: 0x%08x",
+                  pxContext->_internal.usMqttSubPacketID, xResult ) );
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
 AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOptions_t * pxHubClientOptions )
 {
     AzureIoTHubClientResult_t xResult;
@@ -626,3 +740,521 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
 
     return xResult;
 }
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                         uint32_t ulTimeoutMilliseconds )
+{
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+
+    if( pxAzureIoTHubClient == NULL )
+    {
+        AZLogError( ( "Failed to process loop: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else if( ( xMQTTResult = AzureIoTMQTT_ProcessLoop( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                       ulTimeoutMilliseconds ) ) != eAzureIoTMQTTSuccess )
+    {
+        AZLogError( ( "AzureIoTMQTT_ProcessLoop failed : ProcessLoopDuration=%u, Error=0x%08x",
+                      ulTimeoutMilliseconds, xMQTTResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                           AzureIoTHubClientCloudToDeviceMessageCallback_t xCallback,
+                                                                           void * prvCallbackContext,
+                                                                           uint32_t ulTimeoutMilliseconds )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( xCallback == NULL ) )
+    {
+        AZLogError( ( "Failed to subscribe cloud to device message : Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_C2D ];
+        xMqttSubscription.xQoS = eAzureIoTMQTTQoS1;
+        xMqttSubscription.pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
+        xMqttSubscription.usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to subscribe to the MQTT topic: %s.", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Subscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                    &xMqttSubscription, 1, usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Cloud to device subscribe failed: error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
+            pxContext->_internal.usMqttSubPacketID = usSubscribePacketIdentifier;
+            pxContext->_internal.pxProcessFunction = prvAzureIoTHubClientC2DProcess;
+            pxContext->_internal.callbacks.xCloudToDeviceMessageCallback = xCallback;
+            pxContext->_internal.pvCallbackContext = prvCallbackContext;
+
+            if( ( xResult = prvWaitForSubAck( pxAzureIoTHubClient, pxContext,
+                                              ulTimeoutMilliseconds ) ) != eAzureIoTHubClientSuccess )
+            {
+                AZLogError( ( "Wait for sub ack failed : error=0x%08x", xResult ) );
+                memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( pxAzureIoTHubClient == NULL )
+    {
+        AZLogError( ( "Failed to unsubscribe cloud message: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_C2D ];
+        xMqttSubscription.xQoS = eAzureIoTMQTTQoS1;
+        xMqttSubscription.pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC;
+        xMqttSubscription.usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to unsubscribe from the MQTT topic: %s.", AZ_IOT_HUB_CLIENT_C2D_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Unsubscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMqttSubscription, 1,
+                                                      usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Failed to unsubscribe, error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            xResult = eAzureIoTHubClientSuccess;
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDirectMethod( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                   AzureIoTHubClientMethodCallback_t xCallback,
+                                                                   void * prvCallbackContext,
+                                                                   uint32_t ulTimeoutMilliseconds )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( xCallback == NULL ) )
+    {
+        AZLogError( ( "Failed to subscribe direct method: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_METHODS ];
+        xMqttSubscription.xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription.pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
+        xMqttSubscription.usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to subscribe to the MQTT topic: %s.", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Subscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                    &xMqttSubscription, 1,
+                                                    usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Failed to subscribe, error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
+            pxContext->_internal.usMqttSubPacketID = usSubscribePacketIdentifier;
+            pxContext->_internal.pxProcessFunction = prvAzureIoTHubClientDirectMethodProcess;
+            pxContext->_internal.callbacks.xMethodCallback = xCallback;
+            pxContext->_internal.pvCallbackContext = prvCallbackContext;
+
+            if( ( xResult = prvWaitForSubAck( pxAzureIoTHubClient, pxContext,
+                                              ulTimeoutMilliseconds ) ) != eAzureIoTHubClientSuccess )
+            {
+                AZLogError( ( "Wait for sub ack failed : error=0x%08x", xResult ) );
+                memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDirectMethod( AzureIoTHubClient_t * pxAzureIoTHubClient )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( pxAzureIoTHubClient == NULL )
+    {
+        AZLogError( ( "Failed to unsubscribe direct method: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_METHODS ];
+        xMqttSubscription.xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription.pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC;
+        xMqttSubscription.usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempt to unsubscribe from the MQTT topic: %s.", AZ_IOT_HUB_CLIENT_METHODS_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Unsubscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMqttSubscription, 1,
+                                                      usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Failed to unsubscribe, error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            xResult = eAzureIoTHubClientSuccess;
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                const AzureIoTHubClientMethodRequest_t * pxMessage,
+                                                                uint32_t ulStatus,
+                                                                const uint8_t * pucMethodPayload,
+                                                                uint32_t ulMethodPayloadLength )
+{
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
+    az_span xRequestID;
+    size_t xTopicLength;
+    az_result xCoreResult;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( pxMessage == NULL ) )
+    {
+        AZLogError( ( "Failed to send method response: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        xRequestID = az_span_create( ( uint8_t * ) pxMessage->pucRequestID, ( int32_t ) pxMessage->usRequestIDLength );
+
+        if( az_result_failed( xCoreResult =
+                                  az_iot_hub_client_methods_response_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                        xRequestID, ( uint16_t ) ulStatus,
+                                                                                        ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                        pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                        &xTopicLength ) ) )
+        {
+            AZLogError( ( "Failed to get method response topic : 0x%08x", xCoreResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS0;
+            xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
+            xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTopicLength;
+
+            if( ( pucMethodPayload == NULL ) || ( ulMethodPayloadLength == 0 ) )
+            {
+                xMQTTPublishInfo.pvPayload = ( const void * ) azureiothubMETHOD_EMPTY_RESPONSE;
+                xMQTTPublishInfo.xPayloadLength = sizeof( azureiothubMETHOD_EMPTY_RESPONSE ) - 1;
+            }
+            else
+            {
+                xMQTTPublishInfo.pvPayload = ( const void * ) pucMethodPayload;
+                xMQTTPublishInfo.xPayloadLength = ulMethodPayloadLength;
+            }
+
+            if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMQTTPublishInfo, 0 ) ) != eAzureIoTMQTTSuccess )
+            {
+                AZLogError( ( "Failed to publish response, error=0x%08x", xMQTTResult ) );
+                xResult = eAzureIoTHubClientFailed;
+            }
+            else
+            {
+                xResult = eAzureIoTHubClientSuccess;
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                 AzureIoTHubClientTwinCallback_t xCallback,
+                                                                 void * prvCallbackContext,
+                                                                 uint32_t ulTimeoutMilliseconds )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription[ 2 ] = { { 0 }, { 0 } };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( xCallback == NULL ) )
+    {
+        AZLogError( ( "Failed to subscribe device twin: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ];
+        xMqttSubscription[ 0 ].xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription[ 0 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 0 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+        xMqttSubscription[ 1 ].xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription[ 1 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 1 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to subscribe to the MQTT topics: %s and %s.",
+                      AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Subscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                    xMqttSubscription, 2,
+                                                    usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Failed to subscribe, error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
+            pxContext->_internal.usMqttSubPacketID = usSubscribePacketIdentifier;
+            pxContext->_internal.pxProcessFunction = prvAzureIoTHubClientDeviceTwinProcess;
+            pxContext->_internal.callbacks.xTwinCallback = xCallback;
+            pxContext->_internal.pvCallbackContext = prvCallbackContext;
+
+            if( ( xResult = prvWaitForSubAck( pxAzureIoTHubClient, pxContext,
+                                              ulTimeoutMilliseconds ) ) != eAzureIoTHubClientSuccess )
+            {
+                AZLogError( ( "Wait for sub ack failed : error=0x%08x", xResult ) );
+                memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription[ 2 ] = { { 0 }, { 0 } };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( pxAzureIoTHubClient == NULL )
+    {
+        AZLogError( ( "Failed to unsubscribe device twin: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ];
+        xMqttSubscription[ 0 ].xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription[ 0 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 0 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+        xMqttSubscription[ 1 ].xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription[ 1 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 1 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to unsubscribe from the MQTT  %s and %s topics.",
+                      AZ_IOT_HUB_CLIENT_TWIN_RESPONSE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_TWIN_PATCH_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Unsubscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      xMqttSubscription, 2,
+                                                      usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Failed to unsubscribe, error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            xResult = eAzureIoTHubClientSuccess;
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_SendDeviceTwinReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                    const uint8_t * pucReportedPayload,
+                                                                    uint32_t ulReportedPayloadLength,
+                                                                    uint32_t * pulRequestId )
+{
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
+    uint8_t ucRequestID[ azureiothubMAX_SIZE_FOR_UINT32 ];
+    size_t xTopicLength;
+    az_result xCoreResult;
+    az_span xRequestID = az_span_create( ucRequestID, sizeof( ucRequestID ) );
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( pucReportedPayload == NULL ) || ( ulReportedPayloadLength == 0 ) )
+    {
+        AZLogError( ( "Failed to send reported property: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else if( pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ]._internal.usState !=
+             azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
+    {
+        AZLogError( ( "Failed to send reported property: twin topic not subscribed" ) );
+        xResult = eAzureIoTHubClientTopicNotSubscribed;
+    }
+    else
+    {
+        if( ( xResult = prvGetTwinRequestId( pxAzureIoTHubClient, xRequestID,
+                                             true, pulRequestId, &xRequestID ) ) != eAzureIoTHubClientSuccess )
+        {
+            AZLogError( ( "Failed to get request id" ) );
+        }
+        else if( az_result_failed( xCoreResult =
+                                       az_iot_hub_client_twin_patch_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                       xRequestID,
+                                                                                       ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                       pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                       &xTopicLength ) ) )
+        {
+            AZLogError( ( "Failed to get twin patch topic: 0x%08x", xCoreResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS0;
+            xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
+            xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTopicLength;
+            xMQTTPublishInfo.pvPayload = ( const void * ) pucReportedPayload;
+            xMQTTPublishInfo.xPayloadLength = ulReportedPayloadLength;
+
+            if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMQTTPublishInfo, 0 ) ) != eAzureIoTMQTTSuccess )
+            {
+                AZLogError( ( "Failed to Publish twin reported message. Error=0x%08x", xMQTTResult ) );
+                xResult = eAzureIoTHubClientPublishFailed;
+            }
+            else
+            {
+                xResult = eAzureIoTHubClientSuccess;
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_GetDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient )
+{
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTHubClientResult_t xResult;
+    AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
+    uint8_t ucRequestID[ 10 ];
+    az_span xRequestID = az_span_create( ( uint8_t * ) ucRequestID, sizeof( ucRequestID ) );
+    size_t xTopicLength;
+    az_result xCoreResult;
+
+    if( pxAzureIoTHubClient == NULL )
+    {
+        AZLogError( ( "Failed to get twin: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else if( pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_TWIN ]._internal.usState !=
+             azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
+    {
+        AZLogError( ( "Failed to get twin: twin topic not subscribed" ) );
+        xResult = eAzureIoTHubClientTopicNotSubscribed;
+    }
+    else
+    {
+        if( ( xResult = prvGetTwinRequestId( pxAzureIoTHubClient, xRequestID,
+                                             false, NULL, &xRequestID ) ) != eAzureIoTHubClientSuccess )
+        {
+            AZLogError( ( "Failed to get request id" ) );
+        }
+        else if( az_result_failed( xCoreResult =
+                                       az_iot_hub_client_twin_document_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                          xRequestID,
+                                                                                          ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                          pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                          &xTopicLength ) ) )
+        {
+            AZLogError( ( "Failed to get twin document topic: 0x%08x", xCoreResult ) );
+            xResult = eAzureIoTHubClientFailed;
+        }
+        else
+        {
+            xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
+            xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS0;
+            xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTopicLength;
+
+            if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMQTTPublishInfo, 0 ) ) != eAzureIoTMQTTSuccess )
+            {
+                AZLogError( ( "Failed to Publish get twin message. Error=0x%08x", xMQTTResult ) );
+                xResult = eAzureIoTHubClientPublishFailed;
+            }
+            else
+            {
+                xResult = eAzureIoTHubClientSuccess;
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
