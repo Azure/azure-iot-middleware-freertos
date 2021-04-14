@@ -24,38 +24,38 @@
 #endif /* azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC */
 
 #ifndef azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS      azureiotKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS    azureiotKEEP_ALIVE_TIMEOUT_SECONDS
 #endif /* azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiotprovisioningCONNACK_RECV_TIMEOUT_MS
-    #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS         azureiotCONNACK_RECV_TIMEOUT_MS
+    #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS    azureiotCONNACK_RECV_TIMEOUT_MS
 #endif /* azureiotprovisioningCONNACK_RECV_TIMEOUT_MS */
 
 #ifndef azureiotprovisioningUSER_AGENT
-    #define azureiotprovisioningUSER_AGENT                      ""
+    #define azureiotprovisioningUSER_AGENT    ""
 #endif /* azureiotprovisioningUSER_AGENT */
 
 #ifndef azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS
-    #define azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS         ( 500U )
+    #define azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS    ( 500U )
 #endif /* azureiotprovisioningPROCESS_LOOP_TIMEOUT_MS */
 
 /* Define various workflow (WF) states Provisioning can get into */
-#define azureiotprovisioningWF_STATE_INIT              ( 0x0 )
-#define azureiotprovisioningWF_STATE_CONNECT           ( 0x1 )
-#define azureiotprovisioningWF_STATE_SUBSCRIBE         ( 0x2 )
-#define azureiotprovisioningWF_STATE_REQUEST           ( 0x3 )
-#define azureiotprovisioningWF_STATE_RESPONSE          ( 0x4 )
-#define azureiotprovisioningWF_STATE_SUBSCRIBING       ( 0x5 )
-#define azureiotprovisioningWF_STATE_REQUESTING        ( 0x6 )
-#define azureiotprovisioningWF_STATE_WAITING           ( 0x7 )
-#define azureiotprovisioningWF_STATE_COMPLETE          ( 0x8 )
+#define azureiotprovisioningWF_STATE_INIT           ( 0x0 )
+#define azureiotprovisioningWF_STATE_CONNECT        ( 0x1 )
+#define azureiotprovisioningWF_STATE_SUBSCRIBE      ( 0x2 )
+#define azureiotprovisioningWF_STATE_REQUEST        ( 0x3 )
+#define azureiotprovisioningWF_STATE_RESPONSE       ( 0x4 )
+#define azureiotprovisioningWF_STATE_SUBSCRIBING    ( 0x5 )
+#define azureiotprovisioningWF_STATE_REQUESTING     ( 0x6 )
+#define azureiotprovisioningWF_STATE_WAITING        ( 0x7 )
+#define azureiotprovisioningWF_STATE_COMPLETE       ( 0x8 )
 
 #define azureiotPrvGetMaxInt( a, b )    ( ( a ) > ( b ) ? ( a ) : ( b ) )
 
-#define azureiotprovisioningREQUEST_PAYLOAD_LABEL           "payload"
-#define azureiotprovisioningREQUEST_REGISTRATION_ID_LABEL   "registrationId"
+#define azureiotprovisioningREQUEST_PAYLOAD_LABEL            "payload"
+#define azureiotprovisioningREQUEST_REGISTRATION_ID_LABEL    "registrationId"
 
-#define azureiotprovisioningHMACBufferLength                ( 48 )
+#define azureiotprovisioningHMACBufferLength                 ( 48 )
 /*-----------------------------------------------------------*/
 
 /**
@@ -225,7 +225,7 @@ static void prvProvClientSubscribe( AzureIoTProvisioningClient_t * pxAzureProvCl
     AzureIoTProvisioningClientResult_t xResult;
     uint16_t usSubscribePacketIdentifier;
 
-    if ( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_SUBSCRIBE )
+    if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_SUBSCRIBE )
     {
         AZLogWarn( ( "AzureIoTProvisioning subscribe action called in wrong state %d",
                      pxAzureProvClient->_internal.ulWorkflowState ) );
@@ -256,11 +256,10 @@ static void prvProvClientSubscribe( AzureIoTProvisioningClient_t * pxAzureProvCl
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTProvisioningClientResult_t
-    prvProvClientCreateRequestPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                       uint8_t * pucPayload,
-                                       uint32_t ulPayloadLength,
-                                       uint32_t * pulBytesUsed )
+static AzureIoTProvisioningClientResult_t prvProvClientCreateRequestPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                                             uint8_t * pucPayload,
+                                                                             uint32_t ulPayloadLength,
+                                                                             uint32_t * pulBytesUsed )
 {
     AzureIoTProvisioningClientResult_t xResult;
     az_json_writer xJsonWriter;
@@ -386,7 +385,7 @@ static void prvProvClientParseResponse( AzureIoTProvisioningClient_t * pxAzurePr
     az_span xTopic = az_span_create( pxAzureProvClient->_internal.ucProvisioningLastResponse,
                                      ( int32_t ) pxAzureProvClient->_internal.usLastResponseTopicLength );
     az_span xPayload = az_span_create( pxAzureProvClient->_internal.ucProvisioningLastResponse +
-                                            pxAzureProvClient->_internal.usLastResponseTopicLength,
+                                       pxAzureProvClient->_internal.usLastResponseTopicLength,
                                        ( int32_t ) pxAzureProvClient->_internal.xLastResponsePayloadLength );
 
     /* Check the state.  */
@@ -424,7 +423,7 @@ static void prvProvClientParseResponse( AzureIoTProvisioningClient_t * pxAzurePr
         {
             pxAzureProvClient->_internal.ullRetryAfter =
                 pxAzureProvClient->_internal.xGetTimeFunction() +
-                    pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds;
+                pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds;
             prvProvClientUpdateState( pxAzureProvClient, eAzureIoTProvisioningPending );
         }
     }
@@ -530,9 +529,9 @@ static AzureIoTProvisioningClientResult_t prvProvClientRunWorkflow( AzureIoTProv
                           pxAzureProvClient->_internal.ulLastOperationResult ) );
             break;
         }
-        else if ( ( xMQTTResult =
-                        AzureIoTMQTT_ProcessLoop( &( pxAzureProvClient->_internal.xMQTTContext ),
-                                                  ulWaitTime ) ) != eAzureIoTMQTTSuccess )
+        else if( ( xMQTTResult =
+                       AzureIoTMQTT_ProcessLoop( &( pxAzureProvClient->_internal.xMQTTContext ),
+                                                 ulWaitTime ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "AzureIoTProvisioning  failed to process loop: ProcessLoopDuration=%u, Error=%d",
                           ulTimeoutMilliseconds, xMQTTResult ) );
@@ -590,7 +589,7 @@ static void prvProvClientMQTTProcessResponse( AzureIoTProvisioningClient_t * pxA
             pxAzureProvClient->_internal.xLastResponsePayloadLength =
                 pxPublishInfo->xPayloadLength;
             memcpy( pxAzureProvClient->_internal.ucProvisioningLastResponse +
-                        pxAzureProvClient->_internal.usLastResponseTopicLength,
+                    pxAzureProvClient->_internal.usLastResponseTopicLength,
                     pxPublishInfo->pvPayload, pxPublishInfo->xPayloadLength );
 
             prvProvClientUpdateState( pxAzureProvClient, eAzureIoTProvisioningSuccess );
@@ -618,12 +617,12 @@ static void prvProvClientEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
     if( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK )
     {
         prvProvClientMQTTProcessSubAck( pxAzureProvClient,
-                                          pxDeserializedInfo->pxPublishInfo );
+                                        pxDeserializedInfo->pxPublishInfo );
     }
     else if( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_PUBLISH )
     {
         prvProvClientMQTTProcessResponse( pxAzureProvClient,
-                                            pxDeserializedInfo->pxPublishInfo );
+                                          pxDeserializedInfo->pxPublishInfo );
     }
     else
     {
@@ -638,15 +637,18 @@ static void prvProvClientEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
  *
  */
 static uint32_t prvProvClientGetToken( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                       uint64_t ullExpiryTimeSecs, const uint8_t * ucKey,
-                                       uint32_t ulKeyLen, uint8_t * pucSASBuffer,
-                                       uint32_t ulSasBufferLen, uint32_t * pulSaSLength )
+                                       uint64_t ullExpiryTimeSecs,
+                                       const uint8_t * ucKey,
+                                       uint32_t ulKeyLen,
+                                       uint8_t * pucSASBuffer,
+                                       uint32_t ulSasBufferLen,
+                                       uint32_t * pulSaSLength )
 {
     uint8_t * pucHMACBuffer;
-    uint32_t ulHMACBufferLength = azureiotprovisioningHMACBufferLength;
     az_span xSpan = az_span_create( pucSASBuffer, ( int32_t ) ulSasBufferLen );
     az_result xCoreResult;
     uint32_t ulBytesUsed;
+    uint32_t ulSignatureLength;
     uint32_t ulBufferLeft;
     size_t xLength;
 
@@ -662,27 +664,30 @@ static uint32_t prvProvClientGetToken( AzureIoTProvisioningClient_t * pxAzurePro
     ulBytesUsed = ( uint32_t ) az_span_size( xSpan );
     ulBufferLeft = ulSasBufferLen - ulBytesUsed;
 
-    if( ulBufferLeft < ulHMACBufferLength )
+    if( ulBufferLeft < azureiotprovisioningHMACBufferLength )
     {
         AZLogError( ( "AzureIoTProvisioning token generation failed with insufficient buffer size." ) );
         return eAzureIoTProvisioningOutOfMemory;
     }
 
-    ulBufferLeft -= ulHMACBufferLength;
-    pucHMACBuffer = pucSASBuffer + ulSasBufferLen - ulHMACBufferLength;
+    /* Calculate HMAC at the end of buffer, so we do less data movement when returning back to caller. */
+    ulBufferLeft -= azureiotprovisioningHMACBufferLength;
+    pucHMACBuffer = pucSASBuffer + ulSasBufferLen - azureiotprovisioningHMACBufferLength;
 
     if( AzureIoT_Base64HMACCalculate( pxAzureProvClient->_internal.xHMACFunction,
                                       ucKey, ulKeyLen, pucSASBuffer, ulBytesUsed, pucSASBuffer + ulBytesUsed, ulBufferLeft,
-                                      pucHMACBuffer, ulHMACBufferLength, &ulBytesUsed ) )
+                                      pucHMACBuffer, azureiotprovisioningHMACBufferLength,
+                                      &ulSignatureLength ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to encoded HMAC hash" ) );
         return eAzureIoTProvisioningFailed;
     }
 
-    xSpan = az_span_create( pucHMACBuffer, ( int32_t ) ulBytesUsed );
+    xSpan = az_span_create( pucHMACBuffer, ( int32_t ) ulSignatureLength );
     xCoreResult = az_iot_provisioning_client_sas_get_password( &( pxAzureProvClient->_internal.xProvisioningClientCore ),
                                                                xSpan, ullExpiryTimeSecs, AZ_SPAN_EMPTY, ( char * ) pucSASBuffer,
-                                                               ulSasBufferLen - ulHMACBufferLength, &xLength );
+                                                               ulSasBufferLen - azureiotprovisioningHMACBufferLength,
+                                                               &xLength );
 
     if( az_result_failed( xCoreResult ) )
     {
@@ -813,9 +818,9 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
             xResult = eAzureIoTProvisioningFailed;
         }
         else if( ( xMQTTResult = AzureIoTMQTT_Init( &( pxAzureProvClient->_internal.xMQTTContext ),
-                                                pxTransportInterface, prvProvClientGetTimeMillseconds,
-                                                prvProvClientEventCallback, pucNetworkBuffer,
-                                                ulNetworkBufferLength ) ) != eAzureIoTMQTTSuccess )
+                                                    pxTransportInterface, prvProvClientGetTimeMillseconds,
+                                                    prvProvClientEventCallback, pucNetworkBuffer,
+                                                    ulNetworkBufferLength ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "AzureIoTProvisioning initialization failed with mqtt error : %d", xMQTTResult ) );
             xResult = eAzureIoTProvisioningInitFailed;
