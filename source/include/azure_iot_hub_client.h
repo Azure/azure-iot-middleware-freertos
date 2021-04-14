@@ -203,7 +203,7 @@ typedef struct AzureIoTHubClient
         AzureIoTGetHMACFunc_t xHMACFunction;
         AzureIoTGetCurrentTimeFunc_t xTimeFunction;
 
-        uint32_t ulCurrentRequestID;
+        uint32_t ulCurrentTwinRequestID;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     } _internal;

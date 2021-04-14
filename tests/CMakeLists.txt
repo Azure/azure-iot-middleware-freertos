@@ -47,7 +47,6 @@ target_compile_options(az_iot_middleware_freertos
     -Wshadow
     -Wlogical-op
     -Wfloat-equal
-    -Wno-unused-function
 )
 
 target_include_directories(az_iot_middleware_freertos
