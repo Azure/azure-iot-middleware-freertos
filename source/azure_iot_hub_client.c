@@ -12,6 +12,7 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "azure_iot_version.h"
 #include "azure_iot_mqtt.h"
 #include "azure/az_iot.h"
 #include "azure/core/az_version.h"
@@ -29,7 +30,7 @@
 #endif /* azureiothubSUBACK_WAIT_INTERVAL_MS */
 
 #ifndef azureiothubUSER_AGENT
-    #define azureiothubUSER_AGENT    "DeviceClientType=c%2F" AZ_SDK_VERSION_STRING "%28FreeRTOS%29"
+    #define azureiothubUSER_AGENT    "DeviceClientType=c%2F" azureiotVERSION_STRING "%28FreeRTOS%29"
 #endif /* azureiothubUSER_AGENT */
 
 /*
