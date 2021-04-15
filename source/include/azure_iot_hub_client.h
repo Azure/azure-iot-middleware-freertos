@@ -45,6 +45,8 @@ typedef enum AzureIoTHubClientResult
     eAzureIoTHubClientSubackWaitTimeout,  /**< There was timeout while waiting for SUBACK. */
     eAzureIoTHubClientTopicNotSubscribed, /**< Topic not subscribed. */
     eAzureIoTHubClientPublishFailed,      /**< Failed to publish. */
+    eAzureIoTHubClientSubscribeFailed,    /**< Failed to subscribe. */
+    eAzureIoTHubClientUnsubscribeFailed,  /**< Failed to unsubscribe. */
     eAzureIoTHubClientTopicNoMatch,       /**< The received message was not for the currently processed feature. */
     eAzureIoTHubClientFailed,             /**< There was a failure. */
 } AzureIoTHubClientResult_t;
@@ -263,13 +265,13 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClient_t * pxAzureIoTHubClient );
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] pucSymmetricKey The symmetric key to use for the connection.
  * @param[in] ulSymmetricKeyLength The length of the \p pucSymmetricKey.
- * @param[in] xHmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
+ * @param[in] xHMACFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                              const uint8_t * pucSymmetricKey,
                                                              uint32_t ulSymmetricKeyLength,
-                                                             AzureIoTGetHMACFunc_t xHmacFunction );
+                                                             AzureIoTGetHMACFunc_t xHMACFunction );
 
 /**
  * @brief Connect via MQTT to the IoT Hub endpoint.
