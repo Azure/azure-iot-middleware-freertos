@@ -563,6 +563,7 @@ static void prvProvClientMQTTProcessSubAck( AzureIoTProvisioningClient_t * pxAzu
 {
     ( void ) pxPacketInfo;
 
+    /* We assume success since IoT Provisioning would disconnect if there was a problem subscribing. */
     prvProvClientUpdateState( pxAzureProvClient, eAzureIoTProvisioningSuccess );
 }
 /*-----------------------------------------------------------*/

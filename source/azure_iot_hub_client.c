@@ -109,7 +109,7 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
 
         if( pxContext->_internal.usMqttSubPacketID == usPacketId )
         {
-            /* TODO: inspect packet to see is ack was successful*/
+            /* We assume success since IoT Hub would disconnect if there was a problem subscribing. */
             pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
             AZLogInfo( ( "Suback receive context found: 0x%08x", ulIndex ) );
             break;
