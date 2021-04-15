@@ -35,6 +35,7 @@ static AzureIoTTransportInterface_t xTransportInterface =
 };
 
 /*-----------------------------------------------------------*/
+
 TickType_t xTaskGetTickCount( void );
 uint32_t ulGetAllTests();
 
@@ -42,14 +43,12 @@ TickType_t xTaskGetTickCount( void )
 {
     return 1;
 }
-
 /*-----------------------------------------------------------*/
 
 static uint64_t prvGetUnixTime( void )
 {
     return 0xFFFFFFFFFFFFFFFF;
 }
-
 /*-----------------------------------------------------------*/
 
 static void prvSetupTestIoTHubClient( AzureIoTHubClient_t * pxTestIoTHubClient )
@@ -67,7 +66,6 @@ static void prvSetupTestIoTHubClient( AzureIoTHubClient_t * pxTestIoTHubClient )
                                               &xTransportInterface ),
                       eAzureIoTHubClientSuccess );
 }
-
 /*-----------------------------------------------------------*/
 
 static void testAzureIoTHubClient_Init_Failure( void ** state )
@@ -164,8 +162,8 @@ static void testAzureIoTHubClient_Init_Success( void ** state )
     AzureIoTHubClientOptions_t xHubClientOptions = { 0 };
 
     ( void ) state;
-    will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
 
+    will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
                                               ucHostname, sizeof( ucHostname ) - 1,
                                               ucDeviceId, sizeof( ucDeviceId ) - 1,
@@ -182,8 +180,8 @@ static void testAzureIoTHubClient_Init_NULLOptions( void ** state )
     AzureIoTHubClient_t xTestIoTHubClient;
 
     ( void ) state;
-    will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
 
+    will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTHubClient_Init( &xTestIoTHubClient,
                                               ucHostname, sizeof( ucHostname ) - 1,
                                               ucDeviceId, sizeof( ucDeviceId ) - 1,
@@ -254,11 +252,11 @@ static void testAzureIoTHubClient_Connect_MQTTConnectFailure( void ** state )
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
     will_return( AzureIoTMQTT_Connect, eAzureIoTMQTTServerRefused );
-    assert_int_not_equal( AzureIoTHubClient_Connect( &xTestIoTHubClient,
-                                                     false,
-                                                     &xSessionPresent,
-                                                     60 ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Connect( &xTestIoTHubClient,
+                                                 false,
+                                                 &xSessionPresent,
+                                                 60 ),
+                      eAzureIoTHubClientFailed );
 }
 
 static void testAzureIoTHubClient_Connect_Success( void ** state )
@@ -282,8 +280,8 @@ static void testAzureIoTHubClient_Disconnect_InvalidArgFailure( void ** state )
 {
     ( void ) state;
 
-    assert_int_not_equal( AzureIoTHubClient_Disconnect( NULL ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Disconnect( NULL ),
+                      eAzureIoTHubClientInvalidArgument );
 }
 
 static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure( void ** state )
@@ -295,8 +293,8 @@ static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure( void ** stat
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
     will_return( AzureIoTMQTT_Disconnect, eAzureIoTMQTTIllegalState );
-    assert_int_not_equal( AzureIoTHubClient_Disconnect( &xTestIoTHubClient ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_Disconnect( &xTestIoTHubClient ),
+                      eAzureIoTHubClientFailed );
 }
 
 static void testAzureIoTHubClient_Disconnect_Success( void ** state )
@@ -321,10 +319,10 @@ static void testAzureIoTHubClient_SendTelemetry_InvalidArgFailure( void ** state
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
     /* NULL handler */
-    assert_int_not_equal( AzureIoTHubClient_SendTelemetry( NULL,
-                                                           ucTestTelemetryPayload,
-                                                           sizeof( ucTestTelemetryPayload ) - 1, NULL ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_SendTelemetry( NULL,
+                                                       ucTestTelemetryPayload,
+                                                       sizeof( ucTestTelemetryPayload ) - 1, NULL ),
+                      eAzureIoTHubClientInvalidArgument );
 }
 
 static void testAzureIoTHubClient_SendTelemetry_BigTopicFailure( void ** state )
@@ -340,10 +338,10 @@ static void testAzureIoTHubClient_SendTelemetry_BigTopicFailure( void ** state )
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
-    assert_int_not_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
-                                                           ucTestTelemetryPayload,
-                                                           sizeof( ucTestTelemetryPayload ) - 1, &properties ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
+                                                       ucTestTelemetryPayload,
+                                                       sizeof( ucTestTelemetryPayload ) - 1, &properties ),
+                      eAzureIoTHubClientFailed );
 }
 
 static void testAzureIoTHubClient_SendTelemetry_SendFailure( void ** state )
@@ -355,10 +353,10 @@ static void testAzureIoTHubClient_SendTelemetry_SendFailure( void ** state )
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
-    assert_int_not_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
-                                                           ucTestTelemetryPayload,
-                                                           sizeof( ucTestTelemetryPayload ) - 1, NULL ),
-                          eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
+                                                       ucTestTelemetryPayload,
+                                                       sizeof( ucTestTelemetryPayload ) - 1, NULL ),
+                      eAzureIoTHubClientPublishFailed );
 }
 
 static void testAzureIoTHubClient_SendTelemetry_Success( void ** state )
