@@ -175,7 +175,7 @@ static void testAzureIoTHubClient_Init_Success( void ** state )
                       eAzureIoTHubClientSuccess );
 }
 
-static void testAzureIoTHubClient_Init_NULLOptions( void ** state )
+static void testAzureIoTHubClient_Init_NULLOptions_Success( void ** state )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -208,6 +208,7 @@ static void testAzureIoTHubClient_OptionsInit_Fail( void ** state )
 {
     ( void ) state;
 
+    /* Fail if options pointer is NULL */
     assert_int_equal( AzureIoTHubClient_OptionsInit( NULL ), eAzureIoTHubClientInvalidArgument );
 }
 
@@ -229,12 +230,14 @@ static void testAzureIoTHubClient_Connect_InvalidArgFailure( void ** state )
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
+    /* Fail if hub client is NULL */
     assert_int_equal( AzureIoTHubClient_Connect( NULL,
                                                  false,
                                                  &xSessionPresent,
                                                  60 ),
                       eAzureIoTHubClientInvalidArgument );
 
+    /* Fail if session present bool pointer is NULL */
     assert_int_equal( AzureIoTHubClient_Connect( &xTestIoTHubClient,
                                                  false,
                                                  NULL,
@@ -251,6 +254,7 @@ static void testAzureIoTHubClient_Connect_MQTTConnectFailure( void ** state )
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
+    /* Fail if the MQTT client couldn't connect due to an error. */
     will_return( AzureIoTMQTT_Connect, eAzureIoTMQTTServerRefused );
     assert_int_equal( AzureIoTHubClient_Connect( &xTestIoTHubClient,
                                                  false,
@@ -280,6 +284,7 @@ static void testAzureIoTHubClient_Disconnect_InvalidArgFailure( void ** state )
 {
     ( void ) state;
 
+    /* Fail if hub client is NULL. */
     assert_int_equal( AzureIoTHubClient_Disconnect( NULL ),
                       eAzureIoTHubClientInvalidArgument );
 }
@@ -292,6 +297,7 @@ static void testAzureIoTHubClient_Disconnect_MQTTDisconnectFailure( void ** stat
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
+    /* Fail if the MQTT client couldn't disconnect due to an error. */
     will_return( AzureIoTMQTT_Disconnect, eAzureIoTMQTTIllegalState );
     assert_int_equal( AzureIoTHubClient_Disconnect( &xTestIoTHubClient ),
                       eAzureIoTHubClientFailed );
@@ -318,7 +324,7 @@ static void testAzureIoTHubClient_SendTelemetry_InvalidArgFailure( void ** state
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
-    /* NULL handler */
+    /* Fail if the hub client is NULL. */
     assert_int_equal( AzureIoTHubClient_SendTelemetry( NULL,
                                                        ucTestTelemetryPayload,
                                                        sizeof( ucTestTelemetryPayload ) - 1, NULL ),
@@ -338,6 +344,7 @@ static void testAzureIoTHubClient_SendTelemetry_BigTopicFailure( void ** state )
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
+    /* Fail if the topic is not able to fit in the working buffer. */
     assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
                                                        ucTestTelemetryPayload,
                                                        sizeof( ucTestTelemetryPayload ) - 1, &properties ),
@@ -352,6 +359,7 @@ static void testAzureIoTHubClient_SendTelemetry_SendFailure( void ** state )
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
+    /* Fail if the MQTT publish call returns an error. */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
                                                        ucTestTelemetryPayload,
@@ -380,7 +388,7 @@ uint32_t ulGetAllTests()
     {
         cmocka_unit_test( testAzureIoTHubClient_Init_Failure ),
         cmocka_unit_test( testAzureIoTHubClient_Init_Success ),
-        cmocka_unit_test( testAzureIoTHubClient_Init_NULLOptions ),
+        cmocka_unit_test( testAzureIoTHubClient_Init_NULLOptions_Success ),
         cmocka_unit_test( testAzureIoTHubClient_Deinit_Success ),
         cmocka_unit_test( testAzureIoTHubClient_OptionsInit_Fail ),
         cmocka_unit_test( testAzureIoTHubClient_OptionsInit_Success ),
