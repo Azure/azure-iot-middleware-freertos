@@ -49,6 +49,7 @@
 #define azureiothubMETHOD_EMPTY_RESPONSE            "{}"
 
 #define azureiothubMAX_SIZE_FOR_UINT32              ( 10 )
+#define azureiothubHMACBufferLength                 ( 48 )
 /*-----------------------------------------------------------*/
 
 /**
@@ -460,6 +461,75 @@ static AzureIoTHubClientResult_t prvWaitForSubAck( AzureIoTHubClient_t * pxAzure
 }
 /*-----------------------------------------------------------*/
 
+/**
+ * Generate the SAS token based on :
+ *   https://docs.microsoft.com/en-us/azure/iot-hub/iot-hub-devguide-security#use-a-shared-access-policy
+ **/
+static uint32_t prvIoTHubClientGetToken( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                         uint64_t ullExpiryTimeSecs,
+                                         const uint8_t * ucKey,
+                                         uint32_t ulKeyLen,
+                                         uint8_t * pucSASBuffer,
+                                         uint32_t ulSasBufferLen,
+                                         uint32_t * pulSaSLength )
+{
+    uint8_t * pucHMACBuffer;
+    az_span xSpan = az_span_create( pucSASBuffer, ( int32_t ) ulSasBufferLen );
+    az_result xCoreResult;
+    uint32_t ulSignatureLength;
+    uint32_t ulBytesUsed;
+    uint32_t ulBufferLeft;
+    size_t xLength;
+
+    xCoreResult = az_iot_hub_client_sas_get_signature( &( pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore ),
+                                                       ullExpiryTimeSecs, xSpan, &xSpan );
+
+    if( az_result_failed( xCoreResult ) )
+    {
+        AZLogError( ( "AzureIoTHubClient failed to get signature with error status: %08x", xCoreResult ) );
+        return eAzureIoTHubClientFailed;
+    }
+
+    ulBytesUsed = ( uint32_t ) az_span_size( xSpan );
+    ulBufferLeft = ulSasBufferLen - ulBytesUsed;
+
+    if( ulBufferLeft < azureiothubHMACBufferLength )
+    {
+        AZLogError( ( "AzureIoTHubClient token generation failed with insufficient buffer size." ) );
+        return eAzureIoTHubClientOutOfMemory;
+    }
+
+    /* Calculate HMAC at the end of buffer, so we do less data movement when returning back to caller. */
+    ulBufferLeft -= azureiothubHMACBufferLength;
+    pucHMACBuffer = pucSASBuffer + ulSasBufferLen - azureiothubHMACBufferLength;
+
+    if( AzureIoT_Base64HMACCalculate( pxAzureIoTHubClient->_internal.xHMACFunction,
+                                      ucKey, ulKeyLen, pucSASBuffer, ulBytesUsed, pucSASBuffer + ulBytesUsed, ulBufferLeft,
+                                      pucHMACBuffer, azureiothubHMACBufferLength,
+                                      &ulSignatureLength ) != eAzureIoTSuccess )
+    {
+        AZLogError( ( "AzureIoTHubClient failed to encode HMAC hash" ) );
+        return eAzureIoTHubClientFailed;
+    }
+
+    xSpan = az_span_create( pucHMACBuffer, ( int32_t ) ulSignatureLength );
+    xCoreResult = az_iot_hub_client_sas_get_password( &( pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore ),
+                                                      ullExpiryTimeSecs, xSpan, AZ_SPAN_EMPTY, ( char * ) pucSASBuffer,
+                                                      ulSasBufferLen - azureiothubHMACBufferLength,
+                                                      &xLength );
+
+    if( az_result_failed( xCoreResult ) )
+    {
+        AZLogError( ( "AzureIoTHubClient failed to generate token with error status: %08x", xCoreResult ) );
+        return eAzureIoTHubClientFailed;
+    }
+
+    *pulSaSLength = ( uint32_t ) xLength;
+
+    return eAzureIoTHubClientSuccess;
+}
+/*-----------------------------------------------------------*/
+
 AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOptions_t * pxHubClientOptions )
 {
     AzureIoTHubClientResult_t xResult;
@@ -580,6 +650,33 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
 void AzureIoTHubClient_Deinit( AzureIoTHubClient_t * pxAzureIoTHubClient )
 {
     ( void ) pxAzureIoTHubClient;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                             const uint8_t * pucSymmetricKey,
+                                                             uint32_t ulSymmetricKeyLength,
+                                                             AzureIoTGetHMACFunc_t xHMACFunction )
+{
+    AzureIoTHubClientResult_t xResult;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( pucSymmetricKey == NULL ) || ( ulSymmetricKeyLength == 0 ) ||
+        ( xHMACFunction == NULL ) )
+    {
+        AZLogError( ( "AzureIoTHubClient_SetSymmetricKey failed: Invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        pxAzureIoTHubClient->_internal.pucSymmetricKey = pucSymmetricKey;
+        pxAzureIoTHubClient->_internal.ulSymmetricKeyLength = ulSymmetricKeyLength;
+        pxAzureIoTHubClient->_internal.pxTokenRefresh = prvIoTHubClientGetToken;
+        pxAzureIoTHubClient->_internal.xHMACFunction = xHMACFunction;
+        xResult = eAzureIoTHubClientSuccess;
+    }
+
+    return xResult;
 }
 /*-----------------------------------------------------------*/
 
@@ -800,7 +897,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( Azure
                                                     &xMqttSubscription, 1, usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Cloud to device subscribe failed: error=0x%08x", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientSubscribeFailed;
         }
         else
         {
@@ -851,7 +948,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( Azu
                                                       usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to unsubscribe, error=0x%08x", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientUnsubscribeFailed;
         }
         else
         {
@@ -896,7 +993,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDirectMethod( AzureIoTHubCl
                                                     usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to subscribe, error=0x%08x", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientSubscribeFailed;
         }
         else
         {
@@ -947,7 +1044,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDirectMethod( AzureIoTHub
                                                       usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to unsubscribe, error=0x%08x", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientUnsubscribeFailed;
         }
         else
         {
@@ -1014,7 +1111,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClien
                                                       &xMQTTPublishInfo, 0 ) ) != eAzureIoTMQTTSuccess )
             {
                 AZLogError( ( "Failed to publish response, error=0x%08x", xMQTTResult ) );
-                xResult = eAzureIoTHubClientFailed;
+                xResult = eAzureIoTHubClientPublishFailed;
             }
             else
             {
@@ -1063,7 +1160,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceTwin( AzureIoTHubClie
                                                     usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to subscribe, error=0x%08x", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientSubscribeFailed;
         }
         else
         {
@@ -1118,7 +1215,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDeviceTwin( AzureIoTHubCl
                                                       usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
         {
             AZLogError( ( "Failed to unsubscribe, error=0x%08x", xMQTTResult ) );
-            xResult = eAzureIoTHubClientFailed;
+            xResult = eAzureIoTHubClientUnsubscribeFailed;
         }
         else
         {
