@@ -20,11 +20,12 @@
 #include "azure_iot_mqtt_port.h"
 /*-----------------------------------------------------------*/
 
-AzureIoTMQTTEventCallback_t xTestUserCallback = NULL;
+AzureIoTMQTTEventCallback_t xMiddlewareCallback = NULL;
 AzureIoTMQTTPacketInfo_t xPacketInfo;
 AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 uint16_t usTestPacketId = 1;
 const uint8_t * pucPublishPayload = NULL;
+uint32_t ulDelayReceivePacket = 0;
 /*-----------------------------------------------------------*/
 
 AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
@@ -40,7 +41,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
     ( void ) pucNetworkBuffer;
     ( void ) xNetworkBufferLength;
 
-    xTestUserCallback = xUserCallback;
+    xMiddlewareCallback = xUserCallback;
     return ( AzureIoTMQTTResult_t ) mock();
 }
 /*-----------------------------------------------------------*/
@@ -133,9 +134,15 @@ AzureIoTMQTTResult_t AzureIoTMQTT_ProcessLoop( AzureIoTMQTTHandle_t xContext,
         return xReturn;
     }
 
-    if( xTestUserCallback && ( xPacketInfo.ucType != 0 ) )
+    if( ulDelayReceivePacket > ulMilliseconds )
     {
-        xTestUserCallback( xContext, &xPacketInfo, &xDeserializedInfo );
+        ulDelayReceivePacket -= ulMilliseconds;
+        return xReturn;
+    }
+
+    if( xMiddlewareCallback && ( xPacketInfo.ucType != 0 ) )
+    {
+        xMiddlewareCallback( xContext, &xPacketInfo, &xDeserializedInfo );
     }
 
     return xReturn;
