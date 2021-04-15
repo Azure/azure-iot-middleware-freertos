@@ -15,7 +15,8 @@
 #ifndef AZURE_IOT_VERSION_H
 #define AZURE_IOT_VERSION_H
 
-#define STRINGIFY(x) #x
+#define _azureiotSTRINGIFY2( x )    # x
+#define _azureiotSTRINGIFY( x )     _azureiotSTRINGIFY2( x )
 
 /* Major numeric identifier. */
 #define azureiotVERSION_MAJOR         0
@@ -31,9 +32,10 @@
 
 /* The version in string format used for telemetry following the `semver.org` standard */
 /* (https://semver.org). */
-#define azureiotVERSION_STRING         STRINGIFY(azureiotVERSION_MAJOR) "." \
-                                       STRINGIFY(azureiotVERSION_MINOR) "." \
-                                       STRINGIFY(azureiotVERSION_PATCH) "-" \
-                                       STRINGIFY(azureiotVERSION_PRERELEASE)
+#define azureiotVERSION_STRING                      \
+    _azureiotSTRINGIFY( azureiotVERSION_MAJOR ) "." \
+    _azureiotSTRINGIFY( azureiotVERSION_MINOR ) "." \
+    _azureiotSTRINGIFY( azureiotVERSION_PATCH ) "-" \
+    azureiotVERSION_PRERELEASE
 
 #endif /* AZURE_IOT_VERSION_H */
