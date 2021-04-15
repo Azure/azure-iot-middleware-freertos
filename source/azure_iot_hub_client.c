@@ -595,7 +595,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
     size_t xMQTTUserNameLength;
     az_result xCoreResult;
 
-    if( pxAzureIoTHubClient == NULL )
+    if( ( pxAzureIoTHubClient == NULL ) || ( pxOutSessionPresent == NULL ) )
     {
         AZLogError( ( "Failed to connect: Invalid argument." ) );
         xResult = eAzureIoTHubClientInvalidArgument;
