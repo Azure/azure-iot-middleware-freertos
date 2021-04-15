@@ -68,6 +68,7 @@ target_link_libraries(az_iot_middleware_freertos PUBLIC az_iot_hub az_iot_provis
 # list of unit tests
 set(unit_tests
   azure_iot_provisioning_client_ut
+  azure_iot_hub_client_ut
   azure_iot_ut
 )
 
@@ -76,6 +77,12 @@ add_executable(
   azure_iot_provisioning_client_ut
   ${PROJECT_SOURCE_DIR}/azure_iot_cmocka_mqtt.c
   ${PROJECT_SOURCE_DIR}/azure_iot_provisioning_client_ut.c
+)
+
+add_executable(
+  azure_iot_hub_client_ut
+  ${PROJECT_SOURCE_DIR}/azure_iot_cmocka_mqtt.c
+  ${PROJECT_SOURCE_DIR}/azure_iot_hub_client_ut.c
 )
 
 add_executable(
