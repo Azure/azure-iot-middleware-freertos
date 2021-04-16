@@ -751,7 +751,8 @@ static void testAzureIoTProvisioningClient_GetDeviceAndHub_Failure( void ** ppvS
                           eAzureIoTProvisioningSuccess );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
-} /*-----------------------------------------------------------*/
+}
+/*-----------------------------------------------------------*/
 
 static void testAzureIoTProvisioningClient_GetDeviceAndHub_Success( void ** ppvState )
 {
@@ -819,7 +820,6 @@ static void testAzureIoTProvisioningClient_WithCustomPayload_Failure( void ** pp
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
-
 /*-----------------------------------------------------------*/
 
 static void testAzureIoTProvisioningClient_WithCustomPayload_Success( void ** ppvState )
