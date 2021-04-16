@@ -12,6 +12,7 @@
 
 #include "azure_iot.h"
 /*-----------------------------------------------------------*/
+
 static const uint8_t ucTestKey[] = "Hello";
 static const uint8_t ucTestValue[] = "World";
 
