@@ -390,7 +390,7 @@ static void prvAzureDemoTask( void * pvParameters )
         xTransport.send = TLS_FreeRTOS_send;
         xTransport.recv = TLS_FreeRTOS_recv;
 
-        /* Init iotHub option */
+        /* Init IoT Hub option */
         xResult = AzureIoTHubClient_OptionsInit( &xHubOptions );
         configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
 
