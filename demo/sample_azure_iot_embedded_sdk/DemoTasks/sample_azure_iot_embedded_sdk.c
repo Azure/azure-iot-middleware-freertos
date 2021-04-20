@@ -390,6 +390,10 @@ static void prvAzureDemoTask( void * pvParameters )
         xTransport.send = TLS_FreeRTOS_send;
         xTransport.recv = TLS_FreeRTOS_recv;
 
+        /* Init IoT Hub option */
+        xResult = AzureIoTHubClient_OptionsInit( &xHubOptions );
+        configASSERT( xResult == AZURE_IOT_HUB_CLIENT_SUCCESS );
+
         xHubOptions.pModuleId = ( const uint8_t * ) democonfigMODULE_ID;
         xHubOptions.moduleIdLength = sizeof( democonfigMODULE_ID ) - 1;
 
