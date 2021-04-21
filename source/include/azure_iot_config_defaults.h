@@ -39,7 +39,7 @@
  * @brief Max MQTT username.
  */
 #ifndef azureiotUSERNAME_MAX
-    #define azureiotUSERNAME_MAX                        ( 128U )
+    #define azureiotUSERNAME_MAX                        ( 256U )
 #endif
 
 /**
