@@ -48,7 +48,7 @@ add_subdirectory(libraries/azure-sdk-for-c)
 add_subdirectory(source/)
 
 # Tests (mocks require GNU)
-if(${CMAKE_COMPILER_IS_GNUCC})
+if(build_tests AND ${CMAKE_COMPILER_IS_GNUCC})
   set(MOCK_LINKER_OPTIONS "-Wl,--gc-sections")
   add_subdirectory(tests/)
 elseif(build_tests AND NOT ${CMAKE_COMPILER_IS_GNUCC})
