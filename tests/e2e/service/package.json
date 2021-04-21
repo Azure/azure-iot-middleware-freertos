@@ -1,0 +1,35 @@
+{
+  "name": "ts-e2e",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "npmlockrefresh": "npm i --package-lock-only",
+    "build": "tsc",
+    "cleanup": "node ./lib/common/e2e_test_cleanup.js --connectionString ${IOTHUB_CONNECTION_STRING} --e 5",
+    "iothub_e2e_test": "mocha ./lib/iothub_client/e2e_iot_hub_client_test.js  --connectionString ${IOTHUB_CONNECTION_STRING} --e ${DEVICE_TEST_EXE} --timeout 120000",
+    "iothub_e2e_test_using_dm": "mocha ./lib/iothub_client/e2e_iot_hub_client_test.js  --connectionString ${IOTHUB_CONNECTION_STRING} --e ${DEVICE_TEST_EXE} --timeout 120000 --dm true",
+    "iot_provisioning_e2e_test": "mocha ./lib/provisioning_client/e2e_iot_provisioning_client_test.js  --connectionString ${IOTHUB_CONNECTION_STRING} --provConnectionString ${IOT_PROVISIONING_CONNECTION_STRING} --idScope ${IOT_PROVISIONING_SCOPE_ID} --e ${DEVICE_TEST_EXE} --timeout 120000",
+    "iot_provisioning_e2e_test_using_dm": "mocha ./lib/provisioning_client/e2e_iot_provisioning_client_test.js  --connectionString ${IOTHUB_CONNECTION_STRING} --provConnectionString ${IOT_PROVISIONING_CONNECTION_STRING} --idScope ${IOT_PROVISIONING_SCOPE_ID} --e ${DEVICE_TEST_EXE} --timeout 120000 --dm true",
+    "alltest": "npm run iothub_e2e_test && npm run iothub_e2e_test_using_dm && npm run iot_provisioning_e2e_test && npm run iot_provisioning_e2e_test_using_dm"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@azure/event-hubs": "^1.0.8",
+    "@azure/ms-rest-js": "^2.0.5",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.0",
+    "azure-iot-common": "^1.11.2",
+    "azure-iothub": "^1.11.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "terminate": "^2.1.2",
+    "typescript": "^3.8.3",
+    "yargs": "^15.3.0",
+    "minimist": "^1.2.5",
+    "azure-iot-provisioning-service": "1.8.0"
+  },
+  "devDependencies": {},
+  "description": ""
+}
