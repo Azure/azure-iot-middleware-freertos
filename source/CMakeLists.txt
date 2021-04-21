@@ -24,32 +24,22 @@ target_link_libraries(az_iot_middleware_freertos
     az::iot::provisioning
 )
 
-# There needs to be some kind of find_library here for FreeRTOS so if someone already has it
-# in a high project, it can be consumed here.
-
-if(TARGET AFR::freertos)
-  target_link_libraries(az_iot_middleware_freertos
-    PUBLIC
-      AFR::freertos
-  )
-else()
-  if(WIN32)
-    target_include_directories(az_iot_middleware_freertos
-      PRIVATE
-        ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/MSVC-MingW
-    )
-    elseif(UNIX)
-    target_include_directories(az_iot_middleware_freertos
-      PRIVATE
-        ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/ThirdParty/GCC/Posix
-    )
-  endif()
-
+if(WIN32)
   target_include_directories(az_iot_middleware_freertos
-    PUBLIC
-      ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/include
+    PRIVATE
+      ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/MSVC-MingW
+  )
+  elseif(UNIX)
+  target_include_directories(az_iot_middleware_freertos
+    PRIVATE
+      ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/ThirdParty/GCC/Posix
   )
 endif()
+
+target_include_directories(az_iot_middleware_freertos
+  PUBLIC
+    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/include
+)
 
 target_include_directories(az_iot_middleware_freertos
     PUBLIC
