@@ -24,6 +24,12 @@ endif()
 if(build_tests)
   include(CTest)
   enable_testing()
+
+  # Turn on the flags necessary for code coverage
+  add_compile_options(-fprofile-arcs -ftest-coverage -O0 -g3)
+  add_link_options(-fprofile-arcs -ftest-coverage)
+
+  # Set the port and config files
   set(AZURE_IOT_MQTT_PORT ${CMAKE_CURRENT_LIST_DIR}/tests)
   set(config_directory ${CMAKE_CURRENT_LIST_DIR}/tests/config_files)
 endif()

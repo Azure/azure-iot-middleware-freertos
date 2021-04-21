@@ -12,7 +12,7 @@ TEST_CORES=${2:-2}
 TEST_JOB_COUNT=${3:-2}
 
 echo -e "Building tests"
-cmake tests -Bbuild
+cmake -Dbuild_tests=ON . -Bbuild
 cmake --build build -- --jobs=$TEST_CORES
 cd build
 
