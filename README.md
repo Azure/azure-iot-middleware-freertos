@@ -1,5 +1,7 @@
 # Azure FreeRTOS Middleware
 
+[![Linux CI Tests](https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml/badge.svg)](https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml)
+
 **THIS REPO IS IN ACTIVE DEVELOPMENT AND NOT GA READY. APIS ARE SUBJECT TO CHANGE WITHOUT NOTICE UNTIL AN OFFICIAL RELEASE HAS BEEN PUBLISHED.**
 
 The Azure FreeRTOS Middleware simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and adds MQTT client support. Below are key points of this project:
@@ -11,7 +13,7 @@ The Azure FreeRTOS Middleware simplifies the connection of devices running FreeR
 
 ## Repo Structure
 
-As this repo is under development, the `main` branch is limited until tested and thoroughly reviewed code has been merged. For the most cutting edge developments, please see the `sdk_spike` branch [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/sdk_spike). There we have samples for several devices including:
+Main branch contains API's and tests. For the most cutting edge developments, please see the `sdk_spike` branch [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/sdk_spike). There we have samples for several devices including:
 
 - STM32L475
 - STM32L4+
