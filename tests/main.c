@@ -4,11 +4,33 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdint.h>
+#include <setjmp.h>
+
+#include <cmocka.h>
 /*-----------------------------------------------------------*/
 
 extern uint32_t ulGetAllTests();
 void vLoggingPrintf( const char * pcFormatString,
                      ... );
+void vAssertCalled( const char * pcFile,
+                    uint32_t ulLine );
+
+/*-----------------------------------------------------------*/
+
+void vAssertCalled( const char * pcFile,
+                    uint32_t ulLine )
+{
+    volatile char * pcFileName = ( volatile char * ) pcFile;
+    volatile uint32_t ulLineNumber = ulLine;
+
+    ( void ) pcFileName;
+    ( void ) ulLineNumber;
+
+    printf( "vAssertCalled( %s, %u\n", pcFile, ulLine );
+
+    assert_true( 0 );
+}
+
 /*-----------------------------------------------------------*/
 
 void vLoggingPrintf( const char * pcFormatString,

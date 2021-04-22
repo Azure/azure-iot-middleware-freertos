@@ -8,6 +8,7 @@
 # ./run.sh <RTOS connectivity interface>
 # e.g. ./run.sh veth1
 
+# Trace each command by: export DEBUG_SHELL=1
 if [[ ! -z ${DEBUG_SHELL} ]]
 then
   set -x # Activate the expand mode if DEBUG is anything but empty.
@@ -30,14 +31,15 @@ abspath () {
 
 filepath=`abspath $0`
 dir=`dirname $filepath`
+test_root_dir=$dir/..
 
 echo -e "Updating FreeRTOSConfig.h to point to interface $1"
 index=`tcpdump --list-interfaces | grep -Ei "([0-9]+).$1" | sed -E 's/^([0-9]+).*/\1/g'`
-sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFACE_TO_USE ($index)/g" $dir/device/FreeRTOSConfig.h
+sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFACE_TO_USE ($index)/g" $test_root_dir/config_files/FreeRTOSConfig.h
 
 echo -e "Building Device code"
 cd $dir/device; make
 
 echo -e "Running tests"
 export DEVICE_TEST_EXE="$dir/device/build/e2e_device_exe"
-cd $dir/service; ./mocha_exec.sh alltest
+cd $dir/service; stdbuf -o0 ./mocha_exec.sh alltest

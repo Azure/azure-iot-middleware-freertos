@@ -35,7 +35,7 @@ INCLUDE_DIRS += -I${AZURE_IOT_DIR}/source/interface
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/ports/coreMQTT
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/libraries/azure-sdk-for-c/sdk/inc
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/tests/e2e/device/
-INCLUDE_DIRS += -I${AZURE_IOT_DIR}/tests/e2e/device/config
+INCLUDE_DIRS += -I${AZURE_IOT_DIR}/tests/config_files
 
 SOURCE_FILES += $(wildcard ${FREERTOS_DIR}/Source/*.c)
 SOURCE_FILES += ${AZURE_IOT_DIR}/ports/coreMQTT/azure_iot_core_mqtt.c

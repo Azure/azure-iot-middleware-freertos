@@ -100,6 +100,8 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     uint32_t ulIndex;
     AzureIoTHubClientReceiveContext_t * pxContext;
 
+    ( void ) pxIncomingPacket;
+
     configASSERT( pxIncomingPacket != NULL );
     configASSERT( ( pxIncomingPacket->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK );
 
