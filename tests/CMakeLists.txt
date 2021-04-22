@@ -15,6 +15,7 @@ add_link_options(-fprofile-arcs -ftest-coverage)
 
 # FreeRTOS Kernel include
 include_directories(${AZ_IOT_REPO_ROOT}/libraries/FreeRTOS/FreeRTOS/Source/include)
+include_directories(${AZ_IOT_REPO_ROOT}/libraries/FreeRTOS/FreeRTOS-Plus/Source/Utilities/logging)
 
 # port for FreeRTOS
 if(UNIX)
