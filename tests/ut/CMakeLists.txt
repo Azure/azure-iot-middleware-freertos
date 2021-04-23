@@ -15,6 +15,8 @@ endif()
 
 include(AddCMockaTest)
 
+# Add UT
+
 add_cmocka_test(azure_iot_ut
   SOURCES
     main.c

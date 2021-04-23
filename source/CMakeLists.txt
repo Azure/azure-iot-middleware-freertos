@@ -39,6 +39,7 @@ endif()
 target_include_directories(az_iot_middleware_freertos
   PUBLIC
     ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/include
+    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS-Plus/Source/Utilities/logging
 )
 
 target_include_directories(az_iot_middleware_freertos
@@ -64,12 +65,17 @@ else()
   # Include coreMQTT port
   target_sources(az_iot_middleware_freertos
     PRIVATE
-      ${az_iot_middleware_freertos_SOURCE_DIR}/port/coreMQTT/azure_iot_core_mqtt.c
+      ${az_iot_middleware_freertos_SOURCE_DIR}/ports/coreMQTT/azure_iot_core_mqtt.c
   )
 
   target_include_directories(az_iot_middleware_freertos
     PUBLIC
-      ${az_iot_middleware_freertos_SOURCE_DIR}/port/coreMQTT
+      ${az_iot_middleware_freertos_SOURCE_DIR}/ports/coreMQTT
+  )
+
+  target_link_libraries(az_iot_middleware_freertos
+    PUBLIC
+      coremqtt
 )
 
   target_compile_definitions(az_iot_middleware_freertos
