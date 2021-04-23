@@ -23,7 +23,6 @@ echo -e "Building e2e tests"
 rm -rf build/
 cmake -Dbuild_e2e_tests=ON . -Bbuild
 cmake --build build -- --jobs=$TEST_CORES
-cd build
 
 if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
     echo -e "Run E2E tests"
