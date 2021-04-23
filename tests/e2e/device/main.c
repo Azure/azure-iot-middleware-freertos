@@ -1,34 +1,6 @@
-/*
- * FreeRTOS V202011.00
- * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of
- * this software and associated documentation files (the "Software"), to deal in
- * the Software without restriction, including without limitation the rights to
- * use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
- * the Software, and to permit persons to whom the Software is furnished to do so,
- * subject to the following conditions:
- *
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
- * FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
- * COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
- * IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- *
- * https://www.FreeRTOS.org
- * https://github.com/FreeRTOS
- *
- */
+/* Copyright (c) Microsoft Corporation. All rights reserved. */
+/* SPDX-License-Identifier: MIT */
 
-/***
- * See https://www.FreeRTOS.org/coremqtt for configuration and usage instructions.
- ***/
-
-/* Standard includes. */
 #include <stdarg.h>
 #include <stdio.h>
 #include <stdbool.h>
@@ -45,47 +17,17 @@
 #include "FreeRTOS_IP.h"
 #include "FreeRTOS_Sockets.h"
 
-/* Logging configuration for the AzureIoT middleware library. */
-#ifndef LIBRARY_LOG_NAME
-    #define LIBRARY_LOG_NAME    "main"
-#endif
-
-#ifndef LIBRARY_LOG_LEVEL
-    #define LIBRARY_LOG_LEVEL    LOG_INFO
-#endif
-
-/* Prototype for the function used to print to console on Windows simulator
- * of FreeRTOS.
- * The function prints to the console before the network is connected;
- * then a UDP port after the network has connected. */
-extern void vLoggingPrintf( const char * pcFormatString,
-                            ... );
-
-/* Map the SdkLog macro to the logging function to enable logging
- * on Windows simulator. */
-#ifndef SdkLog
-    #define SdkLog( message )    vLoggingPrintf message
-#endif
-
-#include "logging_stack.h"
-
 #define mainHOST_NAME           "RTOSDemo"
-#define mainDEVICE_NICK_NAME    "linux_demo"
+#define mainDEVICE_NICK_NAME    "linux_e2e_test"
 
 /*
- * Prototypes for the demos that can be started from this project.  Note the
- * MQTT demo is not actually started until the network is already, which is
- * indicated by vApplicationIPNetworkEventHook() executing - hence
- * prvStartSimpleMQTTDemo() is called from inside vApplicationIPNetworkEventHook().
+ * Hook to initialize demon tasks
+ *
  */
-extern void vDemoEntry( void );
+extern void vInitD( void );
 
 /*
  * Just seeds the simple pseudo random number generator.
- *
- * !!! NOTE !!!
- * This is not a secure method of generating random numbers and production
- * devices should use a true random number generator (TRNG).
  */
 static void prvSRand( UBaseType_t ulSeed );
 
@@ -104,15 +46,6 @@ static const uint8_t ucNetMask[ 4 ] = { configNET_MASK0, configNET_MASK1, config
 static const uint8_t ucGatewayAddress[ 4 ] = { configGATEWAY_ADDR0, configGATEWAY_ADDR1, configGATEWAY_ADDR2, configGATEWAY_ADDR3 };
 static const uint8_t ucDNSServerAddress[ 4 ] = { configDNS_SERVER_ADDR0, configDNS_SERVER_ADDR1, configDNS_SERVER_ADDR2, configDNS_SERVER_ADDR3 };
 
-/* Set the following constant to pdTRUE to log using the method indicated by the
- * name of the constant, or pdFALSE to not log using the method indicated by the
- * name of the constant.  Options include to standard out (xLogToStdout), to a disk
- * file (xLogToFile), and to a UDP port (xLogToUDP).  If xLogToUDP is set to pdTRUE
- * then UDP messages are sent to the IP address configured as the UDP logging server
- * address (see the configUDP_LOGGING_ADDR0 definitions in FreeRTOSConfig.h) and
- * the port number set by configPRINT_PORT in FreeRTOSConfig.h. */
-const BaseType_t xLogToStdout = pdTRUE, xLogToFile = pdFALSE, xLogToUDP = pdFALSE;
-
 /* Default MAC address configuration.  The demo creates a virtual network
  * connection that uses this MAC address by accessing the raw Ethernet data
  * to and from a real network connection on the host PC.  See the
@@ -123,27 +56,10 @@ const uint8_t ucMACAddress[ 6 ] = { configMAC_ADDR0, configMAC_ADDR1, configMAC_
 /* Use by the pseudo random number generator. */
 static UBaseType_t ulNextRand;
 
+/* Save argument pass to main. */
 int ulArgc = 0;
 char ** ppcArgv = NULL;
 /*-----------------------------------------------------------*/
-
-void vLoggingInit( BaseType_t xLogToStdout,
-                   BaseType_t xLogToFile,
-                   BaseType_t xLogToUDP,
-                   uint32_t ulRemoteIPAddress,
-                   uint16_t usRemotePort )
-{
-    /* Can only be called before the scheduler has started. */
-    configASSERT( xTaskGetSchedulerState() == taskSCHEDULER_NOT_STARTED );
-
-    /* FreeRTOSIPConfig is set such that no print messages will be output.
-     *              * Avoid compiler warnings about unused parameters. */
-    ( void ) xLogToStdout;
-    ( void ) xLogToFile;
-    ( void ) xLogToUDP;
-    ( void ) usRemotePort;
-    ( void ) ulRemoteIPAddress;
-}
 
 void vLoggingPrintf( const char * pcFormat,
                      ... )
@@ -154,40 +70,24 @@ void vLoggingPrintf( const char * pcFormat,
     vprintf( pcFormat, arg );
     va_end( arg );
 }
+/*-----------------------------------------------------------*/
 
 int main( int argc,
           char ** argv )
 {
-    /***
-     * See https://www.FreeRTOS.org/coremqtt for configuration and usage instructions.
-     ***/
-
-    /* Miscellaneous initialization including preparing the logging and seeding
-     * the random number generator. */
-    prvMiscInitialisation();
-
-    /* Save arguments passed from command line. */
+    /* Save main parameter. */
     ulArgc = argc;
     ppcArgv = argv;
 
-    /* Initialize the network interface.
-     *
-     ***NOTE*** Tasks that use the network are created in the network event hook
-     * when the network is connected and ready for use (see the implementation of
-     * vApplicationIPNetworkEventHook() below).  The address values passed in here
-     * are used if ipconfigUSE_DHCP is set to 0, or if ipconfigUSE_DHCP is set to 1
-     * but a DHCP server cannot be contacted. */
-    FreeRTOS_IPInit( ucIPAddress, ucNetMask, ucGatewayAddress, ucDNSServerAddress, ucMACAddress );
+    prvMiscInitialisation();
+
+    FreeRTOS_IPInit( ucIPAddress, ucNetMask,
+                     ucGatewayAddress, ucDNSServerAddress,
+                     ucMACAddress );
 
     /* Start the RTOS scheduler. */
     vTaskStartScheduler();
 
-    /* If all is well, the scheduler will now be running, and the following
-     * line will never be reached.  If the following line does execute, then
-     * there was insufficient FreeRTOS heap memory available for the idle and/or
-     * timer tasks to be created.  See the memory management section on the
-     * FreeRTOS web site for more details (this is standard text that is not
-     * really applicable to the Win32 simulator port). */
     for( ; ; )
     {
         /*assert( false ); */
@@ -210,27 +110,25 @@ void vApplicationIPNetworkEventHook( eIPCallbackEvent_t eNetworkEvent )
          * created. */
         if( xTasksAlreadyCreated == pdFALSE )
         {
-            /* Demos that use the network are created after the network is
-             * up. */
-            LogInfo( ( "---------STARTING ---------\r\n" ) );
-            vDemoEntry();
+            configPRINTF( ( "--------- Init.d ---------\r\n" ) );
+            vInitD();
             xTasksAlreadyCreated = pdTRUE;
         }
 
         /* Print out the network configuration, which may have come from a DHCP
-         * server. */
+         * server.*/
         FreeRTOS_GetAddressConfiguration( &ulIPAddress, &ulNetMask, &ulGatewayAddress, &ulDNSServerAddress );
         FreeRTOS_inet_ntoa( ulIPAddress, cBuffer );
-        LogInfo( ( "\r\n\r\nIP Address: %s\r\n", cBuffer ) );
+        configPRINTF( ( "\r\n\r\nIP Address: %s\r\n", cBuffer ) );
 
         FreeRTOS_inet_ntoa( ulNetMask, cBuffer );
-        LogInfo( ( "Subnet Mask: %s\r\n", cBuffer ) );
+        configPRINTF( ( "Subnet Mask: %s\r\n", cBuffer ) );
 
         FreeRTOS_inet_ntoa( ulGatewayAddress, cBuffer );
-        LogInfo( ( "Gateway Address: %s\r\n", cBuffer ) );
+        configPRINTF( ( "Gateway Address: %s\r\n", cBuffer ) );
 
         FreeRTOS_inet_ntoa( ulDNSServerAddress, cBuffer );
-        LogInfo( ( "DNS Server Address: %s\r\n\r\n\r\n", cBuffer ) );
+        configPRINTF( ( "DNS Server Address: %s\r\n\r\n\r\n", cBuffer ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -264,13 +162,6 @@ UBaseType_t uxRand( void )
 {
     const uint32_t ulMultiplier = 0x015a4e35UL, ulIncrement = 1UL;
 
-    /*
-     * Utility function to generate a pseudo random number.
-     *
-     * !!!NOTE!!!
-     * This is not a secure method of generating a random number.  Production
-     * devices should use a True Random Number Generator (TRNG).
-     */
     ulNextRand = ( ulMultiplier * ulNextRand ) + ulIncrement;
     return( ( int ) ( ulNextRand >> 16UL ) & 0x7fffUL );
 }
@@ -286,22 +177,10 @@ static void prvSRand( UBaseType_t ulSeed )
 static void prvMiscInitialisation( void )
 {
     time_t xTimeNow;
-    uint32_t ulLoggingIPAddress;
 
-    ulLoggingIPAddress = FreeRTOS_inet_addr_quick( configUDP_LOGGING_ADDR0, configUDP_LOGGING_ADDR1, configUDP_LOGGING_ADDR2, configUDP_LOGGING_ADDR3 );
-    vLoggingInit( xLogToStdout, xLogToFile, xLogToUDP, ulLoggingIPAddress, configPRINT_PORT );
-
-    /*
-     * Seed random number generator.
-     *
-     * !!!NOTE!!!
-     * This is not a secure method of generating a random number.  Production
-     * devices should use a True Random Number Generator (TRNG).
-     */
     time( &xTimeNow );
-    LogDebug( ( "Seed for randomizer: %lu\n", xTimeNow ) );
+    configPRINTF( ( "Seed for randomizer: %lu\n", xTimeNow ) );
     prvSRand( ( uint32_t ) xTimeNow );
-    LogDebug( ( "Random numbers: %08X %08X %08X %08X\n", ipconfigRAND32(), ipconfigRAND32(), ipconfigRAND32(), ipconfigRAND32() ) );
 }
 /*-----------------------------------------------------------*/
 
@@ -352,10 +231,10 @@ static void prvMiscInitialisation( void )
  * THAT RETURNS A PSEUDO RANDOM NUMBER SO IS NOT INTENDED FOR USE IN PRODUCTION
  * SYSTEMS.
  */
-extern uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
-                                                    uint16_t usSourcePort,
-                                                    uint32_t ulDestinationAddress,
-                                                    uint16_t usDestinationPort )
+uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
+                                             uint16_t usSourcePort,
+                                             uint32_t ulDestinationAddress,
+                                             uint16_t usDestinationPort )
 {
     ( void ) ulSourceAddress;
     ( void ) usSourcePort;
@@ -371,9 +250,6 @@ extern uint32_t ulApplicationGetNextSequenceNumber( uint32_t ulSourceAddress,
  * generator is broken, it shall return pdFALSE.
  * The macros ipconfigRAND32() and configRAND32() are not in use
  * anymore in FreeRTOS+TCP.
- *
- * THIS IS ONLY A DUMMY IMPLEMENTATION THAT RETURNS A PSEUDO RANDOM NUMBER SO IS
- * NOT INTENDED FOR USE IN PRODUCTION SYSTEMS.
  */
 BaseType_t xApplicationGetRandomNumber( uint32_t * pulNumber )
 {
@@ -389,22 +265,11 @@ void vApplicationGetIdleTaskMemory( StaticTask_t ** ppxIdleTaskTCBBuffer,
                                     StackType_t ** ppxIdleTaskStackBuffer,
                                     uint32_t * pulIdleTaskStackSize )
 {
-    /* If the buffers to be provided to the Idle task are declared inside this
-     * function then they must be declared static - otherwise they will be allocated on
-     * the stack and so not exists after this function exits. */
     static StaticTask_t xIdleTaskTCB;
     static StackType_t uxIdleTaskStack[ configMINIMAL_STACK_SIZE ];
 
-    /* Pass out a pointer to the StaticTask_t structure in which the Idle task's
-     * state will be stored. */
     *ppxIdleTaskTCBBuffer = &xIdleTaskTCB;
-
-    /* Pass out the array that will be used as the Idle task's stack. */
     *ppxIdleTaskStackBuffer = uxIdleTaskStack;
-
-    /* Pass out the size of the array pointed to by *ppxIdleTaskStackBuffer.
-     * Note that, as the array is necessarily of type StackType_t,
-     * configMINIMAL_STACK_SIZE is specified in words, not bytes. */
     *pulIdleTaskStackSize = configMINIMAL_STACK_SIZE;
 }
 /*-----------------------------------------------------------*/
@@ -416,22 +281,11 @@ void vApplicationGetTimerTaskMemory( StaticTask_t ** ppxTimerTaskTCBBuffer,
                                      StackType_t ** ppxTimerTaskStackBuffer,
                                      uint32_t * pulTimerTaskStackSize )
 {
-    /* If the buffers to be provided to the Timer task are declared inside this
-     * function then they must be declared static - otherwise they will be allocated on
-     * the stack and so not exists after this function exits. */
     static StaticTask_t xTimerTaskTCB;
     static StackType_t uxTimerTaskStack[ configTIMER_TASK_STACK_DEPTH ];
 
-    /* Pass out a pointer to the StaticTask_t structure in which the Timer
-     * task's state will be stored. */
     *ppxTimerTaskTCBBuffer = &xTimerTaskTCB;
-
-    /* Pass out the array that will be used as the Timer task's stack. */
     *ppxTimerTaskStackBuffer = uxTimerTaskStack;
-
-    /* Pass out the size of the array pointed to by *ppxTimerTaskStackBuffer.
-     * Note that, as the array is necessarily of type StackType_t,
-     * configMINIMAL_STACK_SIZE is specified in words, not bytes. */
     *pulTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
 }
 /*-----------------------------------------------------------*/

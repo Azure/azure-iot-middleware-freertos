@@ -27,7 +27,7 @@ INCLUDE_DIRS += -I${FREERTOS_PLUS_DIR}/Source/Utilities/logging/
 INCLUDE_DIRS += -I${FREERTOS_PLUS_DIR}/ThirdParty/mbedtls/include
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/source/include
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/source/interface
-INCLUDE_DIRS += -I${AZURE_IOT_DIR}/port/coreMQTT
+INCLUDE_DIRS += -I${AZURE_IOT_DIR}/ports/coreMQTT
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/libraries/azure-sdk-for-c/sdk/inc
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/demo/sample_azure_iot_embedded_sdk/common
 INCLUDE_DIRS += -I${AZURE_IOT_DIR}/demo/Common/stm32l4_l4+
@@ -58,7 +58,7 @@ INCLUDE_DIRS += -I${AZURE_IOT_DIR}/demo/Common/stm32l4_l4+/transport/using_mbedt
 
 SOURCE_FILES := $(wildcard *.c)
 SOURCE_FILES += $(wildcard ${FREERTOS_DIR}/Source/*.c)
-SOURCE_FILES += ${AZURE_IOT_DIR}/port/coreMQTT/azure_iot_core_mqtt.c
+SOURCE_FILES += ${AZURE_IOT_DIR}/ports/coreMQTT/azure_iot_core_mqtt.c
 # Memory manager (use malloc() / free() )
 SOURCE_FILES += ${FREERTOS_DIR}/Source/portable/MemMang/heap_5.c
 
