@@ -1,0 +1,19 @@
+name: Linux CI Tests
+
+on: [pull_request]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Submodules Init
+      uses: snickerbockers/submodules-init@v4
+    - name: Configure
+      run: .github/scripts/install_software.sh; sudo .github/scripts/init_vm_network.sh
+    - name: Check-in Tests
+      run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
+                         export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
+                         export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
+                         .github/scripts/ci_tests.sh"

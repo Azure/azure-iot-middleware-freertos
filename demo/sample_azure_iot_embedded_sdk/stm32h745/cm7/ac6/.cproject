@@ -76,7 +76,7 @@
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../libraries/azure-sdk-for-c/sdk/inc"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../source/include"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../source/interface"/>
-									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../port/coreMQTT"/>
+									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../ports/coreMQTT"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../libraries/FreeRTOS/FreeRTOS/Source/include"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../../libraries/FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM4F"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../common/stm32h745/driver/stm32h745_discovery/STM32H7xx_HAL_Driver/Inc"/>

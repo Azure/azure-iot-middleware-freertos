@@ -58,7 +58,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-Trace\Include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\portable\BufferManagement;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\portable\Compiler\MSVC;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Utilities\logging;..\..\Common\windows\WinPCap;..\..\..\libraries\FreeRTOS\FreeRTOS\Source\include;..\..\..\libraries\FreeRTOS\FreeRTOS\Source\portable\MSVC-MingW;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\coreMQTT\source\include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\coreMQTT\source\interface;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Utilities\backoff_algorithm\source\include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\network_transport\freertos_plus_tcp;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\network_transport\freertos_plus_tcp\using_mbedtls;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Utilities\mbedtls_freertos;..\..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\mbedtls_utils;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include;..\..\..\source\include;..\..\..\libraries\azure-sdk-for-c\sdk\inc;..\common;..\..\..\source\interface;..\..\..\port\coreMQTT;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-Trace\Include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\portable\BufferManagement;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\FreeRTOS-Plus-TCP\portable\Compiler\MSVC;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Utilities\logging;..\..\Common\windows\WinPCap;..\..\..\libraries\FreeRTOS\FreeRTOS\Source\include;..\..\..\libraries\FreeRTOS\FreeRTOS\Source\portable\MSVC-MingW;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\coreMQTT\source\include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\coreMQTT\source\interface;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Utilities\backoff_algorithm\source\include;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\network_transport\freertos_plus_tcp;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Application-Protocols\network_transport\freertos_plus_tcp\using_mbedtls;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\Utilities\mbedtls_freertos;..\..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Source\mbedtls_utils;..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include;..\..\..\source\include;..\..\..\libraries\azure-sdk-for-c\sdk\inc;..\common;..\..\..\source\interface;..\..\..\ports\coreMQTT;.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>MBEDTLS_CONFIG_FILE="mbedtls_config.h";WIN32;_DEBUG;_CONSOLE;_WIN32_WINNT=0x0500;WINVER=0x400;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MinimalRebuild>false</MinimalRebuild>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -502,7 +502,7 @@
       <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TurnOffAllWarnings</WarningLevel>
     </ClCompile>
     <ClCompile Include="..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\Demo\Common\Logging\windows\Logging_WinSim.c" />
-    <ClCompile Include="..\..\..\port\coreMQTT\azure_iot_core_mqtt.c" />
+    <ClCompile Include="..\..\..\ports\coreMQTT\azure_iot_core_mqtt.c" />
     <ClCompile Include="..\..\..\source\azure_iot.c" />
     <ClCompile Include="..\..\..\source\azure_iot_hub_client.c" />
     <ClCompile Include="..\..\..\source\azure_iot_provisioning_client.c" />
@@ -628,7 +628,7 @@
     <ClInclude Include="..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include\mbedtls\x509_crt.h" />
     <ClInclude Include="..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include\mbedtls\x509_csr.h" />
     <ClInclude Include="..\..\..\libraries\FreeRTOS\FreeRTOS-Plus\ThirdParty\mbedtls\include\mbedtls\xtea.h" />
-    <ClInclude Include="..\..\..\port\coreMQTT\azure_iot_mqtt_port.h" />
+    <ClInclude Include="..\..\..\ports\coreMQTT\azure_iot_mqtt_port.h" />
     <ClInclude Include="..\..\..\source\include\azure_iot.h" />
     <ClInclude Include="..\..\..\source\include\azure_iot_hub_client.h" />
     <ClInclude Include="..\..\..\source\include\azure_iot_provisioning_client.h" />

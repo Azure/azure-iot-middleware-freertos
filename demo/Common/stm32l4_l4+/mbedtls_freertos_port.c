@@ -26,6 +26,8 @@
  */
 
 #include <stdio.h>
+#include <string.h>
+
 /* FreeRTOS includes. */
 #include "FreeRTOS.h"
 #include "sockets_wrapper.h"

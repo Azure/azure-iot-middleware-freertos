@@ -131,7 +131,7 @@
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../libraries/FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/interface"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../libraries/FreeRTOS/FreeRTOS-Plus/Source/Application-Protocols/coreMQTT/source/include"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../libraries/azure-sdk-for-c/sdk/inc"/>
-									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../port/coreMQTT"/>
+									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../ports/coreMQTT"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../Common/mimxrt1060/transport/using_mbedtls"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../Common/mimxrt1060/transport"/>
 								</option>

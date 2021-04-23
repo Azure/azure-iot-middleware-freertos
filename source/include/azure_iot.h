@@ -16,10 +16,10 @@
 #ifndef AZURE_IOT_H
 #define AZURE_IOT_H
 
-/* AZURE_IOT_CUSTOM_CONFIG allows building the azure iot library
- * with a custom config. If a custom config is provided, the
- * AZURE_IOT_CUSTOM_CONFIG macro should be defined. */
-#ifndef AZURE_IOT_CUSTOM_CONFIG
+/* AZURE_IOT_NO_CUSTOM_CONFIG allows building the azure iot library
+ * without a custom config. If a custom config is provided, the
+ * AZURE_IOT_NO_CUSTOM_CONFIG macro should not be defined. */
+#ifndef AZURE_IOT_NO_CUSTOM_CONFIG
     /* Include custom config file before other headers. */
     #include "azure_iot_config.h"
 #endif
@@ -31,6 +31,11 @@
 #include "FreeRTOS.h"
 
 #include "azure/az_iot.h"
+
+/**
+ * @brief Milliseconds per FreeRTOS tick.
+ */
+#define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )
 
 typedef enum AzureIoTResult
 {

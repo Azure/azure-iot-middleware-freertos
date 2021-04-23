@@ -1,3 +1,25 @@
+/*
+ * Copyright (C) 2020 Amazon.com, Inc. or its affiliates.  All Rights Reserved.
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
 /* Copyright (c) Microsoft Corporation. All rights reserved. */
 /* SPDX-License-Identifier: MIT */
 
@@ -49,7 +71,6 @@ void * mbedtls_platform_calloc( size_t nmemb,
 
     return pBuffer;
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -61,7 +82,6 @@ void mbedtls_platform_free( void * ptr )
 {
     vPortFree( ptr );
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -86,7 +106,6 @@ int mbedtls_platform_send( void * ctx,
 
     return ( int ) FreeRTOS_send( socket, buf, len, 0 );
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -111,7 +130,6 @@ int mbedtls_platform_recv( void * ctx,
 
     return ( int ) FreeRTOS_recv( socket, buf, len, 0 );
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -128,7 +146,6 @@ void mbedtls_platform_mutex_init( mbedtls_threading_mutex_t * pMutex )
     pMutex->mutexHandle = xSemaphoreCreateMutexStatic( &( pMutex->mutexStorage ) );
     configASSERT( pMutex->mutexHandle != NULL );
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -144,7 +161,6 @@ void mbedtls_platform_mutex_free( mbedtls_threading_mutex_t * pMutex )
     /* Nothing needs to be done to free a statically-allocated FreeRTOS mutex. */
     ( void ) pMutex;
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -169,7 +185,6 @@ int mbedtls_platform_mutex_lock( mbedtls_threading_mutex_t * pMutex )
 
     return 0;
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -193,7 +208,6 @@ int mbedtls_platform_mutex_unlock( mbedtls_threading_mutex_t * pMutex )
 
     return 0;
 }
-
 /*-----------------------------------------------------------*/
 
 /**
@@ -262,5 +276,4 @@ int mbedtls_hardware_poll( void * data,
 {
     return mbedtls_platform_entropy_poll( data, output, len, olen );
 }
-
 /*-----------------------------------------------------------*/

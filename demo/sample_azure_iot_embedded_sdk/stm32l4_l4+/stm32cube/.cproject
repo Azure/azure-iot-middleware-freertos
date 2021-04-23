@@ -134,7 +134,7 @@
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../libraries/azure-sdk-for-c/sdk/inc"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../source/include"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../source/interface"/>
-									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../port/coreMQTT"/>
+									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../ports/coreMQTT"/>
 									<listOptionValue builtIn="false" value="${ProjDirPath}/../../../../libraries/FreeRTOS/FreeRTOS/Source/include"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../../../libraries/FreeRTOS/FreeRTOS/Source/portable/GCC/ARM_CM4F&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${ProjDirPath}/../../../common/stm32l4_l4+/driver/stm32l4_l4+_discovery/STM32L4xx_HAL_Driver/Inc&quot;"/>

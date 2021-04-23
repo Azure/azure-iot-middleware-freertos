@@ -3,7 +3,8 @@
 
 /**
  * @file azure_iot_cmocka_mqtt.c
- * @brief -------.
+ * @brief Unit test dummy MQTT port.
+ *
  */
 
 #include <stdarg.h>
@@ -17,123 +18,140 @@
 
 #include "azure_iot_mqtt.h"
 #include "azure_iot_mqtt_port.h"
+/*-----------------------------------------------------------*/
 
-AzureIoTMQTTEventCallback_t xTestUserCallback = NULL;
+AzureIoTMQTTEventCallback_t xMiddlewareCallback = NULL;
 AzureIoTMQTTPacketInfo_t xPacketInfo;
 AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 uint16_t usTestPacketId = 1;
 const uint8_t * pucPublishPayload = NULL;
+uint32_t ulDelayReceivePacket = 0;
+/*-----------------------------------------------------------*/
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Init(AzureIoTMQTTHandle_t pContext,
-                                       const AzureIoTTransportInterface_t * pTransportInterface,
-                                       AzureIoTMQTTGetCurrentTimeFunc_t getTimeFunction,
-                                       AzureIoTMQTTEventCallback_t userCallback,
-                                       uint8_t *pNetworkBuffer, uint32_t networkBufferLength)
+AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
+                                        const AzureIoTTransportInterface_t * pxTransportInterface,
+                                        AzureIoTMQTTGetCurrentTimeFunc_t xGetTimeFunction,
+                                        AzureIoTMQTTEventCallback_t xUserCallback,
+                                        uint8_t * pucNetworkBuffer,
+                                        size_t xNetworkBufferLength )
 {
-    (void)pContext;
-    (void)pTransportInterface;
-    (void)getTimeFunction;
-    (void)pNetworkBuffer;
-    (void)networkBufferLength;
+    ( void ) xContext;
+    ( void ) pxTransportInterface;
+    ( void ) xGetTimeFunction;
+    ( void ) pucNetworkBuffer;
+    ( void ) xNetworkBufferLength;
 
-    xTestUserCallback = userCallback;
-    return (AzureIoTMQTTStatus_t)mock();
+    xMiddlewareCallback = xUserCallback;
+    return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Connect(AzureIoTMQTTHandle_t pContext,
-                                          const AzureIoTMQTTConnectInfo_t * pConnectInfo,
-                                          const AzureIoTMQTTPublishInfo_t * pWillInfo,
-                                          uint32_t timeoutMs,
-                                          bool *pSessionPresent)
+AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
+                                           const AzureIoTMQTTConnectInfo_t * pxConnectInfo,
+                                           const AzureIoTMQTTPublishInfo_t * pxWillInfo,
+                                           uint32_t ulMilliseconds,
+                                           bool * pxSessionPresent )
 {
-    (void)pContext;
-    (void)pConnectInfo;
-    (void)pWillInfo;
-    (void)timeoutMs;
-    (void)pSessionPresent;
+    ( void ) xContext;
+    ( void ) pxConnectInfo;
+    ( void ) pxWillInfo;
+    ( void ) ulMilliseconds;
+    ( void ) pxSessionPresent;
 
-    return (AzureIoTMQTTStatus_t)mock();
+    return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
-AzureIoTMQTTStatus_t AzureIoTMQTT_Disconnect(AzureIoTMQTTHandle_t pContext)
+AzureIoTMQTTResult_t AzureIoTMQTT_Subscribe( AzureIoTMQTTHandle_t xContext,
+                                             const AzureIoTMQTTSubscribeInfo_t * pxSubscriptionList,
+                                             size_t xSubscriptionCount,
+                                             uint16_t usPacketId )
 {
-    (void)pContext;
+    ( void ) xContext;
+    ( void ) pxSubscriptionList;
+    ( void ) xSubscriptionCount;
+    ( void ) usPacketId;
 
-    return (AzureIoTMQTTStatus_t)mock();
+    return ( AzureIoTMQTTResult_t ) mock();
 }
+/*-----------------------------------------------------------*/
 
-uint16_t AzureIoTMQTT_GetPacketId(AzureIoTMQTTHandle_t pContext)
+AzureIoTMQTTResult_t AzureIoTMQTT_Publish( AzureIoTMQTTHandle_t xContext,
+                                           const AzureIoTMQTTPublishInfo_t * pxPublishInfo,
+                                           uint16_t usPacketId )
 {
-    (void)pContext;
+    ( void ) xContext;
+    ( void ) usPacketId;
+
+    AzureIoTMQTTResult_t xReturn = ( AzureIoTMQTTResult_t ) mock();
+
+    if( xReturn )
+    {
+        return xReturn;
+    }
+
+    if( pucPublishPayload )
+    {
+        assert_memory_equal( pxPublishInfo->pvPayload, pucPublishPayload, pxPublishInfo->xPayloadLength );
+    }
+
+    return xReturn;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTMQTTResult_t AzureIoTMQTT_Unsubscribe( AzureIoTMQTTHandle_t xContext,
+                                               const AzureIoTMQTTSubscribeInfo_t * pxSubscriptionList,
+                                               size_t xSubscriptionCount,
+                                               uint16_t usPacketId )
+{
+    ( void ) xContext;
+    ( void ) pxSubscriptionList;
+    ( void ) xSubscriptionCount;
+    ( void ) usPacketId;
+
+    return ( AzureIoTMQTTResult_t ) mock();
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTMQTTResult_t AzureIoTMQTT_Disconnect( AzureIoTMQTTHandle_t xContext )
+{
+    ( void ) xContext;
+
+    return ( AzureIoTMQTTResult_t ) mock();
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTMQTTResult_t AzureIoTMQTT_ProcessLoop( AzureIoTMQTTHandle_t xContext,
+                                               uint32_t ulMilliseconds )
+{
+    ( void ) xContext;
+    ( void ) ulMilliseconds;
+
+    AzureIoTMQTTResult_t xReturn = ( AzureIoTMQTTResult_t ) mock();
+
+    if( xReturn )
+    {
+        return xReturn;
+    }
+
+    if( ulDelayReceivePacket > ulMilliseconds )
+    {
+        ulDelayReceivePacket -= ulMilliseconds;
+        return xReturn;
+    }
+
+    if( xMiddlewareCallback && ( xPacketInfo.ucType != 0 ) )
+    {
+        xMiddlewareCallback( xContext, &xPacketInfo, &xDeserializedInfo );
+    }
+
+    return xReturn;
+}
+/*-----------------------------------------------------------*/
+
+uint16_t AzureIoTMQTT_GetPacketId( AzureIoTMQTTHandle_t xContext )
+{
+    ( void ) xContext;
 
     return usTestPacketId;
-}
-
-AzureIoTMQTTStatus_t AzureIoTMQTT_Publish(AzureIoTMQTTHandle_t pContext,
-                                          const AzureIoTMQTTPublishInfo_t * pPublishInfo,
-                                          uint16_t packetId)
-{
-    (void)pContext;
-    (void)packetId;
-
-    AzureIoTMQTTStatus_t ret = (AzureIoTMQTTStatus_t)mock();
-
-    if (ret)
-    {
-        return ret;
-    }
-
-    if (pucPublishPayload)
-    {
-        assert_memory_equal(pPublishInfo->pPayload, pucPublishPayload, pPublishInfo->payloadLength);
-    }
-
-    return ret;
-}
-
-AzureIoTMQTTStatus_t AzureIoTMQTT_ProcessLoop(AzureIoTMQTTHandle_t pContext,
-                                              uint32_t timeoutMs)
-{
-    (void)pContext;
-    (void)timeoutMs;
-
-    AzureIoTMQTTStatus_t ret = (AzureIoTMQTTStatus_t)mock();
-
-    if (ret)
-    {
-        return ret;
-    }
-
-    if (xTestUserCallback && (xPacketInfo.type != 0))
-    {
-        xTestUserCallback(pContext, &xPacketInfo, &xDeserializedInfo);
-    }
-
-    return ret;
-}
-
-AzureIoTMQTTStatus_t AzureIoTMQTT_Subscribe(AzureIoTMQTTHandle_t pContext,
-                                            const AzureIoTMQTTSubscribeInfo_t * pSubscriptionList,
-                                            size_t subscriptionCount,
-                                            uint16_t packetId)
-{
-    (void)pContext;
-    (void)pSubscriptionList;
-    (void)subscriptionCount;
-    (void)packetId;
-
-    return (AzureIoTMQTTStatus_t)mock();
-}
-
-AzureIoTMQTTStatus_t AzureIoTMQTT_Unsubscribe(AzureIoTMQTTHandle_t pContext,
-                                              const AzureIoTMQTTSubscribeInfo_t * pSubscriptionList,
-                                              size_t subscriptionCount,
-                                              uint16_t packetId)
-{
-    (void)pContext;
-    (void)pSubscriptionList;
-    (void)subscriptionCount;
-    (void)packetId;
-
-    return (AzureIoTMQTTStatus_t)mock();
 }

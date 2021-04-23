@@ -22,6 +22,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdarg.h>
+#include <string.h>
 
 /* FreeRTOS includes. */
 #include "FreeRTOS.h"
@@ -229,8 +230,6 @@ int __io_putchar( int ch )
  */
 static void prvMiscInitialization( void )
 {
-    int32_t timeout;
-
     /* USER CODE END Boot_Mode_Sequence_0 */
 
     /* MPU Configuration--------------------------------------------------------*/

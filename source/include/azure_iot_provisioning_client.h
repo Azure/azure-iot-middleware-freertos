@@ -4,36 +4,47 @@
 /**
  * @file azure_iot_provisioning_client.h
  *
+ * @brief Definition for the Azure IoT Provisioning client.
+ *
+ * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
+ * prefixed with an underscore ('_') directly in your application code. These symbols
+ * are part of Azure SDK's internal implementation; we do not document these symbols
+ * and they are subject to change in future versions of the SDK which would break your code.
  */
 
 #ifndef AZURE_IOT_PROVISIONING_CLIENT_H
 #define AZURE_IOT_PROVISIONING_CLIENT_H
 
-/* Transport interface include. */
 #include "FreeRTOS.h"
 
 #include "azure_iot.h"
 
-#include "azure_iot_mqtt.h"
 #include "azure_iot_mqtt_port.h"
+#include "azure_iot_transport_interface.h"
 
-typedef struct AzureIoTProvisioningClient * AzureIoTProvisioningClientHandle_t;
+#define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
 
-typedef enum AzureIoTProvisioningClientError
+#define azureiotPROVISIONING_NO_WAIT        ( 0 )
+#define azureiotPROVISIONING_WAIT_FOREVER   ( ( uint32_t )0xFFFFFFFF )
+
+typedef enum AzureIoTProvisioningClientResult
 {
-    AZURE_IOT_PROVISIONING_CLIENT_SUCCESS = 0,      /*/< Success. */
-    AZURE_IOT_PROVISIONING_CLIENT_INVALID_ARGUMENT, /*/< Input argument does not comply with the expected range of values. */
-    AZURE_IOT_PROVISIONING_CLIENT_PENDING,          /*/< The status of the operation is pending. */
-    AZURE_IOT_PROVISIONING_CLIENT_OUT_OF_MEMORY,    /*/< The system is out of memory. */
-    AZURE_IOT_PROVISIONING_CLIENT_INIT_FAILED,      /*/< The initialization failed. */
-    AZURE_IOT_PROVISIONING_CLIENT_SERVER_ERROR,     /*/< There was a server error in registration. */
-    AZURE_IOT_PROVISIONING_CLIENT_FAILED,           /*/< There was a failure. */
+    eAzureIoTProvisioningSuccess = 0,           /** Success. */
+    eAzureIoTProvisioningInvalidArgument,       /** Input argument does not comply with the expected range of values. */
+    eAzureIoTProvisioningPending,               /** The status of the operation is pending. */
+    eAzureIoTProvisioningOutOfMemory,           /** The system is out of memory. */
+    eAzureIoTProvisioningInitFailed,            /** The initialization failed. */
+    eAzureIoTProvisioningServerError,           /** There was a server error in registration. */
+    eAzureIoTProvisioningSubscribeFailed,       /** There was a subscribe failure. */
+    eAzureIoTProvisioningPublishFailed,         /** There was a publish failure. */
+    eAzureIoTProvisioningTokenGenerationFailed, /** There was a failure generating token. */
+    eAzureIoTProvisioningFailed,                /** There was a failure. */
 } AzureIoTProvisioningClientResult_t;
 
 typedef struct AzureIoTProvisioningClientOptions
 {
-    const uint8_t * pUserAgent; /*/ The user agent to use for this device. */
-    uint32_t userAgentLength;   /*/ The length of the user agent. */
+    const uint8_t * pucUserAgent; /* The user agent to use for this device. */
+    uint32_t ulUserAgentLength;   /* The length of the user agent. */
 } AzureIoTProvisioningClientOptions_t;
 
 typedef struct AzureIoTProvisioningClient
@@ -42,43 +53,39 @@ typedef struct AzureIoTProvisioningClient
     {
         AzureIoTMQTT_t xMQTTContext;
 
-        uint8_t * provisioning_scratch_buffer;
-        uint32_t provisioning_scratch_buffer_length;
-        uint8_t azure_iot_provisioning_client_last_response[azureiotPROVISIONING_RESPONSE_MAX];
-        uint8_t * azure_iot_provisioning_client_last_response_payload;
-        size_t azure_iot_provisioning_client_last_response_payload_length;
-        uint8_t * azure_iot_provisioning_client_last_response_topic;
-        uint32_t azure_iot_provisioning_client_last_response_topic_length;
+        const uint8_t * pucRegistrationID;
+        uint32_t ulRegistrationIDLength;
+        const uint8_t * pucEndpoint;
+        uint32_t ulEndpointLength;
+        const uint8_t * pucIDScope;
+        uint32_t ulIDScopeLength;
+        const uint8_t * pucSymmetricKey;
+        uint32_t ulSymmetricKeyLength;
+        const uint8_t * pucRegistrationPayload;
+        uint32_t ulRegistrationPayloadLength;
 
-        az_iot_provisioning_client_register_response register_response;
+        uint32_t ( * pxTokenRefresh )( struct AzureIoTProvisioningClient * pxAzureIoTProvisioningClient,
+                                       uint64_t ullExpiryTimeSecs,
+                                       const uint8_t * ucKey,
+                                       uint32_t ulKeyLen,
+                                       uint8_t * pucSASBuffer,
+                                       uint32_t ulSasBufferLen,
+                                       uint32_t * pulSaSLength );
+        AzureIoTGetHMACFunc_t xHMACFunction;
+        AzureIoTGetCurrentTimeFunc_t xGetTimeFunction;
 
-        az_iot_provisioning_client iot_dps_client_core;
+        az_iot_provisioning_client xProvisioningClientCore;
 
-        const uint8_t * pRegistrationId;
-        uint32_t registrationIdLength;
-        const uint8_t * pEndpoint;
-        uint32_t endpointLength;
-        const uint8_t * pIdScope;
-        uint32_t idScopeLength;
+        uint32_t ulWorkflowState;
+        uint32_t ulLastOperationResult;
+        uint64_t ullRetryAfter;
 
-        uint32_t workflowState;
-        uint32_t lastOperationResult;
-        uint64_t azure_iot_provisioning_client_req_timeout;
-        AzureIoTGetCurrentTimeFunc_t getTimeFunction;
-
-        const uint8_t * azure_iot_provisioning_client_symmetric_key;
-        uint32_t azure_iot_provisioning_client_symmetric_key_length;
-        const uint8_t * azure_iot_provisioning_client_registration_payload;
-        uint32_t azure_iot_provisioning_client_registration_payload_length;
-
-        uint32_t ( * azure_iot_provisioning_client_token_refresh )( struct AzureIoTProvisioningClient * xAzureIoTProvisioningClientHandle,
-                                                                    uint64_t ullExpiryTimeSecs,
-                                                                    const uint8_t * ucKey,
-                                                                    uint32_t ulKeyLen,
-                                                                    uint8_t * pucSASBuffer,
-                                                                    uint32_t ulSasBufferLen,
-                                                                    uint32_t * pulSaSLength );
-        AzureIoTGetHMACFunc_t azure_iot_provisioning_client_hmac_function;
+        uint8_t * pucScratchBuffer;
+        uint32_t ulScratchBufferLength;
+        uint8_t ucProvisioningLastResponse[ azureiotPROVISIONING_RESPONSE_MAX ];
+        size_t xLastResponsePayloadLength;
+        uint16_t usLastResponseTopicLength;
+        az_iot_provisioning_client_register_response xRegisterResponse;
     } _internal;
 } AzureIoTProvisioningClient_t;
 
@@ -93,13 +100,13 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_OptionsInit( Azure
 /**
  * @brief Initialize the Azure IoT Provisioning Client.
  *
- * @param[out] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[out] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  * @param[in] pucEndpoint The IoT Provisioning Hostname.
  * @param[in] ulEndpointLength The length of the IoT Provisioning Hostname.
- * @param[in] pucIdScope The id scope to use for provisioning.
- * @param[in] ulIdScopeLength The length of the scope id.
- * @param[in] pucRegistrationId The registration id to use for provisioning.
- * @param[in] ulRegistrationIdLength The length of the registration id.
+ * @param[in] pucIDScope The ID scope to use for provisioning.
+ * @param[in] ulIDScopeLength The length of the ID scope.
+ * @param[in] pucRegistrationID The registration ID to use for provisioning.
+ * @param[in] ulRegistrationIDLength The length of the registration ID.
  * @param[in] pxProvisioningClientOptions The #AzureIoTProvisioningClientOptions_t for the IoT Provisioning client instance.
  * @param[in] pucBuffer The buffer to use for MQTT messages.
  * @param[in] ulBufferLength bufferLength The length of the \p pucBuffer.
@@ -107,13 +114,13 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_OptionsInit( Azure
  * @param[in] pxTransportInterface The transport interface to use for the MQTT library.
  * @return AzureIoTProvisioningClientResult_t
  */
-AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                     const uint8_t * pucEndpoint,
                                                                     uint32_t ulEndpointLength,
-                                                                    const uint8_t * pucIdScope,
-                                                                    uint32_t ulIdScopeLength,
-                                                                    const uint8_t * pucRegistrationId,
-                                                                    uint32_t ulRegistrationIdLength,
+                                                                    const uint8_t * pucIDScope,
+                                                                    uint32_t ulIDScopeLength,
+                                                                    const uint8_t * pucRegistrationID,
+                                                                    uint32_t ulRegistrationIDLength,
                                                                     AzureIoTProvisioningClientOptions_t * pxProvisioningClientOptions,
                                                                     uint8_t * pucBuffer,
                                                                     uint32_t ulBufferLength,
@@ -123,20 +130,22 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
 /**
  * @brief Deinitialize the Azure IoT Provisioning Client.
  *
- * @param xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  */
-void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle );
+void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClient_t * pxAzureProvClient );
 
 /**
  * @brief Set the symmetric key to use for authentication.
  *
- * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @note For X509 cert based authentication, application configures its transport with client side certificate.
+ *
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  * @param[in] pucSymmetricKey The symmetric key to use for the connection.
  * @param[in] ulSymmetricKeyLength The length of the \p pucSymmetricKey.
  * @param[in] xHmacFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
-AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SymmetricKeySet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SetSymmetricKey( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                                const uint8_t * pucSymmetricKey,
                                                                                uint32_t ulSymmetricKeyLength,
                                                                                AzureIoTGetHMACFunc_t xHmacFunction );
@@ -144,60 +153,62 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SymmetricKeySet( A
 /**
  * @brief Begin the provisioning process.
  *
- * This call will issue the request to the service to provision this device. It will then poll the service
- * to check if an IoT Hub and device id have been provided. After a successful result, AzureIoTProvisioningClient_HubGet() can
- * be called to get the IoT Hub and device id. Otherwise an appropriate error result will be returned.
+ * The initial call to this function will issue the request to the service to provision this device.
+ * If this function is called with the same pxAzureProvClient after a previous call to it returned
+ * "eAzureIoTProvisioningPending", then the function will simply poll to see if the registration
+ * has succeeded or failed. After a successful result, AzureIoTProvisioningClient_GetDeviceAndHub()
+ * can be called to get the IoT Hub and device ID.
  *
- * Note: If result return is AZURE_IOT_PROVISIONING_CLIENT_PENDING, then registation is still in progess and
- * user need to call this function to resume the registartion.
- *
- * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
- * @param[in] ulTimeoutMilliseconds Timeout in millisecond to wait for registration to finish.
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
+ * @param[in] ulTimeoutMilliseconds Timeout in milliseconds to wait for registration to finish.
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
- *      - AZURE_IOT_PROVISIONING_CLIENT_PENDING registration is still in progess.
- *      - AZURE_IOT_PROVISIONING_CLIENT_SUCCESS registration is completed.
+ *      - eAzureIoTProvisioningPending registration is still in progess.
+ *      - eAzureIoTProvisioningOutOfMemory registration failed because the device is out of memory.
+ *      - eAzureIoTProvisioningServerError registration failed because of a server error.
+ *      - eAzureIoTProvisioningFailed registration failed because of an internal error.
+ *      - eAzureIoTProvisioningSuccess registration is completed.
  */
-AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                         uint32_t ulTimeoutMilliseconds );
 
 /**
- * @brief After a registration has been completed, get the IoT Hub host name and device id.
+ * @brief After a registration has been completed, get the IoT Hub hostname and device ID.
  *
- * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  * @param[out] pucHubHostname The pointer to a buffer which will be populated with the IoT Hub hostname.
  * @param[out] pulHostnameLength The pointer to the `uint32_t` which will be populated with the length of the hostname.
- * @param[out] pucDeviceId The pointer to a buffer which will be populated with the device id.
- * @param[out] pulDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device id.
+ * @param[out] pucDeviceId The pointer to a buffer which will be populated with the device ID.
+ * @param[out] pulDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device ID.
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
-AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_HubGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
-                                                                      uint8_t * pucHubHostname,
-                                                                      uint32_t * pulHostnameLength,
-                                                                      uint8_t * pucDeviceId,
-                                                                      uint32_t * pulDeviceIdLength );
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_GetDeviceAndHub( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                                               uint8_t * pucHubHostname,
+                                                                               uint32_t * pulHostnameLength,
+                                                                               uint8_t * pucDeviceID,
+                                                                               uint32_t * pulDeviceIDLength );
 
 /**
  * @brief Get extended code for Provisioning failure.
  *
- * @note Extended code is 6 digit error code.
+ * @note Extended code is 6 digit error code last returned via the Provisioning service, when registration is done.
  *
- * @param[in] xAzureIoTProvisioningClientHandle The #AzureIoTProvisioningClientHandle_t to use for this call.
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  * @param[out] pulExtendedErrorCode The pointer to the uint32_t which will be populated with the extended code.
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
-AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_ExtendedCodeGet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_GetExtendedCode( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                                uint32_t * pulExtendedErrorCode );
 
 /**
  * @brief Set registration payload
  * @details This routine sets registration payload, which is JSON object.
  *
- * @param[in] prov_client_ptr A pointer to a #NX_AZURE_IOT_PROVISIONING_CLIENT.
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  * @param[in] pucPayload A pointer to registration payload.
  * @param[in] ulPayloadLength Length of `payload`. Does not include the `NULL` terminator.
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
-AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_RegistrationPayloadSet( AzureIoTProvisioningClientHandle_t xAzureIoTProvisioningClientHandle,
+AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                                       const uint8_t * pucPayload, uint32_t ulPayloadLength );
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */

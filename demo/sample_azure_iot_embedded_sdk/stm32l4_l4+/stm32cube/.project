@@ -379,7 +379,7 @@
 		<link>
 			<name>ports/Mqtt/azure_iot_core_mqtt.c</name>
 			<type>1</type>
-			<locationURI>AZURE_IOT_MCU_ROOT/port/coreMQTT/azure_iot_core_mqtt.c</locationURI>
+			<locationURI>AZURE_IOT_MCU_ROOT/ports/coreMQTT/azure_iot_core_mqtt.c</locationURI>
 		</link>
 		<link>
 			<name>ports/mbedtls/mbedtls_freertos_port.c</name>

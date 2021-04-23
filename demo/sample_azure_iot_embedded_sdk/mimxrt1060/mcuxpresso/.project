@@ -333,7 +333,7 @@
 		<link>
 			<name>ports/Mqtt/azure_iot_core_mqtt.c</name>
 			<type>1</type>
-			<locationURI>BASE_DIR/port/coreMQTT/azure_iot_core_mqtt.c</locationURI>
+			<locationURI>BASE_DIR/ports/coreMQTT/azure_iot_core_mqtt.c</locationURI>
 		</link>
 		<link>
 			<name>ports/mbedtls/mbedtls_error.c</name>

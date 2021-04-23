@@ -5,27 +5,36 @@
 #include <setjmp.h>
 #include <cmocka.h> /* macros: https://api.cmocka.org/group__cmocka__asserts.html */
 
-/* Azure Provisioning/IoTHub library includes */
+/* Azure IoT library includes */
 #include "azure_iot_hub_client.h"
 #include "azure_iot_provisioning_client.h"
+
+/* E2E test includes */
 #include "e2e_device_process_commands.h"
+/*-----------------------------------------------------------*/
 
 #define e2etestE2E_STACKSIZE    ( 8 * 1024 )
 #define e2etestE2E_PRIORITY     ( 2 )
+/*-----------------------------------------------------------*/
 
 extern int ulArgc;
 extern char ** ppcArgv;
 
 static AzureIoTHubClient_t xAzureIoTHubClient;
 static uint8_t ucSharedBuffer[ 5 * 1024 ];
+/*-----------------------------------------------------------*/
 
-static void test_entry( void ** state )
+/*
+ * Entry point to E2E tests
+ **/
+static void vTestEntry( void ** ppvState )
 {
     NetworkCredentials_t xNetworkCredentials = { 0 };
     AzureIoTTransportInterface_t xTransport;
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIoTHubClientOptions_t xHubOptions = { 0 };
+    bool xSessionPresent = false;
 
     if( ulArgc != 5 )
     {
@@ -34,7 +43,6 @@ static void test_entry( void ** state )
     }
 
     xNetworkCredentials.disableSni = true;
-    /* Set the credentials for establishing a TLS connection. */
     xNetworkCredentials.pRootCa = ( const unsigned char * ) azureiotROOT_CA_PEM;
     xNetworkCredentials.rootCaSize = sizeof( azureiotROOT_CA_PEM );
     xNetworkContext.pParams = &xTlsTransportParams;
@@ -44,19 +52,19 @@ static void test_entry( void ** state )
                                                           &xNetworkContext ),
                       TLS_TRANSPORT_SUCCESS );
 
-    assert_int_equal( AzureIoT_Init(), eAzureIoTSuccess);
+    assert_int_equal( AzureIoT_Init(), eAzureIoTSuccess );
 
-    /* Sends an MQTT Connect packet over the already established TLS connection,
-     * and waits for connection acknowledgment (CONNACK) packet. */
     LogInfo( ( "Creating an MQTT connection to %s.\r\n", ppcArgv[ 1 ] ) );
 
-    /* Fill in Transport Interface send and receive function pointers. */
-    xTransport.pNetworkContext = &xNetworkContext;
-    xTransport.send = TLS_FreeRTOS_send;
-    xTransport.recv = TLS_FreeRTOS_recv;
+    xTransport.pxNetworkContext = &xNetworkContext;
+    xTransport.xSend = TLS_FreeRTOS_send;
+    xTransport.xRecv = TLS_FreeRTOS_recv;
 
-    xHubOptions.pModuleId = ( const uint8_t * ) ppcArgv[ 3 ];
-    xHubOptions.moduleIdLength = strlen( ppcArgv[ 3 ] );
+    assert_int_equal( AzureIoTHubClient_OptionsInit( &xHubOptions ),
+                      eAzureIoTHubClientSuccess );
+
+    xHubOptions.pucModelID = ( const uint8_t * ) ppcArgv[ 3 ];
+    xHubOptions.ulModuleIDLength = ( uint32_t ) strlen( ppcArgv[ 3 ] );
 
     assert_int_equal( AzureIoTHubClient_Init( &xAzureIoTHubClient,
                                               ppcArgv[ 1 ], strlen( ppcArgv[ 1 ] ),
@@ -65,63 +73,71 @@ static void test_entry( void ** state )
                                               ucSharedBuffer, sizeof( ucSharedBuffer ),
                                               ulGetUnixTime,
                                               &xTransport ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
-
-    assert_int_equal( AzureIoTHubClient_SymmetricKeySet( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SetSymmetricKey( &xAzureIoTHubClient,
                                                          ( const uint8_t * ) ppcArgv[ 4 ],
                                                          strlen( ppcArgv[ 4 ] ),
                                                          ulCalculateHMAC ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
     assert_int_equal( AzureIoTHubClient_Connect( &xAzureIoTHubClient,
-                                                 false,
+                                                 false, &xSessionPresent,
                                                  e2etestCONNACK_RECV_TIMEOUT_MS ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
-    assert_int_equal( AzureIoTHubClient_CloudMessageSubscribe( &xAzureIoTHubClient,
-                                                               vHandleCloudMessage,
-                                                               &xAzureIoTHubClient,
-                                                               ULONG_MAX ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+    assert_int_equal( AzureIoTHubClient_SubscribeCloudToDeviceMessage( &xAzureIoTHubClient,
+                                                                       vHandleCloudMessage,
+                                                                       &xAzureIoTHubClient,
+                                                                       ULONG_MAX ),
+                      eAzureIoTHubClientSuccess );
 
-    assert_int_equal( AzureIoTHubClient_DirectMethodSubscribe( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SubscribeDirectMethod( &xAzureIoTHubClient,
                                                                vHandleDirectMethod,
                                                                &xAzureIoTHubClient,
                                                                ULONG_MAX ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
-    assert_int_equal( AzureIoTHubClient_DeviceTwinSubscribe( &xAzureIoTHubClient,
+    assert_int_equal( AzureIoTHubClient_SubscribeDeviceTwin( &xAzureIoTHubClient,
                                                              vHandleDeviceTwinMessage,
                                                              &xAzureIoTHubClient,
                                                              ULONG_MAX ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
     assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient ),
-                      AZURE_IOT_HUB_CLIENT_SUCCESS );
+                      eAzureIoTHubClientSuccess );
 
     AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
     AzureIoTHubClient_Deinit( &xAzureIoTHubClient );
     TLS_FreeRTOS_Disconnect( &xNetworkContext );
 }
+/*-----------------------------------------------------------*/
 
+/*
+ * Task to run E2E tests
+ **/
 static void prvE2ETask( void * pvParameters )
 {
-    const struct CMUnitTest tests[] =
+    const struct CMUnitTest xTests[] =
     {
-        cmocka_unit_test( test_entry ),
+        cmocka_unit_test( vTestEntry ),
     };
 
     setbuf( stdout, NULL );
-    exit( cmocka_run_group_tests( tests, NULL, NULL ) );
+    exit( cmocka_run_group_tests( xTests, NULL, NULL ) );
 }
+/*-----------------------------------------------------------*/
 
-void vDemoEntry( void )
+/*
+ * Hook to start all the tasks required
+ **/
+void vInitD( void )
 {
-    xTaskCreate( prvE2ETask,           /* Function that implements the task. */
-                 "prvE2ETask",         /* Text name for the task - only used for debugging. */
-                 e2etestE2E_STACKSIZE, /* Size of stack (in words, not bytes) to allocate for the task. */
-                 NULL,                 /* Task parameter - not used in this case. */
-                 e2etestE2E_PRIORITY,  /* Task priority, must be between 0 and configMAX_PRIORITIES - 1. */
-                 NULL );               /* Used to pass out a handle to the created task - not used in this case. */
+    xTaskCreate( prvE2ETask,
+                 "prvE2ETask",
+                 e2etestE2E_STACKSIZE,
+                 NULL,
+                 e2etestE2E_PRIORITY,
+                 NULL );
 }
+/*-----------------------------------------------------------*/

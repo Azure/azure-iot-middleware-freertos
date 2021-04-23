@@ -15,9 +15,9 @@ The e2e tests for Azure IoT Convenience layer use a different approach, splittin
 
 * To run the e2e test framework:
 
-  * [Install software](../../.build/init_vm_network.md)
+  * [Install software](../../.github/scripts/install_software.sh)
 
-  * [Configure network](../../.build/init_vm_network.md) **Note: This creates a veth1 interface for RTOS connectivity.**
+  * [Configure network](../../.github/scripts/init_vm_network.sh) **Note: This creates a veth1 interface for RTOS connectivity.**
 
   * Send enviornment variables and execute [run.sh](./run.sh) script.
   ``` sh
