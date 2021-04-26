@@ -31,7 +31,7 @@ cmake --build build -- --jobs=$TEST_CORES
 
 if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
     echo -e "::group::Running E2E tests"
-    ../tests/e2e/run.sh veth1
+    ./tests/e2e/run.sh veth1
 else
     echo -e "Skipping E2E tests"
 fi
