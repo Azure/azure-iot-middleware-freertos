@@ -178,7 +178,7 @@ typedef struct AzureIoTHubClientOptions
     uint32_t ulUserAgentLength;   /**< The length of the user agent. */
 } AzureIoTHubClientOptions_t;
 
-typedef struct AzureIoTHubClient
+struct AzureIoTHubClient
 {
     struct
     {
@@ -209,7 +209,7 @@ typedef struct AzureIoTHubClient
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     } _internal;
-} AzureIoTHubClient_t;
+};
 
 /**
  * @brief Initialize the Azure IoT Hub Options with default values.
