@@ -68,9 +68,8 @@
  * @brief Macro that is called in the Azure IoT Middleware library for logging "Error" level
  * messages.
  *
- * To enable error level logging in the AzureIoT Middleware library either:
+ * To enable error level logging in the AzureIoT Middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
- *  - Enable FreeRTOS's logging stack by `#include <logging_stack.h>` and configuring its logging level to be at least error level.
  *
  * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
@@ -78,19 +77,16 @@
  * <b>Default value</b>: Error logging is turned off, and no code is generated for calls
  * to the macro in the Azure IoT Middleware library on compilation.
  */
-#ifndef LogError
+#ifndef AZLogError
     #define AZLogError( message )
-#else
-    #define AZLogError       LogError
 #endif
 
 /**
  * @brief Macro that is called in the Azure IoT Middleware library for logging "Warning" level
  * messages.
  *
- * To enable warning level logging in the AzureIoT Middleware library either:
+ * To enable warning level logging in the AzureIoT Middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
- *  - Enable FreeRTOS's logging stack by `#include <logging_stack.h>` and configuring its logging level to be at least error level.
  *
  * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
@@ -98,19 +94,16 @@
  * <b>Default value</b>: Warning logs are turned off, and no code is generated for calls
  * to the macro in the Azure IoT Middleware library on compilation.
  */
-#ifndef LogWarn
+#ifndef AZLogWarn
     #define AZLogWarn( message )
-#else
-    #define AZLogWarn       LogWarn
 #endif
 
 /**
  * @brief Macro that is called in the Azure IoT Middleware library for logging "Info" level
  * messages.
  *
- * To enable info level logging in the AzureIoT Middleware library either:
+ * To enable info level logging in the AzureIoT Middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
- *  - Enable FreeRTOS's logging stack by `#include <logging_stack.h>` and configuring its logging level to be at least error level.
  *
  * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
@@ -118,19 +111,16 @@
  * <b>Default value</b>: Info logging is turned off, and no code is generated for calls
  * to the macro in the Azure IoT Middleware library on compilation.
  */
-#ifndef LogInfo
+#ifndef AZLogInfo
     #define AZLogInfo( message )
-#else
-    #define AZLogInfo       LogInfo
 #endif
 
 /**
  * @brief Macro that is called in the Azure IoT Middleware library for logging "Debug" level
  * messages.
  *
- * To enable info level logging in the AzureIoT Middleware library either:
+ * To enable info level logging in the AzureIoT Middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
- *  - Enable FreeRTOS's logging stack by `#include <logging_stack.h>` and configuring its logging level to be at least error level.
  *
  * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
@@ -138,10 +128,8 @@
  * <b>Default value</b>: Debug logging is turned off, and no code is generated for calls
  * to the macro in the Azure IoT Middleware library on compilation.
  */
-#ifndef LogDebug
+#ifndef AZLogDebug
     #define AZLogDebug( message )
-#else
-    #define AZLogDebug       LogDebug
 #endif
 
 #endif /* AZURE_IOT_CONFIG_DEFAULTS_H */

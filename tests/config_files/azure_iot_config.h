@@ -4,41 +4,14 @@
 #ifndef AZURE_IOT_CONFIG_H
 #define AZURE_IOT_CONFIG_H
 
-/**************************************************/
-/******* DO NOT CHANGE the following order ********/
-/**************************************************/
-
-/* Include logging header files and define logging macros in the following order:
- * 1. Include the header file "logging_levels.h".
- * 2. Define the LIBRARY_LOG_NAME and LIBRARY_LOG_LEVEL macros depending on
- * the logging configuration for AzureIoT middleware.
- * 3. Include the header file "logging_stack.h", if logging is enabled for AzureIoT middleware.
- */
-
-#include "logging_levels.h"
-
-/* Logging configuration for the AzureIoT middleware library. */
-#ifndef LIBRARY_LOG_NAME
-    #define LIBRARY_LOG_NAME    "AZ IOT"
-#endif
-
-#ifndef LIBRARY_LOG_LEVEL
-    #define LIBRARY_LOG_LEVEL    LOG_DEBUG
-#endif
-
-#ifndef LOG_METADATA_ARGS
-    #define LOG_METADATA_ARGS    __func__, __LINE__
-#endif
-
 extern void vLoggingPrintf( const char * pcFormatString,
                             ... );
 
-#ifndef SdkLog
-    #define SdkLog( message )    vLoggingPrintf message
-#endif
-
-#include "logging_stack.h"
-/************ End of logging configuration ****************/
+#define AZLog( x )               vLoggingPrintf x
+#define AZLogError( message )    AZLog( ( "[ERROR] [AZ IoT] [%s:%d]", __FILE__, __LINE__ ) ); AZLog( message ); AZLog( ( "\r\n" ) )
+#define AZLogWarn( message )     AZLog( ( "[WARN] [AZ IoT] [%s:%d]", __FILE__, __LINE__ ) ); AZLog( message ); AZLog( ( "\r\n" ) )
+#define AZLogInfo( message )     AZLog( ( "[INFO] [AZ IoT] [%s:%d]", __FILE__, __LINE__ ) ); AZLog( message ); AZLog( ( "\r\n" ) )
+#define AZLogDebug( message )    AZLog( ( "[DEBUG] [AZ IoT] [%s:%d]", __FILE__, __LINE__ ) ); AZLog( message ); AZLog( ( "\r\n" ) )
 
 /**
  * This certificate is for test purposes only. See official 
