@@ -8,8 +8,8 @@ project(az_iot_middleware_freertos LANGUAGES C)
 set(CMAKE_C_STANDARD 99)
 
 # Add modules and include compiler options/switches
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake-modules")
-include(eng/cmake/global_compile_options.cmake)
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/cmake/modules")
+include(cmake/build/compile_options.cmake)
 
 # Options for building the lib
 option(build_ut_tests "Build the unit tests for the Azure IoT Middleware for FreeRTOS" OFF)
