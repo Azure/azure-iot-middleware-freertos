@@ -24,6 +24,8 @@ target_link_libraries(az_iot_middleware_freertos
     az::iot::provisioning
 )
 
+# Include port files
+# TODO: Have the user select the port path to use
 if(WIN32)
   target_include_directories(az_iot_middleware_freertos
     PRIVATE
@@ -36,10 +38,10 @@ if(WIN32)
   )
 endif()
 
+# Include FreeRTOS headers
 target_include_directories(az_iot_middleware_freertos
   PUBLIC
     ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/include
-    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS-Plus/Source/Utilities/logging
 )
 
 target_include_directories(az_iot_middleware_freertos
@@ -47,7 +49,6 @@ target_include_directories(az_iot_middleware_freertos
       ${CMAKE_CURRENT_LIST_DIR}/include
       ${CMAKE_CURRENT_LIST_DIR}/interface
 )
-
 
 # Check if custom mqtt port path is set, otherwise
 # use default coreMQTT port
