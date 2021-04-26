@@ -14,10 +14,15 @@ TEST_JOB_COUNT=${3:-2}
 echo -e "::group::Building unit tests"
 cmake -Dbuild_ut_tests=ON -Bbuild .
 cmake --build build -- --jobs=$TEST_CORES
-cd build
+pushd build
 
 echo -e "::group::Running unit tests"
 ctest -j $TEST_JOB_COUNT -C "debug" --output-on-failure --schedule-random -T test
+
+echo -e "::group::Code coverage"
+gcovr -r $(pwd) -f ../source/.*.c
+
+popd
 
 echo -e "::group::Building e2e tests"
 rm -rf build/
@@ -30,6 +35,3 @@ if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
 else
     echo -e "Skipping E2E tests"
 fi
-
-echo -e "::group::Code coverage"
-gcovr -r $(pwd) -f ../source/.*.c
