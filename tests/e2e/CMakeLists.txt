@@ -1,6 +1,5 @@
-
-############################################# Add E2E Tests ################################################
-
+# Copyright (c) Microsoft Corporation. All rights reserved.
+# SPDX-License-Identifier: MIT
 
 set(FREERTOS_ROOT_PATH "${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS")
 set(FREERTOS_PLUS_ROOT_PATH "${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS-Plus")
