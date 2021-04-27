@@ -6,9 +6,7 @@ set(FREERTOS_PLUS_ROOT_PATH "${az_iot_middleware_freertos_SOURCE_DIR}/libraries/
 
 include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
-add_compile_options(-m32 -ggdb3 -O0 -D_DEBUG -DprojCOVERAGE_TEST=0 -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\" -D_WINDOWS_)
-add_link_options(-ggdb3 -O0)
+add_compile_options(-DprojCOVERAGE_TEST=0 -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\")
 
 # Create FreeRTOS Lib
 
