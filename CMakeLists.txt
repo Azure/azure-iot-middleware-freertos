@@ -15,6 +15,7 @@ include(cmake/build/compile_options.cmake)
 option(build_ut_tests "Build the unit tests for the Azure IoT Middleware for FreeRTOS" OFF)
 option(build_e2e_tests "Build the e2e tests for the Azure IoT Middleware for FreeRTOS" OFF)
 set(config_directory CACHE STRING "The directory which has the FreeRTOSConfig.h and azure_iot_config.h")
+set(freertos_directory CACHE STRING "The directory which has the source code for FreeRTOS (as structured on their Github repo)")
 
 # If samples and tests aren't being built, then the user needs to provide a directory which has the necessary configs.
 if(NOT (build_ut_tests OR build_e2e_tests) AND "${config_directory}" STREQUAL "")
@@ -46,6 +47,17 @@ if(build_e2e_tests)
 
   set(config_directory ${CMAKE_CURRENT_LIST_DIR}/tests/config_files)
 endif()
+
+# If user has not supplied a FreeRTOS directory, fetch the content
+message("Fetching FreeRTOS - This could take up to a minute or so...")
+include(FetchContent)
+FetchContent_Declare(
+  freertos-repo
+  GIT_REPOSITORY        https://github.com/FreeRTOS/FreeRTOS.git
+  GIT_TAG               c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
+)
+
+FetchContent_MakeAvailable(freertos-repo)
 
 # Create the configuration interface library which the middleware will link to
 add_library(middleware_config INTERFACE)

@@ -29,20 +29,30 @@ target_link_libraries(az_iot_middleware_freertos
 if(WIN32)
   target_include_directories(az_iot_middleware_freertos
     PRIVATE
-      ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/MSVC-MingW
+      ${freertos-repo_SOURCE_DIR}/FreeRTOS/Source/portable/MSVC-MingW
   )
 elseif(UNIX)
   target_include_directories(az_iot_middleware_freertos
     PRIVATE
-      ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/ThirdParty/GCC/Posix
+      ${freertos-repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix
   )
 endif()
 
-# Include FreeRTOS headers
-target_include_directories(az_iot_middleware_freertos
-  PUBLIC
-    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/include
-)
+# If the user doesn't supply a path for FreeRTOS, use the fetched content.
+if("${freertos_directory}" STREQUAL "")
+  # Include FreeRTOS headers
+  target_include_directories(az_iot_middleware_freertos
+    PUBLIC
+      ${freertos-repo_SOURCE_DIR}/FreeRTOS/Source/include
+  )
+else()
+  # Include FreeRTOS headers
+  target_include_directories(az_iot_middleware_freertos
+    PUBLIC
+      ${freertos_directory}/FreeRTOS/Source/include
+  )
+endif()
+
 
 target_include_directories(az_iot_middleware_freertos
     PUBLIC

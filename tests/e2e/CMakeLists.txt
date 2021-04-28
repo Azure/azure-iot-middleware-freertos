@@ -1,22 +1,11 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-include(FetchContent)
-
 include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)
 
 add_compile_options(-DprojCOVERAGE_TEST=0 -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\")
 
 # Create FreeRTOS Lib
-
-message("Fetching FreeRTOS - This could take up to a minute or so...")
-FetchContent_Declare(
-  freertos-repo
-  GIT_REPOSITORY        https://github.com/FreeRTOS/FreeRTOS.git
-  GIT_TAG               c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
-)
-
-FetchContent_MakeAvailable(freertos-repo)
 
 add_library(freertos
   ${freertos-repo_SOURCE_DIR}/FreeRTOS/Source/croutine.c
