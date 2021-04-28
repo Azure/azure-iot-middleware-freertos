@@ -24,11 +24,6 @@ gcovr -r $(pwd) -f ../source/.*.c
 
 popd
 
-echo -e "::group::Building e2e tests"
-rm -rf build/
-cmake -Dbuild_e2e_tests=ON -Bbuild .
-cmake --build build -- --jobs=$TEST_CORES
-
 if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
     echo -e "::group::Running E2E tests"
     ./tests/e2e/run.sh veth1
