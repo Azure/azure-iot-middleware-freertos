@@ -1,7 +1,7 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.14)
 
 project(az_iot_middleware_freertos LANGUAGES C)
 
