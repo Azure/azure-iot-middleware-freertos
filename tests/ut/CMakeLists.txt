@@ -4,12 +4,12 @@
 cmake_minimum_required(VERSION 3.13)
 
 # FreeRTOS Kernel include
-include_directories(${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/include)
+include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/include)
 
 if(WIN32)
-  include_directories(${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/MSVC-MingW)
+  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/MSVC-MingW)
 elseif(UNIX)
-  include_directories(${az_iot_middleware_freertos_SOURCE_DIR}/libraries/FreeRTOS/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
+  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
 endif()
 
 include(AddCMockaTest)

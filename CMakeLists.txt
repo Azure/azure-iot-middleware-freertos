@@ -52,7 +52,7 @@ endif()
 message("Fetching FreeRTOS - This could take up to a minute or so...")
 include(FetchContent)
 FetchContent_Declare(
-  freertos-repo
+  freertos_repo
   GIT_REPOSITORY        https://github.com/FreeRTOS/FreeRTOS.git
   GIT_TAG               c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
 )
