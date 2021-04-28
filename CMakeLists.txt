@@ -57,7 +57,7 @@ FetchContent_Declare(
   GIT_TAG               c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
 )
 
-FetchContent_MakeAvailable(freertos-repo)
+FetchContent_MakeAvailable(freertos_repo)
 
 # Create the configuration interface library which the middleware will link to
 add_library(middleware_config INTERFACE)
