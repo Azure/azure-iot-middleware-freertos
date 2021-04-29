@@ -5,6 +5,24 @@ cmake_minimum_required(VERSION 3.13)
 
 set(CMAKE_C_STANDARD 99)
 
+# Add coreMQTT Lib
+add_library(coremqtt
+  ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/core_mqtt_serializer.c
+  ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/core_mqtt_state.c
+  ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/core_mqtt.c
+)
+
+target_include_directories(coremqtt
+  PUBLIC
+    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/include
+    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/interface
+)
+
+target_link_libraries(coremqtt
+  PRIVATE
+    freertos_plus
+)
+
 # Azure IoT FreeRTOS Middleware Library
 add_library(az_iot_middleware_freertos
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_hub_client.c
@@ -41,7 +59,7 @@ target_include_directories(az_iot_middleware_freertos
 
 # Check if custom mqtt port path is set, otherwise
 # use default coreMQTT port
-if(AZURE_IOT_MQTT_PORT)
+if(NOT( "${AZURE_IOT_MQTT_PORT}" STREQUAL "" ))
   target_include_directories(az_iot_middleware_freertos
     PRIVATE
       ${AZURE_IOT_MQTT_PORT}
