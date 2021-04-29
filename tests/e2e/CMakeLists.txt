@@ -174,25 +174,6 @@ target_link_libraries(mbedtls
     freertos
 )
 
-# Add coreMQTT Lib
-
-add_library(coremqtt
-  ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/core_mqtt_serializer.c
-  ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/core_mqtt_state.c
-  ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/core_mqtt.c
-)
-
-target_include_directories(coremqtt
-  PUBLIC
-    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/include
-    ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/interface
-)
-
-target_link_libraries(coremqtt
-  PRIVATE
-    freertos_plus
-)
-
 # Add E2E Test Executable
 
 add_executable(azure_iot_e2e_tests
