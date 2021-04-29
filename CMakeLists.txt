@@ -75,6 +75,9 @@ if(build_ut_tests)
 
   # Include config files for all targets
   include_directories(${CMAKE_CURRENT_LIST_DIR}/tests/config_files)
+
+  # Logging levels
+  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/Source/Utilities/logging)
 endif()
 
 if(build_e2e_tests)

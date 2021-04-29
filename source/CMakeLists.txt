@@ -18,11 +18,6 @@ target_include_directories(coremqtt
     ${az_iot_middleware_freertos_SOURCE_DIR}/libraries/coreMQTT/source/interface
 )
 
-target_link_libraries(coremqtt
-  PRIVATE
-    freertos_plus
-)
-
 # Azure IoT FreeRTOS Middleware Library
 add_library(az_iot_middleware_freertos
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_hub_client.c
@@ -36,20 +31,6 @@ target_link_libraries(az_iot_middleware_freertos
     az::iot::hub
     az::iot::provisioning
 )
-
-# Include port files
-# TODO: Have the user select the port path to use
-if(WIN32)
-  target_include_directories(az_iot_middleware_freertos
-    PRIVATE
-      ${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/MSVC-MingW
-  )
-elseif(UNIX)
-  target_include_directories(az_iot_middleware_freertos
-    PRIVATE
-      ${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix
-  )
-endif()
 
 target_include_directories(az_iot_middleware_freertos
     PUBLIC
