@@ -52,19 +52,17 @@ endif()
 # Include user port directory
 if(NOT( "${freertos_port_directory}" STREQUAL "" ))
   include_directories(${freertos_port_directory})
+  # Include port files for all targets
+elseif(WIN32)
+  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/MSVC-MingW)
+elseif(UNIX)
+  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
 endif()
 
 # If testing, turn on relevant switches and add configurations.
 if(build_ut_tests OR build_e2e_tests)
   include(CTest)
   enable_testing()
-
-  # Include port files for all targets
-  if(WIN32)
-    include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/MSVC-MingW)
-  elseif(UNIX)
-    include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
-  endif()
 
   # Include config files for all targets
   include_directories(${CMAKE_CURRENT_LIST_DIR}/tests/config_files)
@@ -105,5 +103,5 @@ endif()
 if(build_e2e_tests AND NOT ${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
   message(FATAL_ERROR "E2E tests must be run on Linux")
 elseif(build_e2e_tests)
-  add_subdirectory(tests/e2e)
+  # add_subdirectory(tests/e2e)
 endif()
