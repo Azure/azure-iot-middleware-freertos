@@ -12,11 +12,6 @@ add_library(az_iot_middleware_freertos
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot.c
 )
 
-# The user needs to supply this
-target_link_libraries(az_iot_middleware_freertos
-  PUBLIC
-    middleware_config)
-
 target_link_libraries(az_iot_middleware_freertos
   PUBLIC
     az::iot::common
@@ -38,22 +33,6 @@ elseif(UNIX)
   )
 endif()
 
-# If the user doesn't supply a path for FreeRTOS, use the fetched content.
-if("${freertos_directory}" STREQUAL "")
-  # Include FreeRTOS headers
-  target_include_directories(az_iot_middleware_freertos
-    PUBLIC
-      ${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/include
-  )
-else()
-  # Include FreeRTOS headers
-  target_include_directories(az_iot_middleware_freertos
-    PUBLIC
-      ${freertos_directory}/FreeRTOS/Source/include
-  )
-endif()
-
-
 target_include_directories(az_iot_middleware_freertos
     PUBLIC
       ${CMAKE_CURRENT_LIST_DIR}/include
@@ -66,11 +45,6 @@ if(AZURE_IOT_MQTT_PORT)
   target_include_directories(az_iot_middleware_freertos
     PRIVATE
       ${AZURE_IOT_MQTT_PORT}
-  )
-
-  target_link_libraries(az_iot_middleware_freertos
-    PRIVATE
-      middleware_config
   )
 else()
   # Include coreMQTT port

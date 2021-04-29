@@ -209,7 +209,6 @@ target_include_directories(azure_iot_e2e_tests
 
 target_link_libraries(azure_iot_e2e_tests
   PRIVATE
-    middleware_config
     freertos
     freertos_plus
     coremqtt

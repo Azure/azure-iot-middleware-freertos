@@ -25,7 +25,6 @@ gcovr -r $(pwd) -f ../source/.*.c
 popd
 
 if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
-    echo -e "::group::Running E2E tests"
     ./tests/e2e/run.sh veth1
 else
     echo -e "Skipping E2E tests"

@@ -3,14 +3,11 @@
 
 cmake_minimum_required(VERSION 3.13)
 
+# Include files for all tests
+include_directories(${CMAKE_CURRENT_LIST_DIR}/tests/ut)
+
 # FreeRTOS Kernel include
 include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/include)
-
-if(WIN32)
-  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/MSVC-MingW)
-elseif(UNIX)
-  include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
-endif()
 
 include(AddCMockaTest)
 
@@ -26,7 +23,6 @@ add_cmocka_test(azure_iot_ut
   LINK_LIBRARIES
     cmocka
     az::iot_middleware::freertos
-    middleware_config
   LINK_OPTIONS ${MOCK_LINKER_OPTIONS}
   INCLUDE_DIRECTORIES
     ${CMOCKA_INCLUDE_DIR}
@@ -43,7 +39,6 @@ add_cmocka_test(azure_iot_hub_client_ut
   LINK_LIBRARIES
     cmocka
     az::iot_middleware::freertos
-    middleware_config
   LINK_OPTIONS ${MOCK_LINKER_OPTIONS}
   INCLUDE_DIRECTORIES
     ${CMOCKA_INCLUDE_DIR}
@@ -60,7 +55,6 @@ add_cmocka_test(azure_iot_provisioning_client_ut
   LINK_LIBRARIES
     cmocka
     az::iot_middleware::freertos
-    middleware_config
   LINK_OPTIONS ${MOCK_LINKER_OPTIONS}
   INCLUDE_DIRECTORIES
     ${CMOCKA_INCLUDE_DIR}
