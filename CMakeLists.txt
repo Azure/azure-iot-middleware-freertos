@@ -16,7 +16,7 @@ option(build_ut_tests "Build the unit tests for the Azure IoT Middleware for Fre
 option(build_e2e_tests "Build the e2e tests for the Azure IoT Middleware for FreeRTOS" OFF)
 set(config_directory CACHE STRING "The directory which has the FreeRTOSConfig.h and azure_iot_config.h")
 set(freertos_directory CACHE STRING "The directory which has the source code for FreeRTOS (as structured on their Github repo)")
-set(port_directory CACHE STRING "The directory which has the port layer for FreeRTOS")
+set(freertos_port_directory CACHE STRING "The directory which has the port layer for FreeRTOS")
 
 # If samples and tests aren't being built, then the user needs to provide a directory which has the necessary configs.
 if(NOT (build_ut_tests OR build_e2e_tests) AND "${config_directory}" STREQUAL "")
@@ -50,8 +50,8 @@ if(NOT( "${config_directory}" STREQUAL "" ))
 endif()
 
 # Include user port directory
-if(NOT( "${port_directory}" STREQUAL "" ))
-  include_directories(${port_directory})
+if(NOT( "${freertos_port_directory}" STREQUAL "" ))
+  include_directories(${freertos_port_directory})
 endif()
 
 # If testing, turn on relevant switches and add configurations.
