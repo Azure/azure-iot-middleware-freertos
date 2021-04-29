@@ -1,6 +1,8 @@
 /* Copyright (c) Microsoft Corporation. All rights reserved. */
 /* SPDX-License-Identifier: MIT */
 
+#include "demo_key_provisioning.h"
+
 /* Standard includes. */
 #include <string.h>
 #include <stdio.h>
@@ -552,6 +554,7 @@ uint32_t DemoKeyProvision()
     CK_SESSION_HANDLE xSession = 0;
 
     xPKCSResult = C_GetFunctionList( &pxFunctionList );
+    configASSERT( xPKCSResult == CKR_OK );
 
     /* Initialize the PKCS Module */
     if( ( xPKCSResult = xInitializePkcs11Token() ) != CKR_OK )

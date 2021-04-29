@@ -11,6 +11,7 @@
 
 /* Demo Specific configs. */
 #include "demo_config.h"
+#include "demo_key_provisioning.h"
 
 /* Azure Provisioning/IoTHub library includes */
 #include "azure_iot_hub_client.h"
@@ -101,16 +102,31 @@
  */
 #define sampleazureiotProvisioning_Registration_TIMEOUT_MS    ( 20U )
 
+/**
+ * @brief Max hostname.
+ */
+#define sampleazureiotHostname_Max                            ( 128U )
+
+/**
+ * @brief Max device id.
+ */
+#define sampleazureiotDevice_Id_Max                           ( 128U )
+
+/**
+ * @brief Max device id.
+ */
+#define sampleazureiotTelemetry_Propeties_Max                 ( 32U )
+
 /*-----------------------------------------------------------*/
 
 /* Define buffer for IoTHub info.  */
 #ifdef democonfigENABLE_DPS_SAMPLE
-    static uint8_t ucSampleIotHubHostname[ 128 ];
-    static uint8_t ucSampleIotHubDeviceId[ 128 ];
+    static uint8_t ucSampleIotHubHostname[ sampleazureiotHostname_Max ];
+    static uint8_t ucSampleIotHubDeviceId[ sampleazureiotDevice_Id_Max ];
     static AzureIoTProvisioningClient_t xAzureIoTProvisioningClient;
 #endif /* democonfigENABLE_DPS_SAMPLE */
 
-static uint8_t ucPropertyBuffer[ 32 ];
+static uint8_t ucPropertyBuffer[ sampleazureiotTelemetry_Propeties_Max ];
 
 /* Each compilation unit must define the NetworkContext struct. */
 struct NetworkContext
@@ -121,8 +137,6 @@ struct NetworkContext
 static AzureIoTHubClient_t xAzureIoTHubClient;
 
 /*-----------------------------------------------------------*/
-
-extern uint32_t DemoKeyProvision();
 
 #ifdef democonfigENABLE_DPS_SAMPLE
 
@@ -135,11 +149,11 @@ extern uint32_t DemoKeyProvision();
  * @param[out] ppucIothubDeviceId  Pointer to uint8_t* deviceId return from Provisioning Service
  * @param[inout] pulIothubDeviceIdLength  Length of deviceId
  */
-    static uint32_t prvIoTHubInfoGet( NetworkCredentials_t * pXNetworkCredentials,
-                                      uint8_t ** ppucIothubHostname,
-                                      uint32_t * pulIothubHostnameLength,
-                                      uint8_t ** ppucIothubDeviceId,
-                                      uint32_t * pulIothubDeviceIdLength );
+    static uint32_t prvGetIoTHubInfoFromDPS( NetworkCredentials_t * pXNetworkCredentials,
+                                             uint8_t ** ppucIothubHostname,
+                                             uint32_t * pulIothubHostnameLength,
+                                             uint8_t ** ppucIothubDeviceId,
+                                             uint32_t * pulIothubDeviceIdLength );
 
 #endif /* democonfigENABLE_DPS_SAMPLE */
 
@@ -188,64 +202,6 @@ static uint8_t ucSharedBuffer[ democonfigNETWORK_BUFFER_SIZE ];
 static uint64_t ulGlobalEntryTime = 1639093301;
 /*-----------------------------------------------------------*/
 
-
-static void prvHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
-                                   void * pvContext )
-{
-    ( void ) pvContext;
-
-    LogInfo( ( "Cloud message payload : %.*s \r\n",
-               pxMessage->ulPayloadLength,
-               pxMessage->pvMessagePayload ) );
-}
-/*-----------------------------------------------------------*/
-
-static void prvHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
-                                   void * pvContext )
-{
-    LogInfo( ( "Method payload : %.*s \r\n",
-               pxMessage->ulPayloadLength,
-               pxMessage->pvMessagePayload ) );
-
-    AzureIoTHubClient_t * xHandle = ( AzureIoTHubClient_t * ) pvContext;
-
-    if( AzureIoTHubClient_SendMethodResponse( xHandle, pxMessage, 200,
-                                              NULL, 0 ) != eAzureIoTHubClientSuccess )
-    {
-        LogInfo( ( "Error sending method response\r\n" ) );
-    }
-}
-/*-----------------------------------------------------------*/
-
-static void prvHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
-                                        void * pvContext )
-{
-    ( void ) pvContext;
-
-    switch( pxMessage->xMessageType )
-    {
-        case eAzureIoTHubTwinGetMessage:
-            LogInfo( ( "Device twin document GET received" ) );
-            break;
-
-        case eAzureIoTHubTwinReportedResponseMessage:
-            LogInfo( ( "Device twin reported property response received" ) );
-            break;
-
-        case eAzureIoTHubTwinDesiredPropertyMessage:
-            LogInfo( ( "Device twin desired property received" ) );
-            break;
-
-        default:
-            LogError( ( "Unknown twin message" ) );
-    }
-
-    LogInfo( ( "Twin document payload : %.*s \r\n",
-               pxMessage->ulPayloadLength,
-               pxMessage->pvMessagePayload ) );
-}
-/*-----------------------------------------------------------*/
-
 static uint32_t prvInitMbedtls( void )
 {
     /* Set the mutex functions for mbed TLS thread safety. */
@@ -258,6 +214,11 @@ static uint32_t prvInitMbedtls( void )
 }
 /*-----------------------------------------------------------*/
 
+/**
+ *  Setup the root CA and client side certs. After this Mbedtls can use these certs to
+ *  Authenticate/Authorize the endpoint we are connecting to.
+ *
+ **/
 static uint32_t prvSetupNetworkCredentials( NetworkCredentials_t * pxNetworkCredentials )
 {
     pxNetworkCredentials->disableSni = democonfigDISABLE_SNI;
@@ -328,9 +289,9 @@ static void prvAzureDemoTask( void * pvParameters )
 
     #ifdef democonfigENABLE_DPS_SAMPLE
         /* Run DPS.  */
-        if( ( ulStatus = prvIoTHubInfoGet( &xNetworkCredentials, &pucIotHubHostname,
-                                           &pulIothubHostnameLength, &pucIotHubDeviceId,
-                                           &pulIothubDeviceIdLength ) ) != 0 )
+        if( ( ulStatus = prvGetIoTHubInfoFromDPS( &xNetworkCredentials, &pucIotHubHostname,
+                                                  &pulIothubHostnameLength, &pucIotHubDeviceId,
+                                                  &pulIothubDeviceIdLength ) ) != 0 )
         {
             LogError( ( "Failed on sample_dps_entry!: error code = 0x%08x\r\n", ulStatus ) );
             return;
@@ -385,24 +346,7 @@ static void prvAzureDemoTask( void * pvParameters )
                                              sampleazureiotCONNACK_RECV_TIMEOUT_MS );
         configASSERT( xResult == eAzureIoTHubClientSuccess );
 
-        /**************************** Enable features. ******************************/
-
-        xResult = AzureIoTHubClient_SubscribeCloudToDeviceMessage( &xAzureIoTHubClient, prvHandleCloudMessage,
-                                                                   &xAzureIoTHubClient, ULONG_MAX );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
-        xResult = AzureIoTHubClient_SubscribeDirectMethod( &xAzureIoTHubClient, prvHandleDirectMethod,
-                                                           &xAzureIoTHubClient, ULONG_MAX );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
-        xResult = AzureIoTHubClient_SubscribeDeviceTwin( &xAzureIoTHubClient, prvHandleDeviceTwinMessage,
-                                                         &xAzureIoTHubClient, ULONG_MAX );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
-        /* Get the device twin on boot */
-        xResult = AzureIoTHubClient_GetDeviceTwin( &xAzureIoTHubClient );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
+        /****************** Publish and Keep Alive Loop. **********************/
         /* Create a bag of properties for the telemetry */
         xResult = AzureIoT_MessagePropertiesInit( &xPropertyBag, ucPropertyBuffer, 0, sizeof( xPropertyBag ) );
         configASSERT( xResult == eAzureIoTHubClientSuccess );
@@ -411,7 +355,6 @@ static void prvAzureDemoTask( void * pvParameters )
                                                     ( uint8_t * ) "value", sizeof( "value" ) - 1 );
         configASSERT( xResult == eAzureIoTHubClientSuccess );
 
-        /****************** Publish and Keep Alive Loop. **********************/
         /* Publish messages with QoS1, send and process Keep alive messages. */
         for( ulPublishCount = 0; ulPublishCount < ulMaxPublishCount; ulPublishCount++ )
         {
@@ -442,20 +385,6 @@ static void prvAzureDemoTask( void * pvParameters )
         }
 
         /**************************** Disconnect. *****************************/
-
-        xResult = AzureIoTHubClient_UnsubscribeDeviceTwin( &xAzureIoTHubClient );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
-        xResult = AzureIoTHubClient_UnsubscribeDirectMethod( &xAzureIoTHubClient );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
-        xResult = AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( &xAzureIoTHubClient );
-        configASSERT( xResult == eAzureIoTHubClientSuccess );
-
-        /* Send an MQTT Disconnect packet over the already connected TLS over
-         * TCP connection. There is no corresponding response for the disconnect
-         * packet. After sending disconnect, client must close the network
-         * connection. */
         xResult = AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
         configASSERT( xResult == eAzureIoTHubClientSuccess );
 
@@ -473,11 +402,11 @@ static void prvAzureDemoTask( void * pvParameters )
 
 #ifdef democonfigENABLE_DPS_SAMPLE
 
-    static uint32_t prvIoTHubInfoGet( NetworkCredentials_t * pXNetworkCredentials,
-                                      uint8_t ** ppucIothubHostname,
-                                      uint32_t * pulIothubHostnameLength,
-                                      uint8_t ** ppucIothubDeviceId,
-                                      uint32_t * pulIothubDeviceIdLength )
+    static uint32_t prvGetIoTHubInfoFromDPS( NetworkCredentials_t * pXNetworkCredentials,
+                                             uint8_t ** ppucIothubHostname,
+                                             uint32_t * pulIothubHostnameLength,
+                                             uint8_t ** ppucIothubDeviceId,
+                                             uint32_t * pulIothubDeviceIdLength )
     {
         NetworkContext_t xNetworkContext = { 0 };
         TlsTransportParams_t xTlsTransportParams = { 0 };
