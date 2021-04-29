@@ -55,16 +55,9 @@ if(NOT( "${port_directory}" STREQUAL "" ))
 endif()
 
 # If testing, turn on relevant switches and add configurations.
-if(build_ut_tests)
+if(build_ut_tests OR build_e2e_tests)
   include(CTest)
   enable_testing()
-
-  # Turn on the flags necessary for code coverage
-  add_compile_options(-fprofile-arcs -ftest-coverage -O0 -g3)
-  add_link_options(-fprofile-arcs -ftest-coverage)
-
-  # Set the port and config files
-  set(AZURE_IOT_MQTT_PORT ${CMAKE_CURRENT_LIST_DIR}/tests/ut)
 
   # Include port files for all targets
   if(WIN32)
@@ -78,15 +71,20 @@ if(build_ut_tests)
 
   # Logging levels
   include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/Source/Utilities/logging)
-endif()
 
-if(build_e2e_tests)
-  include(CTest)
-  enable_testing()
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+  if(build_ut_tests)
+    # Turn on the flags necessary for code coverage
+    add_compile_options(-fprofile-arcs -ftest-coverage -O0 -g3)
+    add_link_options(-fprofile-arcs -ftest-coverage)
 
-  # Include config files for all targets
-  include_directories(${CMAKE_CURRENT_LIST_DIR}/tests/config_files)
+    # Set the port and config files
+    set(AZURE_IOT_MQTT_PORT ${CMAKE_CURRENT_LIST_DIR}/tests/ut)
+  endif()
+
+  if(build_e2e_tests)
+    # Must build for 32 bit
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+  endif()
 endif()
 
 # Add the embedded SDK library
