@@ -40,6 +40,6 @@ sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFA
 echo -e "::group::Building E2E tests"
 cd $dir/device; cmake -Dbuild_e2e_tests=ON -Bbuild ../../.. ; cmake --build build
 
-echo -e "::group::Running E@E tests"
+echo -e "::group::Running E2E tests"
 export DEVICE_TEST_EXE="$dir/device/build/tests/e2e/azure_iot_e2e_tests"
 cd $dir/service; stdbuf -o0 ./mocha_exec.sh alltest
