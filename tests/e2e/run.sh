@@ -38,8 +38,8 @@ index=`tcpdump --list-interfaces | grep -Ei "([0-9]+).$1" | sed -E 's/^([0-9]+).
 sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFACE_TO_USE ($index)/g" $test_root_dir/config_files/FreeRTOSConfig.h
 
 echo -e "::group::Building E2E tests"
-cd $dir/device; cmake -Dbuild_e2e_tests=ON -Bbuild ../../.. ; cmake --build build
+cd $dir/device; cmake -Dbuild_e2e_tests=ON -Bbuild ../ ; cmake --build build
 
 echo -e "::group::Running E2E tests"
-export DEVICE_TEST_EXE="$dir/device/build/tests/e2e/azure_iot_e2e_tests"
+export DEVICE_TEST_EXE="$dir/device/build/azure_iot_e2e_tests"
 cd $dir/service; stdbuf -o0 ./mocha_exec.sh alltest

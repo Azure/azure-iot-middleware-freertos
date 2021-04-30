@@ -1,12 +1,40 @@
 # Copyright (c) Microsoft Corporation. All rights reserved.
 # SPDX-License-Identifier: MIT
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)
+cmake_minimum_required(VERSION 3.13)
+
+project(az_iot_middleware_freertos_e2e_tests)
+
+if(NOT UNIX)
+  message(FATAL_ERROR "E2E tests must be run on Linux")
+endif()
+
+include(CTest)
+enable_testing()
+
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)# Include config
 
 add_compile_options(-DprojCOVERAGE_TEST=0 -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\")
 
-# Create FreeRTOS Lib
+message("Fetching FreeRTOS - This could take up to a minute or so...")
+include(FetchContent)
+FetchContent_Declare(
+  freertos_repo
+  GIT_REPOSITORY        https://github.com/FreeRTOS/FreeRTOS.git
+  GIT_TAG               c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
+)
+FetchContent_MakeAvailable(freertos_repo)
 
+include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/include)
+include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/Source/Utilities/logging)
+include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
+
+# Add source files and libs
+add_subdirectory(../../source source)
+
+# Create FreeRTOS Lib
 add_library(freertos
   ${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/croutine.c
   ${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/event_groups.c
@@ -28,7 +56,6 @@ target_include_directories(freertos
 )
 
 # Create FreeRTOS Plus Lib
-
 add_library(freertos_plus
   ${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/FreeRTOS_DNS.c
   ${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/Source/FreeRTOS-Plus-TCP/FreeRTOS_DHCP.c
@@ -73,7 +100,6 @@ target_link_libraries(freertos_plus
 )
 
 # Create mbedTLS Lib
-
 add_library(mbedtls
   ${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/ThirdParty/mbedtls/library/aes.c
   ${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/ThirdParty/mbedtls/library/aesni.c
@@ -175,7 +201,6 @@ target_link_libraries(mbedtls
 )
 
 # Add E2E Test Executable
-
 add_executable(azure_iot_e2e_tests
   ${CMAKE_CURRENT_LIST_DIR}/device/mbedtls_freertos_port.c
   ${CMAKE_CURRENT_LIST_DIR}/device/e2e_device_commands.c
