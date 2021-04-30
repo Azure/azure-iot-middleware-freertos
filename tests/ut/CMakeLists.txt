@@ -21,14 +21,9 @@ add_compile_options(-fprofile-arcs -ftest-coverage -O0 -g3)
 add_link_options(-fprofile-arcs -ftest-coverage)
 set(MOCK_LINKER_OPTIONS "-Wl,--gc-sections")
 
-message("Fetching FreeRTOS - This could take up to a minute or so...")
-include(FetchContent)
-FetchContent_Declare(
-  freertos_repo
-  GIT_REPOSITORY        https://github.com/FreeRTOS/FreeRTOS.git
-  GIT_TAG               c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
-)
-FetchContent_MakeAvailable(freertos_repo)
+if("${freertos_repo_SOURCE_DIR}" STREQUAL "")
+  message(FATAL_ERROR "The Unit tests needs a FreeRTOS directory.")
+endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)
