@@ -4,3 +4,6 @@
 [submodule "libraries/azure-sdk-for-c"]
 	path = libraries/azure-sdk-for-c
 	url = https://github.com/Azure/azure-sdk-for-c.git
+[submodule "libraries/FreeRTOS"]
+	path = libraries/FreeRTOS
+	url = https://github.com/FreeRTOS/FreeRTOS.git
