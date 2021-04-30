@@ -61,4 +61,4 @@ dkms.conf
 *.user
 
 # CMake build directory
-build/
+/build
