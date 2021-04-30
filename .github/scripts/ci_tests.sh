@@ -11,8 +11,22 @@ TEST_RUN_E2E_TESTS=${1:-1}
 TEST_CORES=${2:-2}
 TEST_JOB_COUNT=${3:-2}
 
+echo -e "::group::FreeRTOS Source"
+
+if [ ! -d "libraries/FreeRTOS" ]; then
+    git clone https://github.com/FreeRTOS/FreeRTOS.git libraries/FreeRTOS
+    pushd libraries/FreeRTOS
+    git checkout -b c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
+    git submodule sync
+    git submodule update --init --recursive --depth=1
+    popd
+fi
+
+echo -e "Using FreeRTOS in libraries/FreeRTOS (`git name-rev --name-only HEAD`)"
+TEST_FREERTOS_SRC=`pwd`/libraries/FreeRTOS
+
 echo -e "::group::Building unit tests"
-cmake -Bbuild ./tests/ut
+cmake -Bbuild -Dfreertos_repo_SOURCE_DIR=$TEST_FREERTOS_SRC ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
 pushd build
 
@@ -25,7 +39,7 @@ gcovr -r $(pwd) -f ../source/.*.c
 popd
 
 if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
-    ./tests/e2e/run.sh veth1
+    ./tests/e2e/run.sh veth1 $TEST_FREERTOS_SRC
 else
     echo -e "Skipping E2E tests"
 fi
