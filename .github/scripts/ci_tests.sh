@@ -12,7 +12,7 @@ TEST_CORES=${2:-2}
 TEST_JOB_COUNT=${3:-2}
 
 echo -e "::group::Building unit tests"
-cmake -Dbuild_ut_tests=ON -Bbuild ./tests/ut
+cmake -Bbuild ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
 pushd build
 
