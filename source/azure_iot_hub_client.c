@@ -103,7 +103,7 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     ( void ) pxIncomingPacket;
 
     configASSERT( pxIncomingPacket != NULL );
-    configASSERT( ( pxIncomingPacket->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK );
+    configASSERT( ( azureiotmqttGET_PACKET_TYPE( pxIncomingPacket->ucType ) ) == azureiotmqttPACKET_TYPE_SUBACK );
 
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
@@ -138,11 +138,11 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
     /* First element in AzureIoTHubClientHandle */
     AzureIoTHubClient_t * pxAzureIoTHubClient = ( AzureIoTHubClient_t * ) pxMQTTContext;
 
-    if( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_PUBLISH )
+    if( ( azureiotmqttGET_PACKET_TYPE( pxPacketInfo->ucType ) ) == azureiotmqttPACKET_TYPE_PUBLISH )
     {
         prvMQTTProcessIncomingPublish( pxAzureIoTHubClient, pxDeserializedInfo->pxPublishInfo );
     }
-    else if( ( pxPacketInfo->ucType & 0xF0U ) == azureiotmqttPACKET_TYPE_SUBACK )
+    else if( ( azureiotmqttGET_PACKET_TYPE( pxPacketInfo->ucType ) ) == azureiotmqttPACKET_TYPE_SUBACK )
     {
         prvMQTTProcessSuback( pxAzureIoTHubClient, pxPacketInfo, pxDeserializedInfo->usPacketIdentifier );
     }

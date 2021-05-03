@@ -20,20 +20,22 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
-#define azureiotmqttPACKET_TYPE_CONNECT        ( ( uint8_t ) 0x10U )  /** @brief CONNECT (client-to-server). */
-#define azureiotmqttPACKET_TYPE_CONNACK        ( ( uint8_t ) 0x20U )  /** @brief CONNACK (server-to-client). */
-#define azureiotmqttPACKET_TYPE_PUBLISH        ( ( uint8_t ) 0x30U )  /** @brief PUBLISH (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBACK         ( ( uint8_t ) 0x40U )  /** @brief PUBACK (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBREC         ( ( uint8_t ) 0x50U )  /** @brief PUBREC (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBREL         ( ( uint8_t ) 0x62U )  /** @brief PUBREL (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBCOMP        ( ( uint8_t ) 0x70U )  /** @brief PUBCOMP (bidirectional). */
-#define azureiotmqttPACKET_TYPE_SUBSCRIBE      ( ( uint8_t ) 0x82U )  /** @brief SUBSCRIBE (client-to-server). */
-#define azureiotmqttPACKET_TYPE_SUBACK         ( ( uint8_t ) 0x90U )  /** @brief SUBACK (server-to-client). */
-#define azureiotmqttPACKET_TYPE_UNSUBSCRIBE    ( ( uint8_t ) 0xA2U )  /** @brief UNSUBSCRIBE (client-to-server). */
-#define azureiotmqttPACKET_TYPE_UNSUBACK       ( ( uint8_t ) 0xB0U )  /** @brief UNSUBACK (server-to-client). */
-#define azureiotmqttPACKET_TYPE_PINGREQ        ( ( uint8_t ) 0xC0U )  /** @brief PINGREQ (client-to-server). */
-#define azureiotmqttPACKET_TYPE_PINGRESP       ( ( uint8_t ) 0xD0U )  /** @brief PINGRESP (server-to-client). */
-#define azureiotmqttPACKET_TYPE_DISCONNECT     ( ( uint8_t ) 0xE0U )  /** @brief DISCONNECT (client-to-server). */
+#define azureiotmqttPACKET_TYPE_CONNECT        ( ( uint8_t ) 0x10U )    /** @brief CONNECT (client-to-server). */
+#define azureiotmqttPACKET_TYPE_CONNACK        ( ( uint8_t ) 0x20U )    /** @brief CONNACK (server-to-client). */
+#define azureiotmqttPACKET_TYPE_PUBLISH        ( ( uint8_t ) 0x30U )    /** @brief PUBLISH (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBACK         ( ( uint8_t ) 0x40U )    /** @brief PUBACK (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBREC         ( ( uint8_t ) 0x50U )    /** @brief PUBREC (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBREL         ( ( uint8_t ) 0x62U )    /** @brief PUBREL (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBCOMP        ( ( uint8_t ) 0x70U )    /** @brief PUBCOMP (bidirectional). */
+#define azureiotmqttPACKET_TYPE_SUBSCRIBE      ( ( uint8_t ) 0x82U )    /** @brief SUBSCRIBE (client-to-server). */
+#define azureiotmqttPACKET_TYPE_SUBACK         ( ( uint8_t ) 0x90U )    /** @brief SUBACK (server-to-client). */
+#define azureiotmqttPACKET_TYPE_UNSUBSCRIBE    ( ( uint8_t ) 0xA2U )    /** @brief UNSUBSCRIBE (client-to-server). */
+#define azureiotmqttPACKET_TYPE_UNSUBACK       ( ( uint8_t ) 0xB0U )    /** @brief UNSUBACK (server-to-client). */
+#define azureiotmqttPACKET_TYPE_PINGREQ        ( ( uint8_t ) 0xC0U )    /** @brief PINGREQ (client-to-server). */
+#define azureiotmqttPACKET_TYPE_PINGRESP       ( ( uint8_t ) 0xD0U )    /** @brief PINGRESP (server-to-client). */
+#define azureiotmqttPACKET_TYPE_DISCONNECT     ( ( uint8_t ) 0xE0U )    /** @brief DISCONNECT (client-to-server). */
+
+#define azureiotmqttGET_PACKET_TYPE( ucType )    ( ( ucType ) & 0xF0U ) /** @brief Get the packet type according to the MQTT spec */
 
 typedef enum AzureIoTMQTTQoS
 {
@@ -207,7 +209,7 @@ typedef void ( * AzureIoTMQTTEventCallback_t )( AzureIoTMQTTHandle_t pContext,
  * @note This function is for integration of the Azure IoT Middleware and
  *       the underlying MQTT stack and should in general not be invoked by
  *       applications directly.
- * 
+ *
  * @param[in] xContext The AzureIoTMQTT context to initialize.
  * @param[in] pxTransportInterface The transport interface to use with the context.
  * @param[in] xGetTimeFunction The time utility function to use with the context.
@@ -230,7 +232,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
  * @brief Establish an MQTT session.
  *
  * @note Last Will and Testament is not used with Azure IoT Hub.
- * 
+ *
  * This function will send MQTT CONNECT packet and receive a CONNACK packet. The
  * send and receive from the network is done through the transport interface.
  *
@@ -240,7 +242,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Init( AzureIoTMQTTHandle_t xContext,
  * @param[in] ulMilliseconds Maximum time in milliseconds to wait for a CONNACK packet.
  * @param[out] pxSessionPresent Whether a previous session was present.
  * Only relevant if not establishing a clean session.
- * 
+ *
  * @return An #AzureIoTMQTTResult_t with the result of the operation.
  */
 AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
