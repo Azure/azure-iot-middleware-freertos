@@ -20,6 +20,7 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+#define azureiotmqttPACKET_TYPE_BIT_MASK       ( ( uint8_t ) 0xF0U )  /** @brief Mask to acquire the packet type */
 #define azureiotmqttPACKET_TYPE_CONNECT        ( ( uint8_t ) 0x10U )  /** @brief CONNECT (client-to-server). */
 #define azureiotmqttPACKET_TYPE_CONNACK        ( ( uint8_t ) 0x20U )  /** @brief CONNACK (server-to-client). */
 #define azureiotmqttPACKET_TYPE_PUBLISH        ( ( uint8_t ) 0x30U )  /** @brief PUBLISH (bidirectional). */
