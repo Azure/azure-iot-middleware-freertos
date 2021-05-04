@@ -147,7 +147,7 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     }
     else
     {
-        AZLogInfo( ( "Puback received for unknown packet id." ) );
+        AZLogInfo( ( "Puback received for unknown packet id: 0x%08x", usPacketId ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -444,7 +444,7 @@ static AzureIoTHubClientResult_t prvGetTwinRequestId( AzureIoTHubClient_t * pxAz
 /*-----------------------------------------------------------*/
 
 /**
- * Do blocking wait for sub-ack of particular receive context.
+ * Do blocking wait for ack of particular message.
  *
  **/
 static AzureIoTHubClientResult_t prvWaitForAck( AzureIoTHubClient_t * pxAzureIoTHubClient,
@@ -452,7 +452,7 @@ static AzureIoTHubClientResult_t prvWaitForAck( AzureIoTHubClient_t * pxAzureIoT
                                                 uint16_t * pusState,
                                                 uint32_t ulTimeoutMilliseconds )
 {
-    AzureIoTHubClientResult_t xResult = eAzureIoTHubClientSubackWaitTimeout;
+    AzureIoTHubClientResult_t xResult = eAzureIoTHubClientAckWaitTimeout;
     uint32_t ulWaitTime;
 
     AZLogDebug( ( "Waiting for sub ack id: %d", usPacketID ) );

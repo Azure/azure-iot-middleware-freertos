@@ -53,8 +53,7 @@ typedef enum AzureIoTHubClientResult
     eAzureIoTHubClientPending,            /**< The status of the operation is pending. */
     eAzureIoTHubClientOutOfMemory,        /**< The system is out of memory. */
     eAzureIoTHubClientInitFailed,         /**< The initialization failed. */
-    eAzureIoTHubClientSubackWaitTimeout,  /**< There was timeout while waiting for SUBACK. */
-    eAzureIoTHubClientPubackWaitTimeout,  /**< There was timeout while waiting for PUBACK. */
+    eAzureIoTHubClientAckWaitTimeout,     /**< There was timeout while waiting for ACK (PUBACK or SUBACK). */
     eAzureIoTHubClientTopicNotSubscribed, /**< Topic not subscribed. */
     eAzureIoTHubClientPublishFailed,      /**< Failed to publish. */
     eAzureIoTHubClientSubscribeFailed,    /**< Failed to subscribe. */
