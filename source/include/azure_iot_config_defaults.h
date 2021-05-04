@@ -60,8 +60,8 @@
  * @brief Max provisioning response payload supported.
  *
  */
-#ifndef azureiotPROVISIONING_REQUEST_PAYLOAD_MAX
-    #define azureiotPROVISIONING_REQUEST_PAYLOAD_MAX    ( 512U )
+#ifndef azureiotprovisioningREQUEST_PAYLOAD_MAX
+    #define azureiotprovisioningREQUEST_PAYLOAD_MAX    ( 512U )
 #endif
 
 /**

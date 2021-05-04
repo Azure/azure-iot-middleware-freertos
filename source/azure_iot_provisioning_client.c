@@ -775,7 +775,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         AZLogError( ( "AzureIoTProvisioningClient_Init failed: invalid argument" ) );
         xResult = eAzureIoTProvisioningInvalidArgument;
     }
-    else if( ( ulBufferLength < ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX ) ) ||
+    else if( ( ulBufferLength < ( azureiotTOPIC_MAX + azureiotprovisioningREQUEST_PAYLOAD_MAX ) ) ||
              ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) )
     {
         AZLogError( ( "AzureIoTProvisioningClient_Init failed: insufficient buffer size" ) );
@@ -787,7 +787,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         /* Setup scratch buffer to be used by middleware */
         pxAzureProvClient->_internal.ulScratchBufferLength =
             azureiotPrvGetMaxInt( ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ),
-                                  ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX ) );
+                                  ( azureiotTOPIC_MAX + azureiotprovisioningREQUEST_PAYLOAD_MAX ) );
         pxAzureProvClient->_internal.pucScratchBuffer = pucBuffer;
         pucNetworkBuffer = pucBuffer + pxAzureProvClient->_internal.ulScratchBufferLength;
         ulNetworkBufferLength = ulBufferLength - pxAzureProvClient->_internal.ulScratchBufferLength;

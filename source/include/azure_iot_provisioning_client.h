@@ -26,8 +26,8 @@
 
 #define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
 
-#define azureiotPROVISIONING_NO_WAIT        ( 0 )
-#define azureiotPROVISIONING_WAIT_FOREVER   ( ( uint32_t )0xFFFFFFFF )
+#define azureiotprovisioningNO_WAIT        ( 0 )
+#define azureiotprovisioningWAIT_FOREVER   ( ( uint32_t )0xFFFFFFFF )
 
 typedef enum AzureIoTProvisioningClientResult
 {
@@ -84,7 +84,7 @@ typedef struct AzureIoTProvisioningClient
 
         uint8_t * pucScratchBuffer;
         uint32_t ulScratchBufferLength;
-        uint8_t ucProvisioningLastResponse[ azureiotPROVISIONING_RESPONSE_MAX ];
+        uint8_t ucProvisioningLastResponse[ azureiotprovisioningRESPONSE_MAX ];
         size_t xLastResponsePayloadLength;
         uint16_t usLastResponseTopicLength;
         az_iot_provisioning_client_register_response xRegisterResponse;
