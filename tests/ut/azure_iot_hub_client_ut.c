@@ -687,7 +687,7 @@ static void testAzureIoTHubClient_SubscribeCloudMessage_DelayedSuccess( void ** 
     will_return_always( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     xPacketInfo.ucType = azureiotmqttPACKET_TYPE_SUBACK;
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
-    ulDelayReceivePacket = 5 * azureiotconfigSUBACK_WAIT_INTERVAL_MS;
+    ulDelayReceivePacket = 5 * azureiotACK_WAIT_INTERVAL_MS;
     assert_int_equal( AzureIoTHubClient_SubscribeCloudToDeviceMessage( &xTestIoTHubClient,
                                                                        prvTestCloudMessage,
                                                                        NULL, ( uint32_t ) -1 ),
@@ -802,7 +802,7 @@ static void testAzureIoTHubClient_SubscribeDirectMethod_DelayedSuccess( void ** 
     will_return_always( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     xPacketInfo.ucType = azureiotmqttPACKET_TYPE_SUBACK;
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
-    ulDelayReceivePacket = 5 * azureiotconfigSUBACK_WAIT_INTERVAL_MS;
+    ulDelayReceivePacket = 5 * azureiotACK_WAIT_INTERVAL_MS;
     assert_int_equal( AzureIoTHubClient_SubscribeDirectMethod( &xTestIoTHubClient,
                                                                prvTestDirectMethod,
                                                                NULL, ( uint32_t ) -1 ),
@@ -917,7 +917,7 @@ static void testAzureIoTHubClient_SubscribeDeviceTwin_DelayedSuccess( void ** pp
     will_return_always( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     xPacketInfo.ucType = azureiotmqttPACKET_TYPE_SUBACK;
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
-    ulDelayReceivePacket = 5 * azureiotconfigSUBACK_WAIT_INTERVAL_MS;
+    ulDelayReceivePacket = 5 * azureiotACK_WAIT_INTERVAL_MS;
     assert_int_equal( AzureIoTHubClient_SubscribeDeviceTwin( &xTestIoTHubClient,
                                                              prvTestDeviceTwin,
                                                              NULL, ( uint32_t ) -1 ),
