@@ -154,10 +154,11 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     if( pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usMqttPubPacketID == usPacketId )
     {
         pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubTELEMETRY_ACK_STATE_PUBACK;
+        AZLogInfo( ("Puback received for packet id: 0x%08x", usPacketId) )
     }
     else
     {
-        AZLogInfo( ( "PUBACK received for unknown packet id." ) );
+        AZLogInfo( ( "Puback received for unknown packet id." ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -514,7 +515,7 @@ static AzureIoTHubClientResult_t prvWaitForPubAck( AzureIoTHubClient_t * pxAzure
     AzureIoTHubClientResult_t xResult = eAzureIoTHubClientSubackWaitTimeout;
     uint32_t ulWaitTime;
 
-    AZLogDebug( ( "Waiting for pub ack id: %d", pxContext->_internal.usMqttPubPacketID ) );
+    AZLogDebug( ( "Waiting for puback for packet id: 0x%08x", pxContext->_internal.usMqttPubPacketID ) );
 
     do
     {
