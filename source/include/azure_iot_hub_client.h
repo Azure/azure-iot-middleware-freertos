@@ -23,6 +23,9 @@
 
 #include <azure/core/_az_cfg_prefix.h>
 
+#define azureiothubNO_WAIT                   ( 0 )
+#define azureiothubWAIT_FOREVER              ( ( uint32_t ) 0xFFFFFFFF )
+
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
 /* Forward declaration for Azure IoT Hub Client */
@@ -51,6 +54,7 @@ typedef enum AzureIoTHubClientResult
     eAzureIoTHubClientOutOfMemory,        /**< The system is out of memory. */
     eAzureIoTHubClientInitFailed,         /**< The initialization failed. */
     eAzureIoTHubClientSubackWaitTimeout,  /**< There was timeout while waiting for SUBACK. */
+    eAzureIoTHubClientPubackWaitTimeout,  /**< There was timeout while waiting for PUBACK. */
     eAzureIoTHubClientTopicNotSubscribed, /**< Topic not subscribed. */
     eAzureIoTHubClientPublishFailed,      /**< Failed to publish. */
     eAzureIoTHubClientSubscribeFailed,    /**< Failed to subscribe. */
@@ -173,14 +177,14 @@ typedef struct AzureIoTHubClientReceiveContext
     } _internal;
 } AzureIoTHubClientReceiveContext_t;
 
-typedef struct AzureIoTHubClientTelemetryAckContext
+typedef struct AzureIoTHubClientPublishAckContext
 {
     struct
     {
         uint16_t usState;
         uint16_t usMqttPubPacketID;
     } _internal;
-} AzureIoTHubClientTelemetryAckContext_t;
+} AzureIoTHubClientPublishAckContext_t;
 
 typedef struct AzureIoTHubClientOptions
 {
@@ -225,7 +229,7 @@ struct AzureIoTHubClient
         uint32_t ulCurrentTwinRequestID;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
-        AzureIoTHubClientTelemetryAckContext_t xTelemetryAckContext;
+        AzureIoTHubClientPublishAckContext_t xTelemetryAckContext;
     }
     _internal;
 };

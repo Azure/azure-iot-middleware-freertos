@@ -45,11 +45,11 @@
 #define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK     ( 0x2 )
 
 /*
- * Telemetry puback state
+ * Publish puback state
  */
-#define azureiothubTELEMETRY_ACK_STATE_NONE         ( 0x0 )
-#define azureiothubTELEMETRY_ACK_STATE_PUB          ( 0x1 )
-#define azureiothubTELEMETRY_ACK_STATE_PUBACK       ( 0x2 )
+#define azureiothubPUBLISH_ACK_STATE_NONE         ( 0x0 )
+#define azureiothubPUBLISH_ACK_STATE_PUB          ( 0x1 )
+#define azureiothubPUBLISH_ACK_STATE_PUBACK       ( 0x2 )
 
 /*
  * Indexes of the receive context buffer for each feature
@@ -153,8 +153,8 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
 
     if( pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usMqttPubPacketID == usPacketId )
     {
-        pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubTELEMETRY_ACK_STATE_PUBACK;
-        AZLogInfo( ("Puback received for packet id: 0x%08x", usPacketId) );
+        pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubPUBLISH_ACK_STATE_PUBACK;
+        AZLogInfo( ( "Puback received for packet id: 0x%08x", usPacketId ) );
     }
     else
     {
@@ -509,17 +509,17 @@ static AzureIoTHubClientResult_t prvWaitForSubAck( AzureIoTHubClient_t * pxAzure
  *
  **/
 static AzureIoTHubClientResult_t prvWaitForPubAck( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                   AzureIoTHubClientTelemetryAckContext_t * pxContext,
+                                                   AzureIoTHubClientPublishAckContext_t * pxContext,
                                                    uint32_t ulTimeoutMilliseconds )
 {
-    AzureIoTHubClientResult_t xResult = eAzureIoTHubClientSubackWaitTimeout;
+    AzureIoTHubClientResult_t xResult = eAzureIoTHubClientPubackWaitTimeout;
     uint32_t ulWaitTime;
 
     AZLogDebug( ( "Waiting for puback for packet id: 0x%08x", pxContext->_internal.usMqttPubPacketID ) );
 
     do
     {
-        if( pxContext->_internal.usState == azureiothubTELEMETRY_ACK_STATE_PUBACK )
+        if( pxContext->_internal.usState == azureiothubPUBLISH_ACK_STATE_PUBACK )
         {
             xResult = eAzureIoTHubClientSuccess;
             break;
@@ -543,7 +543,7 @@ static AzureIoTHubClientResult_t prvWaitForPubAck( AzureIoTHubClient_t * pxAzure
         }
     } while( ulTimeoutMilliseconds );
 
-    if( pxContext->_internal.usState == azureiothubTELEMETRY_ACK_STATE_PUBACK )
+    if( pxContext->_internal.usState == azureiothubPUBLISH_ACK_STATE_PUBACK )
     {
         xResult = eAzureIoTHubClientSuccess;
     }
@@ -917,6 +917,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         /* Get a unique packet id. */
         usPublishPacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
 
+        pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usMqttPubPacketID = usPublishPacketIdentifier;
+        pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubPUBLISH_ACK_STATE_PUB;
+
         /* Send PUBLISH packet. */
         if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
                                                   &xMQTTPublishInfo, usPublishPacketIdentifier ) ) != eAzureIoTMQTTSuccess )
@@ -924,13 +927,11 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
             AZLogError( ( "Failed to publish telemetry: MQTT error=0x%08x", xMQTTResult ) );
             xResult = eAzureIoTHubClientPublishFailed;
         }
-
-        if( ( xMQTTResult == eAzureIoTMQTTSuccess ) && ( xQOS == eAzureIoTHubMessageQoS1 ) )
+        else if( ( xQOS == eAzureIoTHubMessageQoS1 ) &&
+                 ( xResult = prvWaitForPubAck( pxAzureIoTHubClient, &pxAzureIoTHubClient->_internal.xTelemetryAckContext, ulTimeoutMilliseconds )
+                             != eAzureIoTHubClientSuccess ) )
         {
-            pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usMqttPubPacketID = usPublishPacketIdentifier;
-            pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubTELEMETRY_ACK_STATE_PUB;
-
-            xResult = prvWaitForPubAck( pxAzureIoTHubClient, &pxAzureIoTHubClient->_internal.xTelemetryAckContext, ulTimeoutMilliseconds );
+            AZLogError( ( "Failed to wait for telemetry puback with packet id: 0x%08x", usPublishPacketIdentifier ) );
         }
         else if( xMQTTResult == eAzureIoTMQTTSuccess )
         {
