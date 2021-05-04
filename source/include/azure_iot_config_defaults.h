@@ -29,17 +29,10 @@
 #endif
 
 /**
- * @brief Wait timeout of MQTT SUBACK.
+ * @brief Wait timeout of MQTT ACK (SUBACK and PUBACK).
  */
-#ifndef azureiotconfigSUBACK_WAIT_INTERVAL_MS
-    #define azureiotconfigSUBACK_WAIT_INTERVAL_MS    ( 10U )
-#endif
-
-/**
- * @brief Wait timeout of MQTT PUBACK.
- */
-#ifndef azureiotPUBACK_WAIT_INTERVAL_MS
-    #define azureiotPUBACK_WAIT_INTERVAL_MS             ( 10U )
+#ifndef azureiotACK_WAIT_INTERVAL_MS
+    #define azureiotACK_WAIT_INTERVAL_MS             ( 10U )
 #endif
 
 /**
