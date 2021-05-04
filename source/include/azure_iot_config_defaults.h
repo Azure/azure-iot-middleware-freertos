@@ -36,6 +36,13 @@
 #endif
 
 /**
+ * @brief Wait timeout of MQTT PUBACK.
+ */
+#ifndef azureiotPUBACK_WAIT_INTERVAL_MS
+    #define azureiotPUBACK_WAIT_INTERVAL_MS             ( 10U )
+#endif
+
+/**
  * @brief Max MQTT username.
  */
 #ifndef azureiotconfigUSERNAME_MAX

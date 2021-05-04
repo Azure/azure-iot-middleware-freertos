@@ -28,6 +28,12 @@
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
 
+typedef enum AzureIoTHubMessageQoS
+{
+    eAzureIoTHubMessageQoS0 = 0, /** Delivery at most once. */
+    eAzureIoTHubMessageQoS1 = 1  /** Delivery at least once. */
+} AzureIoTHubMessageQoS_t;
+
 typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,    /**< The message is a cloud message. */
@@ -167,6 +173,15 @@ typedef struct AzureIoTHubClientReceiveContext
     } _internal;
 } AzureIoTHubClientReceiveContext_t;
 
+typedef struct AzureIoTHubClientTelemetryAckContext
+{
+    struct
+    {
+        uint16_t usState;
+        uint16_t usMqttPubPacketID;
+    } _internal;
+} AzureIoTHubClientTelemetryAckContext_t;
+
 typedef struct AzureIoTHubClientOptions
 {
     const uint8_t * pucModuleID;  /**< The optional module ID to use for this device. */
@@ -210,6 +225,7 @@ struct AzureIoTHubClient
         uint32_t ulCurrentTwinRequestID;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
+        AzureIoTHubClientTelemetryAckContext_t xTelemetryAckContext;
     }
     _internal;
 };
@@ -306,12 +322,17 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
  * @param[in] pucTelemetryData The pointer to the buffer of telemetry data.
  * @param[in] ulTelemetryDataLength The length of the buffer to send as telemetry.
  * @param[in] pxProperties The property bag to send with the message.
+ * @param[in] xQOS The quality of service to use for the telemetry publish. Only QOS `0` and `1` are supported.
+ * @param[in] ulTimeoutMilliseconds Timeout (in milliseconds) to wait for QOS `1` publish acknowledgements.
+ * If `0` is passed, it will only run once. This value is ignored for QOS `0`.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                            const uint8_t * pucTelemetryData,
                                                            uint32_t ulTelemetryDataLength,
-                                                           AzureIoTMessageProperties_t * pxProperties );
+                                                           AzureIoTMessageProperties_t * pxProperties,
+                                                           AzureIoTHubMessageQoS_t xQOS,
+                                                           uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.
