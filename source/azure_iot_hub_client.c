@@ -146,9 +146,6 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                   AzureIoTMQTTPacketInfo_t * pxIncomingPacket,
                                   uint16_t usPacketId )
 {
-    uint32_t ulIndex;
-    AzureIoTHubClientReceiveContext_t * pxContext;
-
     ( void ) pxIncomingPacket;
 
     configASSERT( pxIncomingPacket != NULL );
@@ -158,11 +155,9 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     {
         pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubTELEMETRY_ACK_STATE_PUBACK;
     }
-
-    /* If reached the end of the list and haven't found a context, log none found */
-    if( ulIndex == azureiothubSUBSCRIBE_FEATURE_COUNT )
+    else
     {
-        AZLogInfo( ( "No receive context found for incoming suback" ) );
+        AZLogInfo( ( "PUBACK received for unknown packet id." ) );
     }
 }
 /*-----------------------------------------------------------*/
