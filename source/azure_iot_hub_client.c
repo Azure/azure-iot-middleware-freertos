@@ -154,7 +154,7 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     if( pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usMqttPubPacketID == usPacketId )
     {
         pxAzureIoTHubClient->_internal.xTelemetryAckContext._internal.usState = azureiothubTELEMETRY_ACK_STATE_PUBACK;
-        AZLogInfo( ("Puback received for packet id: 0x%08x", usPacketId) )
+        AZLogInfo( ("Puback received for packet id: 0x%08x", usPacketId) );
     }
     else
     {
