@@ -908,7 +908,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     }
     else
     {
-        xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS1;
+        xMQTTPublishInfo.xQOS = xQOS;
         xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
         xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTelemetryTopicLength;
         xMQTTPublishInfo.pvPayload = ( const void * ) pucTelemetryData;
