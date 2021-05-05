@@ -8,60 +8,60 @@
  * @brief Default timeout used for generating SAS token.
  *
  */
-#ifndef azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
-    #define azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC        ( 60 * 60U )
+#ifndef azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC
+    #define azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC        ( 60 * 60U )
 #endif
 
 /**
  * @brief MQTT keep alive.
  *
  */
-#ifndef azureiotKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiotKEEP_ALIVE_TIMEOUT_SECONDS          ( 60U )
+#ifndef azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS          ( 60U )
 #endif
 
 /**
  * @brief Receive timeout for MQTT CONNACK.
  *
  */
-#ifndef azureiotCONNACK_RECV_TIMEOUT_MS
-    #define azureiotCONNACK_RECV_TIMEOUT_MS             ( 1000U )
+#ifndef azureiotconfigCONNACK_RECV_TIMEOUT_MS
+    #define azureiotconfigCONNACK_RECV_TIMEOUT_MS             ( 1000U )
 #endif
 
 /**
  * @brief Wait timeout of MQTT SUBACK.
  */
-#ifndef azureiotSUBACK_WAIT_INTERVAL_MS
-    #define azureiotSUBACK_WAIT_INTERVAL_MS             ( 10U )
+#ifndef azureiotconfigSUBACK_WAIT_INTERVAL_MS
+    #define azureiotconfigSUBACK_WAIT_INTERVAL_MS             ( 10U )
 #endif
 
 /**
  * @brief Max MQTT username.
  */
-#ifndef azureiotUSERNAME_MAX
-    #define azureiotUSERNAME_MAX                        ( 256U )
+#ifndef azureiotconfigUSERNAME_MAX
+    #define azureiotconfigUSERNAME_MAX                        ( 256U )
 #endif
 
 /**
  * @brief Max MQTT password.
  */
-#ifndef azureiotPASSWORD_MAX
-    #define azureiotPASSWORD_MAX                        ( 256U )
+#ifndef azureiotconfigPASSWORD_MAX
+    #define azureiotconfigPASSWORD_MAX                        ( 256U )
 #endif
 
 /**
  * @brief Max MQTT topic length.
  */
-#ifndef azureiotTOPIC_MAX
-    #define azureiotTOPIC_MAX                           ( 128U )
+#ifndef azureiotconfigTOPIC_MAX
+    #define azureiotconfigTOPIC_MAX                           ( 128U )
 #endif
 
 /**
  * @brief Max provisioning response payload supported.
  *
  */
-#ifndef azureiotPROVISIONING_REQUEST_PAYLOAD_MAX
-    #define azureiotPROVISIONING_REQUEST_PAYLOAD_MAX    ( 512U )
+#ifndef azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX
+    #define azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX    ( 512U )
 #endif
 
 /**

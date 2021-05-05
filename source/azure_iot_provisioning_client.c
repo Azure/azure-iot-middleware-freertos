@@ -20,15 +20,15 @@
 #include "azure/core/az_version.h"
 
 #ifndef azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC
-    #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
+    #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC
 #endif /* azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC */
 
 #ifndef azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS    azureiotKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS    azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS
 #endif /* azureiotprovisioningKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiotprovisioningCONNACK_RECV_TIMEOUT_MS
-    #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS    azureiotCONNACK_RECV_TIMEOUT_MS
+    #define azureiotprovisioningCONNACK_RECV_TIMEOUT_MS    azureiotconfigCONNACK_RECV_TIMEOUT_MS
 #endif /* azureiotprovisioningCONNACK_RECV_TIMEOUT_MS */
 
 #ifndef azureiotprovisioningUSER_AGENT
@@ -157,11 +157,11 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
     }
 
     xConnectInfo.pcUserName = pxAzureProvClient->_internal.pucScratchBuffer;
-    xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotUSERNAME_MAX;
+    xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotconfigUSERNAME_MAX;
 
     if( az_result_failed( xCoreResult = az_iot_provisioning_client_get_user_name( &pxAzureProvClient->_internal.xProvisioningClientCore,
                                                                                   ( char * ) xConnectInfo.pcUserName,
-                                                                                  azureiotUSERNAME_MAX, &xMQTTUsernameLength ) ) )
+                                                                                  azureiotconfigUSERNAME_MAX, &xMQTTUsernameLength ) ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to get username: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTProvisioningFailed;
@@ -174,7 +174,7 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
                                                             pxAzureProvClient->_internal.pucSymmetricKey,
                                                             pxAzureProvClient->_internal.ulSymmetricKeyLength,
                                                             ( uint8_t * ) xConnectInfo.pcPassword,
-                                                            azureiotPASSWORD_MAX,
+                                                            azureiotconfigPASSWORD_MAX,
                                                             &ulPasswordLength ) ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to generate auth token" ) );
@@ -323,7 +323,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
             xCoreResult =
                 az_iot_provisioning_client_register_get_publish_topic( &pxAzureProvClient->_internal.xProvisioningClientCore,
                                                                        ( char * ) pxAzureProvClient->_internal.pucScratchBuffer,
-                                                                       azureiotTOPIC_MAX, &xMQTTTopicLength );
+                                                                       azureiotconfigTOPIC_MAX, &xMQTTTopicLength );
         }
         else
         {
@@ -331,7 +331,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
                 az_iot_provisioning_client_query_status_get_publish_topic( &pxAzureProvClient->_internal.xProvisioningClientCore,
                                                                            pxAzureProvClient->_internal.xRegisterResponse.operation_id,
                                                                            ( char * ) pxAzureProvClient->_internal.pucScratchBuffer,
-                                                                           azureiotTOPIC_MAX, &xMQTTTopicLength );
+                                                                           azureiotconfigTOPIC_MAX, &xMQTTTopicLength );
         }
 
         if( az_result_failed( xCoreResult ) )
@@ -775,8 +775,8 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         AZLogError( ( "AzureIoTProvisioningClient_Init failed: invalid argument" ) );
         xResult = eAzureIoTProvisioningInvalidArgument;
     }
-    else if( ( ulBufferLength < ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX ) ) ||
-             ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) )
+    else if( ( ulBufferLength < ( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX ) ) ||
+             ( ulBufferLength < ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) ) )
     {
         AZLogError( ( "AzureIoTProvisioningClient_Init failed: insufficient buffer size" ) );
         xResult = eAzureIoTProvisioningOutOfMemory;
@@ -786,8 +786,8 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Init( AzureIoTProv
         memset( pxAzureProvClient, 0, sizeof( AzureIoTProvisioningClient_t ) );
         /* Setup scratch buffer to be used by middleware */
         pxAzureProvClient->_internal.ulScratchBufferLength =
-            azureiotPrvGetMaxInt( ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ),
-                                  ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX ) );
+            azureiotPrvGetMaxInt( ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ),
+                                  ( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX ) );
         pxAzureProvClient->_internal.pucScratchBuffer = pucBuffer;
         pucNetworkBuffer = pucBuffer + pxAzureProvClient->_internal.ulScratchBufferLength;
         ulNetworkBufferLength = ulBufferLength - pxAzureProvClient->_internal.ulScratchBufferLength;

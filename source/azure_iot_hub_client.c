@@ -18,15 +18,15 @@
 #include "azure/core/az_version.h"
 
 #ifndef azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC
-    #define azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotDEFAULT_TOKEN_TIMEOUT_IN_SEC
+    #define azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC
 #endif /* azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC */
 
 #ifndef azureiothubKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiothubKEEP_ALIVE_TIMEOUT_SECONDS    azureiotKEEP_ALIVE_TIMEOUT_SECONDS
+    #define azureiothubKEEP_ALIVE_TIMEOUT_SECONDS    azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS
 #endif /* azureiothubKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiothubSUBACK_WAIT_INTERVAL_MS
-    #define azureiothubSUBACK_WAIT_INTERVAL_MS    azureiotSUBACK_WAIT_INTERVAL_MS
+    #define azureiothubSUBACK_WAIT_INTERVAL_MS    azureiotconfigSUBACK_WAIT_INTERVAL_MS
 #endif /* azureiothubSUBACK_WAIT_INTERVAL_MS */
 
 #ifndef azureiothubUSER_AGENT
@@ -587,8 +587,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
         AZLogError( ( "AzureIoTHubClient_Init failed: invalid argument" ) );
         xResult = eAzureIoTHubClientInvalidArgument;
     }
-    else if( ( ulBufferLength < azureiotTOPIC_MAX ) ||
-             ( ulBufferLength < ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) ) )
+    else if( ( ulBufferLength < azureiotconfigTOPIC_MAX ) ||
+             ( ulBufferLength < ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) ) )
     {
         AZLogError( ( "AzureIoTHubClient_Init failed: not enough memory passed" ) );
         xResult = eAzureIoTHubClientOutOfMemory;
@@ -599,7 +599,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
 
         /* Setup working buffer to be used by middleware */
         pxAzureIoTHubClient->_internal.ulWorkingBufferLength =
-            ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) > azureiotTOPIC_MAX ? ( azureiotUSERNAME_MAX + azureiotPASSWORD_MAX ) : azureiotTOPIC_MAX;
+            ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) > azureiotconfigTOPIC_MAX ? ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) : azureiotconfigTOPIC_MAX;
         pxAzureIoTHubClient->_internal.pucWorkingBuffer = pucBuffer;
         pucNetworkBuffer = pucBuffer + pxAzureIoTHubClient->_internal.ulWorkingBufferLength;
         ulNetworkBufferLength = ulBufferLength - pxAzureIoTHubClient->_internal.ulWorkingBufferLength;
@@ -704,10 +704,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
     {
         /* Use working buffer for username/password */
         xConnectInfo.pcUserName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
-        xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotUSERNAME_MAX;
+        xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotconfigUSERNAME_MAX;
 
         if( az_result_failed( xCoreResult = az_iot_hub_client_get_user_name( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                             ( char * ) xConnectInfo.pcUserName, azureiotUSERNAME_MAX,
+                                                                             ( char * ) xConnectInfo.pcUserName, azureiotconfigUSERNAME_MAX,
                                                                              &xMQTTUserNameLength ) ) )
         {
             AZLogError( ( "Failed to get username: core error=0x%08x", xCoreResult ) );
@@ -720,7 +720,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzu
                                                                   azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC,
                                                                   pxAzureIoTHubClient->_internal.pucSymmetricKey,
                                                                   pxAzureIoTHubClient->_internal.ulSymmetricKeyLength,
-                                                                  ( uint8_t * ) xConnectInfo.pcPassword, azureiotPASSWORD_MAX,
+                                                                  ( uint8_t * ) xConnectInfo.pcPassword, azureiotconfigPASSWORD_MAX,
                                                                   &ulPasswordLength ) ) )
         {
             AZLogError( ( "Failed to generate SAS token" ) );
