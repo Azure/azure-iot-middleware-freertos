@@ -371,7 +371,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            &ucEndpoint[ 0 ], sizeof( ucEndpoint ),
                                                            &ucIdScope[ 0 ], sizeof( ucIdScope ),
                                                            &ucRegistrationId[ 0 ], sizeof( ucRegistrationId ),
-                                                           NULL, ucBuffer, azureiotUSERNAME_MAX,
+                                                           NULL, ucBuffer, azureiotconfigUSERNAME_MAX,
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
                           eAzureIoTProvisioningSuccess );

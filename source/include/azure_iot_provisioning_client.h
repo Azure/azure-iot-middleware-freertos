@@ -24,7 +24,7 @@
 
 #include <azure/core/_az_cfg_prefix.h>
 
-#define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
+#define azureiotprovisioningRESPONSE_MAX   ( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX )
 
 #define azureiotprovisioningNO_WAIT        ( 0 )
 #define azureiotprovisioningWAIT_FOREVER   ( ( uint32_t )0xFFFFFFFF )
