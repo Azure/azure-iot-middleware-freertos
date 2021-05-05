@@ -26,7 +26,7 @@
 #endif /* azureiothubKEEP_ALIVE_TIMEOUT_SECONDS */
 
 #ifndef azureiothubACK_WAIT_INTERVAL_MS
-    #define azureiothubACK_WAIT_INTERVAL_MS    azureiotACK_WAIT_INTERVAL_MS
+    #define azureiothubACK_WAIT_INTERVAL_MS    azureiotconfigACK_WAIT_INTERVAL_MS
 #endif /* azureiothubACK_WAIT_INTERVAL_MS */
 
 #ifndef azureiothubUSER_AGENT
