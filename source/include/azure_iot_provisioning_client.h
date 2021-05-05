@@ -22,6 +22,8 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+#include <azure/core/_az_cfg_prefix.h>
+
 #define azureiotPROVISIONING_RESPONSE_MAX   ( azureiotTOPIC_MAX + azureiotPROVISIONING_REQUEST_PAYLOAD_MAX )
 
 #define azureiotPROVISIONING_NO_WAIT        ( 0 )
@@ -210,5 +212,7 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_GetExtendedCode( A
  */
 AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                                       const uint8_t * pucPayload, uint32_t ulPayloadLength );
+
+#include <azure/core/_az_cfg_suffix.h>
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */

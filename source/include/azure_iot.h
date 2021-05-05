@@ -32,6 +32,8 @@
 
 #include "azure/az_iot.h"
 
+#include <azure/core/_az_cfg_prefix.h>
+
 /**
  * @brief Milliseconds per FreeRTOS tick.
  */
@@ -176,5 +178,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
                                                uint8_t * pucOutput,
                                                uint32_t ulOutputSize,
                                                uint32_t * pulOutputLength );
+
+#include <azure/core/_az_cfg_suffix.h>
 
 #endif /* AZURE_IOT_H */

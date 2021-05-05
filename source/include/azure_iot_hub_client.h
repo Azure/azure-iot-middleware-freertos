@@ -21,6 +21,8 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+#include <azure/core/_az_cfg_prefix.h>
+
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
 /* Forward declaration for Azure IoT Hub Client */
@@ -434,5 +436,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendDeviceTwinReported( AzureIoTHubC
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_GetDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient );
+
+#include <azure/core/_az_cfg_suffix.h>
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */
