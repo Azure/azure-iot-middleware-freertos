@@ -22,6 +22,17 @@ Main branch contains API's and tests. For the most cutting edge developments, pl
 - Linux
 - Windows
 
+## Code Style
+
+This repository uses `uncrustify` to enforce coding style. The config in the root (`uncrustify.cfg`) is the same as in the FreeRTOS repo.
+
+Note that different versions of `uncrustify` can produce differently rendered files. For that reason, just as the FreeRTOS repo has declared, we use version 0.67 of `uncrustify`. For installation instructions for `uncrustify`, please see their repo [here](https://github.com/uncrustify/uncrustify). Once you have that installed, you can make sure your contributions are rendered correctly by running our uncrustify script:
+
+```bash
+# From the repo root
+./.github/scripts/code_style.sh 1
+```
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
