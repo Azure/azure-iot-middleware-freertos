@@ -91,7 +91,7 @@
     uint64_t ulGetUnixTime( void );
 
     #ifdef __cplusplus
-        }
+}
     #endif
 
 #endif /* E2E_DEVICE_PROCESS_COMMANDS_H */
