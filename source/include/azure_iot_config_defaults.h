@@ -9,7 +9,7 @@
  *
  */
 #ifndef azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC
-    #define azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC        ( 60 * 60U )
+    #define azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC    ( 60 * 60U )
 #endif
 
 /**
@@ -17,7 +17,7 @@
  *
  */
 #ifndef azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS
-    #define azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS          ( 60U )
+    #define azureiotconfigKEEP_ALIVE_TIMEOUT_SECONDS    ( 60U )
 #endif
 
 /**
@@ -25,35 +25,35 @@
  *
  */
 #ifndef azureiotconfigCONNACK_RECV_TIMEOUT_MS
-    #define azureiotconfigCONNACK_RECV_TIMEOUT_MS             ( 1000U )
+    #define azureiotconfigCONNACK_RECV_TIMEOUT_MS    ( 1000U )
 #endif
 
 /**
  * @brief Wait timeout of MQTT SUBACK.
  */
 #ifndef azureiotconfigSUBACK_WAIT_INTERVAL_MS
-    #define azureiotconfigSUBACK_WAIT_INTERVAL_MS             ( 10U )
+    #define azureiotconfigSUBACK_WAIT_INTERVAL_MS    ( 10U )
 #endif
 
 /**
  * @brief Max MQTT username.
  */
 #ifndef azureiotconfigUSERNAME_MAX
-    #define azureiotconfigUSERNAME_MAX                        ( 256U )
+    #define azureiotconfigUSERNAME_MAX    ( 256U )
 #endif
 
 /**
  * @brief Max MQTT password.
  */
 #ifndef azureiotconfigPASSWORD_MAX
-    #define azureiotconfigPASSWORD_MAX                        ( 256U )
+    #define azureiotconfigPASSWORD_MAX    ( 256U )
 #endif
 
 /**
  * @brief Max MQTT topic length.
  */
 #ifndef azureiotconfigTOPIC_MAX
-    #define azureiotconfigTOPIC_MAX                           ( 128U )
+    #define azureiotconfigTOPIC_MAX    ( 128U )
 #endif
 
 /**

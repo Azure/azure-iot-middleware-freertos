@@ -4,12 +4,12 @@
 /**
  * @file azure_iot_core_mqtt.c
  * @brief Implements the port for Azure IoT MQTT based on coreMQTT.
- * 
+ *
  * @note This interface is private and subjected to change. Currently, there is only
  *       one implementation for this interface, which uses coreMQTT as underlying MQTT stack.
- * 
+ *
  */
- 
+
 #include <assert.h>
 
 #include "azure_iot_mqtt.h"
@@ -21,79 +21,55 @@ static AzureIoTMQTTResult_t prvTranslateToAzureIoTMQTTResult( MQTTStatus_t xResu
 {
     AzureIoTMQTTResult_t xReturn;
 
-    switch ( xResult )
+    switch( xResult )
     {
-        case MQTTSuccess :
-        {
+        case MQTTSuccess:
             xReturn = eAzureIoTMQTTSuccess;
-        }
-        break;
+            break;
 
-        case MQTTBadParameter :
-        {
+        case MQTTBadParameter:
             xReturn = eAzureIoTMQTTBadParameter;
-        }
-        break;
+            break;
 
-        case MQTTNoMemory :
-        {
+        case MQTTNoMemory:
             xReturn = eAzureIoTMQTTNoMemory;
-        }
-        break;
+            break;
 
         case MQTTSendFailed:
-        {
             xReturn = eAzureIoTMQTTSendFailed;
-        }
-        break;
+            break;
 
-        case MQTTRecvFailed :
-        {
+        case MQTTRecvFailed:
             xReturn = eAzureIoTMQTTRecvFailed;
-        }
-        break;
+            break;
 
-        case MQTTBadResponse :
-        {
+        case MQTTBadResponse:
             xReturn = eAzureIoTMQTTBadResponse;
-        }
-        break;
+            break;
 
-        case MQTTServerRefused :
-        {
+        case MQTTServerRefused:
             xReturn = eAzureIoTMQTTServerRefused;
-        }
-        break;
+            break;
 
-        case MQTTNoDataAvailable :
-        {
+        case MQTTNoDataAvailable:
             xReturn = eAzureIoTMQTTNoDataAvailable;
-        }
-        break;
+            break;
 
-        case MQTTIllegalState :
-        {
+        case MQTTIllegalState:
             xReturn = eAzureIoTMQTTIllegalState;
-        }
-        break;
+            break;
 
-        case MQTTStateCollision :
-        {
+        case MQTTStateCollision:
             xReturn = eAzureIoTMQTTStateCollision;
-        }
-        break;
+            break;
 
-        case MQTTKeepAliveTimeout :
-        {
+        case MQTTKeepAliveTimeout:
             xReturn = eAzureIoTMQTTKeepAliveTimeout;
-        }
-        break;
+            break;
 
-        default :
-        {
+        default:
             xReturn = eAzureIoTMQTTFailed;
-        }
-        break;
+            break;
     }
 
     return xReturn;
@@ -134,11 +110,11 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Connect( AzureIoTMQTTHandle_t xContext,
 {
     MQTTStatus_t xResult;
 
-    xResult =  MQTT_Connect( xContext,
-                             ( const MQTTConnectInfo_t * ) pxConnectInfo,
-                             ( const MQTTPublishInfo_t * ) pxWillInfo,
-                             ulMilliseconds, pxSessionPresent );
-    
+    xResult = MQTT_Connect( xContext,
+                            ( const MQTTConnectInfo_t * ) pxConnectInfo,
+                            ( const MQTTPublishInfo_t * ) pxWillInfo,
+                            ulMilliseconds, pxSessionPresent );
+
     return prvTranslateToAzureIoTMQTTResult( xResult );
 }
 

@@ -210,7 +210,8 @@ struct AzureIoTHubClient
         uint32_t ulCurrentTwinRequestID;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
-    } _internal;
+    }
+    _internal;
 };
 
 /**

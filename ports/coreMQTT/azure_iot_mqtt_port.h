@@ -4,7 +4,7 @@
 /**
  * @file azure_iot_mqtt_port.h
  * @brief Defines Azure IoT MQTT port based on coreMQTT
- * 
+ *
  */
 
 #ifndef AZURE_IOT_MQTT_PORT_H
@@ -17,4 +17,4 @@
 /* Maps MQTTContext directly to AzureIoTMQTT */
 typedef struct MQTTContext AzureIoTMQTT_t;
 
-#endif // AZURE_IOT_MQTT_PORT_H
+#endif /* AZURE_IOT_MQTT_PORT_H */
