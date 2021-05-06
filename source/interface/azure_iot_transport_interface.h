@@ -18,7 +18,7 @@
  *
  * The transport interface is a set of APIs that must be implemented using an
  * external transport layer protocol. The transport interface is defined in
- * @ref transport_interface.h. This interface allows protocols like MQTT 
+ * @ref transport_interface.h. This interface allows protocols like MQTT
  * to send and receive data over the transport layer. This
  * interface does not handle connection and disconnection to the server of
  * interest. The connection, disconnection, and other transport settings, like

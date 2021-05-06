@@ -24,10 +24,10 @@
 
 #include <azure/core/_az_cfg_prefix.h>
 
-#define azureiotprovisioningRESPONSE_MAX   ( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX )
+#define azureiotprovisioningRESPONSE_MAX    ( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX )
 
-#define azureiotprovisioningNO_WAIT        ( 0 )
-#define azureiotprovisioningWAIT_FOREVER   ( ( uint32_t )0xFFFFFFFF )
+#define azureiotprovisioningNO_WAIT         ( 0 )
+#define azureiotprovisioningWAIT_FOREVER    ( ( uint32_t ) 0xFFFFFFFF )
 
 typedef enum AzureIoTProvisioningClientResult
 {
@@ -211,7 +211,8 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_GetExtendedCode( A
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
 AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                                      const uint8_t * pucPayload, uint32_t ulPayloadLength );
+                                                                                      const uint8_t * pucPayload,
+                                                                                      uint32_t ulPayloadLength );
 
 #include <azure/core/_az_cfg_suffix.h>
 
