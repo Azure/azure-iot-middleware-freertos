@@ -40,6 +40,6 @@ else
     ./tests/ut/*.c)
 
     if [ $? -ne 0 ]; then
-      echo $RESULT | grep "FAIL"
+      echo $RESULT | grep -B 2 "FAIL"
     fi
 fi
