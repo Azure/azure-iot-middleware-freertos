@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Style Check
-      run: style_check.sh
+      run: .github/scripts/style_check.sh
     - name: Submodules Init
       uses: snickerbockers/submodules-init@v4
     - name: Configure
