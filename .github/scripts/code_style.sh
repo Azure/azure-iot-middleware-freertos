@@ -7,18 +7,17 @@ set -o errexit # Exit if command failed.
 set -o nounset # Exit if variable not set.
 set -o pipefail # Exit if pipe failed.
 
-# Pass anything as a first parameter to fix code style problems
-FIX=${1:-0}
-
 usage() {
     echo "${0} [check|fix]" 1>&2
     exit 1
 }
 
-FIX=${1:-"check"}
+FIX=${1:-""}
 
 # Version 0.67 is the source of truth
 if ! [ -x "$(command -v uncrustify)" ]; then
+    tmp_dir=$(mktemp -d -t uncrustify-XXXX)
+    pushd $tmp_dir
     git clone https://github.com/uncrustify/uncrustify.git
     cd uncrustify
     git checkout uncrustify-0.67
@@ -27,7 +26,7 @@ if ! [ -x "$(command -v uncrustify)" ]; then
     cmake ..
     cmake --build .
     sudo make install
-    cd ../..
+    popd
 fi
 
 if [[ "$FIX" == "check" ]]; then
