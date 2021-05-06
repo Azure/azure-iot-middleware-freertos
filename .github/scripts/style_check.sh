@@ -36,6 +36,6 @@ else
     ./tests/e2e/device/*.h                           \
     ./tests/ut/*.h                                   \
     ./tests/ut/*.c                                   \
-    |                                                \
-    grep "FAIL"
+    # |                                                \
+    # grep "FAIL"
 fi
