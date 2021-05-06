@@ -36,7 +36,7 @@
 /*
  * Topic subscribe state
  */
-#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE       ( 0x0  )
+#define azureiothubTOPIC_SUBSCRIBE_STATE_NONE       ( 0x0 )
 #define azureiothubTOPIC_SUBSCRIBE_STATE_SUB        ( 0x1 )
 #define azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK     ( 0x2 )
 
