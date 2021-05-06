@@ -10,12 +10,21 @@ set -o pipefail # Exit if pipe failed.
 # Pass anything as a first parameter to fix code style problems
 FIX=${1:-0}
 
+# Version 0.67 is the source of truth
 if ! [ -x "$(command -v uncrustify)" ]; then
-  sudo apt-get install uncrustify
+    git clone https://github.com/uncrustify/uncrustify.git
+    cd uncrustify
+    git checkout uncrustify-0.67
+    mkdir build
+    cd build
+    cmake ..
+    cmake --build .
+    sudo make install
+    cd ../..
 fi
 
 if [ $FIX -ne 0 ]; then
-    uncrustify -c ./uncrustify.cfg -l C --no-backup --replace \
+    uncrustify -c ./uncrustify.cfg --no-backup --replace \
     ./source/*.c                                              \
     ./source/include/*.h                                      \
     ./source/interface/*.h                                    \
@@ -27,7 +36,7 @@ if [ $FIX -ne 0 ]; then
     ./tests/ut/*.h                                            \
     ./tests/ut/*.c
 else
-    RESULT=$(uncrustify -c ./uncrustify.cfg -l C --check      \
+    RESULT=$(uncrustify -c ./uncrustify.cfg --check      \
     ./source/*.c                                              \
     ./source/include/*.h                                      \
     ./source/interface/*.h                                    \
@@ -40,6 +49,6 @@ else
     ./tests/ut/*.c)
 
     if [ $? -ne 0 ]; then
-      echo $RESULT | grep -B 2 "FAIL"
+      echo $RESULT | grep "FAIL"
     fi
 fi

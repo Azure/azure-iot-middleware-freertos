@@ -1,6 +1,8 @@
 /* Copyright (c) Microsoft Corporation. All rights reserved. */
 /* SPDX-License-Identifier: MIT */
 
+/* Uncrustify wants to indent because of the cpp wrapper so turn off */
+/* *INDENT-OFF* */
 #ifndef E2E_DEVICE_PROCESS_COMMANDS_H
 #define E2E_DEVICE_PROCESS_COMMANDS_H
 
