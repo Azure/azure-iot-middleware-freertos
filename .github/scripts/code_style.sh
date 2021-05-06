@@ -44,6 +44,7 @@ if [[ "$FIX" == "check" ]]; then
 
     if [ $? -ne 0 ]; then
       echo $RESULT | grep "FAIL"
+      exit 1
     fi
 elif [[ "$FIX" == "fix" ]]; then
     uncrustify -c ./uncrustify.cfg --no-backup --replace      \
