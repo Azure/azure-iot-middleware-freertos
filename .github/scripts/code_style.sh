@@ -10,6 +10,13 @@ set -o pipefail # Exit if pipe failed.
 # Pass anything as a first parameter to fix code style problems
 FIX=${1:-0}
 
+usage() {
+    echo "${0} [check|fix]" 1>&2
+    exit 1
+}
+
+FIX=${1:-"check"}
+
 # Version 0.67 is the source of truth
 if ! [ -x "$(command -v uncrustify)" ]; then
     git clone https://github.com/uncrustify/uncrustify.git
@@ -23,20 +30,8 @@ if ! [ -x "$(command -v uncrustify)" ]; then
     cd ../..
 fi
 
-if [ $FIX -ne 0 ]; then
-    uncrustify -c ./uncrustify.cfg --no-backup --replace \
-    ./source/*.c                                              \
-    ./source/include/*.h                                      \
-    ./source/interface/*.h                                    \
-    ./ports/coreMQTT/*.c                                      \
-    ./ports/coreMQTT/*.h                                      \
-    ./tests/config_files/*.h                                  \
-    ./tests/e2e/device/*.c                                    \
-    ./tests/e2e/device/*.h                                    \
-    ./tests/ut/*.h                                            \
-    ./tests/ut/*.c
-else
-    RESULT=$(uncrustify -c ./uncrustify.cfg --check      \
+if [[ "$FIX" == "check" ]]; then
+    RESULT=$(uncrustify -c ./uncrustify.cfg --check           \
     ./source/*.c                                              \
     ./source/include/*.h                                      \
     ./source/interface/*.h                                    \
@@ -51,4 +46,18 @@ else
     if [ $? -ne 0 ]; then
       echo $RESULT | grep "FAIL"
     fi
+elif [[ "$FIX" == "fix" ]]; then
+    uncrustify -c ./uncrustify.cfg --no-backup --replace      \
+    ./source/*.c                                              \
+    ./source/include/*.h                                      \
+    ./source/interface/*.h                                    \
+    ./ports/coreMQTT/*.c                                      \
+    ./ports/coreMQTT/*.h                                      \
+    ./tests/config_files/*.h                                  \
+    ./tests/e2e/device/*.c                                    \
+    ./tests/e2e/device/*.h                                    \
+    ./tests/ut/*.h                                            \
+    ./tests/ut/*.c
+else
+    usage
 fi

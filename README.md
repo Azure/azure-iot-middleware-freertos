@@ -30,7 +30,7 @@ Note that different versions of `uncrustify` can produce differently rendered fi
 
 ```bash
 # From the repo root
-./.github/scripts/code_style.sh 1
+./.github/scripts/code_style.sh fix
 ```
 
 ## Contributing
