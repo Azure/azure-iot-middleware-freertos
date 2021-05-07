@@ -32,7 +32,7 @@
  * @brief Wait timeout of MQTT ACK (SUBACK and PUBACK).
  */
 #ifndef azureiotconfigACK_WAIT_INTERVAL_MS
-    #define azureiotconfigACK_WAIT_INTERVAL_MS             ( 10U )
+    #define azureiotconfigACK_WAIT_INTERVAL_MS    ( 10U )
 #endif
 
 /**

@@ -23,8 +23,8 @@
 
 #include <azure/core/_az_cfg_prefix.h>
 
-#define azureiothubNO_WAIT                   ( 0 )
-#define azureiothubWAIT_FOREVER              ( ( uint32_t ) 0xFFFFFFFF )
+#define azureiothubNO_WAIT                    ( 0 )
+#define azureiothubWAIT_FOREVER               ( ( uint32_t ) 0xFFFFFFFF )
 
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 

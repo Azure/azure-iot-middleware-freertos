@@ -538,7 +538,7 @@ static uint32_t prvE2ETestDeviceProvisioningCommandExecute( E2E_TEST_COMMAND_HAN
 
     if( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                          ucMessageBuffer, ulMessageLength,
-                                         NULL,eAzureIoTHubMessageQoS1, azureiothubWAIT_FOREVER ) != eAzureIoTHubClientSuccess )
+                                         NULL, eAzureIoTHubMessageQoS1, azureiothubWAIT_FOREVER ) != eAzureIoTHubClientSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Fail to send telemetry" );
     }
