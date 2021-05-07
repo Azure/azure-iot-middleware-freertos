@@ -128,6 +128,29 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
 
 /**
  *
+ * Handle any incoming puback messages.
+ *
+ * */
+static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                  AzureIoTMQTTPacketInfo_t * pxIncomingPacket,
+                                  uint16_t usPacketId )
+{
+    ( void ) pxIncomingPacket;
+
+    configASSERT( pxIncomingPacket != NULL );
+    configASSERT( ( azureiotmqttGET_PACKET_TYPE( pxIncomingPacket->ucType ) ) == azureiotmqttPACKET_TYPE_PUBACK );
+
+    AZLogInfo( ( "Puback received for packet id: 0x%08x", usPacketId ) );
+
+    if ( pxAzureIoTHubClient->_internal.xTelemetryCallback != NULL)
+    {
+        pxAzureIoTHubClient->_internal.xTelemetryCallback(usPacketId);
+    }
+}
+/*-----------------------------------------------------------*/
+
+/**
+ *
  * Process incoming MQTT events.
  *
  * */
@@ -145,6 +168,10 @@ static void prvEventCallback( AzureIoTMQTTHandle_t pxMQTTContext,
     else if( ( azureiotmqttGET_PACKET_TYPE( pxPacketInfo->ucType ) ) == azureiotmqttPACKET_TYPE_SUBACK )
     {
         prvMQTTProcessSuback( pxAzureIoTHubClient, pxPacketInfo, pxDeserializedInfo->usPacketIdentifier );
+    }
+    else if( ( azureiotmqttGET_PACKET_TYPE( pxPacketInfo->ucType ) ) == azureiotmqttPACKET_TYPE_PUBACK )
+    {
+        prvMQTTProcessPuback( pxAzureIoTHubClient, pxPacketInfo, pxDeserializedInfo->usPacketIdentifier );
     }
     else
     {
@@ -551,6 +578,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
         pxHubClientOptions->ulModuleIDLength = 0;
         pxHubClientOptions->pucUserAgent = ( const uint8_t * ) azureiothubUSER_AGENT;
         pxHubClientOptions->ulUserAgentLength = sizeof( azureiothubUSER_AGENT ) - 1;
+        pxHubClientOptions->xTelemetryCallback = NULL;
         xResult = eAzureIoTHubClientSuccess;
     }
 
@@ -642,6 +670,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
             pxAzureIoTHubClient->_internal.pucHostname = pucHostname;
             pxAzureIoTHubClient->_internal.ulHostnameLength = ulHostnameLength;
             pxAzureIoTHubClient->_internal.xTimeFunction = xGetTimeFunction;
+            pxAzureIoTHubClient->_internal.xTelemetryCallback = pxHubClientOptions->xTelemetryCallback;
             xResult = eAzureIoTHubClientSuccess;
         }
     }
@@ -790,7 +819,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
 AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                            const uint8_t * pucTelemetryData,
                                                            uint32_t ulTelemetryDataLength,
-                                                           AzureIoTMessageProperties_t * pxProperties )
+                                                           AzureIoTMessageProperties_t * pxProperties,
+                                                           uint32_t * pulTelemetryPacketID )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTHubClientResult_t xResult;

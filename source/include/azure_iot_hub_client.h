@@ -167,17 +167,28 @@ typedef struct AzureIoTHubClientReceiveContext
     } _internal;
 } AzureIoTHubClientReceiveContext_t;
 
+/**
+ * @brief Callback to send notification that puback was received for specific packet ID.
+ */
+typedef void (* AzureIoTTelemetryAckCallback_t)( uint32_t ulTelemetryPacketID );
+
+/**
+ * @brief Options list for the hub client.
+ */
 typedef struct AzureIoTHubClientOptions
 {
-    const uint8_t * pucModuleID;  /**< The optional module ID to use for this device. */
-    uint32_t ulModuleIDLength;    /**< The length of the module ID. */
+    const uint8_t * pucModuleID;                       /**< The optional module ID to use for this device. */
+    uint32_t ulModuleIDLength;                         /**< The length of the module ID. */
 
-    const uint8_t * pucModelID;   /**< The Azure Digital Twin Definition Language model ID used to
-                                   *   identify the capabilities of this device based on the Digital Twin document. */
-    uint32_t ulModelIDLength;     /**< The length of the model ID. */
+    const uint8_t * pucModelID;                        /**< The Azure Digital Twin Definition Language model ID used to
+                                                        *   identify the capabilities of this device based on the Digital Twin document. */
+    uint32_t ulModelIDLength;                          /**< The length of the model ID. */
 
-    const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
-    uint32_t ulUserAgentLength;   /**< The length of the user agent. */
+    const uint8_t * pucUserAgent;                      /**< The user agent to use for this device. */
+    uint32_t ulUserAgentLength;                        /**< The length of the user agent. */
+
+    AzureIoTTelemetryAckCallback_t xTelemetryCallback; /**< The callback to invoke to notify user a puback was received for QOS 1.
+                                                        *   Can be NULL if user does not want to be notified.*/
 } AzureIoTHubClientOptions_t;
 
 struct AzureIoTHubClient
@@ -206,6 +217,7 @@ struct AzureIoTHubClient
                                        uint32_t * pulSaSLength );
         AzureIoTGetHMACFunc_t xHMACFunction;
         AzureIoTGetCurrentTimeFunc_t xTimeFunction;
+        AzureIoTTelemetryAckCallback_t xTelemetryCallback;
 
         uint32_t ulCurrentTwinRequestID;
 
@@ -311,7 +323,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
 AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                            const uint8_t * pucTelemetryData,
                                                            uint32_t ulTelemetryDataLength,
-                                                           AzureIoTMessageProperties_t * pxProperties );
+                                                           AzureIoTMessageProperties_t * pxProperties,
+                                                           uint32_t * pulTelemetryPacketID );
 
 /**
  * @brief Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.
