@@ -820,7 +820,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
                                                            const uint8_t * pucTelemetryData,
                                                            uint32_t ulTelemetryDataLength,
                                                            AzureIoTMessageProperties_t * pxProperties,
-                                                           uint32_t * pulTelemetryPacketID )
+                                                           AzureIoTHubMessageQoS_t xQOS,
+                                                           uint16_t * pusTelemetryPacketID )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTHubClientResult_t xResult;
@@ -845,7 +846,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     }
     else
     {
-        xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS1;
+        xMQTTPublishInfo.xQOS = xQOS;
         xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
         xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTelemetryTopicLength;
         xMQTTPublishInfo.pvPayload = ( const void * ) pucTelemetryData;
@@ -863,6 +864,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         }
         else
         {
+            if( *pusTelemetryPacketID != NULL && xQOS == eAzureIoTHubMessageQoS1 )
+            {
+                *pusTelemetryPacketID = usPublishPacketIdentifier;
+            }
             AZLogInfo( ( "Successfully sent telemetry message" ) );
             xResult = eAzureIoTHubClientSuccess;
         }

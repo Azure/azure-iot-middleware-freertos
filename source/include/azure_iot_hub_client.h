@@ -28,6 +28,12 @@
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
 
+typedef enum AzureIoTHubMessageQoS
+{
+    eAzureIoTHubMessageQoS0 = 0, /** Delivery at most once. */
+    eAzureIoTHubMessageQoS1 = 1  /** Delivery at least once. */
+} AzureIoTHubMessageQoS_t;
+
 typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,    /**< The message is a cloud message. */
@@ -318,13 +324,18 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
  * @param[in] pucTelemetryData The pointer to the buffer of telemetry data.
  * @param[in] ulTelemetryDataLength The length of the buffer to send as telemetry.
  * @param[in] pxProperties The property bag to send with the message.
+ * @param[in] xQOS The QOS to use for the telemetry. Only QOS `0` and `1` are supported.
+ * @param[out] pusTelemetryPacketID The packet id for the sent telemetry.
+ *                                  Can be notified of PUBACK for QOS 1 using the #AzureIoTHubClientOptions_t `xTelemetryCallback` option.
+ *                                  Can be `NULL`.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                            const uint8_t * pucTelemetryData,
                                                            uint32_t ulTelemetryDataLength,
                                                            AzureIoTMessageProperties_t * pxProperties,
-                                                           uint32_t * pulTelemetryPacketID );
+                                                           AzureIoTHubMessageQoS_t xQOS,
+                                                           uint16_t * pusTelemetryPacketID );
 
 /**
  * @brief Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.
