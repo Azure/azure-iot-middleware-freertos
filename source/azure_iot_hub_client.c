@@ -195,9 +195,9 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
             pxContext->_internal.callbacks.xCloudToDeviceMessageCallback( &xCloudToDeviceMessage,
                                                                           pxContext->_internal.pvCallbackContext );
             AZLogDebug( ( "Returned from Cloud to Device callback" ) );
-
-            xResult = eAzureIoTHubClientSuccess;
         }
+
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -248,9 +248,9 @@ static uint32_t prvAzureIoTHubClientDirectMethodProcess( AzureIoTHubClientReceiv
             AZLogDebug( ( "Invoking method callback" ) );
             pxContext->_internal.callbacks.xMethodCallback( &xMethodRequest, pxContext->_internal.pvCallbackContext );
             AZLogDebug( ( "Returned from method callback" ) );
-
-            xResult = eAzureIoTHubClientSuccess;
         }
+
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;

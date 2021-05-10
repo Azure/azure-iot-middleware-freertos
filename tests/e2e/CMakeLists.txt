@@ -218,3 +218,7 @@ target_link_libraries(azure_iot_e2e_tests
     pthread
     az::iot_middleware::freertos
 )
+
+target_link_options(azure_iot_e2e_tests
+  PRIVATE
+    -Xlinker -Map=azure_iot_e2e_tests.map)
