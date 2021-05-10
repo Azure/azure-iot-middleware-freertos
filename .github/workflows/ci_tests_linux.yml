@@ -20,15 +20,3 @@ jobs:
                          export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
                          .github/scripts/ci_tests.sh"
 
-name: Build Docs
-
-on: workflow_dispatch
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Build Doxygen docs
-        run: .github/scripts/doxygen.sh
-
-
