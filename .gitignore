@@ -62,3 +62,4 @@ dkms.conf
 
 # CMake build directory
 /build
+/doc
