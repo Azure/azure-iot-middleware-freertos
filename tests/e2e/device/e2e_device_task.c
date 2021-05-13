@@ -22,7 +22,7 @@ extern char ** ppcArgv;
 
 static AzureIoTHubClient_t xAzureIoTHubClient;
 static uint8_t ucSharedBuffer[ 5 * 1024 ];
-static uint16_t usReceivedPubacks[ 7 ];
+static uint16_t usReceivedPubacks[ 7 ] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,0xFF,0xFF};
 static uint16_t usReceivedPubacksIndex;
 /*-----------------------------------------------------------*/
 
