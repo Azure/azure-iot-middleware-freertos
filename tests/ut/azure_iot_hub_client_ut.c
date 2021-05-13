@@ -495,7 +495,10 @@ static void testAzureIoTHubClient_SendTelemetry_InvalidArgFailure( void ** ppvSt
     /* Fail if the hub client is NULL. */
     assert_int_equal( AzureIoTHubClient_SendTelemetry( NULL,
                                                        ucTestTelemetryPayload,
-                                                       sizeof( ucTestTelemetryPayload ) - 1, NULL ),
+                                                       sizeof( ucTestTelemetryPayload ) - 1,
+                                                       NULL,
+                                                       eAzureIoTHubMessageQoS0,
+                                                       NULL ),
                       eAzureIoTHubClientInvalidArgument );
 }
 /*-----------------------------------------------------------*/
@@ -516,7 +519,10 @@ static void testAzureIoTHubClient_SendTelemetry_BigTopicFailure( void ** ppvStat
     /* Fail if the topic is not able to fit in the working buffer. */
     assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
                                                        ucTestTelemetryPayload,
-                                                       sizeof( ucTestTelemetryPayload ) - 1, &properties ),
+                                                       sizeof( ucTestTelemetryPayload ) - 1,
+                                                       &properties,
+                                                       eAzureIoTHubMessageQoS0,
+                                                       NULL ),
                       eAzureIoTHubClientFailed );
 }
 /*-----------------------------------------------------------*/
@@ -533,7 +539,10 @@ static void testAzureIoTHubClient_SendTelemetry_SendFailure( void ** ppvState )
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
                                                        ucTestTelemetryPayload,
-                                                       sizeof( ucTestTelemetryPayload ) - 1, NULL ),
+                                                       sizeof( ucTestTelemetryPayload ) - 1,
+                                                       NULL,
+                                                       eAzureIoTHubMessageQoS0,
+                                                       NULL ),
                       eAzureIoTHubClientPublishFailed );
 }
 /*-----------------------------------------------------------*/
@@ -549,7 +558,10 @@ static void testAzureIoTHubClient_SendTelemetry_Success( void ** ppvState )
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
                                                        ucTestTelemetryPayload,
-                                                       sizeof( ucTestTelemetryPayload ) - 1, NULL ),
+                                                       sizeof( ucTestTelemetryPayload ) - 1,
+                                                       NULL,
+                                                       eAzureIoTHubMessageQoS0,
+                                                       NULL ),
                       eAzureIoTHubClientSuccess );
 }
 /*-----------------------------------------------------------*/

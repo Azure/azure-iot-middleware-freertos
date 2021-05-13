@@ -95,7 +95,7 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
  * */
 static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                   AzureIoTMQTTPacketInfo_t * pxIncomingPacket,
-                                  uint16_t usPacketId )
+                                  uint16_t usPacketID )
 {
     uint32_t ulIndex;
     AzureIoTHubClientReceiveContext_t * pxContext;
@@ -109,7 +109,7 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
     {
         pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ ulIndex ];
 
-        if( pxContext->_internal.usMqttSubPacketID == usPacketId )
+        if( pxContext->_internal.usMqttSubPacketID == usPacketID )
         {
             /* We assume success since IoT Hub would disconnect if there was a problem subscribing. */
             pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
@@ -133,18 +133,18 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
  * */
 static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                   AzureIoTMQTTPacketInfo_t * pxIncomingPacket,
-                                  uint16_t usPacketId )
+                                  uint16_t usPacketID )
 {
     ( void ) pxIncomingPacket;
 
     configASSERT( pxIncomingPacket != NULL );
     configASSERT( ( azureiotmqttGET_PACKET_TYPE( pxIncomingPacket->ucType ) ) == azureiotmqttPACKET_TYPE_PUBACK );
 
-    AZLogInfo( ( "Puback received for packet id: 0x%08x", usPacketId ) );
+    AZLogInfo( ( "Puback received for packet id: 0x%08x", usPacketID ) );
 
-    if ( pxAzureIoTHubClient->_internal.xTelemetryCallback != NULL)
+    if( pxAzureIoTHubClient->_internal.xTelemetryCallback != NULL )
     {
-        pxAzureIoTHubClient->_internal.xTelemetryCallback(usPacketId);
+        pxAzureIoTHubClient->_internal.xTelemetryCallback( usPacketID );
     }
 }
 /*-----------------------------------------------------------*/
@@ -670,7 +670,8 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureI
             pxAzureIoTHubClient->_internal.pucHostname = pucHostname;
             pxAzureIoTHubClient->_internal.ulHostnameLength = ulHostnameLength;
             pxAzureIoTHubClient->_internal.xTimeFunction = xGetTimeFunction;
-            pxAzureIoTHubClient->_internal.xTelemetryCallback = pxHubClientOptions->xTelemetryCallback;
+            pxAzureIoTHubClient->_internal.xTelemetryCallback =
+                pxHubClientOptions == NULL ? NULL : pxHubClientOptions->xTelemetryCallback;
             xResult = eAzureIoTHubClientSuccess;
         }
     }
@@ -864,10 +865,11 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         }
         else
         {
-            if( *pusTelemetryPacketID != NULL && xQOS == eAzureIoTHubMessageQoS1 )
+            if( ( xQOS == eAzureIoTHubMessageQoS1 ) && ( pusTelemetryPacketID != NULL ) )
             {
                 *pusTelemetryPacketID = usPublishPacketIdentifier;
             }
+
             AZLogInfo( ( "Successfully sent telemetry message" ) );
             xResult = eAzureIoTHubClientSuccess;
         }
