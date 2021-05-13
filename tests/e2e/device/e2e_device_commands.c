@@ -71,8 +71,8 @@ static const uint8_t ucStatusOKTelemetry[] = "{\"status\": \"OK\"}";
 static uint32_t ulContinueProcessingCMD = 1;
 static uint8_t ucSharedBuffer[ e2etestMESSAGE_BUFFER_SIZE ];
 static AzureIoTProvisioningClient_t xAzureIoTProvisioningClient;
-static uint16_t usSentPubacks[ 7 ];
-static uint16_t usSentPubacksIndex;
+static uint16_t usSentTelemetryPublishes[ 7 ];
+static uint16_t usSentTelemetryPublishesIndex;
 /*-----------------------------------------------------------*/
 
 /**
@@ -431,8 +431,8 @@ static uint32_t prvE2ETestSendTelemetryCommandExecute( E2E_TEST_COMMAND_HANDLE x
             LogError( ( "Telemetry message send failed!", ulStatus ) );
         }
 
-        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
 
         if( ulStatus == e2etestE2E_TEST_SUCCESS )
         {
@@ -466,8 +466,8 @@ static uint32_t prvE2ETestEchoCommandExecute( E2E_TEST_COMMAND_HANDLE xCMD,
     }
     else
     {
-        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
         LogInfo( ( "Successfully done with prvE2ETestEchoCommandExecute" ) );
     }
 
@@ -552,8 +552,8 @@ static uint32_t prvE2ETestDeviceProvisioningCommandExecute( E2E_TEST_COMMAND_HAN
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Fail to send telemetry" );
     }
 
-    AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-    usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+    AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+    usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
 
     return e2etestE2E_TEST_SUCCESS;
 }
@@ -605,8 +605,8 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     }
     else
     {
-        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
         ulStatus = e2etestE2E_TEST_SUCCESS;
     }
 
@@ -656,8 +656,8 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     }
     else
     {
-        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+        AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
         ulStatus = e2etestE2E_TEST_SUCCESS;
     }
 
@@ -722,8 +722,8 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to send response" );
     }
 
-    AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-    usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+    AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+    usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
 
     return e2etestE2E_TEST_SUCCESS;
 }
@@ -973,7 +973,8 @@ void vHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
  *
  * */
 uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                     uint16_t ** ppusArrayOfSentPacketID )
+                                     uint16_t ** ppusArrayOfSentPacketID,
+                                     uint16_t * pusTotalSentPublishes )
 {
     AzureIoTHubClientResult_t xResult;
     E2E_TEST_COMMAND xCMD = { 0 };
@@ -992,8 +993,8 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient,
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Report connected failed!" );
     }
 
-    AZLogInfo( ( "Telemetry sent with packet id: 0x%08x | Index set %d", usTelemetryPacketID, usSentPubacksIndex ) );
-    usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
+    AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+    usSentTelemetryPublishes[ usSentTelemetryPublishesIndex++ ] = usTelemetryPacketID;
 
     do
     {
@@ -1064,7 +1065,8 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient,
     } while( ( ulStatus == e2etestE2E_TEST_SUCCESS ) &&
              ulContinueProcessingCMD );
 
-    *ppusArrayOfSentPacketID = ( uint16_t * ) &usSentPubacks;
+    *ppusArrayOfSentPacketID = ( uint16_t * ) &usSentTelemetryPublishes;
+    *pusTotalSentPublishes = usSentTelemetryPublishesIndex;
 
     return ulStatus;
 }
