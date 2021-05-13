@@ -71,6 +71,8 @@ static const uint8_t ucStatusOKTelemetry[] = "{\"status\": \"OK\"}";
 static uint32_t ulContinueProcessingCMD = 1;
 static uint8_t ucSharedBuffer[ e2etestMESSAGE_BUFFER_SIZE ];
 static AzureIoTProvisioningClient_t xAzureIoTProvisioningClient;
+static uint16_t usSentPubacks[ 7 ];
+static uint16_t usSentPubacksIndex;
 /*-----------------------------------------------------------*/
 
 /**
@@ -430,6 +432,7 @@ static uint32_t prvE2ETestSendTelemetryCommandExecute( E2E_TEST_COMMAND_HANDLE x
         }
 
         AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
 
         if( ulStatus == e2etestE2E_TEST_SUCCESS )
         {
@@ -464,6 +467,7 @@ static uint32_t prvE2ETestEchoCommandExecute( E2E_TEST_COMMAND_HANDLE xCMD,
     else
     {
         AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
         LogInfo( ( "Successfully done with prvE2ETestEchoCommandExecute" ) );
     }
 
@@ -549,6 +553,7 @@ static uint32_t prvE2ETestDeviceProvisioningCommandExecute( E2E_TEST_COMMAND_HAN
     }
 
     AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+    usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
 
     return e2etestE2E_TEST_SUCCESS;
 }
@@ -601,6 +606,7 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     else
     {
         AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
         ulStatus = e2etestE2E_TEST_SUCCESS;
     }
 
@@ -651,6 +657,7 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     else
     {
         AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+        usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
         ulStatus = e2etestE2E_TEST_SUCCESS;
     }
 
@@ -716,6 +723,7 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
     }
 
     AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+    usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
 
     return e2etestE2E_TEST_SUCCESS;
 }
@@ -964,7 +972,8 @@ void vHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
  * Poll for commands and execute commands
  *
  * */
-uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
+uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                     uint16_t ** ppusArrayOfSentPacketID )
 {
     AzureIoTHubClientResult_t xResult;
     E2E_TEST_COMMAND xCMD = { 0 };
@@ -984,6 +993,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
     }
 
     AZLogInfo( ( "Telemetry sent with packet id: 0x%08x", usTelemetryPacketID ) );
+    usSentPubacks[ usSentPubacksIndex++ ] = usTelemetryPacketID;
 
     do
     {
@@ -1053,6 +1063,8 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
         }
     } while( ( ulStatus == e2etestE2E_TEST_SUCCESS ) &&
              ulContinueProcessingCMD );
+
+    *ppusArrayOfSentPacketID = ( uint16_t * ) &usSentPubacks;
 
     return ulStatus;
 }

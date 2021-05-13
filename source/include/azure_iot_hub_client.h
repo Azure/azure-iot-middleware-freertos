@@ -176,7 +176,7 @@ typedef struct AzureIoTHubClientReceiveContext
 /**
  * @brief Callback to send notification that puback was received for specific packet ID.
  */
-typedef void (* AzureIoTTelemetryAckCallback_t)( uint32_t ulTelemetryPacketID );
+typedef void (* AzureIoTTelemetryAckCallback_t)( uint16_t ulTelemetryPacketID );
 
 /**
  * @brief Options list for the hub client.

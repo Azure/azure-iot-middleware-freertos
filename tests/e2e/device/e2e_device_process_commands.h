@@ -42,7 +42,7 @@ struct NetworkContext
  * Process all the test command send to device.
  *
  */
-uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * xAzureIoTHubClientHandle );
+uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * xAzureIoTHubClientHandle, uint16_t ** ppusArrayOfSentPacketID );
 
 /**
  * Callback use for Cloud messages

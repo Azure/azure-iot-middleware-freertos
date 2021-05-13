@@ -22,6 +22,8 @@ extern char ** ppcArgv;
 
 static AzureIoTHubClient_t xAzureIoTHubClient;
 static uint8_t ucSharedBuffer[ 5 * 1024 ];
+static uint16_t usReceivedPubacks[ 7 ];
+static uint16_t usReceivedPubacksIndex;
 /*-----------------------------------------------------------*/
 
 /**
@@ -31,6 +33,23 @@ static uint8_t ucSharedBuffer[ 5 * 1024 ];
 static void prvTelemetryPubackCallback( uint16_t usPacketID )
 {
     AZLogInfo( ( "Puback received for packet id in callback: 0x%08x", usPacketID ) );
+    usReceivedPubacks[ usReceivedPubacksIndex++ ] = usPacketID;
+}
+/*-----------------------------------------------------------*/
+
+/**
+ * Verify sent/received packet id PUBACK
+ *
+ **/
+static AzureIoTHubClientResult_t prvVerifyPuback( uint16_t * pusSentPacketID )
+{
+    AZLogInfo( ( "Verifying match of sent and received packet id's" ) );
+
+    for( int i = 0; i < 7; i++ )
+    {
+        AZLogInfo( ( "Check: %d = %d", usReceivedPubacks[ i ], pusSentPacketID[ i ] ) );
+        assert_int_equal( usReceivedPubacks[ i ], pusSentPacketID[ i ] );
+    }
 }
 
 /*
@@ -44,6 +63,7 @@ static void vTestEntry( void ** ppvState )
     TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIoTHubClientOptions_t xHubOptions = { 0 };
     bool xSessionPresent = false;
+    uint16_t * pusArrayOfSentPacketID;
 
     if( ulArgc != 5 )
     {
@@ -115,8 +135,10 @@ static void vTestEntry( void ** ppvState )
                                                              ULONG_MAX ),
                       eAzureIoTHubClientSuccess );
 
-    assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient ),
+    assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient, &pusArrayOfSentPacketID ),
                       eAzureIoTHubClientSuccess );
+
+    prvVerifyPuback( pusArrayOfSentPacketID );
 
     AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
     AzureIoTHubClient_Deinit( &xAzureIoTHubClient );
