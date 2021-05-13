@@ -71,7 +71,7 @@ static const uint8_t ucStatusOKTelemetry[] = "{\"status\": \"OK\"}";
 static uint32_t ulContinueProcessingCMD = 1;
 static uint8_t ucSharedBuffer[ e2etestMESSAGE_BUFFER_SIZE ];
 static AzureIoTProvisioningClient_t xAzureIoTProvisioningClient;
-static uint16_t usSentTelemetryPublishes[ 7 ];
+static uint16_t usSentTelemetryPublishes[ 7 ]; /* Rec begin as 0xFF | Sent start as 0x00 */
 static uint16_t usSentTelemetryPublishesIndex;
 /*-----------------------------------------------------------*/
 

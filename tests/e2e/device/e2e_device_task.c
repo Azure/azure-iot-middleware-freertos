@@ -22,7 +22,7 @@ extern char ** ppcArgv;
 
 static AzureIoTHubClient_t xAzureIoTHubClient;
 static uint8_t ucSharedBuffer[ 5 * 1024 ];
-static uint16_t usReceivedPubacks[ 7 ] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF };
+static uint16_t usReceivedPubacks[ 7 ] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }; /* Rec begin as 0xFF | Sent start as 0x00 */
 static uint16_t usReceivedPubacksIndex;
 /*-----------------------------------------------------------*/
 
@@ -44,7 +44,7 @@ static void prvTelemetryPubackCallback( uint16_t usPacketID )
 static AzureIoTHubClientResult_t prvVerifyPuback( uint16_t * pusSentPacketID,
                                                   uint16_t totalSent )
 {
-    AZLogInfo( ( "Verifying match of sent and received packet id's" ) );
+    AZLogInfo( ( "Verifying match of sent and received PUBACK packet id's" ) );
 
     for( int i = 0; i < totalSent; i++ )
     {
