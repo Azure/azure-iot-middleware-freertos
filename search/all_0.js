@@ -74,5 +74,6 @@ var searchData=
   ['azureiotresult_71',['AzureIoTResult',['../azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3baf',1,'azure_iot.h']]],
   ['azureiottransportinterface_72',['AzureIoTTransportInterface',['../struct_azure_io_t_transport_interface.html',1,'']]],
   ['azureiottransportrecv_5ft_73',['AzureIoTTransportRecv_t',['../azure__iot__transport__interface_8h.html#a1844f2f0ac918e0dbd8ebc3e9c473cef',1,'azure_iot_transport_interface.h']]],
-  ['azureiottransportsend_5ft_74',['AzureIoTTransportSend_t',['../azure__iot__transport__interface_8h.html#abbdced6c2ba7013184e22f1b31dd64a6',1,'azure_iot_transport_interface.h']]]
+  ['azureiottransportsend_5ft_74',['AzureIoTTransportSend_t',['../azure__iot__transport__interface_8h.html#abbdced6c2ba7013184e22f1b31dd64a6',1,'azure_iot_transport_interface.h']]],
+  ['azure_20freertos_20middleware_75',['Azure FreeRTOS Middleware',['../index.html',1,'']]]
 ];
