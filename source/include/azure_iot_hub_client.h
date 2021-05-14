@@ -327,6 +327,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
  * @param[in] xQOS The QOS to use for the telemetry. Only QOS `0` and `1` are supported.
  * @param[out] pusTelemetryPacketID The packet id for the sent telemetry.
  *                                  Can be notified of PUBACK for QOS 1 using the #AzureIoTHubClientOptions_t `xTelemetryCallback` option.
+ *                                  If xQOS is `eAzureIoTHubMessageQoS0` this value will not be sent on return.
  *                                  Can be `NULL`.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */

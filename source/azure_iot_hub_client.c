@@ -144,7 +144,9 @@ static void prvMQTTProcessPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
 
     if( pxAzureIoTHubClient->_internal.xTelemetryCallback != NULL )
     {
+        AZLogDebug( ( "Invoking telemetry puback callback" ) );
         pxAzureIoTHubClient->_internal.xTelemetryCallback( usPacketID );
+        AZLogDebug( ( "Returned from telemetry puback callback" ) );
     }
 }
 /*-----------------------------------------------------------*/
@@ -572,13 +574,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
     else
     {
         memset( pxHubClientOptions, 0, sizeof( AzureIoTHubClientOptions_t ) );
-        pxHubClientOptions->pucModelID = NULL;
-        pxHubClientOptions->ulModelIDLength = 0;
-        pxHubClientOptions->pucModuleID = NULL;
-        pxHubClientOptions->ulModuleIDLength = 0;
+
         pxHubClientOptions->pucUserAgent = ( const uint8_t * ) azureiothubUSER_AGENT;
         pxHubClientOptions->ulUserAgentLength = sizeof( azureiothubUSER_AGENT ) - 1;
-        pxHubClientOptions->xTelemetryCallback = NULL;
+
         xResult = eAzureIoTHubClientSuccess;
     }
 
@@ -853,8 +852,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
         xMQTTPublishInfo.pvPayload = ( const void * ) pucTelemetryData;
         xMQTTPublishInfo.xPayloadLength = ulTelemetryDataLength;
 
-        /* Get a unique packet id. */
-        usPublishPacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+        /* Get a unique packet id. Not used if QOS is 0 */
+        usPublishPacketIdentifier = xQOS == eAzureIoTHubMessageQoS1 ?
+                                    AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) :
+                                    0;
 
         /* Send PUBLISH packet. */
         if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
