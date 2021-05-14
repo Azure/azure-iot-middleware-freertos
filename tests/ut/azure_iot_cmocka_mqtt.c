@@ -25,6 +25,7 @@ AzureIoTMQTTPacketInfo_t xPacketInfo;
 AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 uint16_t usTestPacketId = 1;
 const uint8_t * pucPublishPayload = NULL;
+uint16_t usSentQOS = 0xFF;
 uint32_t ulDelayReceivePacket = 0;
 /*-----------------------------------------------------------*/
 
@@ -94,6 +95,13 @@ AzureIoTMQTTResult_t AzureIoTMQTT_Publish( AzureIoTMQTTHandle_t xContext,
     {
         assert_memory_equal( pxPublishInfo->pvPayload, pucPublishPayload, pxPublishInfo->xPayloadLength );
     }
+
+    if( usSentQOS != 0xFF )
+    {
+        assert_int_equal( usSentQOS, pxPublishInfo->xQOS );
+    }
+
+    usSentQOS = 0xFF; /* Reset to wrong value after checking */
 
     return xReturn;
 }

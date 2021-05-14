@@ -43,6 +43,7 @@ extern AzureIoTMQTTPacketInfo_t xPacketInfo;
 extern AzureIoTMQTTDeserializedInfo_t xDeserializedInfo;
 extern uint16_t usTestPacketId;
 extern const uint8_t * pucPublishPayload;
+extern uint16_t usSentQOS;
 extern uint32_t ulDelayReceivePacket;
 
 static const uint8_t ucHostname[] = "unittest.azure-devices.net";
@@ -547,13 +548,15 @@ static void testAzureIoTHubClient_SendTelemetry_SendFailure( void ** ppvState )
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTHubClient_SendTelemetry_Success( void ** ppvState )
+static void testAzureIoTHubClient_SendTelemetryQOS0_Success( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
     ( void ) ppvState;
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    usSentQOS = eAzureIoTMQTTQoS0; /* Check to make sure the hub QOS translates correctly to MQTT layer */
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
@@ -563,6 +566,30 @@ static void testAzureIoTHubClient_SendTelemetry_Success( void ** ppvState )
                                                        eAzureIoTHubMessageQoS0,
                                                        NULL ),
                       eAzureIoTHubClientSuccess );
+}
+/*-----------------------------------------------------------*/
+
+
+static void testAzureIoTHubClient_SendTelemetryQOS1WithPacketID_Success( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    uint16_t usPacketId = 0;
+
+    ( void ) ppvState;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    usSentQOS = eAzureIoTMQTTQoS1; /* Check to make sure the hub QOS translates correctly to MQTT QOS */
+
+    will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
+    assert_int_equal( AzureIoTHubClient_SendTelemetry( &xTestIoTHubClient,
+                                                       ucTestTelemetryPayload,
+                                                       sizeof( ucTestTelemetryPayload ) - 1,
+                                                       NULL,
+                                                       eAzureIoTHubMessageQoS1,
+                                                       &usPacketId ),
+                      eAzureIoTHubClientSuccess );
+    assert_int_equal( usPacketId, 1);
 }
 /*-----------------------------------------------------------*/
 
@@ -1572,7 +1599,8 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTHubClient_SendTelemetry_InvalidArgFailure ),
         cmocka_unit_test( testAzureIoTHubClient_SendTelemetry_BigTopicFailure ),
         cmocka_unit_test( testAzureIoTHubClient_SendTelemetry_SendFailure ),
-        cmocka_unit_test( testAzureIoTHubClient_SendTelemetry_Success ),
+        cmocka_unit_test( testAzureIoTHubClient_SendTelemetryQOS0_Success ),
+        cmocka_unit_test( testAzureIoTHubClient_SendTelemetryQOS1WithPacketID_Success ),
         cmocka_unit_test( testAzureIoTHubClient_ProcessLoop_InvalidArgFailure ),
         cmocka_unit_test( testAzureIoTHubClient_ProcessLoop_MQTTProcessFailure ),
         cmocka_unit_test( testAzureIoTHubClient_ProcessLoop_Success ),
