@@ -24,6 +24,10 @@ static AzureIoTHubClient_t xAzureIoTHubClient;
 static uint8_t ucSharedBuffer[ 5 * 1024 ];
 /*-----------------------------------------------------------*/
 
+extern void prvTelemetryPubackCallback( uint16_t usPacketID );
+
+/*-----------------------------------------------------------*/
+
 /*
  * Entry point to E2E tests
  **/
@@ -62,6 +66,8 @@ static void vTestEntry( void ** ppvState )
 
     assert_int_equal( AzureIoTHubClient_OptionsInit( &xHubOptions ),
                       eAzureIoTHubClientSuccess );
+
+    xHubOptions.xTelemetryCallback = prvTelemetryPubackCallback;
 
     xHubOptions.pucModelID = ( const uint8_t * ) ppcArgv[ 3 ];
     xHubOptions.ulModuleIDLength = ( uint32_t ) strlen( ppcArgv[ 3 ] );

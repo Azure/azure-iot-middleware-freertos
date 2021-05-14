@@ -28,6 +28,12 @@
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
 
+typedef enum AzureIoTHubMessageQoS
+{
+    eAzureIoTHubMessageQoS0 = 0, /** Delivery at most once. */
+    eAzureIoTHubMessageQoS1 = 1  /** Delivery at least once. */
+} AzureIoTHubMessageQoS_t;
+
 typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,    /**< The message is a cloud message. */
@@ -167,17 +173,28 @@ typedef struct AzureIoTHubClientReceiveContext
     } _internal;
 } AzureIoTHubClientReceiveContext_t;
 
+/**
+ * @brief Callback to send notification that puback was received for specific packet ID.
+ */
+typedef void (* AzureIoTTelemetryAckCallback_t)( uint16_t ulTelemetryPacketID );
+
+/**
+ * @brief Options list for the hub client.
+ */
 typedef struct AzureIoTHubClientOptions
 {
-    const uint8_t * pucModuleID;  /**< The optional module ID to use for this device. */
-    uint32_t ulModuleIDLength;    /**< The length of the module ID. */
+    const uint8_t * pucModuleID;                       /**< The optional module ID to use for this device. */
+    uint32_t ulModuleIDLength;                         /**< The length of the module ID. */
 
-    const uint8_t * pucModelID;   /**< The Azure Digital Twin Definition Language model ID used to
-                                   *   identify the capabilities of this device based on the Digital Twin document. */
-    uint32_t ulModelIDLength;     /**< The length of the model ID. */
+    const uint8_t * pucModelID;                        /**< The Azure Digital Twin Definition Language model ID used to
+                                                        *   identify the capabilities of this device based on the Digital Twin document. */
+    uint32_t ulModelIDLength;                          /**< The length of the model ID. */
 
-    const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
-    uint32_t ulUserAgentLength;   /**< The length of the user agent. */
+    const uint8_t * pucUserAgent;                      /**< The user agent to use for this device. */
+    uint32_t ulUserAgentLength;                        /**< The length of the user agent. */
+
+    AzureIoTTelemetryAckCallback_t xTelemetryCallback; /**< The callback to invoke to notify user a puback was received for QOS 1.
+                                                        *   Can be NULL if user does not want to be notified.*/
 } AzureIoTHubClientOptions_t;
 
 struct AzureIoTHubClient
@@ -206,6 +223,7 @@ struct AzureIoTHubClient
                                        uint32_t * pulSaSLength );
         AzureIoTGetHMACFunc_t xHMACFunction;
         AzureIoTGetCurrentTimeFunc_t xTimeFunction;
+        AzureIoTTelemetryAckCallback_t xTelemetryCallback;
 
         uint32_t ulCurrentTwinRequestID;
 
@@ -306,12 +324,19 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
  * @param[in] pucTelemetryData The pointer to the buffer of telemetry data.
  * @param[in] ulTelemetryDataLength The length of the buffer to send as telemetry.
  * @param[in] pxProperties The property bag to send with the message.
+ * @param[in] xQOS The QOS to use for the telemetry. Only QOS `0` and `1` are supported.
+ * @param[out] pusTelemetryPacketID The packet id for the sent telemetry.
+ *                                  Can be notified of PUBACK for QOS 1 using the #AzureIoTHubClientOptions_t `xTelemetryCallback` option.
+ *                                  If xQOS is `eAzureIoTHubMessageQoS0` this value will not be sent on return.
+ *                                  Can be `NULL`.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
  */
 AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                            const uint8_t * pucTelemetryData,
                                                            uint32_t ulTelemetryDataLength,
-                                                           AzureIoTMessageProperties_t * pxProperties );
+                                                           AzureIoTMessageProperties_t * pxProperties,
+                                                           AzureIoTHubMessageQoS_t xQOS,
+                                                           uint16_t * pusTelemetryPacketID );
 
 /**
  * @brief Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.
