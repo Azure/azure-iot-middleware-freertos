@@ -22,36 +22,11 @@ extern char ** ppcArgv;
 
 static AzureIoTHubClient_t xAzureIoTHubClient;
 static uint8_t ucSharedBuffer[ 5 * 1024 ];
-static uint16_t usReceivedPubacks[ 7 ] = { 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF }; /* Rec begin as 0xFF | Sent start as 0x00 */
-static uint16_t usReceivedPubacksIndex;
 /*-----------------------------------------------------------*/
 
-/**
- * Telemetry PUBACK callback
- *
- **/
-static void prvTelemetryPubackCallback( uint16_t usPacketID )
-{
-    AZLogInfo( ( "Puback received for packet id in callback: 0x%08x", usPacketID ) );
-    usReceivedPubacks[ usReceivedPubacksIndex++ ] = usPacketID;
-}
+extern void prvTelemetryPubackCallback( uint16_t usPacketID );
+
 /*-----------------------------------------------------------*/
-
-/**
- * Verify sent/received packet id PUBACK
- *
- **/
-static AzureIoTHubClientResult_t prvVerifyPuback( uint16_t * pusSentPacketID,
-                                                  uint16_t totalSent )
-{
-    AZLogInfo( ( "Verifying match of sent and received PUBACK packet id's" ) );
-
-    for( int i = 0; i < totalSent; i++ )
-    {
-        AZLogInfo( ( "Check: %d = %d", usReceivedPubacks[ i ], pusSentPacketID[ i ] ) );
-        assert_int_equal( usReceivedPubacks[ i ], pusSentPacketID[ i ] );
-    }
-}
 
 /*
  * Entry point to E2E tests
@@ -137,10 +112,8 @@ static void vTestEntry( void ** ppvState )
                                                              ULONG_MAX ),
                       eAzureIoTHubClientSuccess );
 
-    assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient, &pusArrayOfSentPacketID, &totalSentPublishes ),
+    assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient ),
                       eAzureIoTHubClientSuccess );
-
-    prvVerifyPuback( pusArrayOfSentPacketID, totalSentPublishes );
 
     AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
     AzureIoTHubClient_Deinit( &xAzureIoTHubClient );
