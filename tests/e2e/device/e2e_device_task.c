@@ -39,8 +39,6 @@ static void vTestEntry( void ** ppvState )
     TlsTransportParams_t xTlsTransportParams = { 0 };
     AzureIoTHubClientOptions_t xHubOptions = { 0 };
     bool xSessionPresent = false;
-    uint16_t * pusArrayOfSentPacketID;
-    uint16_t totalSentPublishes;
 
     if( ulArgc != 5 )
     {

@@ -826,7 +826,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTHubClientResult_t xResult;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
-    uint16_t usPublishPacketIdentifier;
+    uint16_t usPublishPacketIdentifier = 0;
     size_t xTelemetryTopicLength;
     az_result xCoreResult;
 
@@ -846,16 +846,17 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
     }
     else
     {
-        xMQTTPublishInfo.xQOS = ( AzureIoTMQTTQoS_t ) xQOS;
+        xMQTTPublishInfo.xQOS = xQOS == eAzureIoTHubMessageQoS1 ? eAzureIoTMQTTQoS1 : eAzureIoTMQTTQoS0;
         xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
         xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTelemetryTopicLength;
         xMQTTPublishInfo.pvPayload = ( const void * ) pucTelemetryData;
         xMQTTPublishInfo.xPayloadLength = ulTelemetryDataLength;
 
         /* Get a unique packet id. Not used if QOS is 0 */
-        usPublishPacketIdentifier = xQOS == eAzureIoTHubMessageQoS1 ?
-                                    AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) :
-                                    0;
+        if( xQOS == eAzureIoTHubMessageQoS1 )
+        {
+            usPublishPacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+        }
 
         /* Send PUBLISH packet. */
         if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),

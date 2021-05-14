@@ -88,10 +88,10 @@ void prvTelemetryPubackCallback( uint16_t usPacketID )
  * Telemetry PUBACK callback
  *
  **/
-static AzureIoTHubClientResult_t prvWaitForPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                   uint16_t usSentTelemetryPublishID )
+static uint32_t prvWaitForPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                  uint16_t usSentTelemetryPublishID )
 {
-    AzureIoTHubClientResult_t xResult;
+    uint32_t xResult;
 
     AzureIoTHubClient_ProcessLoop( pxAzureIoTHubClient, e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC );
 
@@ -100,11 +100,11 @@ static AzureIoTHubClientResult_t prvWaitForPuback( AzureIoTHubClient_t * pxAzure
     if( usReceivedTelemetryPubackID == usSentTelemetryPublishID )
     {
         usReceivedTelemetryPubackID = 0; /* Reset received to 0 */
-        xResult = eAzureIoTHubClientSuccess;
+        xResult = 0;
     }
     else
     {
-        xResult = eAzureIoTHubClientFailed;
+        xResult = 1;
     }
 
     return xResult;
@@ -469,7 +469,7 @@ static uint32_t prvE2ETestSendTelemetryCommandExecute( E2E_TEST_COMMAND_HANDLE x
         }
 
         if( ( ulStatus == e2etestE2E_TEST_SUCCESS ) &&
-            ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+            ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
         {
             ulStatus = e2etestE2E_TEST_FAILED;
             LogError( ( "Telemetry message PUBACK never received!", ulStatus ) );
@@ -505,7 +505,7 @@ static uint32_t prvE2ETestEchoCommandExecute( E2E_TEST_COMMAND_HANDLE xCMD,
     {
         LogError( ( "Telemetry message send failed!, error code %d", xStatus ) );
     }
-    else if( ( xStatus = prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
     {
         LogError( ( "Telemetry message PUBACK never received!", xStatus ) );
     }
@@ -594,7 +594,7 @@ static uint32_t prvE2ETestDeviceProvisioningCommandExecute( E2E_TEST_COMMAND_HAN
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Fail to send telemetry" );
     }
-    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Telemetry message PUBACK never received!" );
     }
@@ -647,7 +647,7 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
         LogError( ( "Failed to send response" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
     }
-    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
     {
         ulStatus = e2etestE2E_TEST_FAILED;
         LogError( ( "Telemetry message PUBACK never received!", ulStatus ) );
@@ -701,7 +701,7 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
         LogError( ( "Failed to send response" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
     }
-    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
     {
         ulStatus = e2etestE2E_TEST_FAILED;
         LogError( ( "Telemetry message PUBACK never received!", ulStatus ) );
@@ -771,7 +771,7 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to send response" );
     }
-    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Telemetry message PUBACK never received!" );
     }
@@ -1041,7 +1041,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Report connected failed!" );
     }
-    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+    else if( ( prvWaitForPuback( pxAzureIoTHubClient, usTelemetryPacketID ) ) )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Telemetry message PUBACK never received!" );
     }
