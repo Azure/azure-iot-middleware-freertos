@@ -589,7 +589,7 @@ static void testAzureIoTHubClient_SendTelemetryQOS1WithPacketID_Success( void **
                                                        eAzureIoTHubMessageQoS1,
                                                        &usPacketId ),
                       eAzureIoTHubClientSuccess );
-    assert_int_equal( usPacketId, 1);
+    assert_int_equal( usPacketId, 1 );
 }
 /*-----------------------------------------------------------*/
 
