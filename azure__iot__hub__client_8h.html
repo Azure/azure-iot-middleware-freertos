@@ -100,6 +100,7 @@ Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_hub_client_receive_context.html">AzureIoTHubClientReceiveContext</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_hub_client_options.html">AzureIoTHubClientOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options list for the hub client.  <a href="struct_azure_io_t_hub_client_options.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_hub_client.html">AzureIoTHubClient_t</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,9 +122,17 @@ Typedefs</h2></td></tr>
 <tr class="memitem:a11b9847e2cbc1f914bcae385ded92cf3"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a11b9847e2cbc1f914bcae385ded92cf3">AzureIoTHubClientTwinCallback_t</a>) (AzureIoTHubClientTwinResponse_t *pxMessage, void *pvContext)</td></tr>
 <tr class="memdesc:a11b9847e2cbc1f914bcae385ded92cf3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Twin callback to be invoked when a twin message is received in the call to <a class="el" href="azure__iot__hub__client_8h.html#a2d96565ecf234d146e2952f6fe12ade6" title="Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.">AzureIoTHubClient_ProcessLoop()</a>.  <a href="azure__iot__hub__client_8h.html#a11b9847e2cbc1f914bcae385ded92cf3">More...</a><br /></td></tr>
 <tr class="separator:a11b9847e2cbc1f914bcae385ded92cf3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="memItemLeft" align="right" valign="top"><a id="af6adbb2afc1cfdb598bb2f9a6528907a"></a>
+typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af6adbb2afc1cfdb598bb2f9a6528907a">AzureIoTTelemetryAckCallback_t</a>) (uint16_t ulTelemetryPacketID)</td></tr>
+<tr class="memdesc:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to send notification that puback was received for specific packet ID. <br /></td></tr>
+<tr class="separator:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
+<tr class="memitem:ae15273584a1a437a17bb8e4f0bfad46a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46a">AzureIoTHubMessageQoS</a> { <b>eAzureIoTHubMessageQoS0</b> = 0, 
+<a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46aa214166adc1c1e186e48e22b9ffa4f9a0">eAzureIoTHubMessageQoS1</a> = 1
+ }</td></tr>
+<tr class="separator:ae15273584a1a437a17bb8e4f0bfad46a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92be11689791a8435db76d1146c55666"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666">AzureIoTHubMessageType</a> { <br />
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab35cdb9dc9b1820d38f70f85d9892fcf">eAzureIoTHubCloudToDeviceMessage</a> = 1, 
 <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666abafac6f09b323b66dca6d2827352f9ae">eAzureIoTHubDirectMethodMessage</a>, 
@@ -200,9 +209,9 @@ Functions</h2></td></tr>
 <tr class="memitem:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af48dde06a7de12ac1e3ddf7589dba5f6">AzureIoTHubClient_Disconnect</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect from the IoT Hub endpoint.  <a href="azure__iot__hub__client_8h.html#af48dde06a7de12ac1e3ddf7589dba5f6">More...</a><br /></td></tr>
 <tr class="separator:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f1984f5137fb5fdaf131aae48991224"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a4f1984f5137fb5fdaf131aae48991224">AzureIoTHubClient_SendTelemetry</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const uint8_t *pucTelemetryData, uint32_t ulTelemetryDataLength, AzureIoTMessageProperties_t *pxProperties)</td></tr>
-<tr class="memdesc:a4f1984f5137fb5fdaf131aae48991224"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send telemetry data to IoT Hub.  <a href="azure__iot__hub__client_8h.html#a4f1984f5137fb5fdaf131aae48991224">More...</a><br /></td></tr>
-<tr class="separator:a4f1984f5137fb5fdaf131aae48991224"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5142c66e95cc7d8c55db1010782b950d"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a5142c66e95cc7d8c55db1010782b950d">AzureIoTHubClient_SendTelemetry</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const uint8_t *pucTelemetryData, uint32_t ulTelemetryDataLength, AzureIoTMessageProperties_t *pxProperties, AzureIoTHubMessageQoS_t xQOS, uint16_t *pusTelemetryPacketID)</td></tr>
+<tr class="memdesc:a5142c66e95cc7d8c55db1010782b950d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send telemetry data to IoT Hub.  <a href="azure__iot__hub__client_8h.html#a5142c66e95cc7d8c55db1010782b950d">More...</a><br /></td></tr>
+<tr class="separator:a5142c66e95cc7d8c55db1010782b950d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d96565ecf234d146e2952f6fe12ade6"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a2d96565ecf234d146e2952f6fe12ade6">AzureIoTHubClient_ProcessLoop</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, uint32_t ulTimeoutMilliseconds)</td></tr>
 <tr class="memdesc:a2d96565ecf234d146e2952f6fe12ade6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.  <a href="azure__iot__hub__client_8h.html#a2d96565ecf234d146e2952f6fe12ade6">More...</a><br /></td></tr>
 <tr class="separator:a2d96565ecf234d146e2952f6fe12ade6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -322,6 +331,24 @@ Functions</h2></td></tr>
 <tr><td class="fieldname"><a id="a41a0af7a7ec2c362658a9dc5e9731940a78caa26618515b31509e42f73778bc88"></a>eAzureIoTHubClientTopicNoMatch&#160;</td><td class="fielddoc"><p>The received message was not for the currently processed feature. </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a41a0af7a7ec2c362658a9dc5e9731940a3b20da00c44eca05194f57162b9b4cae"></a>eAzureIoTHubClientFailed&#160;</td><td class="fielddoc"><p>There was a failure. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="ae15273584a1a437a17bb8e4f0bfad46a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae15273584a1a437a17bb8e4f0bfad46a">&#9670;&nbsp;</a></span>AzureIoTHubMessageQoS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46a">AzureIoTHubMessageQoS</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae15273584a1a437a17bb8e4f0bfad46aa214166adc1c1e186e48e22b9ffa4f9a0"></a>eAzureIoTHubMessageQoS1&#160;</td><td class="fielddoc"><p>Delivery at most once. </p>
 </td></tr>
 </table>
 
@@ -766,8 +793,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a4f1984f5137fb5fdaf131aae48991224"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4f1984f5137fb5fdaf131aae48991224">&#9670;&nbsp;</a></span>AzureIoTHubClient_SendTelemetry()</h2>
+<a id="a5142c66e95cc7d8c55db1010782b950d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5142c66e95cc7d8c55db1010782b950d">&#9670;&nbsp;</a></span>AzureIoTHubClient_SendTelemetry()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -794,7 +821,19 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
-          <td class="paramname"><em>pxProperties</em>&#160;</td>
+          <td class="paramname"><em>pxProperties</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">AzureIoTHubMessageQoS_t&#160;</td>
+          <td class="paramname"><em>xQOS</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t *&#160;</td>
+          <td class="paramname"><em>pusTelemetryPacketID</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -811,6 +850,8 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucTelemetryData</td><td>The pointer to the buffer of telemetry data. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTelemetryDataLength</td><td>The length of the buffer to send as telemetry. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pxProperties</td><td>The property bag to send with the message. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xQOS</td><td>The QOS to use for the telemetry. Only QOS <code>0</code> and <code>1</code> are supported. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pusTelemetryPacketID</td><td>The packet id for the sent telemetry. Can be notified of PUBACK for QOS 1 using the #AzureIoTHubClientOptions_t <code>xTelemetryCallback</code> option. If xQOS is <code>eAzureIoTHubMessageQoS0</code> this value will not be sent on return. Can be <code>NULL</code>. </td></tr>
   </table>
   </dd>
 </dl>
