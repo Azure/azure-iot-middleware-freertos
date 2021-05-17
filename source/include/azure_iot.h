@@ -100,7 +100,7 @@ void AzureIoT_Deinit();
  *
  * @param[out] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[out] pucBuffer The pointer to the buffer.
- * @param[in] ulWrittenLength The length of the properties already written (if applicable).
+ * @param[in] ulAlreadyWrittenLength The length of the properties already written (if applicable).
  * @param[in] ulBufferLength The length of \p pucBuffer.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
@@ -139,7 +139,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
  *
  * @param[in] pxMessageProperties The #AzureIoTMessageProperties_t* to use for the operation.
  * @param[in] pucName The name of the property to find.
- * @param[in] nameLength Length of the property name.
+ * @param[in] ulNameLength Length of the property name.
  * @param[out] ppucOutValue The output pointer to the property value.
  * @param[out] pulOutValueLength The length of \p ppucOutValue.
  * @return An #AzureIoTResult_t with the result of the operation.
