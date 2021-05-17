@@ -33,10 +33,12 @@ cmake --build build > /dev/null 2> build.log
 cat build.log | grep -A 3 -E 'azure.*\.h'
 
 # If grep "failed" then it means it didn't find any problems. Exit if found something.
-if [ $? -ne 0 ]; then
+if [ $? -eq 0 ]; then
   exit 1
 fi
 set -e
+
+rm -rf build/
 
 echo -e "::group::Build using clang"
 cmake -Bbuild -DCMAKE_C_COMPILER=clang -Dfreertos_directory=$TEST_FREERTOS_SRC -Dfreertos_port_directory=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -Dconfig_directory=.github/config .
