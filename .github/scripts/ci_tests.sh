@@ -30,7 +30,7 @@ set +e
 echo -e "::group::Checking doxygen documentation matches sources"
 cmake -Bbuild -Dcheck_docs=ON -DCMAKE_C_COMPILER=clang -Dfreertos_directory=$TEST_FREERTOS_SRC -Dfreertos_port_directory=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -Dconfig_directory=.github/config .
 cmake --build build > /dev/null 2> build.log
-cat build.log | grep -A 3 -E 'azure.*\.h'
+cat build.log | grep -A 3 -E 'azure_.*\.h'
 
 # If grep "failed" then it means it didn't find any problems. Exit if found something.
 if [ $? -eq 0 ]; then
