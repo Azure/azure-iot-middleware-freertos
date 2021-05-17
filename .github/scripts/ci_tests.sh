@@ -25,6 +25,15 @@ fi
 echo -e "Using FreeRTOS in libraries/FreeRTOS (`git name-rev --name-only HEAD`)"
 TEST_FREERTOS_SRC=`pwd`/libraries/FreeRTOS
 
+echo -d "::group::Checking doxygen documentation matches sources"
+cmake -Bbuild -Dcheck-docs=ON -DCMAKE_C_COMPILER=clang -Dfreertos_directory=$TEST_FREERTOS_SRC -Dfreertos_port_directory=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -Dconfig_directory=.github/config .
+cmake --build build 2> build.log
+cat build.log | grep -A 3 -E 'azure.*\.h'
+
+echo -d "::group::Build using clang"
+cmake -Bbuild -DCMAKE_C_COMPILER=clang -Dfreertos_directory=$TEST_FREERTOS_SRC -Dfreertos_port_directory=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -Dconfig_directory=.github/config .
+cmake --build build
+
 echo -e "::group::Building unit tests"
 cmake -Bbuild -Dfreertos_repo_SOURCE_DIR=$TEST_FREERTOS_SRC ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
