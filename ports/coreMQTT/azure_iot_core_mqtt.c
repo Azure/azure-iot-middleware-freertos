@@ -190,7 +190,7 @@ uint16_t AzureIoTMQTT_GetPacketId( AzureIoTMQTTHandle_t xContext )
 
     xResult = MQTT_GetPacketId( xContext );
 
-    return prvTranslateToAzureIoTMQTTResult( xResult );
+    return (uint16_t) prvTranslateToAzureIoTMQTTResult( xResult );
 }
 
 AzureIoTMQTTResult_t AzureIoTMQTT_GetSubAckStatusCodes( const AzureIoTMQTTPacketInfo_t * pxSubackPacket,
