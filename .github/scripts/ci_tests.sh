@@ -44,6 +44,8 @@ echo -e "::group::Build using clang"
 cmake -Bbuild -DCMAKE_C_COMPILER=clang -Dfreertos_directory=$TEST_FREERTOS_SRC -Dfreertos_port_directory=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -Dconfig_directory=.github/config .
 cmake --build build
 
+rm -rf build/
+
 echo -e "::group::Building unit tests"
 cmake -Bbuild -Dfreertos_repo_SOURCE_DIR=$TEST_FREERTOS_SRC ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
