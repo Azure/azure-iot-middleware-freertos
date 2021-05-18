@@ -4,7 +4,7 @@
 /**
  * @file azure_iot_version.h
  *
- * @brief Provides version information for the Azure IoT FreeRTOS Middleware.
+ * @brief Provides version information for the Azure IoT FreeRTOS middleware.
  *
  * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
  * prefixed with an underscore ('_') directly in your application code. These symbols

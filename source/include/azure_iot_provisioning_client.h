@@ -4,7 +4,7 @@
 /**
  * @file azure_iot_provisioning_client.h
  *
- * @brief Definition for the Azure IoT Provisioning client.
+ * @brief The middleware IoT Provisioning Client used to connect a device to Azure IoT Device Provisioning.
  *
  * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
  * prefixed with an underscore ('_') directly in your application code. These symbols
