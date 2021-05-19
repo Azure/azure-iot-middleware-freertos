@@ -24,11 +24,17 @@
 
 #include <azure/core/_az_cfg_prefix.h>
 
+/**
+ * @brief The maximum size of the response buffer.
+ */
 #define azureiotprovisioningRESPONSE_MAX    ( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX )
 
-#define azureiotprovisioningNO_WAIT         ( 0 )
-#define azureiotprovisioningWAIT_FOREVER    ( ( uint32_t ) 0xFFFFFFFF )
+#define azureiotprovisioningNO_WAIT         ( 0 )                       /**< @brief Do not wait on the function call */
+#define azureiotprovisioningWAIT_FOREVER    ( ( uint32_t ) 0xFFFFFFFF ) /**< @brief Wait as long as it takes to complete the operation (success or failure) */
 
+/**
+ * @brief Result values used for Azure IoT Device Provisioning functions.
+ */
 typedef enum AzureIoTProvisioningClientResult
 {
     eAzureIoTProvisioningSuccess = 0,           /** Success. */
@@ -43,12 +49,18 @@ typedef enum AzureIoTProvisioningClientResult
     eAzureIoTProvisioningFailed,                /** There was a failure. */
 } AzureIoTProvisioningClientResult_t;
 
+/**
+ * @brief The options for the Azure IoT Device Provisioning client.
+ */
 typedef struct AzureIoTProvisioningClientOptions
 {
-    const uint8_t * pucUserAgent; /* The user agent to use for this device. */
-    uint32_t ulUserAgentLength;   /* The length of the user agent. */
+    const uint8_t * pucUserAgent; /**< The user agent to use for this device. */
+    uint32_t ulUserAgentLength;   /**< The length of the user agent. */
 } AzureIoTProvisioningClientOptions_t;
 
+/**
+ * @brief The Azure IoT Device Provisioning client
+ */
 typedef struct AzureIoTProvisioningClient
 {
     struct
@@ -88,7 +100,7 @@ typedef struct AzureIoTProvisioningClient
         size_t xLastResponsePayloadLength;
         uint16_t usLastResponseTopicLength;
         az_iot_provisioning_client_register_response xRegisterResponse;
-    } _internal;
+    } _internal; /**< @brief Internal to the SDK */
 } AzureIoTProvisioningClient_t;
 
 /**
@@ -179,8 +191,8 @@ AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_Register( AzureIoT
  * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
  * @param[out] pucHubHostname The pointer to a buffer which will be populated with the IoT Hub hostname.
  * @param[out] pulHostnameLength The pointer to the `uint32_t` which will be populated with the length of the hostname.
- * @param[out] pucDeviceId The pointer to a buffer which will be populated with the device ID.
- * @param[out] pulDeviceIdLength The pointer to the uint32_t which will be populated with the length of the device ID.
+ * @param[out] pucDeviceID The pointer to a buffer which will be populated with the device ID.
+ * @param[out] pulDeviceIDLength The pointer to the uint32_t which will be populated with the length of the device ID.
  * @return An #AzureIoTProvisioningClientResult_t with the result of the operation.
  */
 AzureIoTProvisioningClientResult_t AzureIoTProvisioningClient_GetDeviceAndHub( AzureIoTProvisioningClient_t * pxAzureProvClient,

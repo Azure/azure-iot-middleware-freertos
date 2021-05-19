@@ -157,9 +157,9 @@ typedef int32_t ( * AzureIoTTransportSend_t )( struct NetworkContext * pxNetwork
  */
 typedef struct AzureIoTTransportInterface
 {
-    AzureIoTTransportRecv_t xRecv;            /** Transport receive interface. */
-    AzureIoTTransportSend_t xSend;            /** Transport send interface. */
-    struct NetworkContext * pxNetworkContext; /** Implementation-defined network context. */
+    AzureIoTTransportRecv_t xRecv;            /**< Transport receive interface. */
+    AzureIoTTransportSend_t xSend;            /**< Transport send interface. */
+    struct NetworkContext * pxNetworkContext; /**< Implementation-defined network context. */
 } AzureIoTTransportInterface_t;
 
 #endif /* AZURE_IOT_TRANSPORT_INTERFACE_H */

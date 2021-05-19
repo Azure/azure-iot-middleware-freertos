@@ -15,23 +15,33 @@
 #ifndef AZURE_IOT_VERSION_H
 #define AZURE_IOT_VERSION_H
 
-#define _azureiotSTRINGIFY2( x )    # x
-#define _azureiotSTRINGIFY( x )     _azureiotSTRINGIFY2( x )
+#define _azureiotSTRINGIFY2( x )    # x                      /**< @brief Internal */
+#define _azureiotSTRINGIFY( x )     _azureiotSTRINGIFY2( x ) /**< @brief Internal */
 
-/* Major numeric identifier. */
+/**
+ * @brief Major numeric identifier.
+ */
 #define azureiotVERSION_MAJOR         0
 
-/* Minor numeric identifier. */
+/**
+ * @brief Minor numeric identifier.
+ */
 #define azureiotVERSION_MINOR         0
 
-/* Patch numeric identifier. */
+/**
+ * @brief Patch numeric identifier.
+ */
 #define azureiotVERSION_PATCH         1
 
-/* Optional pre-release identifier. SDK is in a pre-release state when present. */
+/**
+ * @brief Optional pre-release identifier. SDK is in a pre-release state when present.
+ */
 #define azureiotVERSION_PRERELEASE    "alpha"
 
-/* The version in string format used for telemetry following the `semver.org` standard */
-/* (https://semver.org). */
+/**
+ * @brief The version in string format used for telemetry following the `semver.org` standard
+ * (https://semver.org).
+ */
 #define azureiotVERSION_STRING                      \
     _azureiotSTRINGIFY( azureiotVERSION_MAJOR ) "." \
     _azureiotSTRINGIFY( azureiotVERSION_MINOR ) "." \
