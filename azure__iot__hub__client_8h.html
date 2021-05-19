@@ -98,6 +98,7 @@ Data Structures</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">IoT Hub Twin Response struct.  <a href="struct_azure_io_t_hub_client_twin_response.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_hub_client_receive_context.html">AzureIoTHubClientReceiveContext</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive context to be used internally for the processing of messages.  <a href="struct_azure_io_t_hub_client_receive_context.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_hub_client_options.html">AzureIoTHubClientOptions</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Options list for the hub client.  <a href="struct_azure_io_t_hub_client_options.html#details">More...</a><br /></td></tr>
@@ -108,7 +109,8 @@ Data Structures</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:af8b81b133f97baf4050f60983e129e9f"><td class="memItemLeft" align="right" valign="top"><a id="af8b81b133f97baf4050f60983e129e9f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiothubSUBSCRIBE_FEATURE_COUNT</b>&#160;&#160;&#160;( 3 )</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af8b81b133f97baf4050f60983e129e9f">azureiothubSUBSCRIBE_FEATURE_COUNT</a>&#160;&#160;&#160;( 3 )</td></tr>
+<tr class="memdesc:af8b81b133f97baf4050f60983e129e9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Total number of features which could be subscribed to. <br /></td></tr>
 <tr class="separator:af8b81b133f97baf4050f60983e129e9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
@@ -132,6 +134,7 @@ Enumerations</h2></td></tr>
 <tr class="memitem:ae15273584a1a437a17bb8e4f0bfad46a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46a">AzureIoTHubMessageQoS</a> { <b>eAzureIoTHubMessageQoS0</b> = 0, 
 <a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46aa214166adc1c1e186e48e22b9ffa4f9a0">eAzureIoTHubMessageQoS1</a> = 1
  }</td></tr>
+<tr class="memdesc:ae15273584a1a437a17bb8e4f0bfad46a"><td class="mdescLeft">&#160;</td><td class="mdescRight">MQTT quality of service values used for messages.  <a href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46a">More...</a><br /></td></tr>
 <tr class="separator:ae15273584a1a437a17bb8e4f0bfad46a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92be11689791a8435db76d1146c55666"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666">AzureIoTHubMessageType</a> { <br />
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab35cdb9dc9b1820d38f70f85d9892fcf">eAzureIoTHubCloudToDeviceMessage</a> = 1, 
@@ -142,6 +145,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666afbfe6bf51c38f6aa39c34e7dcea7e2b7">eAzureIoTHubTwinDesiredPropertyMessage</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a92be11689791a8435db76d1146c55666"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration to dictate message types.  <a href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666">More...</a><br /></td></tr>
 <tr class="separator:a92be11689791a8435db76d1146c55666"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a41a0af7a7ec2c362658a9dc5e9731940"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940">AzureIoTHubClientResult</a> { <br />
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940a150f20c6e8023600cee24f42f36cc1ef">eAzureIoTHubClientSuccess</a> = 0, 
@@ -160,8 +164,9 @@ Enumerations</h2></td></tr>
 <a class="el" href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940a3b20da00c44eca05194f57162b9b4cae">eAzureIoTHubClientFailed</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a41a0af7a7ec2c362658a9dc5e9731940"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result values used for Azure IoT Hub functions.  <a href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940">More...</a><br /></td></tr>
 <tr class="separator:a41a0af7a7ec2c362658a9dc5e9731940"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7fe6a886b1c59af3f5876341b64ee32"><td class="memItemLeft" align="right" valign="top"><a id="af7fe6a886b1c59af3f5876341b64ee32"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHubMessageStatus</b> { <br />
+<tr class="memitem:af7fe6a886b1c59af3f5876341b64ee32"><td class="memItemLeft" align="right" valign="top"><a id="af7fe6a886b1c59af3f5876341b64ee32"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af7fe6a886b1c59af3f5876341b64ee32">AzureIoTHubMessageStatus</a> { <br />
 &#160;&#160;<b>eAzureIoTStatusUnknown</b> = 0, 
 <b>eAzureIoTStatusOk</b> = 200, 
 <b>eAzureIoTStatusAccepted</b> = 202, 
@@ -187,6 +192,7 @@ Enumerations</h2></td></tr>
 <b>eAzureIoTStatusTimeout</b> = 504
 <br />
  }</td></tr>
+<tr class="memdesc:af7fe6a886b1c59af3f5876341b64ee32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Status codes for IoT Hub responses. <br /></td></tr>
 <tr class="separator:af7fe6a886b1c59af3f5876341b64ee32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -194,52 +200,52 @@ Functions</h2></td></tr>
 <tr class="memitem:aa3c3ef9f0a4ccd9c7a1133985255e321"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#aa3c3ef9f0a4ccd9c7a1133985255e321">AzureIoTHubClient_OptionsInit</a> (AzureIoTHubClientOptions_t *pxHubClientOptions)</td></tr>
 <tr class="memdesc:aa3c3ef9f0a4ccd9c7a1133985255e321"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure IoT Hub Options with default values.  <a href="azure__iot__hub__client_8h.html#aa3c3ef9f0a4ccd9c7a1133985255e321">More...</a><br /></td></tr>
 <tr class="separator:aa3c3ef9f0a4ccd9c7a1133985255e321"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a86435d686ee3b48057874c2a89da1115"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a86435d686ee3b48057874c2a89da1115">AzureIoTHubClient_Init</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const uint8_t *pucHostname, uint16_t ulHostnameLength, const uint8_t *pucDeviceID, uint16_t ulDeviceIDLength, AzureIoTHubClientOptions_t *pxHubClientOptions, uint8_t *pucBuffer, uint32_t ulBufferLength, AzureIoTGetCurrentTimeFunc_t xGetTimeFunction, const AzureIoTTransportInterface_t *pxTransportInterface)</td></tr>
+<tr class="memitem:a86435d686ee3b48057874c2a89da1115"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a86435d686ee3b48057874c2a89da1115">AzureIoTHubClient_Init</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucHostname, uint16_t ulHostnameLength, const uint8_t *pucDeviceID, uint16_t ulDeviceIDLength, AzureIoTHubClientOptions_t *pxHubClientOptions, uint8_t *pucBuffer, uint32_t ulBufferLength, <a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a> xGetTimeFunction, const AzureIoTTransportInterface_t *pxTransportInterface)</td></tr>
 <tr class="memdesc:a86435d686ee3b48057874c2a89da1115"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure IoT Hub Client.  <a href="azure__iot__hub__client_8h.html#a86435d686ee3b48057874c2a89da1115">More...</a><br /></td></tr>
 <tr class="separator:a86435d686ee3b48057874c2a89da1115"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c5ecccaca98fd324f94578807e47989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a7c5ecccaca98fd324f94578807e47989">AzureIoTHubClient_Deinit</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
+<tr class="memitem:a7c5ecccaca98fd324f94578807e47989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a7c5ecccaca98fd324f94578807e47989">AzureIoTHubClient_Deinit</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:a7c5ecccaca98fd324f94578807e47989"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitialize the Azure IoT Hub Client.  <a href="azure__iot__hub__client_8h.html#a7c5ecccaca98fd324f94578807e47989">More...</a><br /></td></tr>
 <tr class="separator:a7c5ecccaca98fd324f94578807e47989"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a23b466c534e674ac3b9ef53417d1c824"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a23b466c534e674ac3b9ef53417d1c824">AzureIoTHubClient_SetSymmetricKey</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const uint8_t *pucSymmetricKey, uint32_t ulSymmetricKeyLength, AzureIoTGetHMACFunc_t xHMACFunction)</td></tr>
+<tr class="memitem:a23b466c534e674ac3b9ef53417d1c824"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a23b466c534e674ac3b9ef53417d1c824">AzureIoTHubClient_SetSymmetricKey</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucSymmetricKey, uint32_t ulSymmetricKeyLength, <a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a> xHMACFunction)</td></tr>
 <tr class="memdesc:a23b466c534e674ac3b9ef53417d1c824"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the symmetric key to use for authentication.  <a href="azure__iot__hub__client_8h.html#a23b466c534e674ac3b9ef53417d1c824">More...</a><br /></td></tr>
 <tr class="separator:a23b466c534e674ac3b9ef53417d1c824"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af79b38a59101983d8e5bbc0bc05d4706"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af79b38a59101983d8e5bbc0bc05d4706">AzureIoTHubClient_Connect</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, bool xCleanSession, bool *pxOutSessionPresent, uint32_t ulTimeoutMilliseconds)</td></tr>
+<tr class="memitem:af79b38a59101983d8e5bbc0bc05d4706"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af79b38a59101983d8e5bbc0bc05d4706">AzureIoTHubClient_Connect</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, bool xCleanSession, bool *pxOutSessionPresent, uint32_t ulTimeoutMilliseconds)</td></tr>
 <tr class="memdesc:af79b38a59101983d8e5bbc0bc05d4706"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connect via MQTT to the IoT Hub endpoint.  <a href="azure__iot__hub__client_8h.html#af79b38a59101983d8e5bbc0bc05d4706">More...</a><br /></td></tr>
 <tr class="separator:af79b38a59101983d8e5bbc0bc05d4706"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af48dde06a7de12ac1e3ddf7589dba5f6">AzureIoTHubClient_Disconnect</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
+<tr class="memitem:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af48dde06a7de12ac1e3ddf7589dba5f6">AzureIoTHubClient_Disconnect</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect from the IoT Hub endpoint.  <a href="azure__iot__hub__client_8h.html#af48dde06a7de12ac1e3ddf7589dba5f6">More...</a><br /></td></tr>
 <tr class="separator:af48dde06a7de12ac1e3ddf7589dba5f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5142c66e95cc7d8c55db1010782b950d"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a5142c66e95cc7d8c55db1010782b950d">AzureIoTHubClient_SendTelemetry</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const uint8_t *pucTelemetryData, uint32_t ulTelemetryDataLength, AzureIoTMessageProperties_t *pxProperties, AzureIoTHubMessageQoS_t xQOS, uint16_t *pusTelemetryPacketID)</td></tr>
+<tr class="memitem:a5142c66e95cc7d8c55db1010782b950d"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a5142c66e95cc7d8c55db1010782b950d">AzureIoTHubClient_SendTelemetry</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucTelemetryData, uint32_t ulTelemetryDataLength, AzureIoTMessageProperties_t *pxProperties, AzureIoTHubMessageQoS_t xQOS, uint16_t *pusTelemetryPacketID)</td></tr>
 <tr class="memdesc:a5142c66e95cc7d8c55db1010782b950d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send telemetry data to IoT Hub.  <a href="azure__iot__hub__client_8h.html#a5142c66e95cc7d8c55db1010782b950d">More...</a><br /></td></tr>
 <tr class="separator:a5142c66e95cc7d8c55db1010782b950d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d96565ecf234d146e2952f6fe12ade6"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a2d96565ecf234d146e2952f6fe12ade6">AzureIoTHubClient_ProcessLoop</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, uint32_t ulTimeoutMilliseconds)</td></tr>
+<tr class="memitem:a2d96565ecf234d146e2952f6fe12ade6"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a2d96565ecf234d146e2952f6fe12ade6">AzureIoTHubClient_ProcessLoop</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, uint32_t ulTimeoutMilliseconds)</td></tr>
 <tr class="memdesc:a2d96565ecf234d146e2952f6fe12ade6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.  <a href="azure__iot__hub__client_8h.html#a2d96565ecf234d146e2952f6fe12ade6">More...</a><br /></td></tr>
 <tr class="separator:a2d96565ecf234d146e2952f6fe12ade6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6506a4bd08de619d8ff5164e975fce4f"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a6506a4bd08de619d8ff5164e975fce4f">AzureIoTHubClient_SubscribeCloudToDeviceMessage</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, <a class="el" href="azure__iot__hub__client_8h.html#a669b820c2f3a094fc51e3052586776c9">AzureIoTHubClientCloudToDeviceMessageCallback_t</a> xCloudToDeviceMessageCallback, void *prvCallbackContext, uint32_t ulTimeoutMilliseconds)</td></tr>
+<tr class="memitem:a6506a4bd08de619d8ff5164e975fce4f"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a6506a4bd08de619d8ff5164e975fce4f">AzureIoTHubClient_SubscribeCloudToDeviceMessage</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, <a class="el" href="azure__iot__hub__client_8h.html#a669b820c2f3a094fc51e3052586776c9">AzureIoTHubClientCloudToDeviceMessageCallback_t</a> xCloudToDeviceMessageCallback, void *prvCallbackContext, uint32_t ulTimeoutMilliseconds)</td></tr>
 <tr class="memdesc:a6506a4bd08de619d8ff5164e975fce4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to cloud to device messages.  <a href="azure__iot__hub__client_8h.html#a6506a4bd08de619d8ff5164e975fce4f">More...</a><br /></td></tr>
 <tr class="separator:a6506a4bd08de619d8ff5164e975fce4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1272885bc8fdf22f3710d8149756ec7"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af1272885bc8fdf22f3710d8149756ec7">AzureIoTHubClient_UnsubscribeCloudToDeviceMessage</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
+<tr class="memitem:af1272885bc8fdf22f3710d8149756ec7"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af1272885bc8fdf22f3710d8149756ec7">AzureIoTHubClient_UnsubscribeCloudToDeviceMessage</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:af1272885bc8fdf22f3710d8149756ec7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsubscribe from cloud to device messages.  <a href="azure__iot__hub__client_8h.html#af1272885bc8fdf22f3710d8149756ec7">More...</a><br /></td></tr>
 <tr class="separator:af1272885bc8fdf22f3710d8149756ec7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a380322726b9e9e8a71bdcd3204adc7f7"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a380322726b9e9e8a71bdcd3204adc7f7">AzureIoTHubClient_SubscribeDirectMethod</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, <a class="el" href="azure__iot__hub__client_8h.html#abb69873b1952a73dda4362f33110aa91">AzureIoTHubClientMethodCallback_t</a> xMethodCallback, void *prvCallbackContext, uint32_t ulTimeoutMilliseconds)</td></tr>
+<tr class="memitem:a380322726b9e9e8a71bdcd3204adc7f7"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a380322726b9e9e8a71bdcd3204adc7f7">AzureIoTHubClient_SubscribeDirectMethod</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, <a class="el" href="azure__iot__hub__client_8h.html#abb69873b1952a73dda4362f33110aa91">AzureIoTHubClientMethodCallback_t</a> xMethodCallback, void *prvCallbackContext, uint32_t ulTimeoutMilliseconds)</td></tr>
 <tr class="memdesc:a380322726b9e9e8a71bdcd3204adc7f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to direct methods.  <a href="azure__iot__hub__client_8h.html#a380322726b9e9e8a71bdcd3204adc7f7">More...</a><br /></td></tr>
 <tr class="separator:a380322726b9e9e8a71bdcd3204adc7f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c67cf9295db41e8593ad0b34e92f29a"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a4c67cf9295db41e8593ad0b34e92f29a">AzureIoTHubClient_UnsubscribeDirectMethod</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
+<tr class="memitem:a4c67cf9295db41e8593ad0b34e92f29a"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a4c67cf9295db41e8593ad0b34e92f29a">AzureIoTHubClient_UnsubscribeDirectMethod</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:a4c67cf9295db41e8593ad0b34e92f29a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsubscribe from direct methods.  <a href="azure__iot__hub__client_8h.html#a4c67cf9295db41e8593ad0b34e92f29a">More...</a><br /></td></tr>
 <tr class="separator:a4c67cf9295db41e8593ad0b34e92f29a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a094c736adfc2396e9bb4b474f451dbf0"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a094c736adfc2396e9bb4b474f451dbf0">AzureIoTHubClient_SendMethodResponse</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const AzureIoTHubClientMethodRequest_t *pxMessage, uint32_t ulStatus, const uint8_t *pucMethodPayload, uint32_t ulMethodPayloadLength)</td></tr>
+<tr class="memitem:a094c736adfc2396e9bb4b474f451dbf0"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a094c736adfc2396e9bb4b474f451dbf0">AzureIoTHubClient_SendMethodResponse</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const AzureIoTHubClientMethodRequest_t *pxMessage, uint32_t ulStatus, const uint8_t *pucMethodPayload, uint32_t ulMethodPayloadLength)</td></tr>
 <tr class="memdesc:a094c736adfc2396e9bb4b474f451dbf0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a response to a received direct method message.  <a href="azure__iot__hub__client_8h.html#a094c736adfc2396e9bb4b474f451dbf0">More...</a><br /></td></tr>
 <tr class="separator:a094c736adfc2396e9bb4b474f451dbf0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab036ba54f5f570308cc56a57bf7d79b4"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ab036ba54f5f570308cc56a57bf7d79b4">AzureIoTHubClient_SubscribeDeviceTwin</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, <a class="el" href="azure__iot__hub__client_8h.html#a11b9847e2cbc1f914bcae385ded92cf3">AzureIoTHubClientTwinCallback_t</a> xTwinCallback, void *prvCallbackContext, uint32_t ulTimeoutMilliseconds)</td></tr>
+<tr class="memitem:ab036ba54f5f570308cc56a57bf7d79b4"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ab036ba54f5f570308cc56a57bf7d79b4">AzureIoTHubClient_SubscribeDeviceTwin</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, <a class="el" href="azure__iot__hub__client_8h.html#a11b9847e2cbc1f914bcae385ded92cf3">AzureIoTHubClientTwinCallback_t</a> xTwinCallback, void *prvCallbackContext, uint32_t ulTimeoutMilliseconds)</td></tr>
 <tr class="memdesc:ab036ba54f5f570308cc56a57bf7d79b4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscribe to device twin.  <a href="azure__iot__hub__client_8h.html#ab036ba54f5f570308cc56a57bf7d79b4">More...</a><br /></td></tr>
 <tr class="separator:ab036ba54f5f570308cc56a57bf7d79b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac48e4d5fee895210ddcc3a2f2181a17b"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ac48e4d5fee895210ddcc3a2f2181a17b">AzureIoTHubClient_UnsubscribeDeviceTwin</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
+<tr class="memitem:ac48e4d5fee895210ddcc3a2f2181a17b"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ac48e4d5fee895210ddcc3a2f2181a17b">AzureIoTHubClient_UnsubscribeDeviceTwin</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:ac48e4d5fee895210ddcc3a2f2181a17b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unsubscribe from device twin.  <a href="azure__iot__hub__client_8h.html#ac48e4d5fee895210ddcc3a2f2181a17b">More...</a><br /></td></tr>
 <tr class="separator:ac48e4d5fee895210ddcc3a2f2181a17b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b2fd1e70bcac0327e71960683836f78"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a7b2fd1e70bcac0327e71960683836f78">AzureIoTHubClient_SendDeviceTwinReported</a> (AzureIoTHubClient_t *pxAzureIoTHubClient, const uint8_t *pucReportedPayload, uint32_t ulReportedPayloadLength, uint32_t *pulRequestID)</td></tr>
+<tr class="memitem:a7b2fd1e70bcac0327e71960683836f78"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a7b2fd1e70bcac0327e71960683836f78">AzureIoTHubClient_SendDeviceTwinReported</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucReportedPayload, uint32_t ulReportedPayloadLength, uint32_t *pulRequestID)</td></tr>
 <tr class="memdesc:a7b2fd1e70bcac0327e71960683836f78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send reported device twin properties to Azure IoT Hub.  <a href="azure__iot__hub__client_8h.html#a7b2fd1e70bcac0327e71960683836f78">More...</a><br /></td></tr>
 <tr class="separator:a7b2fd1e70bcac0327e71960683836f78"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5af75596525a56283fce8bc038c7b741"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a5af75596525a56283fce8bc038c7b741">AzureIoTHubClient_GetDeviceTwin</a> (AzureIoTHubClient_t *pxAzureIoTHubClient)</td></tr>
+<tr class="memitem:a5af75596525a56283fce8bc038c7b741"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a5af75596525a56283fce8bc038c7b741">AzureIoTHubClient_GetDeviceTwin</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
 <tr class="memdesc:a5af75596525a56283fce8bc038c7b741"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request to get the device twin document.  <a href="azure__iot__hub__client_8h.html#a5af75596525a56283fce8bc038c7b741">More...</a><br /></td></tr>
 <tr class="separator:a5af75596525a56283fce8bc038c7b741"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -307,6 +313,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Result values used for Azure IoT Hub functions. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a41a0af7a7ec2c362658a9dc5e9731940a150f20c6e8023600cee24f42f36cc1ef"></a>eAzureIoTHubClientSuccess&#160;</td><td class="fielddoc"><p>Success. </p>
 </td></tr>
@@ -347,6 +355,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>MQTT quality of service values used for messages. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae15273584a1a437a17bb8e4f0bfad46aa214166adc1c1e186e48e22b9ffa4f9a0"></a>eAzureIoTHubMessageQoS1&#160;</td><td class="fielddoc"><p>Delivery at most once. </p>
 </td></tr>
@@ -365,6 +375,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Enumeration to dictate message types. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a92be11689791a8435db76d1146c55666ab35cdb9dc9b1820d38f70f85d9892fcf"></a>eAzureIoTHubCloudToDeviceMessage&#160;</td><td class="fielddoc"><p>The message is a cloud message. </p>
 </td></tr>
@@ -390,7 +402,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_Connect </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -422,7 +434,7 @@ Functions</h2></td></tr>
 <p>Connect via MQTT to the IoT Hub endpoint. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xCleanSession</td><td>A boolean dictating whether to connect with a clean session or not. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pxOutSessionPresent</td><td>Whether a previous session was present. Only relevant if not establishing a clean session. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTimeoutMilliseconds</td><td>The maximum time in milliseconds to wait for a CONNACK. </td></tr>
@@ -442,7 +454,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">void AzureIoTHubClient_Deinit </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
           <td></td>
         </tr>
@@ -452,7 +464,7 @@ Functions</h2></td></tr>
 <p>Deinitialize the Azure IoT Hub Client. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>
@@ -468,7 +480,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
           <td></td>
         </tr>
@@ -478,7 +490,7 @@ Functions</h2></td></tr>
 <p>Disconnect from the IoT Hub endpoint. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>
@@ -495,7 +507,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_GetDeviceTwin </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
           <td></td>
         </tr>
@@ -507,7 +519,7 @@ Functions</h2></td></tr>
 <p>The response to the request will be returned via the <a class="el" href="azure__iot__hub__client_8h.html#a11b9847e2cbc1f914bcae385ded92cf3" title="Twin callback to be invoked when a twin message is received in the call to AzureIoTHubClient_ProcessL...">AzureIoTHubClientTwinCallback_t</a> which was passed in the <a class="el" href="azure__iot__hub__client_8h.html#ab036ba54f5f570308cc56a57bf7d79b4" title="Subscribe to device twin.">AzureIoTHubClient_SubscribeDeviceTwin()</a> call. The type of message will be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666affcc466608b1564f142dac1ffee37295">eAzureIoTHubTwinGetMessage</a> and the payload (on success) will be the twin document.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>
@@ -524,7 +536,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_Init </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -572,7 +584,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AzureIoTGetCurrentTimeFunc_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a>&#160;</td>
           <td class="paramname"><em>xGetTimeFunction</em>, </td>
         </tr>
         <tr>
@@ -592,7 +604,7 @@ Functions</h2></td></tr>
 <p>Initialize the Azure IoT Hub Client. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucHostname</td><td>The IoT Hub Hostname. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulHostnameLength</td><td>The length of the IoT Hub Hostname. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucDeviceID</td><td>The device ID. If the ID contains any of the following characters, they must be percent-encoded as follows:<ul>
@@ -651,7 +663,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -672,7 +684,7 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>This API will receive any messages sent to the device and manage the connection such as sending <code>PING</code> messages.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTimeoutMilliseconds</td><td>Minimum time (in milliseconds) for the loop to run. If <code>0</code> is passed, it will only run once. </td></tr>
   </table>
   </dd>
@@ -690,7 +702,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SendDeviceTwinReported </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -723,7 +735,7 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd><a class="el" href="azure__iot__hub__client_8h.html#ab036ba54f5f570308cc56a57bf7d79b4" title="Subscribe to device twin.">AzureIoTHubClient_SubscribeDeviceTwin()</a> must be called before calling this function.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucReportedPayload</td><td>The payload of properly formatted, reported properties. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulReportedPayloadLength</td><td>The length of the reported property payload. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pulRequestID</td><td>Pointer to request ID used to send the twin reported property. </td></tr>
@@ -743,7 +755,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -781,7 +793,7 @@ Functions</h2></td></tr>
 <p>Send a response to a received direct method message. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pxMessage</td><td>The pointer to the #AzureIoTHubClientMethodRequest_t to which a response is being sent. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulStatus</td><td>A code that indicates the result of the method, as defined by the user. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucMethodPayload</td><td><b>[nullable]</b> An optional method response payload. </td></tr>
@@ -802,7 +814,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -846,7 +858,7 @@ Functions</h2></td></tr>
 <p>Send telemetry data to IoT Hub. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucTelemetryData</td><td>The pointer to the buffer of telemetry data. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTelemetryDataLength</td><td>The length of the buffer to send as telemetry. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pxProperties</td><td>The property bag to send with the message. </td></tr>
@@ -868,7 +880,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -886,7 +898,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AzureIoTGetHMACFunc_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>&#160;</td>
           <td class="paramname"><em>xHMACFunction</em>&#160;</td>
         </tr>
         <tr>
@@ -901,10 +913,10 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>If using X509 authentication, this is not needed and should not be used.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucSymmetricKey</td><td>The symmetric key to use for the connection. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulSymmetricKeyLength</td><td>The length of the <code>pucSymmetricKey</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xHMACFunction</td><td>The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHMACFunction</td><td>The <a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc" title="The HMAC function used by the SDK to generate SAS keys.">AzureIoTGetHMACFunc_t</a> function pointer to a function which computes the HMAC256 over a set of bytes. </td></tr>
   </table>
   </dd>
 </dl>
@@ -921,7 +933,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -953,8 +965,8 @@ Functions</h2></td></tr>
 <p>Subscribe to cloud to device messages. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xCloudToDeviceCallback</td><td>The <a class="el" href="azure__iot__hub__client_8h.html#a669b820c2f3a094fc51e3052586776c9" title="Cloud message callback to be invoked when a cloud message is received in the call to AzureIoTHubClien...">AzureIoTHubClientCloudToDeviceMessageCallback_t</a> to invoke when a CloudToDevice messages arrive. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xCloudToDeviceMessageCallback</td><td>The <a class="el" href="azure__iot__hub__client_8h.html#a669b820c2f3a094fc51e3052586776c9" title="Cloud message callback to be invoked when a cloud message is received in the call to AzureIoTHubClien...">AzureIoTHubClientCloudToDeviceMessageCallback_t</a> to invoke when a CloudToDevice messages arrive. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">prvCallbackContext</td><td>A pointer to a context to pass to the callback. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTimeoutMilliseconds</td><td>Timeout in milliseconds for subscribe operation to complete. </td></tr>
   </table>
@@ -973,7 +985,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceTwin </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -1005,7 +1017,7 @@ Functions</h2></td></tr>
 <p>Subscribe to device twin. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xTwinCallback</td><td>The <a class="el" href="azure__iot__hub__client_8h.html#a11b9847e2cbc1f914bcae385ded92cf3" title="Twin callback to be invoked when a twin message is received in the call to AzureIoTHubClient_ProcessL...">AzureIoTHubClientTwinCallback_t</a> to invoke when device twin messages arrive. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">prvCallbackContext</td><td>A pointer to a context to pass to the callback. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTimeoutMilliseconds</td><td>Timeout in milliseconds for Subscribe operation to complete. </td></tr>
@@ -1025,7 +1037,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDirectMethod </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em>, </td>
         </tr>
         <tr>
@@ -1057,7 +1069,7 @@ Functions</h2></td></tr>
 <p>Subscribe to direct methods. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xMethodCallback</td><td>The <a class="el" href="azure__iot__hub__client_8h.html#abb69873b1952a73dda4362f33110aa91" title="Method callback to be invoked when a method request is received in the call to AzureIoTHubClient_Proc...">AzureIoTHubClientMethodCallback_t</a> to invoke when direct method messages arrive. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">prvCallbackContext</td><td>A pointer to a context to pass to the callback. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTimeoutMilliseconds</td><td>Timeout in milliseconds for Subscribe operation to complete. </td></tr>
@@ -1077,7 +1089,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1087,7 +1099,7 @@ Functions</h2></td></tr>
 <p>Unsubscribe from cloud to device messages. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1104,7 +1116,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDeviceTwin </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1114,7 +1126,7 @@ Functions</h2></td></tr>
 <p>Unsubscribe from device twin. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>
@@ -1131,7 +1143,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDirectMethod </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTHubClient_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
           <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
           <td></td>
         </tr>
@@ -1141,7 +1153,7 @@ Functions</h2></td></tr>
 <p>Unsubscribe from direct methods. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The #AzureIoTHubClient_t * to use for this call. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>

@@ -102,11 +102,12 @@ Macros</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
-<tr class="memitem:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="memItemLeft" align="right" valign="top"><a id="ad72c3a80ab66f18762dfca4ff4bd918c"></a>
-typedef uint64_t(*&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTGetCurrentTimeFunc_t</b>) (void)</td></tr>
+<tr class="memitem:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="memItemLeft" align="right" valign="top">typedef uint64_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a>) (void)</td></tr>
+<tr class="memdesc:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time function to be used by the SDK for MQTT connections.  <a href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">More...</a><br /></td></tr>
 <tr class="separator:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5824b14bbf563402fa8d15279fdb74cc"><td class="memItemLeft" align="right" valign="top"><a id="a5824b14bbf563402fa8d15279fdb74cc"></a>
-typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTGetHMACFunc_t</b>) (const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</td></tr>
+typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>) (const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</td></tr>
+<tr class="memdesc:a5824b14bbf563402fa8d15279fdb74cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The HMAC function used by the SDK to generate SAS keys. <br /></td></tr>
 <tr class="separator:a5824b14bbf563402fa8d15279fdb74cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -120,6 +121,7 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3bafaa6b1cf0f3001850593892d644aa74f85">eAzureIoTFailed</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a1225ecf72e3eb47c48db7aabfb9c3baf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result values used for Azure IoT functions.  <a href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3baf">More...</a><br /></td></tr>
 <tr class="separator:a1225ecf72e3eb47c48db7aabfb9c3baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -139,14 +141,32 @@ Functions</h2></td></tr>
 <tr class="memitem:a8744a24f126cb03a64da501d8f239f6d"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a8744a24f126cb03a64da501d8f239f6d">AzureIoT_MessagePropertiesFind</a> (AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t **ppucOutValue, uint32_t *pulOutValueLength)</td></tr>
 <tr class="memdesc:a8744a24f126cb03a64da501d8f239f6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a property in the message property bag.  <a href="azure__iot_8h.html#a8744a24f126cb03a64da501d8f239f6d">More...</a><br /></td></tr>
 <tr class="separator:a8744a24f126cb03a64da501d8f239f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:affd3197853da9b63ca9932a43320c835"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#affd3197853da9b63ca9932a43320c835">AzureIoT_Base64HMACCalculate</a> (AzureIoTGetHMACFunc_t xAzureIoTHMACFunction, const uint8_t *pucKey, uint32_t ulKeySize, const uint8_t *pucMessage, uint32_t ulMessageSize, uint8_t *pucBuffer, uint32_t ulBufferLength, uint8_t *pucOutput, uint32_t ulOutputSize, uint32_t *pulOutputLength)</td></tr>
+<tr class="memitem:affd3197853da9b63ca9932a43320c835"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#affd3197853da9b63ca9932a43320c835">AzureIoT_Base64HMACCalculate</a> (<a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a> xAzureIoTHMACFunction, const uint8_t *pucKey, uint32_t ulKeySize, const uint8_t *pucMessage, uint32_t ulMessageSize, uint8_t *pucBuffer, uint32_t ulBufferLength, uint8_t *pucOutput, uint32_t ulOutputSize, uint32_t *pulOutputLength)</td></tr>
 <tr class="memdesc:affd3197853da9b63ca9932a43320c835"><td class="mdescLeft">&#160;</td><td class="mdescRight">As part of symmetric key authentication, HMAC256 a buffer of bytes and base64 encode the result.  <a href="azure__iot_8h.html#affd3197853da9b63ca9932a43320c835">More...</a><br /></td></tr>
 <tr class="separator:affd3197853da9b63ca9932a43320c835"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Azure IoT FreeRTOS middleware common APIs and structs. </p>
 <dl class="section note"><dt>Note</dt><dd>You MUST NOT use any symbols (macros, functions, structures, enums, etc.) prefixed with an underscore ('_') directly in your application code. These symbols are part of Azure SDK's internal implementation; we do not document these symbols and they are subject to change in future versions of the SDK which would break your code. </dd></dl>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="ad72c3a80ab66f18762dfca4ff4bd918c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad72c3a80ab66f18762dfca4ff4bd918c">&#9670;&nbsp;</a></span>AzureIoTGetCurrentTimeFunc_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uint64_t( * AzureIoTGetCurrentTimeFunc_t) (void)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The time function to be used by the SDK for MQTT connections. </p>
+<dl class="section note"><dt>Note</dt><dd>Must return the time since Unix epoch. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a1225ecf72e3eb47c48db7aabfb9c3baf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1225ecf72e3eb47c48db7aabfb9c3baf">&#9670;&nbsp;</a></span>AzureIoTResult</h2>
 
@@ -158,6 +178,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Result values used for Azure IoT functions. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1225ecf72e3eb47c48db7aabfb9c3bafa9cb33f14023f8406f8d0ed21d3447822"></a>eAzureIoTSuccess&#160;</td><td class="fielddoc"><p>Success. </p>
 </td></tr>
@@ -183,7 +205,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoT_Base64HMACCalculate </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTGetHMACFunc_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>&#160;</td>
           <td class="paramname"><em>xAzureIoTHMACFunction</em>, </td>
         </tr>
         <tr>
@@ -252,7 +274,7 @@ Functions</h2></td></tr>
 <dl class="section note"><dt>Note</dt><dd>This is used within Azure IoT Hub and Device Provisioning APIs if a symmetric key is set.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">xAzureIoTHMACFunction</td><td>The #AzureIoTGetHMACFunc_t function to use for HMAC256 hashing. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xAzureIoTHMACFunction</td><td>The <a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc" title="The HMAC function used by the SDK to generate SAS keys.">AzureIoTGetHMACFunc_t</a> function to use for HMAC256 hashing. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucKey</td><td>A pointer to the base64 encoded key. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulKeySize</td><td>The length of the <code>pucKey</code>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucMessage</td><td>A pointer to the blob to be hashed. </td></tr>
@@ -424,7 +446,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucName</td><td>The name of the property to find. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">nameLength</td><td>Length of the property name. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulNameLength</td><td>Length of the property name. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ppucOutValue</td><td>The output pointer to the property value. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pulOutValueLength</td><td>The length of <code>ppucOutValue</code>. </td></tr>
   </table>
@@ -484,7 +506,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pucBuffer</td><td>The pointer to the buffer. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ulWrittenLength</td><td>The length of the properties already written (if applicable). </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulAlreadyWrittenLength</td><td>The length of the properties already written (if applicable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferLength</td><td>The length of <code>pucBuffer</code>. </td></tr>
   </table>
   </dd>

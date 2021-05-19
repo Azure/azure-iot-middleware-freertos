@@ -89,20 +89,25 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_provisioning_client_options.html">AzureIoTProvisioningClientOptions</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The options for the Azure IoT Device Provisioning client.  <a href="struct_azure_io_t_provisioning_client_options.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_provisioning_client.html">AzureIoTProvisioningClient</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The Azure IoT Device Provisioning client.  <a href="struct_azure_io_t_provisioning_client.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:afd138dd2b1be30fe96f2a31a55864eba"><td class="memItemLeft" align="right" valign="top"><a id="afd138dd2b1be30fe96f2a31a55864eba"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotprovisioningRESPONSE_MAX</b>&#160;&#160;&#160;( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX )</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#afd138dd2b1be30fe96f2a31a55864eba">azureiotprovisioningRESPONSE_MAX</a>&#160;&#160;&#160;( azureiotconfigTOPIC_MAX + azureiotconfigPROVISIONING_REQUEST_PAYLOAD_MAX )</td></tr>
+<tr class="memdesc:afd138dd2b1be30fe96f2a31a55864eba"><td class="mdescLeft">&#160;</td><td class="mdescRight">The maximum size of the response buffer. <br /></td></tr>
 <tr class="separator:afd138dd2b1be30fe96f2a31a55864eba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47507ea759bae94b71fda45d5a10e031"><td class="memItemLeft" align="right" valign="top"><a id="a47507ea759bae94b71fda45d5a10e031"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotprovisioningNO_WAIT</b>&#160;&#160;&#160;( 0 )</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#a47507ea759bae94b71fda45d5a10e031">azureiotprovisioningNO_WAIT</a>&#160;&#160;&#160;( 0 )</td></tr>
+<tr class="memdesc:a47507ea759bae94b71fda45d5a10e031"><td class="mdescLeft">&#160;</td><td class="mdescRight">Do not wait on the function call. <br /></td></tr>
 <tr class="separator:a47507ea759bae94b71fda45d5a10e031"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8bdbd0bc84ed9a324a2618188b430e7c"><td class="memItemLeft" align="right" valign="top"><a id="a8bdbd0bc84ed9a324a2618188b430e7c"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotprovisioningWAIT_FOREVER</b>&#160;&#160;&#160;( ( uint32_t ) 0xFFFFFFFF )</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#a8bdbd0bc84ed9a324a2618188b430e7c">azureiotprovisioningWAIT_FOREVER</a>&#160;&#160;&#160;( ( uint32_t ) 0xFFFFFFFF )</td></tr>
+<tr class="memdesc:a8bdbd0bc84ed9a324a2618188b430e7c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wait as long as it takes to complete the operation (success or failure) <br /></td></tr>
 <tr class="separator:a8bdbd0bc84ed9a324a2618188b430e7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -122,6 +127,7 @@ Enumerations</h2></td></tr>
 <a class="el" href="azure__iot__provisioning__client_8h.html#aaf8edda67c0038d0555b653c21edf3bfa7402a1f35de27143e79398c8df9e614c">eAzureIoTProvisioningFailed</a>
 <br />
  }</td></tr>
+<tr class="memdesc:aaf8edda67c0038d0555b653c21edf3bf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result values used for Azure IoT Device Provisioning functions.  <a href="azure__iot__provisioning__client_8h.html#aaf8edda67c0038d0555b653c21edf3bf">More...</a><br /></td></tr>
 <tr class="separator:aaf8edda67c0038d0555b653c21edf3bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -129,13 +135,13 @@ Functions</h2></td></tr>
 <tr class="memitem:ab60eafa858b8378868ee2a4b6229da96"><td class="memItemLeft" align="right" valign="top">AzureIoTProvisioningClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#ab60eafa858b8378868ee2a4b6229da96">AzureIoTProvisioningClient_OptionsInit</a> (AzureIoTProvisioningClientOptions_t *pxProvisioningClientOptions)</td></tr>
 <tr class="memdesc:ab60eafa858b8378868ee2a4b6229da96"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure IoT Provisioning Options with default values.  <a href="azure__iot__provisioning__client_8h.html#ab60eafa858b8378868ee2a4b6229da96">More...</a><br /></td></tr>
 <tr class="separator:ab60eafa858b8378868ee2a4b6229da96"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8de1c57dcbe6e184dee0dbf521f1b35a"><td class="memItemLeft" align="right" valign="top">AzureIoTProvisioningClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#a8de1c57dcbe6e184dee0dbf521f1b35a">AzureIoTProvisioningClient_Init</a> (AzureIoTProvisioningClient_t *pxAzureProvClient, const uint8_t *pucEndpoint, uint32_t ulEndpointLength, const uint8_t *pucIDScope, uint32_t ulIDScopeLength, const uint8_t *pucRegistrationID, uint32_t ulRegistrationIDLength, AzureIoTProvisioningClientOptions_t *pxProvisioningClientOptions, uint8_t *pucBuffer, uint32_t ulBufferLength, AzureIoTGetCurrentTimeFunc_t xGetTimeFunction, const AzureIoTTransportInterface_t *pxTransportInterface)</td></tr>
+<tr class="memitem:a8de1c57dcbe6e184dee0dbf521f1b35a"><td class="memItemLeft" align="right" valign="top">AzureIoTProvisioningClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#a8de1c57dcbe6e184dee0dbf521f1b35a">AzureIoTProvisioningClient_Init</a> (AzureIoTProvisioningClient_t *pxAzureProvClient, const uint8_t *pucEndpoint, uint32_t ulEndpointLength, const uint8_t *pucIDScope, uint32_t ulIDScopeLength, const uint8_t *pucRegistrationID, uint32_t ulRegistrationIDLength, AzureIoTProvisioningClientOptions_t *pxProvisioningClientOptions, uint8_t *pucBuffer, uint32_t ulBufferLength, <a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a> xGetTimeFunction, const AzureIoTTransportInterface_t *pxTransportInterface)</td></tr>
 <tr class="memdesc:a8de1c57dcbe6e184dee0dbf521f1b35a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure IoT Provisioning Client.  <a href="azure__iot__provisioning__client_8h.html#a8de1c57dcbe6e184dee0dbf521f1b35a">More...</a><br /></td></tr>
 <tr class="separator:a8de1c57dcbe6e184dee0dbf521f1b35a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6508c2441a974d40708faad345a49b51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#a6508c2441a974d40708faad345a49b51">AzureIoTProvisioningClient_Deinit</a> (AzureIoTProvisioningClient_t *pxAzureProvClient)</td></tr>
 <tr class="memdesc:a6508c2441a974d40708faad345a49b51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitialize the Azure IoT Provisioning Client.  <a href="azure__iot__provisioning__client_8h.html#a6508c2441a974d40708faad345a49b51">More...</a><br /></td></tr>
 <tr class="separator:a6508c2441a974d40708faad345a49b51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae33219731f6de3ef4013a7328d5a29ce"><td class="memItemLeft" align="right" valign="top">AzureIoTProvisioningClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#ae33219731f6de3ef4013a7328d5a29ce">AzureIoTProvisioningClient_SetSymmetricKey</a> (AzureIoTProvisioningClient_t *pxAzureProvClient, const uint8_t *pucSymmetricKey, uint32_t ulSymmetricKeyLength, AzureIoTGetHMACFunc_t xHmacFunction)</td></tr>
+<tr class="memitem:ae33219731f6de3ef4013a7328d5a29ce"><td class="memItemLeft" align="right" valign="top">AzureIoTProvisioningClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#ae33219731f6de3ef4013a7328d5a29ce">AzureIoTProvisioningClient_SetSymmetricKey</a> (AzureIoTProvisioningClient_t *pxAzureProvClient, const uint8_t *pucSymmetricKey, uint32_t ulSymmetricKeyLength, <a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a> xHmacFunction)</td></tr>
 <tr class="memdesc:ae33219731f6de3ef4013a7328d5a29ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the symmetric key to use for authentication.  <a href="azure__iot__provisioning__client_8h.html#ae33219731f6de3ef4013a7328d5a29ce">More...</a><br /></td></tr>
 <tr class="separator:ae33219731f6de3ef4013a7328d5a29ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a342a581a093060f652fb65cd19bfdfe4"><td class="memItemLeft" align="right" valign="top">AzureIoTProvisioningClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__provisioning__client_8h.html#a342a581a093060f652fb65cd19bfdfe4">AzureIoTProvisioningClient_Register</a> (AzureIoTProvisioningClient_t *pxAzureProvClient, uint32_t ulTimeoutMilliseconds)</td></tr>
@@ -166,6 +172,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Result values used for Azure IoT Device Provisioning functions. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aaf8edda67c0038d0555b653c21edf3bfa303d1933f47868effe8091cd2cb752a7"></a>eAzureIoTProvisioningInvalidArgument&#160;</td><td class="fielddoc"><p>Success. </p>
 </td></tr>
@@ -266,8 +274,8 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureProvClient</td><td>The #AzureIoTProvisioningClient_t * to use for this call. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pucHubHostname</td><td>The pointer to a buffer which will be populated with the IoT Hub hostname. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pulHostnameLength</td><td>The pointer to the <code>uint32_t</code> which will be populated with the length of the hostname. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">pucDeviceId</td><td>The pointer to a buffer which will be populated with the device ID. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">pulDeviceIdLength</td><td>The pointer to the uint32_t which will be populated with the length of the device ID. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucDeviceID</td><td>The pointer to a buffer which will be populated with the device ID. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pulDeviceIDLength</td><td>The pointer to the uint32_t which will be populated with the length of the device ID. </td></tr>
   </table>
   </dd>
 </dl>
@@ -383,7 +391,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AzureIoTGetCurrentTimeFunc_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a>&#160;</td>
           <td class="paramname"><em>xGetTimeFunction</em>, </td>
         </tr>
         <tr>
@@ -568,7 +576,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AzureIoTGetHMACFunc_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>&#160;</td>
           <td class="paramname"><em>xHmacFunction</em>&#160;</td>
         </tr>
         <tr>
@@ -586,7 +594,7 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureProvClient</td><td>The #AzureIoTProvisioningClient_t * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucSymmetricKey</td><td>The symmetric key to use for the connection. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulSymmetricKeyLength</td><td>The length of the <code>pucSymmetricKey</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">xHmacFunction</td><td>The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHmacFunction</td><td>The <a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc" title="The HMAC function used by the SDK to generate SAS keys.">AzureIoTGetHMACFunc_t</a> function pointer to a function which computes the HMAC256 over a set of bytes. </td></tr>
   </table>
   </dd>
 </dl>

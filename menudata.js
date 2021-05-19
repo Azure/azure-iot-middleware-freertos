@@ -27,10 +27,12 @@ var menudata={children:[
 {text:"Data Structure Index",url:"classes.html"},
 {text:"Data Fields",url:"functions.html",children:[
 {text:"All",url:"functions.html",children:[
+{text:"_",url:"functions.html#index__5F"},
 {text:"p",url:"functions.html#index_p"},
 {text:"u",url:"functions.html#index_u"},
 {text:"x",url:"functions.html#index_x"}]},
 {text:"Variables",url:"functions_vars.html",children:[
+{text:"_",url:"functions_vars.html#index__5F"},
 {text:"p",url:"functions_vars.html#index_p"},
 {text:"u",url:"functions_vars.html#index_u"},
 {text:"x",url:"functions_vars.html#index_x"}]}]}]},
@@ -38,6 +40,7 @@ var menudata={children:[
 {text:"File List",url:"files.html"},
 {text:"Globals",url:"globals.html",children:[
 {text:"All",url:"globals.html",children:[
+{text:"_",url:"globals.html#index__5F"},
 {text:"a",url:"globals.html#index_a"},
 {text:"e",url:"globals.html#index_e"}]},
 {text:"Functions",url:"globals_func.html",children:[

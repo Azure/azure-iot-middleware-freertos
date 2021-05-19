@@ -89,74 +89,96 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_connect_info.html">AzureIoTMQTTConnectInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Connection info for the MQTT client.  <a href="struct_azure_io_t_m_q_t_t_connect_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_subscribe_info.html">AzureIoTMQTTSubscribeInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Subscription info for the MQTT client.  <a href="struct_azure_io_t_m_q_t_t_subscribe_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_publish_info.html">AzureIoTMQTTPublishInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publish info for the MQTT client.  <a href="struct_azure_io_t_m_q_t_t_publish_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_deserialized_info.html">AzureIoTMQTTDeserializedInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MQTT packet deserialized info for the MQTT client.  <a href="struct_azure_io_t_m_q_t_t_deserialized_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_packet_info.html">AzureIoTMQTTPacketInfo</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">MQTT packet info for the MQTT client.  <a href="struct_azure_io_t_m_q_t_t_packet_info.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a6b460b63cf7ed90142b9fe807088a186"><td class="memItemLeft" align="right" valign="top"><a id="a6b460b63cf7ed90142b9fe807088a186"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_CONNECT</b>&#160;&#160;&#160;( ( uint8_t ) 0x10U )    /** @brief CONNECT (client-to-server). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a6b460b63cf7ed90142b9fe807088a186">azureiotmqttPACKET_TYPE_CONNECT</a>&#160;&#160;&#160;( ( uint8_t ) 0x10U )</td></tr>
+<tr class="memdesc:a6b460b63cf7ed90142b9fe807088a186"><td class="mdescLeft">&#160;</td><td class="mdescRight">CONNECT (client-to-server). <br /></td></tr>
 <tr class="separator:a6b460b63cf7ed90142b9fe807088a186"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a282eeafe24452d695dc517fa843a360e"><td class="memItemLeft" align="right" valign="top"><a id="a282eeafe24452d695dc517fa843a360e"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_CONNACK</b>&#160;&#160;&#160;( ( uint8_t ) 0x20U )    /** @brief CONNACK (server-to-client). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a282eeafe24452d695dc517fa843a360e">azureiotmqttPACKET_TYPE_CONNACK</a>&#160;&#160;&#160;( ( uint8_t ) 0x20U )</td></tr>
+<tr class="memdesc:a282eeafe24452d695dc517fa843a360e"><td class="mdescLeft">&#160;</td><td class="mdescRight">CONNACK (server-to-client). <br /></td></tr>
 <tr class="separator:a282eeafe24452d695dc517fa843a360e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a400c86a2bde8062bd57226d0c444447f"><td class="memItemLeft" align="right" valign="top"><a id="a400c86a2bde8062bd57226d0c444447f"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PUBLISH</b>&#160;&#160;&#160;( ( uint8_t ) 0x30U )    /** @brief PUBLISH (bidirectional). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a400c86a2bde8062bd57226d0c444447f">azureiotmqttPACKET_TYPE_PUBLISH</a>&#160;&#160;&#160;( ( uint8_t ) 0x30U )</td></tr>
+<tr class="memdesc:a400c86a2bde8062bd57226d0c444447f"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBLISH (bidirectional). <br /></td></tr>
 <tr class="separator:a400c86a2bde8062bd57226d0c444447f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add8f7ebb2211d99179d1bf025a0a6115"><td class="memItemLeft" align="right" valign="top"><a id="add8f7ebb2211d99179d1bf025a0a6115"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PUBACK</b>&#160;&#160;&#160;( ( uint8_t ) 0x40U )    /** @brief PUBACK (bidirectional). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#add8f7ebb2211d99179d1bf025a0a6115">azureiotmqttPACKET_TYPE_PUBACK</a>&#160;&#160;&#160;( ( uint8_t ) 0x40U )</td></tr>
+<tr class="memdesc:add8f7ebb2211d99179d1bf025a0a6115"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBACK (bidirectional). <br /></td></tr>
 <tr class="separator:add8f7ebb2211d99179d1bf025a0a6115"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a83bb0994ad47ae2d6d0e6e3699fc5183"><td class="memItemLeft" align="right" valign="top"><a id="a83bb0994ad47ae2d6d0e6e3699fc5183"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PUBREC</b>&#160;&#160;&#160;( ( uint8_t ) 0x50U )    /** @brief PUBREC (bidirectional). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a83bb0994ad47ae2d6d0e6e3699fc5183">azureiotmqttPACKET_TYPE_PUBREC</a>&#160;&#160;&#160;( ( uint8_t ) 0x50U )</td></tr>
+<tr class="memdesc:a83bb0994ad47ae2d6d0e6e3699fc5183"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBREC (bidirectional). <br /></td></tr>
 <tr class="separator:a83bb0994ad47ae2d6d0e6e3699fc5183"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c0b5f9bb3d10e0d93aff596062363cb"><td class="memItemLeft" align="right" valign="top"><a id="a3c0b5f9bb3d10e0d93aff596062363cb"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PUBREL</b>&#160;&#160;&#160;( ( uint8_t ) 0x62U )    /** @brief PUBREL (bidirectional). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a3c0b5f9bb3d10e0d93aff596062363cb">azureiotmqttPACKET_TYPE_PUBREL</a>&#160;&#160;&#160;( ( uint8_t ) 0x62U )</td></tr>
+<tr class="memdesc:a3c0b5f9bb3d10e0d93aff596062363cb"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBREL (bidirectional). <br /></td></tr>
 <tr class="separator:a3c0b5f9bb3d10e0d93aff596062363cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7a7d637762ffb36a95a0057e418d96f6"><td class="memItemLeft" align="right" valign="top"><a id="a7a7d637762ffb36a95a0057e418d96f6"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PUBCOMP</b>&#160;&#160;&#160;( ( uint8_t ) 0x70U )    /** @brief PUBCOMP (bidirectional). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a7a7d637762ffb36a95a0057e418d96f6">azureiotmqttPACKET_TYPE_PUBCOMP</a>&#160;&#160;&#160;( ( uint8_t ) 0x70U )</td></tr>
+<tr class="memdesc:a7a7d637762ffb36a95a0057e418d96f6"><td class="mdescLeft">&#160;</td><td class="mdescRight">PUBCOMP (bidirectional). <br /></td></tr>
 <tr class="separator:a7a7d637762ffb36a95a0057e418d96f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6ec19e65e875baa24fd7ca15e39d537b"><td class="memItemLeft" align="right" valign="top"><a id="a6ec19e65e875baa24fd7ca15e39d537b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_SUBSCRIBE</b>&#160;&#160;&#160;( ( uint8_t ) 0x82U )    /** @brief SUBSCRIBE (client-to-server). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a6ec19e65e875baa24fd7ca15e39d537b">azureiotmqttPACKET_TYPE_SUBSCRIBE</a>&#160;&#160;&#160;( ( uint8_t ) 0x82U )</td></tr>
+<tr class="memdesc:a6ec19e65e875baa24fd7ca15e39d537b"><td class="mdescLeft">&#160;</td><td class="mdescRight">SUBSCRIBE (client-to-server). <br /></td></tr>
 <tr class="separator:a6ec19e65e875baa24fd7ca15e39d537b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a71f6aea4a14b0ca558e15a933c5601e7"><td class="memItemLeft" align="right" valign="top"><a id="a71f6aea4a14b0ca558e15a933c5601e7"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_SUBACK</b>&#160;&#160;&#160;( ( uint8_t ) 0x90U )    /** @brief SUBACK (server-to-client). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a71f6aea4a14b0ca558e15a933c5601e7">azureiotmqttPACKET_TYPE_SUBACK</a>&#160;&#160;&#160;( ( uint8_t ) 0x90U )</td></tr>
+<tr class="memdesc:a71f6aea4a14b0ca558e15a933c5601e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">SUBACK (server-to-client). <br /></td></tr>
 <tr class="separator:a71f6aea4a14b0ca558e15a933c5601e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a06c8e29cd5fb65ba081b1c1e41c7aa1d"><td class="memItemLeft" align="right" valign="top"><a id="a06c8e29cd5fb65ba081b1c1e41c7aa1d"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_UNSUBSCRIBE</b>&#160;&#160;&#160;( ( uint8_t ) 0xA2U )    /** @brief UNSUBSCRIBE (client-to-server). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a06c8e29cd5fb65ba081b1c1e41c7aa1d">azureiotmqttPACKET_TYPE_UNSUBSCRIBE</a>&#160;&#160;&#160;( ( uint8_t ) 0xA2U )</td></tr>
+<tr class="memdesc:a06c8e29cd5fb65ba081b1c1e41c7aa1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">UNSUBSCRIBE (client-to-server). <br /></td></tr>
 <tr class="separator:a06c8e29cd5fb65ba081b1c1e41c7aa1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5ae06cbf47f58c919a29796504b9ef4"><td class="memItemLeft" align="right" valign="top"><a id="ab5ae06cbf47f58c919a29796504b9ef4"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_UNSUBACK</b>&#160;&#160;&#160;( ( uint8_t ) 0xB0U )    /** @brief UNSUBACK (server-to-client). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ab5ae06cbf47f58c919a29796504b9ef4">azureiotmqttPACKET_TYPE_UNSUBACK</a>&#160;&#160;&#160;( ( uint8_t ) 0xB0U )</td></tr>
+<tr class="memdesc:ab5ae06cbf47f58c919a29796504b9ef4"><td class="mdescLeft">&#160;</td><td class="mdescRight">UNSUBACK (server-to-client). <br /></td></tr>
 <tr class="separator:ab5ae06cbf47f58c919a29796504b9ef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab8ec3aa6b643c8bb9dbd7f86831de20b"><td class="memItemLeft" align="right" valign="top"><a id="ab8ec3aa6b643c8bb9dbd7f86831de20b"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PINGREQ</b>&#160;&#160;&#160;( ( uint8_t ) 0xC0U )    /** @brief PINGREQ (client-to-server). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ab8ec3aa6b643c8bb9dbd7f86831de20b">azureiotmqttPACKET_TYPE_PINGREQ</a>&#160;&#160;&#160;( ( uint8_t ) 0xC0U )</td></tr>
+<tr class="memdesc:ab8ec3aa6b643c8bb9dbd7f86831de20b"><td class="mdescLeft">&#160;</td><td class="mdescRight">PINGREQ (client-to-server). <br /></td></tr>
 <tr class="separator:ab8ec3aa6b643c8bb9dbd7f86831de20b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acba952a9c87223e8bdf3f4331fc57331"><td class="memItemLeft" align="right" valign="top"><a id="acba952a9c87223e8bdf3f4331fc57331"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_PINGRESP</b>&#160;&#160;&#160;( ( uint8_t ) 0xD0U )    /** @brief PINGRESP (server-to-client). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#acba952a9c87223e8bdf3f4331fc57331">azureiotmqttPACKET_TYPE_PINGRESP</a>&#160;&#160;&#160;( ( uint8_t ) 0xD0U )</td></tr>
+<tr class="memdesc:acba952a9c87223e8bdf3f4331fc57331"><td class="mdescLeft">&#160;</td><td class="mdescRight">PINGRESP (server-to-client). <br /></td></tr>
 <tr class="separator:acba952a9c87223e8bdf3f4331fc57331"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a15eb43d24d22f6a9a539d1e7a5e45908"><td class="memItemLeft" align="right" valign="top"><a id="a15eb43d24d22f6a9a539d1e7a5e45908"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttPACKET_TYPE_DISCONNECT</b>&#160;&#160;&#160;( ( uint8_t ) 0xE0U )    /** @brief DISCONNECT (client-to-server). */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a15eb43d24d22f6a9a539d1e7a5e45908">azureiotmqttPACKET_TYPE_DISCONNECT</a>&#160;&#160;&#160;( ( uint8_t ) 0xE0U )</td></tr>
+<tr class="memdesc:a15eb43d24d22f6a9a539d1e7a5e45908"><td class="mdescLeft">&#160;</td><td class="mdescRight">DISCONNECT (client-to-server). <br /></td></tr>
 <tr class="separator:a15eb43d24d22f6a9a539d1e7a5e45908"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9d6bdc2d5a3e3222526af38cd697a15"><td class="memItemLeft" align="right" valign="top"><a id="ac9d6bdc2d5a3e3222526af38cd697a15"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiotmqttGET_PACKET_TYPE</b>(ucType)&#160;&#160;&#160;( ( ucType ) &amp; 0xF0U ) /** @brief Get the packet type according to the MQTT spec */</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ac9d6bdc2d5a3e3222526af38cd697a15">azureiotmqttGET_PACKET_TYPE</a>(ucType)&#160;&#160;&#160;( ( ucType ) &amp; 0xF0U )</td></tr>
+<tr class="memdesc:ac9d6bdc2d5a3e3222526af38cd697a15"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the packet type according to the MQTT spec. <br /></td></tr>
 <tr class="separator:ac9d6bdc2d5a3e3222526af38cd697a15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:ae10c68b0cfa37f4b6b9387ca84f6d0c3"><td class="memItemLeft" align="right" valign="top"><a id="ae10c68b0cfa37f4b6b9387ca84f6d0c3"></a>
-typedef AzureIoTMQTT_t *&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTMQTTHandle_t</b></td></tr>
+typedef AzureIoTMQTT_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a></td></tr>
+<tr class="memdesc:ae10c68b0cfa37f4b6b9387ca84f6d0c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Typedef of the MQTT client which is defined by the MQTT port. <br /></td></tr>
 <tr class="separator:ae10c68b0cfa37f4b6b9387ca84f6d0c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4c3ba99ad053c362e284a26c89d6eeda"><td class="memItemLeft" align="right" valign="top"><a id="a4c3ba99ad053c362e284a26c89d6eeda"></a>
-typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTMQTTGetCurrentTimeFunc_t</b>) (void)</td></tr>
+<tr class="memitem:a4c3ba99ad053c362e284a26c89d6eeda"><td class="memItemLeft" align="right" valign="top">typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a4c3ba99ad053c362e284a26c89d6eeda">AzureIoTMQTTGetCurrentTimeFunc_t</a>) (void)</td></tr>
+<tr class="memdesc:a4c3ba99ad053c362e284a26c89d6eeda"><td class="mdescLeft">&#160;</td><td class="mdescRight">The time function to be used for MQTT functionality.  <a href="azure__iot__mqtt_8h.html#a4c3ba99ad053c362e284a26c89d6eeda">More...</a><br /></td></tr>
 <tr class="separator:a4c3ba99ad053c362e284a26c89d6eeda"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afe5870931c1aba4d3aff52aa8751a208"><td class="memItemLeft" align="right" valign="top"><a id="afe5870931c1aba4d3aff52aa8751a208"></a>
-typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTMQTTEventCallback_t</b>) (AzureIoTMQTTHandle_t pContext, struct <a class="el" href="struct_azure_io_t_m_q_t_t_packet_info.html">AzureIoTMQTTPacketInfo</a> *pxPacketInfo, struct <a class="el" href="struct_azure_io_t_m_q_t_t_deserialized_info.html">AzureIoTMQTTDeserializedInfo</a> *pxDeserializedInfo)</td></tr>
+typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#afe5870931c1aba4d3aff52aa8751a208">AzureIoTMQTTEventCallback_t</a>) (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> pContext, struct <a class="el" href="struct_azure_io_t_m_q_t_t_packet_info.html">AzureIoTMQTTPacketInfo</a> *pxPacketInfo, struct <a class="el" href="struct_azure_io_t_m_q_t_t_deserialized_info.html">AzureIoTMQTTDeserializedInfo</a> *pxDeserializedInfo)</td></tr>
+<tr class="memdesc:afe5870931c1aba4d3aff52aa8751a208"><td class="mdescLeft">&#160;</td><td class="mdescRight">The callback function which will be invoked on receipt of an MQTT message. <br /></td></tr>
 <tr class="separator:afe5870931c1aba4d3aff52aa8751a208"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -165,12 +187,14 @@ Enumerations</h2></td></tr>
 <a class="el" href="azure__iot__mqtt_8h.html#a70651079d0c4e019ef2d8571e3d3914cacc2ef418c12a1360373d81526e31cd93">eAzureIoTMQTTQoS1</a> = 1, 
 <a class="el" href="azure__iot__mqtt_8h.html#a70651079d0c4e019ef2d8571e3d3914cab27ad3d017946a9758041f7b5e047e61">eAzureIoTMQTTQoS2</a> = 2
  }</td></tr>
+<tr class="memdesc:a70651079d0c4e019ef2d8571e3d3914c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Quality of service values.  <a href="azure__iot__mqtt_8h.html#a70651079d0c4e019ef2d8571e3d3914c">More...</a><br /></td></tr>
 <tr class="separator:a70651079d0c4e019ef2d8571e3d3914c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d78eb48d9db26a741e63a9a7a94af77"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a2d78eb48d9db26a741e63a9a7a94af77">AzureIoTMQTTSubAckStatus</a> { <b>eMQTTSubAckSuccessQos0</b> = 0x00, 
 <a class="el" href="azure__iot__mqtt_8h.html#a2d78eb48d9db26a741e63a9a7a94af77a3cd9c0d6a5faee52b13e3dffcd37e369">eMQTTSubAckSuccessQos1</a> = 0x01, 
 <a class="el" href="azure__iot__mqtt_8h.html#a2d78eb48d9db26a741e63a9a7a94af77ae0d645784c4d34dce299efcbcf4f1570">eMQTTSubAckSuccessQos2</a> = 0x02, 
 <a class="el" href="azure__iot__mqtt_8h.html#a2d78eb48d9db26a741e63a9a7a94af77a0351a27c076c456306a3735ceefc0b9c">eMQTTSubAckFailure</a> = 0x80
  }</td></tr>
+<tr class="memdesc:a2d78eb48d9db26a741e63a9a7a94af77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Suback ack status states.  <a href="azure__iot__mqtt_8h.html#a2d78eb48d9db26a741e63a9a7a94af77">More...</a><br /></td></tr>
 <tr class="separator:a2d78eb48d9db26a741e63a9a7a94af77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a59bf4767ec0d0f6e20858dede946a7f2"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a59bf4767ec0d0f6e20858dede946a7f2">AzureIoTMQTTResult</a> { <br />
 &#160;&#160;<b>eAzureIoTMQTTSuccess</b> = 0, 
@@ -189,35 +213,36 @@ Enumerations</h2></td></tr>
 <a class="el" href="azure__iot__mqtt_8h.html#a59bf4767ec0d0f6e20858dede946a7f2a6fa418ca6a8eecf59c7870899e672f3e">eAzureIoTMQTTFailed</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a59bf4767ec0d0f6e20858dede946a7f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result values used for Azure IoT MQTT functions.  <a href="azure__iot__mqtt_8h.html#a59bf4767ec0d0f6e20858dede946a7f2">More...</a><br /></td></tr>
 <tr class="separator:a59bf4767ec0d0f6e20858dede946a7f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a8f78b4dab059d99f96d97930b02fcbb0"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a8f78b4dab059d99f96d97930b02fcbb0">AzureIoTMQTT_Init</a> (AzureIoTMQTTHandle_t xContext, const AzureIoTTransportInterface_t *pxTransportInterface, AzureIoTMQTTGetCurrentTimeFunc_t xGetTimeFunction, AzureIoTMQTTEventCallback_t xUserCallback, uint8_t *pucNetworkBuffer, size_t xNetworkBufferLength)</td></tr>
+<tr class="memitem:a8f78b4dab059d99f96d97930b02fcbb0"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a8f78b4dab059d99f96d97930b02fcbb0">AzureIoTMQTT_Init</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext, const AzureIoTTransportInterface_t *pxTransportInterface, <a class="el" href="azure__iot__mqtt_8h.html#a4c3ba99ad053c362e284a26c89d6eeda">AzureIoTMQTTGetCurrentTimeFunc_t</a> xGetTimeFunction, <a class="el" href="azure__iot__mqtt_8h.html#afe5870931c1aba4d3aff52aa8751a208">AzureIoTMQTTEventCallback_t</a> xUserCallback, uint8_t *pucNetworkBuffer, size_t xNetworkBufferLength)</td></tr>
 <tr class="memdesc:a8f78b4dab059d99f96d97930b02fcbb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize an AzureIoTMQTT context.  <a href="azure__iot__mqtt_8h.html#a8f78b4dab059d99f96d97930b02fcbb0">More...</a><br /></td></tr>
 <tr class="separator:a8f78b4dab059d99f96d97930b02fcbb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab76b32cc8ed55f428c4ca584624163d9"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ab76b32cc8ed55f428c4ca584624163d9">AzureIoTMQTT_Connect</a> (AzureIoTMQTTHandle_t xContext, const AzureIoTMQTTConnectInfo_t *pxConnectInfo, const AzureIoTMQTTPublishInfo_t *pxWillInfo, uint32_t ulMilliseconds, bool *pxSessionPresent)</td></tr>
+<tr class="memitem:ab76b32cc8ed55f428c4ca584624163d9"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ab76b32cc8ed55f428c4ca584624163d9">AzureIoTMQTT_Connect</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext, const AzureIoTMQTTConnectInfo_t *pxConnectInfo, const AzureIoTMQTTPublishInfo_t *pxWillInfo, uint32_t ulMilliseconds, bool *pxSessionPresent)</td></tr>
 <tr class="memdesc:ab76b32cc8ed55f428c4ca584624163d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Establish an MQTT session.  <a href="azure__iot__mqtt_8h.html#ab76b32cc8ed55f428c4ca584624163d9">More...</a><br /></td></tr>
 <tr class="separator:ab76b32cc8ed55f428c4ca584624163d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b2d157d2f9e3c35005bab92b3f03fbf"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a6b2d157d2f9e3c35005bab92b3f03fbf">AzureIoTMQTT_Subscribe</a> (AzureIoTMQTTHandle_t xContext, const AzureIoTMQTTSubscribeInfo_t *pxSubscriptionList, size_t xSubscriptionCount, uint16_t usPacketId)</td></tr>
+<tr class="memitem:a6b2d157d2f9e3c35005bab92b3f03fbf"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a6b2d157d2f9e3c35005bab92b3f03fbf">AzureIoTMQTT_Subscribe</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext, const AzureIoTMQTTSubscribeInfo_t *pxSubscriptionList, size_t xSubscriptionCount, uint16_t usPacketId)</td></tr>
 <tr class="memdesc:a6b2d157d2f9e3c35005bab92b3f03fbf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends MQTT SUBSCRIBE for the given list of topic filters to the broker.  <a href="azure__iot__mqtt_8h.html#a6b2d157d2f9e3c35005bab92b3f03fbf">More...</a><br /></td></tr>
 <tr class="separator:a6b2d157d2f9e3c35005bab92b3f03fbf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dce018c43f71d68563dd8db15f4878d"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a7dce018c43f71d68563dd8db15f4878d">AzureIoTMQTT_Publish</a> (AzureIoTMQTTHandle_t xContext, const AzureIoTMQTTPublishInfo_t *pxPublishInfo, uint16_t usPacketId)</td></tr>
+<tr class="memitem:a7dce018c43f71d68563dd8db15f4878d"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a7dce018c43f71d68563dd8db15f4878d">AzureIoTMQTT_Publish</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext, const AzureIoTMQTTPublishInfo_t *pxPublishInfo, uint16_t usPacketId)</td></tr>
 <tr class="memdesc:a7dce018c43f71d68563dd8db15f4878d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Publishes a message to the given topic name.  <a href="azure__iot__mqtt_8h.html#a7dce018c43f71d68563dd8db15f4878d">More...</a><br /></td></tr>
 <tr class="separator:a7dce018c43f71d68563dd8db15f4878d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00c24eaed6829de2fad8d039f54e9b54"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a00c24eaed6829de2fad8d039f54e9b54">AzureIoTMQTT_Ping</a> (AzureIoTMQTTHandle_t xContext)</td></tr>
+<tr class="memitem:a00c24eaed6829de2fad8d039f54e9b54"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a00c24eaed6829de2fad8d039f54e9b54">AzureIoTMQTT_Ping</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext)</td></tr>
 <tr class="memdesc:a00c24eaed6829de2fad8d039f54e9b54"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends a MQTT PINGREQ to broker.  <a href="azure__iot__mqtt_8h.html#a00c24eaed6829de2fad8d039f54e9b54">More...</a><br /></td></tr>
 <tr class="separator:a00c24eaed6829de2fad8d039f54e9b54"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abc612a49587510cf957adbd6d55d0496"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#abc612a49587510cf957adbd6d55d0496">AzureIoTMQTT_Unsubscribe</a> (AzureIoTMQTTHandle_t xContext, const AzureIoTMQTTSubscribeInfo_t *pxSubscriptionList, size_t xSubscriptionCount, uint16_t usPacketId)</td></tr>
+<tr class="memitem:abc612a49587510cf957adbd6d55d0496"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#abc612a49587510cf957adbd6d55d0496">AzureIoTMQTT_Unsubscribe</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext, const AzureIoTMQTTSubscribeInfo_t *pxSubscriptionList, size_t xSubscriptionCount, uint16_t usPacketId)</td></tr>
 <tr class="memdesc:abc612a49587510cf957adbd6d55d0496"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends MQTT UNSUBSCRIBE for the given list of topic filters to the broker.  <a href="azure__iot__mqtt_8h.html#abc612a49587510cf957adbd6d55d0496">More...</a><br /></td></tr>
 <tr class="separator:abc612a49587510cf957adbd6d55d0496"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aba68348dcd4030fb4dd031e9b0135b4a"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#aba68348dcd4030fb4dd031e9b0135b4a">AzureIoTMQTT_Disconnect</a> (AzureIoTMQTTHandle_t xContext)</td></tr>
+<tr class="memitem:aba68348dcd4030fb4dd031e9b0135b4a"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#aba68348dcd4030fb4dd031e9b0135b4a">AzureIoTMQTT_Disconnect</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext)</td></tr>
 <tr class="memdesc:aba68348dcd4030fb4dd031e9b0135b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Disconnect a MQTT session.  <a href="azure__iot__mqtt_8h.html#aba68348dcd4030fb4dd031e9b0135b4a">More...</a><br /></td></tr>
 <tr class="separator:aba68348dcd4030fb4dd031e9b0135b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac0dc2a341bcf261a812c2103d3d15cb0"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ac0dc2a341bcf261a812c2103d3d15cb0">AzureIoTMQTT_ProcessLoop</a> (AzureIoTMQTTHandle_t xContext, uint32_t ulMilliseconds)</td></tr>
+<tr class="memitem:ac0dc2a341bcf261a812c2103d3d15cb0"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#ac0dc2a341bcf261a812c2103d3d15cb0">AzureIoTMQTT_ProcessLoop</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext, uint32_t ulMilliseconds)</td></tr>
 <tr class="memdesc:ac0dc2a341bcf261a812c2103d3d15cb0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Loop to receive packets from the transport interface. Handles keep alive.  <a href="azure__iot__mqtt_8h.html#ac0dc2a341bcf261a812c2103d3d15cb0">More...</a><br /></td></tr>
 <tr class="separator:ac0dc2a341bcf261a812c2103d3d15cb0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b4934b88408dfcd07aa4716af55aa3d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a9b4934b88408dfcd07aa4716af55aa3d">AzureIoTMQTT_GetPacketId</a> (AzureIoTMQTTHandle_t xContext)</td></tr>
+<tr class="memitem:a9b4934b88408dfcd07aa4716af55aa3d"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a9b4934b88408dfcd07aa4716af55aa3d">AzureIoTMQTT_GetPacketId</a> (<a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a> xContext)</td></tr>
 <tr class="memdesc:a9b4934b88408dfcd07aa4716af55aa3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a packet ID.  <a href="azure__iot__mqtt_8h.html#a9b4934b88408dfcd07aa4716af55aa3d">More...</a><br /></td></tr>
 <tr class="separator:a9b4934b88408dfcd07aa4716af55aa3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e613040450820579f76484533df9d76"><td class="memItemLeft" align="right" valign="top">AzureIoTMQTTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__mqtt_8h.html#a2e613040450820579f76484533df9d76">AzureIoTMQTT_GetSubAckStatusCodes</a> (const AzureIoTMQTTPacketInfo_t *pxSubackPacket, uint8_t **ppucPayloadStart, size_t *pxPayloadSize)</td></tr>
@@ -227,7 +252,25 @@ Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Azure IoT MQTT is the MQTT interface that AzureIoT middleware depends upon. </p>
 <dl class="section note"><dt>Note</dt><dd>This interface is private and subjected to change. Currently, there is only one implementation for this interface, which uses coreMQTT as underlying MQTT stack. </dd></dl>
-</div><h2 class="groupheader">Enumeration Type Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="a4c3ba99ad053c362e284a26c89d6eeda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c3ba99ad053c362e284a26c89d6eeda">&#9670;&nbsp;</a></span>AzureIoTMQTTGetCurrentTimeFunc_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uint32_t( * AzureIoTMQTTGetCurrentTimeFunc_t) (void)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The time function to be used for MQTT functionality. </p>
+<dl class="section note"><dt>Note</dt><dd>Must return the time since Unix epoch. </dd></dl>
+
+</div>
+</div>
+<h2 class="groupheader">Enumeration Type Documentation</h2>
 <a id="a70651079d0c4e019ef2d8571e3d3914c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a70651079d0c4e019ef2d8571e3d3914c">&#9670;&nbsp;</a></span>AzureIoTMQTTQoS</h2>
 
@@ -239,6 +282,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Quality of service values. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a70651079d0c4e019ef2d8571e3d3914cacc2ef418c12a1360373d81526e31cd93"></a>eAzureIoTMQTTQoS1&#160;</td><td class="fielddoc"><p>Delivery at most once. </p>
 </td></tr>
@@ -259,6 +304,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Result values used for Azure IoT MQTT functions. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a59bf4767ec0d0f6e20858dede946a7f2ab94a077c4f8afeb974e3b86633064dba"></a>eAzureIoTMQTTBadParameter&#160;</td><td class="fielddoc"><p>Function completed successfully. </p>
 </td></tr>
@@ -297,6 +344,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Suback ack status states. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a2d78eb48d9db26a741e63a9a7a94af77a3cd9c0d6a5faee52b13e3dffcd37e369"></a>eMQTTSubAckSuccessQos1&#160;</td><td class="fielddoc"><p>Success with a maximum delivery at QoS 0. </p>
 </td></tr>
@@ -318,7 +367,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Connect </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em>, </td>
         </tr>
         <tr>
@@ -379,7 +428,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Disconnect </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em></td><td>)</td>
           <td></td>
         </tr>
@@ -406,7 +455,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">uint16_t AzureIoTMQTT_GetPacketId </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em></td><td>)</td>
           <td></td>
         </tr>
@@ -484,7 +533,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Init </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em>, </td>
         </tr>
         <tr>
@@ -496,13 +545,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AzureIoTMQTTGetCurrentTimeFunc_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#a4c3ba99ad053c362e284a26c89d6eeda">AzureIoTMQTTGetCurrentTimeFunc_t</a>&#160;</td>
           <td class="paramname"><em>xGetTimeFunction</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">AzureIoTMQTTEventCallback_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#afe5870931c1aba4d3aff52aa8751a208">AzureIoTMQTTEventCallback_t</a>&#160;</td>
           <td class="paramname"><em>xUserCallback</em>, </td>
         </tr>
         <tr>
@@ -551,7 +600,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Ping </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em></td><td>)</td>
           <td></td>
         </tr>
@@ -578,7 +627,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_ProcessLoop </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em>, </td>
         </tr>
         <tr>
@@ -616,7 +665,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Publish </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em>, </td>
         </tr>
         <tr>
@@ -661,7 +710,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Subscribe </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em>, </td>
         </tr>
         <tr>
@@ -713,7 +762,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTMQTTResult_t AzureIoTMQTT_Unsubscribe </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMQTTHandle_t&#160;</td>
+          <td class="paramtype"><a class="el" href="azure__iot__mqtt_8h.html#ae10c68b0cfa37f4b6b9387ca84f6d0c3">AzureIoTMQTTHandle_t</a>&#160;</td>
           <td class="paramname"><em>xContext</em>, </td>
         </tr>
         <tr>

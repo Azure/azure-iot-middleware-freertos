@@ -75,30 +75,23 @@ $(function() {
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#ifndef AZURE_IOT_VERSION_H</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define AZURE_IOT_VERSION_H</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#define _azureiotSTRINGIFY2( x )    # x</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#define _azureiotSTRINGIFY( x )     _azureiotSTRINGIFY2( x )</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="comment">/* Major numeric identifier. */</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#define azureiotVERSION_MAJOR         0</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">/* Minor numeric identifier. */</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#define azureiotVERSION_MINOR         0</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">/* Patch numeric identifier. */</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#define azureiotVERSION_PATCH         1</span></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment">/* Optional pre-release identifier. SDK is in a pre-release state when present. */</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#define azureiotVERSION_PRERELEASE    &quot;alpha&quot;</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="comment">/* The version in string format used for telemetry following the `semver.org` standard */</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">/* (https://semver.org). */</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#define azureiotVERSION_STRING                      \</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">    _azureiotSTRINGIFY( azureiotVERSION_MAJOR ) &quot;.&quot; \</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">    _azureiotSTRINGIFY( azureiotVERSION_MINOR ) &quot;.&quot; \</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="preprocessor">    _azureiotSTRINGIFY( azureiotVERSION_PATCH ) &quot;-&quot; \</span></div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="preprocessor">    azureiotVERSION_PRERELEASE</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#aafa54933e19291863842d2f27f322a7f">   18</a></span>&#160;<span class="preprocessor">#define _azureiotSTRINGIFY2( x )    # x                      </span></div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#a41fc4b2e85943360dab0616450a5962a">   19</a></span>&#160;<span class="preprocessor">#define _azureiotSTRINGIFY( x )     _azureiotSTRINGIFY2( x ) </span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#a32276f9e636d39613565f9abfe0ff06a">   24</a></span>&#160;<span class="preprocessor">#define azureiotVERSION_MAJOR         0</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#a03f125f22610070e5003e4c6fe839bff">   29</a></span>&#160;<span class="preprocessor">#define azureiotVERSION_MINOR         0</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#a32014f04a04386beeb0dde34af2cab56">   34</a></span>&#160;<span class="preprocessor">#define azureiotVERSION_PATCH         1</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#a71d850b1db8b06d73fdeb3390815d61d">   39</a></span>&#160;<span class="preprocessor">#define azureiotVERSION_PRERELEASE    &quot;alpha&quot;</span></div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_VERSION_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="azure__iot__version_8h.html#a9fa652477e08d50684486c4693c76795">   45</a></span>&#160;<span class="preprocessor">#define azureiotVERSION_STRING                      \</span></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="preprocessor">    _azureiotSTRINGIFY( azureiotVERSION_MAJOR ) &quot;.&quot; \</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">    _azureiotSTRINGIFY( azureiotVERSION_MINOR ) &quot;.&quot; \</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="preprocessor">    _azureiotSTRINGIFY( azureiotVERSION_PATCH ) &quot;-&quot; \</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="preprocessor">    azureiotVERSION_PRERELEASE</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_VERSION_H */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
