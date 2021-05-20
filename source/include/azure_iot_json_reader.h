@@ -54,8 +54,8 @@ typedef struct AzureIoTJSONReader
  * @param[in] buffer_ptr An pointer to buffer containing the JSON text to read.
  * @param[in] buffer_len Length of buffer.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The #AzureIoTJSONReader_t is initialized successfully.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The #AzureIoTJSONReader_t is initialized successfully.
  * @retval other Initialization failed.
  *
  */
@@ -68,8 +68,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * reader
  *
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance to de-initialize
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The #AzureIoTJSONReader_t is de-initialized successfully.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The #AzureIoTJSONReader_t is de-initialized successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_Deinit( AzureIoTJSONReader_t * reader_ptr );
 
@@ -79,8 +79,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_Deinit( AzureIoTJSONReader_t * read
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance containing the JSON to
  * read.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The token was read successfully.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The token was read successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * reader_ptr );
 
@@ -90,12 +90,12 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * r
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance containing the JSON to
  * read.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The children of the current JSON token are skipped successfully.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The children of the current JSON token are skipped successfully.
  *
  * @remarks If the current token kind is a property name, the reader first moves to the property
  * value. Then, if the token kind is start of an object or array, the reader moves to the matching
- * end object or array. For all other token kinds, the reader doesn't move and returns #AZURE_IOT_SUCCESS.
+ * end object or array. For all other token kinds, the reader doesn't move and returns #eAzureIoTHubClientSuccess.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * reader_ptr );
 
@@ -105,8 +105,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t 
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance.
  * @param[out] value_ptr A pointer to a boolean to receive the value.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The boolean value is returned.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The boolean value is returned.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenBoolGet( AzureIoTJSONReader_t * reader_ptr,
                                                            bool * value_ptr );
@@ -117,8 +117,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenBoolGet( AzureIoTJSONReader_t 
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance.
  * @param[out] value_ptr A pointer to a variable to receive the value.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The number is returned.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The number is returned.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenInt32Get( AzureIoTJSONReader_t * reader_ptr,
                                                             int32_t * value_ptr );
@@ -129,8 +129,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenInt32Get( AzureIoTJSONReader_t
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance.
  * @param[out] value_ptr A pointer to a variable to receive the value.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The number is returned.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The number is returned.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenDoubleGet( AzureIoTJSONReader_t * reader_ptr,
                                                              double * value_ptr );
@@ -144,8 +144,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenDoubleGet( AzureIoTJSONReader_
  * @param[out] bytes_copied Contains the number of bytes written to the \p
  * destination which denote the length of the unescaped string.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the result of the operation.
- * @retval #AZURE_IOT_SUCCESS The property name was appended successfully.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess The property name was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenStringGet( AzureIoTJSONReader_t * reader_ptr,
                                                              uint8_t * buffer_ptr,
@@ -175,7 +175,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReade
  *
  * @param[in] reader_ptr A pointer to an #AzureIoTJSONReader_t instance.
  *
- * @return An `AzureIoTHubClientResult_t` value indicating the type of token.
+ * @return An #AzureIoTHubClientResult_t value indicating the type of token.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * reader_ptr );
 
