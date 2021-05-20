@@ -16,6 +16,9 @@
 #ifndef AZURE_IOT_JSON_WRITER_H
 #define AZURE_IOT_JSON_WRITER_H
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "azure_iot_hub_client.h"
 
 #include "azure/core/az_json.h"
