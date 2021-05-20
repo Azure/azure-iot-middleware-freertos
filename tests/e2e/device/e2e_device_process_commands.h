@@ -24,7 +24,7 @@
 #define e2etestRETRY_MAX_ATTEMPTS                      ( 5U )
 #define e2etestRETRY_MAX_BACKOFF_DELAY_MS              ( 5000U )
 #define e2etestRETRY_BACKOFF_BASE_MS                   ( 500U )
-#define e2etestCONNACK_RECV_TIMEOUT_MS                 ( 1000U )
+#define e2etestCONNACK_RECV_TIMEOUT_MS                 ( 10 * 1000U )
 #define e2etestTRANSPORT_SEND_RECV_TIMEOUT_MS          ( 2000U )
 #define e2etestProvisioning_Registration_TIMEOUT_MS    ( 10U )
 /*-----------------------------------------------------------*/
