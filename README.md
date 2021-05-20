@@ -35,11 +35,11 @@ Note that different versions of `uncrustify` can produce differently rendered fi
 
 ## Building
 
-This repository uses `CMake` to build. To integrate into your project, it requires three paths.
+This repository uses `CMake` to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a `-D` or add them as cache variables in your CMake.
 
 - `freertos_directory`: Full path to a directory which contains FreeRTOS ([as set up on GitHub](https://github.com/FreeRTOS/FreeRTOS)).
-- `freertos_port_directory`: The path to the freertos port that you would like to use. On GitHub you can find [the list here](https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/main/portable). Locally, if you initialize the FreeRTOS submodules, you can find the options in `<freertos_directory>/FreeRTOS/Source/portable`
-- `config_directory`: The directory which has the following files: `FreeRTOSConfig.h`, `azure_iot_config.h`, and `core_mqtt_config.h`.
+- `freertos_port_directory`: The full path to the freertos port that you would like to use. On GitHub you can find [the list here](https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/main/portable). Locally, if you initialize the FreeRTOS submodules, you can find the options in `<freertos_directory>/FreeRTOS/Source/portable`
+- `config_directory`: The full path which has the following files: `FreeRTOSConfig.h`, `azure_iot_config.h`, and `core_mqtt_config.h`.
 
 With those options added, the following CMake target will be available to integrate into your project:
 
