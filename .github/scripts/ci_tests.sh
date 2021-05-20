@@ -11,17 +11,6 @@ TEST_RUN_E2E_TESTS=${1:-1}
 TEST_CORES=${2:-2}
 TEST_JOB_COUNT=${3:-2}
 
-echo -e "::group::FreeRTOS Source"
-
-if [ ! -d "libraries/FreeRTOS" ]; then
-    git clone https://github.com/FreeRTOS/FreeRTOS.git libraries/FreeRTOS
-    pushd libraries/FreeRTOS
-    git checkout -b c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
-    git submodule sync
-    git submodule update --init --recursive --depth=1
-    popd
-fi
-
 echo -e "Using FreeRTOS in libraries/FreeRTOS (`git name-rev --name-only HEAD`)"
 TEST_FREERTOS_SRC=`pwd`/libraries/FreeRTOS
 

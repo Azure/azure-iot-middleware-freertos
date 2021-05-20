@@ -186,11 +186,7 @@ AzureIoTMQTTResult_t AzureIoTMQTT_ProcessLoop( AzureIoTMQTTHandle_t xContext,
 
 uint16_t AzureIoTMQTT_GetPacketId( AzureIoTMQTTHandle_t xContext )
 {
-    MQTTStatus_t xResult;
-
-    xResult = MQTT_GetPacketId( xContext );
-
-    return prvTranslateToAzureIoTMQTTResult( xResult );
+    return MQTT_GetPacketId( xContext );
 }
 
 AzureIoTMQTTResult_t AzureIoTMQTT_GetSubAckStatusCodes( const AzureIoTMQTTPacketInfo_t * pxSubackPacket,

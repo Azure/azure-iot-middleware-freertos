@@ -524,7 +524,7 @@ static AzureIoTProvisioningClientResult_t prvProvClientRunWorkflow( AzureIoTProv
 
         prvProvClientTriggerAction( pxAzureProvClient );
 
-        if( ( pxAzureProvClient->_internal.ulWorkflowState == azureiotprovisioningWF_STATE_COMPLETE ) )
+        if( pxAzureProvClient->_internal.ulWorkflowState == azureiotprovisioningWF_STATE_COMPLETE )
         {
             AZLogDebug( ( "AzureIoTProvisioning is in complete state: status=0x%08x",
                           pxAzureProvClient->_internal.ulLastOperationResult ) );

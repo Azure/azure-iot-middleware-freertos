@@ -355,7 +355,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * p
  * @brief Subscribe to cloud to device messages.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] xCloudToDeviceCallback The #AzureIoTHubClientCloudToDeviceMessageCallback_t to invoke when a CloudToDevice messages arrive.
+ * @param[in] xCloudToDeviceMessageCallback The #AzureIoTHubClientCloudToDeviceMessageCallback_t to invoke when a CloudToDevice messages arrive.
  * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
  * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for subscribe operation to complete.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.

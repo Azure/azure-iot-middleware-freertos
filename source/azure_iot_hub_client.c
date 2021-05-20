@@ -352,7 +352,7 @@ static uint32_t prvAzureIoTHubClientDeviceTwinProcess( AzureIoTHubClientReceiveC
             {
                 xTwinResponse.pvMessagePayload = xMQTTPublishInfo->pvPayload;
                 xTwinResponse.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
-                xTwinResponse.xMessageStatus = xOutRequest.status;
+                xTwinResponse.xMessageStatus = ( AzureIoTHubMessageStatus_t ) xOutRequest.status;
                 xTwinResponse.pucVersion = az_span_ptr( xOutRequest.version );
                 xTwinResponse.usVersionLength = ( uint16_t ) az_span_size( xOutRequest.version );
                 xTwinResponse.ulRequestID = ulRequestID;
