@@ -23,7 +23,6 @@
 
 #include "azure/core/az_json.h"
 
-
 typedef struct AzureIoTJSONWriter
 {
     struct
