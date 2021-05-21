@@ -21,15 +21,15 @@ add_compile_options(-fprofile-arcs -ftest-coverage -O0 -g3)
 add_link_options(-fprofile-arcs -ftest-coverage)
 set(MOCK_LINKER_OPTIONS "-Wl,--gc-sections")
 
-if("${freertos_repo_SOURCE_DIR}" STREQUAL "")
+if("${FREERTOS_DIRECTORY}" STREQUAL "")
   message(FATAL_ERROR "The Unit tests needs a FreeRTOS directory.")
 endif()
 
 include_directories(${CMAKE_CURRENT_LIST_DIR})
 include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)
-include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/include)
-include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS-Plus/Source/Utilities/logging)
-include_directories(${freertos_repo_SOURCE_DIR}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
+include_directories(${FREERTOS_DIRECTORY}/FreeRTOS/Source/include)
+include_directories(${FREERTOS_DIRECTORY}/FreeRTOS-Plus/Source/Utilities/logging)
+include_directories(${FREERTOS_DIRECTORY}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
 
 # Set the port for MQTT
 set(AZURE_IOT_MQTT_PORT ${CMAKE_CURRENT_LIST_DIR})
