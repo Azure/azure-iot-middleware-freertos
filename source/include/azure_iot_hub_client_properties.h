@@ -33,7 +33,7 @@
  *
  * @code
  * "reported": {
- *     "<component_name>": {
+ *     "<pucComponentName>": {
  *         "__t": "c",
  *         "temperature": 23
  *     }
@@ -48,11 +48,12 @@
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
  * @param[in,out] pxJSONWriter The #AzureIoTJSONWriter_t to append the necessary characters for an IoT
  * Plug and Play component.
- * @param[in] component_name The component name associated with the reported properties.
+ * @param[in] pucComponentName The component name associated with the reported properties.
+ * @param[in] usComponentNameLength The length of \p pucComponentName.
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONWriter must not be `NULL`.
- * @pre \p component_name must be a valid, non-empty #az_span.
+ * @pre \p pucComponentName must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The JSON payload was prefixed successfully.
@@ -95,10 +96,10 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndComponent( Azure
  * **Without component**
  * @code
  * {
- *   "<property_name>":{
+ *   "<pucPropertyName>":{
  *     "ac": <ilAckCode>,
  *     "av": <ilAckVersion>,
- *     "ad": "<ack_description>",
+ *     "ad": "<pucAckDescription>",
  *     "value": <user_value>
  *   }
  * }
@@ -107,12 +108,12 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndComponent( Azure
  * **With component**
  * @code
  * {
- *   "<component_name>": {
+ *   "<pucComponentName>": {
  *     "__t": "c",
- *     "<property_name>": {
+ *     "<pucPropertyName>": {
  *       "ac": <ilAckCode>,
  *       "av": <ilAckVersion>,
- *       "ad": "<ack_description>",
+ *       "ad": "<pucAckDescription>",
  *       "value": <user_value>
  *     }
  *   }
@@ -120,28 +121,28 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndComponent( Azure
  * @endcode
  *
  * To send a status for properties belonging to a component, first call the
- * az_iot_hub_client_properties_builder_begin_component() API to prefix the payload with the
+ * AzureIotHubClientProperties_BuilderBeginComponent() API to prefix the payload with the
  * necessary identification. The API call flow would look like the following with the listed JSON
  * payload being generated.
  *
  * @code
- * az_iot_hub_client_properties_builder_begin_component()
- * az_iot_hub_client_properties_builder_begin_response_status()
+ * AzureIotHubClientProperties_BuilderBeginComponent()
+ * AzureIotHubClientProperties_BuilderBeginResponseStatus()
  * // Append user value here (<user_value>) using pxJSONWriter directly.
- * az_iot_hub_client_properties_builder_end_response_status()
- * az_iot_hub_client_properties_builder_end_component()
+ * AzureIotHubClientProperties_BuilderEndResponseStatus()
+ * AzureIotHubClientProperties_BuilderEndComponent()
  * @endcode
  *
  * @note This API only builds the metadata for the properties response.  The
  * application itself must specify the payload contents between calls
- * to this API and az_iot_hub_client_properties_builder_end_response_status() using
+ * to this API and AzureIotHubClientProperties_BuilderEndResponseStatus() using
  * \p pxJSONWriter to specify the JSON payload.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
  * @param[in,out] pxJSONWriter The initialized #AzureIoTJSONWriter_t to append data to.
  * @param[in] pucPropertyName The name of the property to build a response payload for.
  * @param[in] usPropertyNameLength The length of \p pucPropertyName.
- * @param[in] ilAckCode The HTTP-like status code to respond with. See #az_iot_status for
+ * @param[in] ilAckCode The HTTP-like status code to respond with. See #AzureIoTHubMessageStatus_t for
  * possible supported values.
  * @param[in] ilAckVersion The version of the property the application is acknowledging.
  * This can be retrieved from the service request by
@@ -152,7 +153,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndComponent( Azure
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONWriter must not be `NULL`.
- * @pre \p property_name must be a valid, non-empty #az_span.
+ * @pre \p pucPropertyName must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The JSON payload was prefixed successfully.
@@ -196,12 +197,13 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndResponseStatus( 
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
  * @param[in,out] pxJSONReader The pointer to the #AzureIoTJSONReader_t used to parse through the JSON
  * payload.
- * @param[in] xResponseType The #az_iot_hub_client_properties_response_type representing the message
+ * @param[in] xResponseType The #AzureIoTHubMessageType_t representing the message
  * type associated with the payload.
  * @param[out] pilVersion The numeric version of the properties in the JSON payload.
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
+ * @pre \p xResponseType must be #eAzureIoTHubTwinReportedResponseMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
  * @pre \p pilVersion must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
@@ -209,7 +211,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndResponseStatus( 
  */
 AzureIoTHubClientResult_t AzureIotHubClientProperties_GetPropertiesVersion( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                             AzureIoTJSONReader_t * pxJSONReader,
-                                                                            az_iot_hub_client_properties_response_type xResponseType,
+                                                                            AzureIoTHubMessageType_t xResponseType,
                                                                             int32_t * pilVersion );
 
 /**
@@ -243,7 +245,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  * @code
  *
  * while (az_result_succeeded(az_iot_hub_client_properties_get_next_component_property(
- *       &hub_client, &jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE, &component_name)))
+ *       &hub_client, &jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE, &pucComponentName)))
  * {
  *   // Check if property is of interest (substitute user_property for your own property name)
  *   if (az_json_token_is_text_equal(&jr.token, user_property))
@@ -279,16 +281,18 @@ typedef enum AzureIoTHubClientPropertyType_t
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
  * @param[in,out] pxJSONReader The #AzureIoTJSONReader_t to parse through. The ownership of iterating
  * through this json reader is shared between the user and this API.
- * @param[in] xResponseType The #az_iot_hub_client_properties_response_type representing the message
+ * @param[in] xResponseType The #AzureIoTHubMessageType_t representing the message
  * type associated with the payload.
  * @param[in] xPropertyType The #AzureIoTHubClientPropertyType_t to scan for.
- * @param[out] out_component_name The #az_span* representing the value of the component.
+ * @param[out] ppucComponentName The output component name for the property returned.
+ * @param[out] pusComponentNameLength The length of the output \p ppucComponentName.
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p out_component_name must not be `NULL`. It must point to an #az_span instance.
- * @pre \p If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
- * then \p xResponseType must be `AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_GET`.
+ * @pre \p xResponseType must be #eAzureIoTHubTwinGetMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
+ * @pre \p ppucComponentName must not be `NULL`.
+ * @pre \p xResponseType If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
+ * then \p xResponseType must be #eAzureIoTHubTwinGetMessage.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and
@@ -298,7 +302,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  */
 AzureIoTHubClientResult_t AzureIotHubClientProperties_GetNextComponentProperty( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                                 AzureIoTJSONReader_t * pxJSONReader,
-                                                                                az_iot_hub_client_properties_response_type xResponseType,
+                                                                                AzureIoTHubMessageType_t xResponseType,
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
                                                                                 uint8_t * ppucComponentName,
                                                                                 uint16_t * pusComponentNameLength );
