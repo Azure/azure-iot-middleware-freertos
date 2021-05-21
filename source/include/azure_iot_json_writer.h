@@ -36,15 +36,15 @@ typedef struct AzureIoTJSONWriter
  * @brief Initializes an #AzureIoTJSONWriter_t which writes JSON text into a buffer passed.
  *
  * @param[out] pxWriter A pointer to an #AzureIoTJSONWriter_t the instance to initialize.
- * @param[in] buffer_ptr A buffer pointer to which JSON text will be written.
- * @param[in] buffer_len Length of buffer.
+ * @param[in] pucBuffer A buffer pointer to which JSON text will be written.
+ * @param[in] usBufferLen Length of buffer.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess Successfully initialized JSON writer.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
-                                                   uint8_t * buffer_ptr,
-                                                   uint16_t buffer_len );
+                                                   uint8_t * pucBuffer,
+                                                   uint16_t usBufferLen );
 
 /**
  * @brief Deinitializes an #AzureIoTJSONWriter_t.
@@ -60,63 +60,63 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_Deinit( AzureIoTJSONWriter_t * pxWr
  * @brief Appends the UTF-8 property name and value where value is int32
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] property_name The UTF-8 encoded property name of the JSON value to be written. The name is
+ * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
- * @param[in] property_name_len Length of property_name.
- * @param[in] value The value to be written as a JSON number.
+ * @param[in] usPropertyName Length of pucPropertyName.
+ * @param[in] ilValue The value to be written as a JSON number.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The property name and int32 value was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWriter_t * pxWriter,
-                                                                           const uint8_t * property_name,
-                                                                           uint16_t property_name_len,
-                                                                           int32_t value );
+                                                                           const uint8_t * pucPropertyName,
+                                                                           uint16_t usPropertyName,
+                                                                           int32_t ilValue );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is double
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] property_name The UTF-8 encoded property name of the JSON value to be written. The name is
+ * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
- * @param[in] property_name_len Length of property_name.
- * @param[in] value The value to be written as a JSON number.
+ * @param[in] usPropertyName Length of pucPropertyName.
+ * @param[in] xValue The value to be written as a JSON number.
  * @param[in] ulFractionalDigits The number of digits of the value to write after the decimal point and truncate the rest.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The property name and double value was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                            const uint8_t * property_name,
-                                                                            uint16_t property_name_len,
-                                                                            double value,
+                                                                            const uint8_t * pucPropertyName,
+                                                                            uint16_t usPropertyName,
+                                                                            double xValue,
                                                                             uint16_t ulFractionalDigits );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is boolean
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] property_name The UTF-8 encoded property name of the JSON value to be written. The name is
+ * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
- * @param[in] property_name_len Length of property_name.
- * @param[in] value The value to be written as a JSON literal `true` or `false`.
+ * @param[in] usPropertyNameLength Length of pucPropertyName.
+ * @param[in] usValue The value to be written as a JSON literal `true` or `false`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The property name and bool value was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                          const uint8_t * property_name,
-                                                                          uint16_t property_name_len,
-                                                                          uint16_t value );
+                                                                          const uint8_t * pucPropertyName,
+                                                                          uint16_t usPropertyNameLength,
+                                                                          uint16_t usValue );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is string
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] property_name The UTF-8 encoded property name of the JSON value to be written. The name is
+ * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
- * @param[in] property_name_len Length of property_name.
- * @param[in] value The UTF-8 encoded property name of the JSON value to be written. The name is
+ * @param[in] usPropertyName Length of pucPropertyName.
+ * @param[in] pucValue The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
  * @param[in] usValueLen Length of value.
  *
@@ -124,9 +124,9 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureI
  * @retval #eAzureIoTHubClientSuccess The property name and string value was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                            const uint8_t * property_name,
-                                                                            uint16_t property_name_len,
-                                                                            const uint8_t * value,
+                                                                            const uint8_t * pucPropertyName,
+                                                                            uint16_t usPropertyName,
+                                                                            const uint8_t * pucValue,
                                                                             uint16_t usValueLen );
 
 /**
@@ -142,7 +142,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t 
  * @brief Appends the UTF-8 text value (as a JSON string) into the buffer.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] value Pointer of UCHAR buffer that contains UTF-8 encoded value to be written as a JSON string.
+ * @param[in] pucValue Pointer of UCHAR buffer that contains UTF-8 encoded value to be written as a JSON string.
  * The value is escaped before writing.
  * @param[in] usValueLen Length of value.
  *
@@ -150,7 +150,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t 
  * @retval #eAzureIoTHubClientSuccess The string value was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
-                                                           const uint8_t * value,
+                                                           const uint8_t * pucValue,
                                                            uint16_t usValueLen );
 
 /**
@@ -158,10 +158,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
  * JSON.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] json A pointer to single, possibly nested, valid, UTF-8 encoded, JSON value to be written as
+ * @param[in] pucJSON A pointer to single, possibly nested, valid, UTF-8 encoded, JSON value to be written as
  * is, without any formatting or spacing changes. No modifications are made to this text, including
  * escaping.
- * @param[in] json_len Length of json
+ * @param[in] usJSONLen Length of `pucJSON`.
  *
  * @remarks A single, possibly nested, JSON value is one that starts and ends with {} or [] or is a
  * single primitive token. The JSON cannot start with an end object or array, or a property name, or
@@ -174,8 +174,8 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
  * @retval #eAzureIoTHubClientSuccess The provided json_text was appended successfully.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJsonText( AzureIoTJSONWriter_t * pxWriter,
-                                                             const uint8_t * json,
-                                                             uint16_t json_len );
+                                                             const uint8_t * pucJSON,
+                                                             uint16_t usJSONLen );
 
 /**
  * @brief Appends the UTF-8 property name (as a JSON string) which is the first part of a name/value
@@ -221,7 +221,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
  * @brief Appends a `double` number value.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] value The value to be written as a JSON number.
+ * @param[in] xValue The value to be written as a JSON number.
  * @param[in] ulFractionalDigits The number of digits of the \p value to write after the decimal
  * point and truncate the rest.
  *
@@ -238,7 +238,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
  * is larger will be clamped down to 15.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
-                                                           double value,
+                                                           double xValue,
                                                            int32_t ulFractionalDigits );
 
 /**
