@@ -54,7 +54,7 @@ typedef struct AzureIoTJSONReader
  * buffer.
  *
  * @param[out] pxReader A pointer to an #AzureIoTJSONReader_t instance to initialize.
- * @param[in] pucBuffer An pointer to buffer containing the JSON text to read.
+ * @param[in] pucBuffer A pointer to a buffer containing the JSON text to read.
  * @param[in] usBufferLen Length of buffer.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.

@@ -60,7 +60,7 @@
  */
 AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderBeginComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                              AzureIoTJSONWriter_t * pxJSONWriter,
-                                                                             uint8_t * const pucComponentName,
+                                                                             const uint8_t * pucComponentName,
                                                                              uint16_t usComponentNameLength );
 
 /**
@@ -203,7 +203,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndResponseStatus( 
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubTwinReportedResponseMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubTwinGetMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
  * @pre \p pilVersion must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
@@ -221,9 +221,9 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_GetPropertiesVersion( Azur
 typedef enum AzureIoTHubClientPropertyType_t
 {
     /** @brief Property was originally reported from the device. */
-    eAzureIoTHubClientReportedFromDevice = 1,
+    eAzureIoTHubClientReportedFromDevice = AZ_IOT_HUB_CLIENT_PROPERTY_REPORTED_FROM_DEVICE,
     /** @brief Property was received from the service. */
-    eAzureIoTHubClientPropertyWriteable = 2
+    eAzureIoTHubClientPropertyWriteable = AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE
 } AzureIoTHubClientPropertyType_t;
 
 /**
@@ -290,9 +290,9 @@ typedef enum AzureIoTHubClientPropertyType_t
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
  * @pre \p xResponseType must be #eAzureIoTHubTwinGetMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
- * @pre \p ppucComponentName must not be `NULL`.
- * @pre \p xResponseType If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
+ * If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
  * then \p xResponseType must be #eAzureIoTHubTwinGetMessage.
+ * @pre \p ppucComponentName must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and
