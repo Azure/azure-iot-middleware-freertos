@@ -92,11 +92,23 @@ Code Style</h1>
 <div class="fragment"><div class="line"># From the repo root</div>
 <div class="line">./.github/scripts/code_style.sh fix</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
+Building</h1>
+<p>This repository uses <code>CMake</code> to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a <code>-D</code> or add them as cache variables in your CMake.</p>
+<ul>
+<li><code>FREERTOS_DIRECTORY</code>: Full path to a directory which contains FreeRTOS (<a href="https://github.com/FreeRTOS/FreeRTOS">as set up on GitHub</a>).</li>
+<li><code>FREERTOS_PORT_DIRECTORY</code>: The full path to the freertos port that you would like to use. On GitHub you can find <a href="https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/main/portable">the list here</a>. Locally, if you initialize the FreeRTOS submodules, you can find the options in <code>&lt;FREERTOS_DIRECTORY&gt;/FreeRTOS/Source/portable</code></li>
+<li><code>CONFIG_DIRECTORY</code>: The full path which has the following files: <code>FreeRTOSConfig.h</code>, <code>azure_iot_config.h</code>, and <code>core_mqtt_config.h</code>.</li>
+</ul>
+<p>With those options added, the following CMake target will be available to integrate into your project:</p>
+<ul>
+<li><code>az::iot_middleware::freertos</code></li>
+</ul>
+<h1><a class="anchor" id="autotoc_md4"></a>
 Contributing</h1>
 <p>This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit <a href="https://cla.opensource.microsoft.com">https://cla.opensource.microsoft.com</a>.</p>
 <p>When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.</p>
 <p>This project has adopted the <a href="https://opensource.microsoft.com/codeofconduct/">Microsoft Open Source Code of Conduct</a>. For more information see the <a href="https://opensource.microsoft.com/codeofconduct/faq/">Code of Conduct FAQ</a> or contact <a href="#" onclick="location.href='mai'+'lto:'+'ope'+'nc'+'ode'+'@m'+'icr'+'os'+'oft'+'.c'+'om'; return false;">opencode@microsoft.com</a> with any additional questions or comments.</p>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<h1><a class="anchor" id="autotoc_md5"></a>
 Trademarks</h1>
 <p>This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow <a href="https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general">Microsoft's Trademark &amp; Brand Guidelines</a>. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies. </p>
 </div></div><!-- PageDoc -->
