@@ -31,7 +31,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install and Build
+      - name: Install and Build Doxygen
         run: .github/scripts/doxygen.sh
 
       - name: Deploy

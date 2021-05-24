@@ -41,7 +41,7 @@ typedef enum AzureIoTHubMessageQoS
 } AzureIoTHubMessageQoS_t;
 
 /**
- * @brief Enumeration to dictate message types.
+ * @brief Enumeration to dictate Azure IoT message types.
  */
 typedef enum AzureIoTHubMessageType
 {
@@ -72,7 +72,7 @@ typedef enum AzureIoTHubClientResult
 } AzureIoTHubClientResult_t;
 
 /**
- * @brief Status codes for IoT Hub responses.
+ * @brief Status codes for Azure IoT Hub responses.
  */
 typedef enum AzureIoTHubMessageStatus
 {
@@ -218,7 +218,7 @@ typedef struct AzureIoTHubClientOptions
 
 /**
  * @struct AzureIoTHubClient_t
- * @brief Azure IoT Hub Client used to manage connections and features for IoT Hub.
+ * @brief Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.
  */
 struct AzureIoTHubClient
 {

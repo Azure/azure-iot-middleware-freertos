@@ -49,7 +49,7 @@ typedef enum AzureIoTMQTTQoS
 } AzureIoTMQTTQoS_t;
 
 /**
- * @brief Suback ack status states.
+ * @brief MQTT suback ack status states.
  */
 typedef enum AzureIoTMQTTSubAckStatus
 {

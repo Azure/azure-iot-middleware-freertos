@@ -64,14 +64,14 @@ typedef struct AzureIoTMessageProperties
 } AzureIoTMessageProperties_t;
 
 /**
- * @brief The time function to be used by the SDK for MQTT connections.
+ * @brief The platform get time function to be used by the SDK for MQTT connections.
  *
  * @note Must return the time since Unix epoch.
  */
 typedef uint64_t ( * AzureIoTGetCurrentTimeFunc_t )( void );
 
 /**
- * @brief The HMAC function used by the SDK to generate SAS keys.
+ * @brief The HMAC256 function used by the SDK to generate SAS keys.
  */
 typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
                                               uint32_t ulKeyLength,

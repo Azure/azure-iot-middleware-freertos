@@ -10,4 +10,4 @@ set -o pipefail # Exit if pipe failed.
 sudo apt update
 sudo apt install -y doxygen
 
-doxygen doxygen/Doxyfile
+doxygen docs/Doxyfile
