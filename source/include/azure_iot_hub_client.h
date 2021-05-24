@@ -202,7 +202,7 @@ typedef void ( * AzureIoTHubClientTwinCallback_t ) ( AzureIoTHubClientTwinRespon
                                                      void * pvContext );
 
 /**
- * @brief Twin callback to be invoked when a twin message is received in the call to AzureIoTHubClient_ProcessLoop().
+ * @brief Properties callback to be invoked when a property message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  */
 typedef void ( * AzureIoTHubClientPropertiesCallback_t ) ( AzureIoTHubClientPropertiesResponse_t * pxMessage,
