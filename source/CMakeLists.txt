@@ -28,6 +28,7 @@ add_subdirectory(../libraries/azure-sdk-for-c azure-sdk-for-c)
 add_library(az_iot_middleware_freertos
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_hub_client.c
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_provisioning_client.c
+  ${CMAKE_CURRENT_LIST_DIR}/azure_iot_hub_client_properties.c
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot.c
 )
 

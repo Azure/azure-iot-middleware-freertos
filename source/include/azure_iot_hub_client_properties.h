@@ -23,6 +23,8 @@
 #include "azure_iot_json_reader.h"
 #include "azure_iot_json_writer.h"
 
+#include "azure/iot/az_iot_hub_client_properties.h"
+
 /**
  * @brief Append the necessary characters to a reported properties JSON payload belonging to a
  * component.
@@ -302,7 +304,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( 
                                                                                 AzureIoTJSONReader_t * pxJSONReader,
                                                                                 AzureIoTHubMessageType_t xResponseType,
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
-                                                                                uint8_t * ppucComponentName,
+                                                                                uint8_t ** ppucComponentName,
                                                                                 uint16_t * pusComponentNameLength );
 
 #endif /*AZURE_IOT_HUB_CLIENT_PROPERTIES_H */

@@ -6,18 +6,25 @@
  * @brief Implementation of the Azure IoT Hub Client properties.
  */
 
+#include <stdbool.h>
+#include <stdint.h>
+
+#include "azure_iot_hub_client.h"
+#include "azure_iot_json_reader.h"
+#include "azure_iot_json_writer.h"
+
 #include "azure_iot_hub_client_properties.h"
 
 #include "azure/iot/az_iot_hub_client_properties.h"
 
-AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderBeginComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                              AzureIoTJSONWriter_t * pxJSONWriter,
                                                                              const uint8_t * pucComponentName,
                                                                              uint16_t usComponentNameLength )
 {
     AzureIoTHubClientResult_t xResult;
     az_result xCoreResult;
-    az_span xComponentSpan = az_span_create( pucComponentName, usComponentNameLength );
+    az_span xComponentSpan = az_span_create( ( uint8_t * ) pucComponentName, usComponentNameLength );
 
     if( az_result_failed(
             xCoreResult = az_iot_hub_client_properties_builder_begin_component( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
@@ -33,7 +40,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderBeginComponent( Azu
     return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                            AzureIoTJSONWriter_t * pxJSONWriter )
 {
     AzureIoTHubClientResult_t xResult;
@@ -53,7 +60,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndComponent( Azure
     return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderBeginResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                                   AzureIoTJSONWriter_t * pxJSONWriter,
                                                                                   const uint8_t * pucPropertyName,
                                                                                   uint16_t usPropertyNameLength,
@@ -64,8 +71,8 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderBeginResponseStatus
 {
     AzureIoTHubClientResult_t xResult;
     az_result xCoreResult;
-    az_span xPropertyName = az_span_create( pucPropertyName, usPropertyNameLength );
-    az_span xAckDescription = az_span_create( pucAckDescription, usAckDescriptionLength );
+    az_span xPropertyName = az_span_create( ( uint8_t * ) pucPropertyName, usPropertyNameLength );
+    az_span xAckDescription = az_span_create( ( uint8_t * ) pucAckDescription, usAckDescriptionLength );
 
     if( az_result_failed(
             xCoreResult = az_iot_hub_client_properties_builder_begin_response_status( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
@@ -84,7 +91,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderBeginResponseStatus
     return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                                 AzureIoTJSONWriter_t * pxJSONWriter )
 {
     AzureIoTHubClientResult_t xResult;
@@ -104,10 +111,10 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_BuilderEndResponseStatus( 
     return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIotHubClientProperties_GetPropertiesVersion( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                             AzureIoTJSONReader_t * pxJSONReader,
                                                                             AzureIoTHubMessageType_t xResponseType,
-                                                                            int32_t * pilVersion )
+                                                                            uint32_t * pulVersion )
 {
     AzureIoTHubClientResult_t xResult;
     az_result xCoreResult;
@@ -124,7 +131,7 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_GetPropertiesVersion( Azur
 
     if( az_result_failed(
             xCoreResult = az_iot_hub_client_properties_get_properties_version( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                               &pxJSONReader->_internal.xCoreReader, xCoreResponseType, pilVersion ) ) )
+                                                                               &pxJSONReader->_internal.xCoreReader, xCoreResponseType, ( int32_t * ) pulVersion ) ) )
     {
         xResult = eAzureIoTHubClientFailed;
     }
@@ -136,11 +143,11 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_GetPropertiesVersion( Azur
     return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIotHubClientProperties_GetNextComponentProperty( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                                 AzureIoTJSONReader_t * pxJSONReader,
                                                                                 AzureIoTHubMessageType_t xResponseType,
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
-                                                                                uint8_t * ppucComponentName,
+                                                                                uint8_t ** ppucComponentName,
                                                                                 uint16_t * pusComponentNameLength )
 {
     AzureIoTHubClientResult_t xResult;
@@ -168,6 +175,8 @@ AzureIoTHubClientResult_t AzureIotHubClientProperties_GetNextComponentProperty( 
     }
     else
     {
+        *ppucComponentName = az_span_ptr( xComponentSpan );
+        *pusComponentNameLength = ( uint16_t ) az_span_size( xComponentSpan );
         xResult = eAzureIoTHubClientSuccess;
     }
 
