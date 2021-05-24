@@ -23,8 +23,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <azure/core/_az_cfg_prefix.h>
-
 /**
  * @brief Append the necessary characters to a reported properties JSON payload belonging to a
  * component.
@@ -306,7 +304,5 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( 
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
                                                                                 uint8_t * ppucComponentName,
                                                                                 uint16_t * pusComponentNameLength );
-
-#include <azure/core/_az_cfg_suffix.h>
 
 #endif /*AZURE_IOT_HUB_CLIENT_PROPERTIES_H */

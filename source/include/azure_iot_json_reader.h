@@ -43,10 +43,7 @@ typedef enum AzureIoTJSONTokenType
 
 typedef struct AzureIoTJSONReader
 {
-    struct
-    {
-        az_json_reader xCoreReader;
-    } _internal;
+    az_json_reader xCoreReader;
 } AzureIoTJSONReader_t;
 
 /**

@@ -89,7 +89,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( Azur
                                                                             const uint8_t * pucPropertyName,
                                                                             uint16_t usPropertyName,
                                                                             double xValue,
-                                                                            uint16_t ulFractionalDigits );
+                                                                            uint16_t usFractionalDigits );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is boolean
@@ -106,7 +106,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( Azur
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
                                                                           const uint8_t * pucPropertyName,
                                                                           uint16_t usPropertyNameLength,
-                                                                          uint16_t usValue );
+                                                                          bool usValue );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is string
