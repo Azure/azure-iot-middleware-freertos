@@ -16,12 +16,12 @@
 #ifndef AZURE_IOT_HUB_CLIENT_PROPERTIES_H
 #define AZURE_IOT_HUB_CLIENT_PROPERTIES_H
 
+#include <stdbool.h>
+#include <stdint.h>
+
 #include "azure_iot_hub_client.h"
 #include "azure_iot_json_reader.h"
 #include "azure_iot_json_writer.h"
-
-#include <stdbool.h>
-#include <stdint.h>
 
 /**
  * @brief Append the necessary characters to a reported properties JSON payload belonging to a
@@ -95,8 +95,8 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndComponent( Azure
  * @code
  * {
  *   "<pucPropertyName>":{
- *     "ac": <ilAckCode>,
- *     "av": <ilAckVersion>,
+ *     "ac": <lAckCode>,
+ *     "av": <lAckVersion>,
  *     "ad": "<pucAckDescription>",
  *     "value": <user_value>
  *   }
@@ -109,8 +109,8 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndComponent( Azure
  *   "<pucComponentName>": {
  *     "__t": "c",
  *     "<pucPropertyName>": {
- *       "ac": <ilAckCode>,
- *       "av": <ilAckVersion>,
+ *       "ac": <lAckCode>,
+ *       "av": <lAckVersion>,
  *       "ad": "<pucAckDescription>",
  *       "value": <user_value>
  *     }
@@ -140,9 +140,9 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndComponent( Azure
  * @param[in,out] pxJSONWriter The initialized #AzureIoTJSONWriter_t to append data to.
  * @param[in] pucPropertyName The name of the property to build a response payload for.
  * @param[in] usPropertyNameLength The length of \p pucPropertyName.
- * @param[in] ilAckCode The HTTP-like status code to respond with. See #AzureIoTHubMessageStatus_t for
+ * @param[in] lAckCode The HTTP-like status code to respond with. See #AzureIoTHubMessageStatus_t for
  * possible supported values.
- * @param[in] ilAckVersion The version of the property the application is acknowledging.
+ * @param[in] lAckVersion The version of the property the application is acknowledging.
  * This can be retrieved from the service request by
  * calling az_iot_hub_client_properties_get_properties_version.
  * @param[in] pucAckDescription An optional description detailing the context or any details about
@@ -160,8 +160,8 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus
                                                                                   AzureIoTJSONWriter_t * pxJSONWriter,
                                                                                   const uint8_t * pucPropertyName,
                                                                                   uint16_t usPropertyNameLength,
-                                                                                  int32_t ilAckCode,
-                                                                                  int32_t ilAckVersion,
+                                                                                  int32_t lAckCode,
+                                                                                  int32_t lAckVersion,
                                                                                   const uint8_t * pucAckDescription,
                                                                                   uint16_t usAckDescriptionLength );
 
@@ -197,12 +197,12 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( 
  * payload.
  * @param[in] xResponseType The #AzureIoTHubMessageType_t representing the message
  * type associated with the payload.
- * @param[out] pilVersion The numeric version of the properties in the JSON payload.
+ * @param[out] pulVersion The numeric version of the properties in the JSON payload.
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
  * @pre \p xResponseType must be #eAzureIoTHubTwinGetMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
- * @pre \p pilVersion must not be `NULL`.
+ * @pre \p pulVersion must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess If the function returned a valid version.
@@ -210,7 +210,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( 
 AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                             AzureIoTJSONReader_t * pxJSONReader,
                                                                             AzureIoTHubMessageType_t xResponseType,
-                                                                            int32_t * pilVersion );
+                                                                            uint32_t * pulVersion );
 
 /**
  * @brief Property type
