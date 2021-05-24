@@ -19,8 +19,6 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "azure_iot_hub_client.h"
-
 #include "azure/core/az_json.h"
 
 /**
@@ -43,10 +41,7 @@ typedef enum AzureIoTJSONTokenType
 
 typedef struct AzureIoTJSONReader
 {
-    struct
-    {
-        az_json_reader xCoreReader;
-    } _internal;
+    az_json_reader xCoreReader;
 } AzureIoTJSONReader_t;
 
 /**
