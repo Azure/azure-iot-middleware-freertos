@@ -221,7 +221,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] xValue The value to be written as a JSON number.
- * @param[in] ulFractionalDigits The number of digits of the \p value to write after the decimal
+ * @param[in] usFractionalDigits The number of digits of the \p value to write after the decimal
  * point and truncate the rest.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
@@ -231,14 +231,14 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
  * allowed and would lead to invalid JSON being written.
  *
  * @remark Non-significant trailing zeros (after the decimal point) are not written, even if \p
- * ulFractionalDigits is large enough to allow the zero padding.
+ * usFractionalDigits is large enough to allow the zero padding.
  *
- * @remark The \p ulFractionalDigits must be between 0 and 15 (inclusive). Any value passed in that
+ * @remark The \p usFractionalDigits must be between 0 and 15 (inclusive). Any value passed in that
  * is larger will be clamped down to 15.
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
                                                            double xValue,
-                                                           int32_t ulFractionalDigits );
+                                                           uint16_t usFractionalDigits );
 
 /**
  * @brief Appends the JSON literal `null`.
