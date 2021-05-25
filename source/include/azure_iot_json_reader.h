@@ -41,7 +41,10 @@ typedef enum AzureIoTJSONTokenType
 
 typedef struct AzureIoTJSONReader
 {
-    az_json_reader xCoreReader;
+    struct
+    {
+        az_json_reader xCoreReader;
+    } _internal;
 } AzureIoTJSONReader_t;
 
 /**
@@ -106,7 +109,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t 
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The boolean value is returned.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenBoolGet( AzureIoTJSONReader_t * pxReader,
+AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReader,
                                                            bool * pxValue );
 
 /**
@@ -118,7 +121,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenBoolGet( AzureIoTJSONReader_t 
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The number is returned.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenInt32Get( AzureIoTJSONReader_t * pxReader,
+AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
                                                             int32_t * pilValue );
 
 /**
@@ -130,7 +133,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenInt32Get( AzureIoTJSONReader_t
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The number is returned.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenDoubleGet( AzureIoTJSONReader_t * pxReader,
+AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxReader,
                                                              double * pxValue );
 
 /**
@@ -145,7 +148,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenDoubleGet( AzureIoTJSONReader_
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The property name was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenStringGet( AzureIoTJSONReader_t * pxReader,
+AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
                                                              uint8_t * pucBuffer,
                                                              uint16_t usBufferSize,
                                                              uint16_t * pusBytesCopied );

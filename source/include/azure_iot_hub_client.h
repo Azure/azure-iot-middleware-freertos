@@ -37,11 +37,7 @@ typedef enum AzureIoTHubMessageQoS
 typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,          /**< The message is a cloud message. */
-    eAzureIoTHubDirectMethodMessage,               /**< The message is a direct method message. */
     eAzureIoTHubCommandMessage,                    /**< The message is a command message. */
-    eAzureIoTHubTwinGetMessage,                    /**< The message is a twin get response (payload contains the twin document). */
-    eAzureIoTHubTwinReportedResponseMessage,       /**< The message is a twin reported property status response. */
-    eAzureIoTHubTwinDesiredPropertyMessage,        /**< The message is a twin desired property message (incoming from the service). */
     eAzureIoTHubPropertiesGetMessage,              /**< The message is a property get response (payload contains the property document). */
     eAzureIoTHubPropertiesReportedResponseMessage, /**< The message is a reported property status response. */
     eAzureIoTHubPropertiesDesiredPropertyMessage,  /**< The message is a desired property message (incoming from the service). */
@@ -103,21 +99,6 @@ typedef struct AzureIoTHubClientCloudToDeviceMessageRequest
 } AzureIoTHubClientCloudToDeviceMessageRequest_t;
 
 /**
- * @brief IoT Hub Method Request struct.
- */
-typedef struct AzureIoTHubClientMethodRequest
-{
-    const void * pvMessagePayload; /**< The pointer to the message payload. */
-    uint32_t ulPayloadLength;      /**< The length of the message payload. */
-
-    const uint8_t * pucRequestID;  /**< The pointer to the request ID. */
-    uint16_t usRequestIDLength;    /**< The length of the request ID. */
-
-    const uint8_t * pucMethodName; /**< The name of the method to invoke. */
-    uint16_t usMethodNameLength;   /**< The length of the method name. */
-} AzureIoTHubClientMethodRequest_t;
-
-/**
  * @brief IoT Hub Command Request struct.
  */
 typedef struct AzureIoTHubClientCommandRequest
@@ -134,24 +115,6 @@ typedef struct AzureIoTHubClientCommandRequest
     const uint8_t * pucCommandName;   /**< The name of the command to invoke. */
     uint16_t usCommandNameLength;     /**< The length of the command name. */
 } AzureIoTHubClientCommandRequest_t;
-
-/**
- * @brief IoT Hub Twin Response struct.
- */
-typedef struct AzureIoTHubClientTwinResponse
-{
-    AzureIoTHubMessageType_t xMessageType;     /**< The type of message received. */
-
-    const void * pvMessagePayload;             /**< The pointer to the message payload. */
-    uint32_t ulPayloadLength;                  /**< The length of the message payload. */
-
-    uint32_t ulRequestID;                      /**< The request ID for the twin response. */
-
-    AzureIoTHubMessageStatus_t xMessageStatus; /**< The operation status. */
-
-    const uint8_t * pucVersion;                /**< The pointer to the twin document version. */
-    uint16_t usVersionLength;                  /**< The length of the twin document version. */
-} AzureIoTHubClientTwinResponse_t;
 
 /**
  * @brief IoT Hub Properties Response struct.
@@ -179,13 +142,6 @@ typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( AzureIoTHub
                                                                      void * pvContext );
 
 /**
- * @brief Method callback to be invoked when a method request is received in the call to AzureIoTHubClient_ProcessLoop().
- *
- */
-typedef void ( * AzureIoTHubClientMethodCallback_t ) ( AzureIoTHubClientMethodRequest_t * pxMessage,
-                                                       void * pvContext );
-
-/**
  * @brief Command callback to be invoked when a command request is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  * @note This is used with Azure Plug and Play.
@@ -193,13 +149,6 @@ typedef void ( * AzureIoTHubClientMethodCallback_t ) ( AzureIoTHubClientMethodRe
  */
 typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommandRequest_t * pxMessage,
                                                         void * pvContext );
-
-/**
- * @brief Twin callback to be invoked when a twin message is received in the call to AzureIoTHubClient_ProcessLoop().
- *
- */
-typedef void ( * AzureIoTHubClientTwinCallback_t ) ( AzureIoTHubClientTwinResponse_t * pxMessage,
-                                                     void * pvContext );
 
 /**
  * @brief Properties callback to be invoked when a property message is received in the call to AzureIoTHubClient_ProcessLoop().
@@ -223,8 +172,6 @@ typedef struct AzureIoTHubClientReceiveContext
         union
         {
             AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback;
-            AzureIoTHubClientMethodCallback_t xMethodCallback;
-            AzureIoTHubClientTwinCallback_t xTwinCallback;
             AzureIoTHubClientCommandCallback_t xCommandCallback;
             AzureIoTHubClientPropertiesCallback_t xPropertiesCallback;
         } callbacks;
@@ -283,7 +230,7 @@ struct AzureIoTHubClient
         AzureIoTGetCurrentTimeFunc_t xTimeFunction;
         AzureIoTTelemetryAckCallback_t xTelemetryCallback;
 
-        uint32_t ulCurrentTwinRequestID;
+        uint32_t ulCurrentPropertyRequestID;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     }
@@ -432,44 +379,6 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( Azure
 AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
- * @brief Subscribe to direct methods.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] xMethodCallback The #AzureIoTHubClientMethodCallback_t to invoke when direct method messages arrive.
- * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
- * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for Subscribe operation to complete.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDirectMethod( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                   AzureIoTHubClientMethodCallback_t xMethodCallback,
-                                                                   void * prvCallbackContext,
-                                                                   uint32_t ulTimeoutMilliseconds );
-
-/**
- * @brief Unsubscribe from direct methods.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDirectMethod( AzureIoTHubClient_t * pxAzureIoTHubClient );
-
-/**
- * @brief Send a response to a received direct method message.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] pxMessage The pointer to the #AzureIoTHubClientMethodRequest_t to which a response is being sent.
- * @param[in] ulStatus A code that indicates the result of the method, as defined by the user.
- * @param[in] pucMethodPayload __[nullable]__ An optional method response payload.
- * @param[in] ulMethodPayloadLength The length of the method response payload.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_SendMethodResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                const AzureIoTHubClientMethodRequest_t * pxMessage,
-                                                                uint32_t ulStatus,
-                                                                const uint8_t * pucMethodPayload,
-                                                                uint32_t ulMethodPayloadLength );
-
-/**
  * @brief Subscribe to commands.
  *
  * @note This is used with Azure Plug and Play.
@@ -499,7 +408,7 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClien
  * @brief Send a response to a received command message.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] pxMessage The pointer to the #AzureIoTHubClientMethodRequest_t to which a response is being sent.
+ * @param[in] pxMessage The pointer to the #AzureIoTHubClientCommandRequest_t to which a response is being sent.
  * @param[in] ulStatus A code that indicates the result of the method, as defined by the user.
  * @param[in] pucCommandPayload __[nullable]__ An optional method response payload.
  * @param[in] ulCommandPayloadLength The length of the method response payload.
@@ -510,58 +419,6 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClie
                                                                  uint32_t ulStatus,
                                                                  const uint8_t * pucCommandPayload,
                                                                  uint32_t ulCommandPayloadLength );
-
-/**
- * @brief Subscribe to device twin.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] xTwinCallback The #AzureIoTHubClientTwinCallback_t to invoke when device twin messages arrive.
- * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
- * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for Subscribe operation to complete.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                 AzureIoTHubClientTwinCallback_t xTwinCallback,
-                                                                 void * prvCallbackContext,
-                                                                 uint32_t ulTimeoutMilliseconds );
-
-/**
- * @brief Unsubscribe from device twin.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient );
-
-/**
- * @brief Send reported device twin properties to Azure IoT Hub.
- *
- * @note AzureIoTHubClient_SubscribeDeviceTwin() must be called before calling this function.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param[in] pucReportedPayload The payload of properly formatted, reported properties.
- * @param[in] ulReportedPayloadLength The length of the reported property payload.
- * @param[out] pulRequestID Pointer to request ID used to send the twin reported property.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_SendDeviceTwinReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                    const uint8_t * pucReportedPayload,
-                                                                    uint32_t ulReportedPayloadLength,
-                                                                    uint32_t * pulRequestID );
-
-/**
- * @brief Request to get the device twin document.
- *
- * @note AzureIoTHubClient_SubscribeDeviceTwin() must be called before calling this function.
- *
- * The response to the request will be returned via the #AzureIoTHubClientTwinCallback_t which was passed
- * in the AzureIoTHubClient_SubscribeDeviceTwin() call. The type of message will be #eAzureIoTHubTwinGetMessage
- * and the payload (on success) will be the twin document.
- *
- * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
- */
-AzureIoTHubClientResult_t AzureIoTHubClient_GetDeviceTwin( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
  * @brief Subscribe to device properties.
