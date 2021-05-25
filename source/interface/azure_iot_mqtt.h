@@ -20,23 +20,27 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
-#define azureiotmqttPACKET_TYPE_CONNECT        ( ( uint8_t ) 0x10U )    /** @brief CONNECT (client-to-server). */
-#define azureiotmqttPACKET_TYPE_CONNACK        ( ( uint8_t ) 0x20U )    /** @brief CONNACK (server-to-client). */
-#define azureiotmqttPACKET_TYPE_PUBLISH        ( ( uint8_t ) 0x30U )    /** @brief PUBLISH (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBACK         ( ( uint8_t ) 0x40U )    /** @brief PUBACK (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBREC         ( ( uint8_t ) 0x50U )    /** @brief PUBREC (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBREL         ( ( uint8_t ) 0x62U )    /** @brief PUBREL (bidirectional). */
-#define azureiotmqttPACKET_TYPE_PUBCOMP        ( ( uint8_t ) 0x70U )    /** @brief PUBCOMP (bidirectional). */
-#define azureiotmqttPACKET_TYPE_SUBSCRIBE      ( ( uint8_t ) 0x82U )    /** @brief SUBSCRIBE (client-to-server). */
-#define azureiotmqttPACKET_TYPE_SUBACK         ( ( uint8_t ) 0x90U )    /** @brief SUBACK (server-to-client). */
-#define azureiotmqttPACKET_TYPE_UNSUBSCRIBE    ( ( uint8_t ) 0xA2U )    /** @brief UNSUBSCRIBE (client-to-server). */
-#define azureiotmqttPACKET_TYPE_UNSUBACK       ( ( uint8_t ) 0xB0U )    /** @brief UNSUBACK (server-to-client). */
-#define azureiotmqttPACKET_TYPE_PINGREQ        ( ( uint8_t ) 0xC0U )    /** @brief PINGREQ (client-to-server). */
-#define azureiotmqttPACKET_TYPE_PINGRESP       ( ( uint8_t ) 0xD0U )    /** @brief PINGRESP (server-to-client). */
-#define azureiotmqttPACKET_TYPE_DISCONNECT     ( ( uint8_t ) 0xE0U )    /** @brief DISCONNECT (client-to-server). */
 
-#define azureiotmqttGET_PACKET_TYPE( ucType )    ( ( ucType ) & 0xF0U ) /** @brief Get the packet type according to the MQTT spec */
+#define azureiotmqttPACKET_TYPE_CONNECT        ( ( uint8_t ) 0x10U )    /**< @brief CONNECT (client-to-server). */
+#define azureiotmqttPACKET_TYPE_CONNACK        ( ( uint8_t ) 0x20U )    /**< @brief CONNACK (server-to-client). */
+#define azureiotmqttPACKET_TYPE_PUBLISH        ( ( uint8_t ) 0x30U )    /**< @brief PUBLISH (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBACK         ( ( uint8_t ) 0x40U )    /**< @brief PUBACK (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBREC         ( ( uint8_t ) 0x50U )    /**< @brief PUBREC (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBREL         ( ( uint8_t ) 0x62U )    /**< @brief PUBREL (bidirectional). */
+#define azureiotmqttPACKET_TYPE_PUBCOMP        ( ( uint8_t ) 0x70U )    /**< @brief PUBCOMP (bidirectional). */
+#define azureiotmqttPACKET_TYPE_SUBSCRIBE      ( ( uint8_t ) 0x82U )    /**< @brief SUBSCRIBE (client-to-server). */
+#define azureiotmqttPACKET_TYPE_SUBACK         ( ( uint8_t ) 0x90U )    /**< @brief SUBACK (server-to-client). */
+#define azureiotmqttPACKET_TYPE_UNSUBSCRIBE    ( ( uint8_t ) 0xA2U )    /**< @brief UNSUBSCRIBE (client-to-server). */
+#define azureiotmqttPACKET_TYPE_UNSUBACK       ( ( uint8_t ) 0xB0U )    /**< @brief UNSUBACK (server-to-client). */
+#define azureiotmqttPACKET_TYPE_PINGREQ        ( ( uint8_t ) 0xC0U )    /**< @brief PINGREQ (client-to-server). */
+#define azureiotmqttPACKET_TYPE_PINGRESP       ( ( uint8_t ) 0xD0U )    /**< @brief PINGRESP (server-to-client). */
+#define azureiotmqttPACKET_TYPE_DISCONNECT     ( ( uint8_t ) 0xE0U )    /**< @brief DISCONNECT (client-to-server). */
 
+#define azureiotmqttGET_PACKET_TYPE( ucType )    ( ( ucType ) & 0xF0U ) /**< @brief Get the packet type according to the MQTT spec */
+
+/**
+ * @brief Quality of service values.
+ */
 typedef enum AzureIoTMQTTQoS
 {
     eAzureIoTMQTTQoS0 = 0, /** Delivery at most once. */
@@ -44,6 +48,9 @@ typedef enum AzureIoTMQTTQoS
     eAzureIoTMQTTQoS2 = 2  /** Delivery exactly once. */
 } AzureIoTMQTTQoS_t;
 
+/**
+ * @brief MQTT suback ack status states.
+ */
 typedef enum AzureIoTMQTTSubAckStatus
 {
     eMQTTSubAckSuccessQos0 = 0x00, /** Success with a maximum delivery at QoS 0. */
@@ -52,6 +59,9 @@ typedef enum AzureIoTMQTTSubAckStatus
     eMQTTSubAckFailure = 0x80      /** Failure. */
 } AzureIoTMQTTSubAckStatus_t;
 
+/**
+ * @brief Result values used for Azure IoT MQTT functions.
+ */
 typedef enum AzureIoTMQTTResult
 {
     eAzureIoTMQTTSuccess = 0,      /** Function completed successfully. */
@@ -68,6 +78,9 @@ typedef enum AzureIoTMQTTResult
     eAzureIoTMQTTFailed            /** Function failed with Unknown Error. */
 } AzureIoTMQTTResult_t;
 
+/**
+ * @brief Connection info for the MQTT client.
+ */
 typedef struct AzureIoTMQTTConnectInfo
 {
     /**
@@ -113,6 +126,9 @@ typedef struct AzureIoTMQTTConnectInfo
     uint16_t usPasswordLength;
 } AzureIoTMQTTConnectInfo_t;
 
+/**
+ * @brief Subscription info for the MQTT client.
+ */
 typedef struct AzureIoTMQTTSubscribeInfo
 {
     /**
@@ -131,6 +147,9 @@ typedef struct AzureIoTMQTTSubscribeInfo
     uint16_t usTopicFilterLength;
 } AzureIoTMQTTSubscribeInfo_t;
 
+/**
+ * @brief Publish info for the MQTT client.
+ */
 typedef struct AzureIoTMQTTPublishInfo
 {
     /**
@@ -169,13 +188,19 @@ typedef struct AzureIoTMQTTPublishInfo
     size_t xPayloadLength;
 } AzureIoTMQTTPublishInfo_t;
 
+/**
+ * @brief MQTT packet deserialized info for the MQTT client.
+ */
 typedef struct AzureIoTMQTTDeserializedInfo
 {
-    uint16_t usPacketIdentifier;                 /** @brief Packet ID of deserialized packet. */
-    AzureIoTMQTTPublishInfo_t * pxPublishInfo;   /** @brief Pointer to deserialized publish info. */
-    AzureIoTMQTTResult_t xDeserializationResult; /** @brief Return code of deserialization. */
+    uint16_t usPacketIdentifier;                 /**< @brief Packet ID of deserialized packet. */
+    AzureIoTMQTTPublishInfo_t * pxPublishInfo;   /**< @brief Pointer to deserialized publish info. */
+    AzureIoTMQTTResult_t xDeserializationResult; /**< @brief Return code of deserialization. */
 } AzureIoTMQTTDeserializedInfo_t;
 
+/**
+ * @brief MQTT packet info for the MQTT client.
+ */
 typedef struct AzureIoTMQTTPacketInfo
 {
     /**
@@ -194,10 +219,21 @@ typedef struct AzureIoTMQTTPacketInfo
     size_t xRemainingLength;
 } AzureIoTMQTTPacketInfo_t;
 
+/**
+ * @brief Typedef of the MQTT client which is defined by the MQTT port.
+ */
 typedef AzureIoTMQTT_t * AzureIoTMQTTHandle_t;
 
+/**
+ * @brief The time function to be used for MQTT functionality.
+ *
+ * @note Must return the time since Unix epoch.
+ */
 typedef uint32_t ( * AzureIoTMQTTGetCurrentTimeFunc_t )( void );
 
+/**
+ * @brief The callback function which will be invoked on receipt of an MQTT message.
+ */
 typedef void ( * AzureIoTMQTTEventCallback_t )( AzureIoTMQTTHandle_t pContext,
                                                 struct AzureIoTMQTTPacketInfo * pxPacketInfo,
                                                 struct AzureIoTMQTTDeserializedInfo * pxDeserializedInfo );

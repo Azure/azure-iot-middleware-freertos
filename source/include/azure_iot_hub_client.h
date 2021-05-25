@@ -23,17 +23,26 @@
 
 #include <azure/core/_az_cfg_prefix.h>
 
+/**
+ * @brief Total number of features which could be subscribed to.
+ */
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
 
+/**
+ * @brief MQTT quality of service values used for messages.
+ */
 typedef enum AzureIoTHubMessageQoS
 {
     eAzureIoTHubMessageQoS0 = 0, /** Delivery at most once. */
     eAzureIoTHubMessageQoS1 = 1  /** Delivery at least once. */
 } AzureIoTHubMessageQoS_t;
 
+/**
+ * @brief Enumeration to dictate Azure IoT message types.
+ */
 typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,          /**< The message is a cloud message. */
@@ -43,6 +52,9 @@ typedef enum AzureIoTHubMessageType
     eAzureIoTHubPropertiesDesiredPropertyMessage,  /**< The message is a desired property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
 
+/**
+ * @brief Result values used for Azure IoT Hub functions.
+ */
 typedef enum AzureIoTHubClientResult
 {
     eAzureIoTHubClientSuccess = 0,        /**< Success. */
@@ -59,6 +71,9 @@ typedef enum AzureIoTHubClientResult
     eAzureIoTHubClientFailed,             /**< There was a failure. */
 } AzureIoTHubClientResult_t;
 
+/**
+ * @brief Status codes for Azure IoT Hub responses.
+ */
 typedef enum AzureIoTHubMessageStatus
 {
     /* Default, unset value */
@@ -157,7 +172,11 @@ typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommand
 typedef void ( * AzureIoTHubClientPropertiesCallback_t ) ( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                                            void * pvContext );
 
-/* Receive context to be used internally to the processing of messages */
+/**
+ * @brief Receive context to be used internally for the processing of messages.
+ *
+ * @warning Used internally.
+ */
 typedef struct AzureIoTHubClientReceiveContext
 {
     struct
@@ -175,7 +194,7 @@ typedef struct AzureIoTHubClientReceiveContext
             AzureIoTHubClientCommandCallback_t xCommandCallback;
             AzureIoTHubClientPropertiesCallback_t xPropertiesCallback;
         } callbacks;
-    } _internal;
+    } _internal; /**< @brief Internal to the SDK */
 } AzureIoTHubClientReceiveContext_t;
 
 /**
@@ -202,6 +221,10 @@ typedef struct AzureIoTHubClientOptions
                                                         *   Can be NULL if user does not want to be notified.*/
 } AzureIoTHubClientOptions_t;
 
+/**
+ * @struct AzureIoTHubClient_t
+ * @brief Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.
+ */
 struct AzureIoTHubClient
 {
     struct
@@ -234,7 +257,7 @@ struct AzureIoTHubClient
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     }
-    _internal;
+    _internal; /**< @brief Internal to the SDK */
 };
 
 /**

@@ -39,6 +39,9 @@
  */
 #define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )
 
+/**
+ * @brief Result values used for Azure IoT functions.
+ */
 typedef enum AzureIoTResult
 {
     eAzureIoTSuccess = 0,     /**< Success. */
@@ -57,11 +60,19 @@ typedef struct AzureIoTMessageProperties
     struct
     {
         az_iot_message_properties xProperties;
-    } _internal;
+    } _internal; /**< @brief Internal to the SDK */
 } AzureIoTMessageProperties_t;
 
+/**
+ * @brief The platform get time function to be used by the SDK for MQTT connections.
+ *
+ * @note Must return the time since Unix epoch.
+ */
 typedef uint64_t ( * AzureIoTGetCurrentTimeFunc_t )( void );
 
+/**
+ * @brief The HMAC256 function used by the SDK to generate SAS keys.
+ */
 typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
                                               uint32_t ulKeyLength,
                                               const uint8_t * pucData,
