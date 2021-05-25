@@ -120,13 +120,13 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetPropertiesVersion( Azur
     az_result xCoreResult;
     az_iot_hub_client_properties_response_type xCoreResponseType;
 
-    if( ( xResponseType != eAzureIoTHubTwinGetMessage ) && ( xResponseType != eAzureIoTHubTwinDesiredPropertyMessage ) )
+    if( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesDesiredPropertyMessage ) )
     {
-        AZLogError( ( "Invalid parameter: xResponseType must be eAzureIoTHubTwinGetMessage or eAzureIoTHubTwinDesiredPropertyMessage" ) );
+        AZLogError( ( "Invalid parameter: xResponseType must be eAzureIoTHubPropertiesGetMessage or eAzureIoTHubPropertiesDesiredPropertyMessage" ) );
         xResult = eAzureIoTHubClientFailed;
     }
 
-    xCoreResponseType = xResponseType == eAzureIoTHubTwinGetMessage ?
+    xCoreResponseType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
                         AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_GET : AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_DESIRED_PROPERTIES;
 
     if( az_result_failed(
@@ -155,13 +155,13 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( 
     az_span xComponentSpan;
     az_iot_hub_client_properties_response_type xCoreResponseType;
 
-    if( ( xResponseType != eAzureIoTHubTwinGetMessage ) && ( xResponseType != eAzureIoTHubTwinDesiredPropertyMessage ) )
+    if( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesDesiredPropertyMessage ) )
     {
-        AZLogError( ( "Invalid parameter: xResponseType must be eAzureIoTHubTwinGetMessage or eAzureIoTHubTwinDesiredPropertyMessage" ) );
+        AZLogError( ( "Invalid parameter: xResponseType must be eAzureIoTHubPropertiesGetMessage or eAzureIoTHubPropertiesDesiredPropertyMessage" ) );
         xResult = eAzureIoTHubClientFailed;
     }
 
-    xCoreResponseType = xResponseType == eAzureIoTHubTwinGetMessage ?
+    xCoreResponseType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
                         AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_GET : AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_DESIRED_PROPERTIES;
 
     if( az_result_failed(

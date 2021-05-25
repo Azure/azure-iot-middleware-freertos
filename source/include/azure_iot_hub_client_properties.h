@@ -203,7 +203,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( 
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubTwinGetMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesDesiredPropertyMessage.
  * @pre \p pulVersion must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
@@ -289,9 +289,9 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubTwinGetMessage or #eAzureIoTHubTwinDesiredPropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesDesiredPropertyMessage.
  * If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
- * then \p xResponseType must be #eAzureIoTHubTwinGetMessage.
+ * then \p xResponseType must be #eAzureIoTHubPropertiesGetMessage.
  * @pre \p ppucComponentName must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
