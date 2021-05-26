@@ -112,9 +112,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a6d57bae12f23b3dcb68c21758dd9e6f9"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a6d57bae12f23b3dcb68c21758dd9e6f9">AzureIoTJSONReader_Init</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint16_t usBufferLen)</td></tr>
 <tr class="memdesc:a6d57bae12f23b3dcb68c21758dd9e6f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#a6d57bae12f23b3dcb68c21758dd9e6f9">More...</a><br /></td></tr>
 <tr class="separator:a6d57bae12f23b3dcb68c21758dd9e6f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18a0b07f4aae4cae7998c660c5f862dd"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a18a0b07f4aae4cae7998c660c5f862dd">AzureIoTJSONReader_Deinit</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
-<tr class="memdesc:a18a0b07f4aae4cae7998c660c5f862dd"><td class="mdescLeft">&#160;</td><td class="mdescRight">De-initializes an #AzureIoTJSONReader_t.  <a href="azure__iot__json__reader_8h.html#a18a0b07f4aae4cae7998c660c5f862dd">More...</a><br /></td></tr>
-<tr class="separator:a18a0b07f4aae4cae7998c660c5f862dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a45acf1d1be1177cc6b14805817cadba7"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a45acf1d1be1177cc6b14805817cadba7">AzureIoTJSONReader_NextToken</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
 <tr class="memdesc:a45acf1d1be1177cc6b14805817cadba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the next token in the JSON text and updates the reader state.  <a href="azure__iot__json__reader_8h.html#a45acf1d1be1177cc6b14805817cadba7">More...</a><br /></td></tr>
 <tr class="separator:a45acf1d1be1177cc6b14805817cadba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -160,39 +157,6 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a18a0b07f4aae4cae7998c660c5f862dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18a0b07f4aae4cae7998c660c5f862dd">&#9670;&nbsp;</a></span>AzureIoTJSONReader_Deinit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_Deinit </td>
-          <td>(</td>
-          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
-          <td class="paramname"><em>pxReader</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>De-initializes an #AzureIoTJSONReader_t. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance to de-initialize</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname"><a class="el" href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940a150f20c6e8023600cee24f42f36cc1ef">eAzureIoTHubClientSuccess</a></td><td>The #AzureIoTJSONReader_t is de-initialized successfully. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a6eee754658715b67ffa6a970c9cc4a6b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6eee754658715b67ffa6a970c9cc4a6b">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenBool()</h2>
 

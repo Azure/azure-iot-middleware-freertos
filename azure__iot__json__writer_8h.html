@@ -91,12 +91,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a9c5bee149b1d1c5277d454e3628c9d9f"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a9c5bee149b1d1c5277d454e3628c9d9f">AzureIoTJSONWriter_Init</a> (AzureIoTJSONWriter_t *pxWriter, uint8_t *pucBuffer, uint16_t usBufferLen)</td></tr>
 <tr class="memdesc:a9c5bee149b1d1c5277d454e3628c9d9f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONWriter_t which writes JSON text into a buffer passed.  <a href="azure__iot__json__writer_8h.html#a9c5bee149b1d1c5277d454e3628c9d9f">More...</a><br /></td></tr>
 <tr class="separator:a9c5bee149b1d1c5277d454e3628c9d9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1544289ee6ae1d59b0d0f7dd8ec3d48a"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a1544289ee6ae1d59b0d0f7dd8ec3d48a">AzureIoTJSONWriter_Deinit</a> (AzureIoTJSONWriter_t *pxWriter)</td></tr>
-<tr class="memdesc:a1544289ee6ae1d59b0d0f7dd8ec3d48a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitializes an #AzureIoTJSONWriter_t.  <a href="azure__iot__json__writer_8h.html#a1544289ee6ae1d59b0d0f7dd8ec3d48a">More...</a><br /></td></tr>
-<tr class="separator:a1544289ee6ae1d59b0d0f7dd8ec3d48a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aca0f63443c07e3997dca453d15ab2b4a"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#aca0f63443c07e3997dca453d15ab2b4a">AzureIoTJSONWriter_AppendPropertyWithInt32Value</a> (AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint16_t usPropertyName, int32_t ilValue)</td></tr>
-<tr class="memdesc:aca0f63443c07e3997dca453d15ab2b4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends the UTF-8 property name and value where value is int32.  <a href="azure__iot__json__writer_8h.html#aca0f63443c07e3997dca453d15ab2b4a">More...</a><br /></td></tr>
-<tr class="separator:aca0f63443c07e3997dca453d15ab2b4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a36707affd90d557ebe174b98d611706e"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a36707affd90d557ebe174b98d611706e">AzureIoTJSONWriter_AppendPropertyWithInt32Value</a> (AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint16_t usPropertyName, int32_t lValue)</td></tr>
+<tr class="memdesc:a36707affd90d557ebe174b98d611706e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends the UTF-8 property name and value where value is int32.  <a href="azure__iot__json__writer_8h.html#a36707affd90d557ebe174b98d611706e">More...</a><br /></td></tr>
+<tr class="separator:a36707affd90d557ebe174b98d611706e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a403e68f1af6048434131656088c01c6d"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a403e68f1af6048434131656088c01c6d">AzureIoTJSONWriter_AppendPropertyWithDoubleValue</a> (AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint16_t usPropertyName, double xValue, uint16_t usFractionalDigits)</td></tr>
 <tr class="memdesc:a403e68f1af6048434131656088c01c6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends the UTF-8 property name and value where value is double.  <a href="azure__iot__json__writer_8h.html#a403e68f1af6048434131656088c01c6d">More...</a><br /></td></tr>
 <tr class="separator:a403e68f1af6048434131656088c01c6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,9 +118,9 @@ Functions</h2></td></tr>
 <tr class="memitem:ab9831cabe3ef4871b3f9427c251151f2"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#ab9831cabe3ef4871b3f9427c251151f2">AzureIoTJSONWriter_AppendBool</a> (AzureIoTJSONWriter_t *pxWriter, bool xValue)</td></tr>
 <tr class="memdesc:ab9831cabe3ef4871b3f9427c251151f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a boolean value (as a JSON literal <code>true</code> or <code>false</code>).  <a href="azure__iot__json__writer_8h.html#ab9831cabe3ef4871b3f9427c251151f2">More...</a><br /></td></tr>
 <tr class="separator:ab9831cabe3ef4871b3f9427c251151f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8810da229613f7cf19e21d5c46962873"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a8810da229613f7cf19e21d5c46962873">AzureIoTJSONWriter_AppendInt32</a> (AzureIoTJSONWriter_t *pxWriter, int32_t ilValue)</td></tr>
-<tr class="memdesc:a8810da229613f7cf19e21d5c46962873"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends an <code>int32_t</code> number value.  <a href="azure__iot__json__writer_8h.html#a8810da229613f7cf19e21d5c46962873">More...</a><br /></td></tr>
-<tr class="separator:a8810da229613f7cf19e21d5c46962873"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae9eb0f26ad1a74d0f323e3d001f54ba5"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#ae9eb0f26ad1a74d0f323e3d001f54ba5">AzureIoTJSONWriter_AppendInt32</a> (AzureIoTJSONWriter_t *pxWriter, int32_t lValue)</td></tr>
+<tr class="memdesc:ae9eb0f26ad1a74d0f323e3d001f54ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends an <code>int32_t</code> number value.  <a href="azure__iot__json__writer_8h.html#ae9eb0f26ad1a74d0f323e3d001f54ba5">More...</a><br /></td></tr>
+<tr class="separator:ae9eb0f26ad1a74d0f323e3d001f54ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aef38713a2599e9831bec96b48ae76d43"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#aef38713a2599e9831bec96b48ae76d43">AzureIoTJSONWriter_AppendDouble</a> (AzureIoTJSONWriter_t *pxWriter, double xValue, uint16_t usFractionalDigits)</td></tr>
 <tr class="memdesc:aef38713a2599e9831bec96b48ae76d43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends a <code>double</code> number value.  <a href="azure__iot__json__writer_8h.html#aef38713a2599e9831bec96b48ae76d43">More...</a><br /></td></tr>
 <tr class="separator:aef38713a2599e9831bec96b48ae76d43"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -379,8 +376,8 @@ The <code>usFractionalDigits</code> must be between 0 and 15 (inclusive). Any va
 
 </div>
 </div>
-<a id="a8810da229613f7cf19e21d5c46962873"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8810da229613f7cf19e21d5c46962873">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_AppendInt32()</h2>
+<a id="ae9eb0f26ad1a74d0f323e3d001f54ba5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae9eb0f26ad1a74d0f323e3d001f54ba5">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_AppendInt32()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -395,7 +392,7 @@ The <code>usFractionalDigits</code> must be between 0 and 15 (inclusive). Any va
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>ilValue</em>&#160;</td>
+          <td class="paramname"><em>lValue</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -409,7 +406,7 @@ The <code>usFractionalDigits</code> must be between 0 and 15 (inclusive). Any va
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxWriter</td><td>A pointer to an #AzureIoTJSONWriter_t. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ilValue</td><td>The value to be written as a JSON number.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lValue</td><td>The value to be written as a JSON number.</td></tr>
   </table>
   </dd>
 </dl>
@@ -684,8 +681,8 @@ The function validates that the provided JSON to be appended is valid and proper
 
 </div>
 </div>
-<a id="aca0f63443c07e3997dca453d15ab2b4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aca0f63443c07e3997dca453d15ab2b4a">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_AppendPropertyWithInt32Value()</h2>
+<a id="a36707affd90d557ebe174b98d611706e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a36707affd90d557ebe174b98d611706e">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_AppendPropertyWithInt32Value()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -712,7 +709,7 @@ The function validates that the provided JSON to be appended is valid and proper
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int32_t&#160;</td>
-          <td class="paramname"><em>ilValue</em>&#160;</td>
+          <td class="paramname"><em>lValue</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -728,7 +725,7 @@ The function validates that the provided JSON to be appended is valid and proper
     <tr><td class="paramdir">[in]</td><td class="paramname">pxWriter</td><td>A pointer to an #AzureIoTJSONWriter_t. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucPropertyName</td><td>The UTF-8 encoded property name of the JSON value to be written. The name is escaped before writing. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">usPropertyName</td><td>Length of pucPropertyName. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ilValue</td><td>The value to be written as a JSON number.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lValue</td><td>The value to be written as a JSON number.</td></tr>
   </table>
   </dd>
 </dl>
@@ -852,39 +849,6 @@ The function validates that the provided JSON to be appended is valid and proper
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
     <tr><td class="paramname"><a class="el" href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940a150f20c6e8023600cee24f42f36cc1ef">eAzureIoTHubClientSuccess</a></td><td>The string value was appended successfully. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a1544289ee6ae1d59b0d0f7dd8ec3d48a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1544289ee6ae1d59b0d0f7dd8ec3d48a">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_Deinit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONWriter_Deinit </td>
-          <td>(</td>
-          <td class="paramtype">AzureIoTJSONWriter_t *&#160;</td>
-          <td class="paramname"><em>pxWriter</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Deinitializes an #AzureIoTJSONWriter_t. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">pxWriter</td><td>A pointer to an #AzureIoTJSONWriter_t the instance to de-initialize.</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
-<dl class="retval"><dt>Return values</dt><dd>
-  <table class="retval">
-    <tr><td class="paramname"><a class="el" href="azure__iot__hub__client_8h.html#a41a0af7a7ec2c362658a9dc5e9731940a150f20c6e8023600cee24f42f36cc1ef">eAzureIoTHubClientSuccess</a></td><td>Successfully de-initialized JSON writer. </td></tr>
   </table>
   </dd>
 </dl>
