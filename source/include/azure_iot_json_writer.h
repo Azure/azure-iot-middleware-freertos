@@ -21,6 +21,9 @@
 
 #include "azure/core/az_json.h"
 
+/* TODO: remove this dep */
+#include "azure_iot_hub_client.h"
+
 typedef struct AzureIoTJSONWriter
 {
     struct

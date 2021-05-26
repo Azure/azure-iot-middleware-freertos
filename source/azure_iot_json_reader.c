@@ -33,31 +33,45 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxRead
                                                    uint16_t usBufferLen )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
+    az_span xJSONSpan = az_span_create( ( uint8_t * ) pucBuffer, usBufferLen );
 
-    return result;
-}
+    if( az_result_failed( xCoreResult = az_json_reader_init( &pxReader->_internal.xCoreReader, xJSONSpan, NULL ) ) )
+    {
+        AZLogError( ( "Could not initialize the JSON reader: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
 
-
-AzureIoTHubClientResult_t AzureIoTJSONReader_Deinit( AzureIoTJSONReader_t * pxReader )
-{
-    AzureIoTHubClientResult_t xResult;
-
-    return result;
+    return xResult;
 }
 
 
 AzureIoTHubClientResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * pxReader )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_reader_next_token( &pxReader->_internal.xCoreReader ) ) )
+    {
+        AZLogError( ( "Could not get next JSON token: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
 AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReader )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_reader_skip_children( &pxReader->_internal.xCoreReader ) ) )
+    {
+        AZLogError( ( "Could not skip children in JSON: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
 
@@ -65,8 +79,15 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t 
                                                            bool * pxValue )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_token_get_boolean( &pxReader->_internal.xCoreReader.token, pxValue ) ) )
+    {
+        AZLogError( ( "Could not get boolean in JSON: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
 
@@ -74,8 +95,15 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t
                                                             int32_t * pilValue )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_token_get_int32( &pxReader->_internal.xCoreReader.token, pilValue ) ) )
+    {
+        AZLogError( ( "Could not get int32_t in JSON: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
 
@@ -83,8 +111,15 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_
                                                              double * pxValue )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_token_get_double( &pxReader->_internal.xCoreReader.token, pxValue ) ) )
+    {
+        AZLogError( ( "Could not get double in JSON: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
 
@@ -94,8 +129,16 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
                                                              uint16_t * pusBytesCopied )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_token_get_string( &pxReader->_internal.xCoreReader.token,
+                                                                  (char*)pucBuffer, usBufferSize, (int32_t*) pusBytesCopied ) ) )
+    {
+        AZLogError( ( "Could not get string in JSON: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
 
@@ -104,13 +147,33 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReade
                                                                uint16_t usExpectedTextLength )
 {
     AzureIoTHubClientResult_t xResult;
+    az_result xCoreResult;
+    az_span xExpectedTextSpan = az_span_create( pucExpectedText, usExpectedTextLength );
 
-    return result;
+    if( az_result_failed( xCoreResult = az_json_token_is_text_equal( &pxReader->_internal.xCoreReader.token, xExpectedTextSpan ) ) )
+    {
+        AZLogError( ( "Could not compare text in JSON: core error=0x%08x", xCoreResult ) );
+        xResult = eAzureIoTHubClientFailed;
+    }
+
+    return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader )
+AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
+                                                      AzureIoTJSONTokenType_t * pxTokenType )
 {
     AzureIoTHubClientResult_t xResult;
 
-    return result;
+    if( pxReader == NULL )
+    {
+        AZLogError( ( "AzureIoTJSONReader_TokenType failed: invalid argument" ) );
+        xResult = eAzureIoTHubClientInvalidArgument;
+    }
+    else
+    {
+        *pxTokenType = pxReader->_internal.xCoreReader.token.kind;
+        xResult = eAzureIoTHubClientSuccess;
+    }
+
+    return xResult;
 }

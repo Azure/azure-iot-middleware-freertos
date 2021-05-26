@@ -618,9 +618,9 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     uint16_t usTelemetryPacketID;
 
     if( AzureIoTHubClient_SendDevicePropertiesReported( pxAzureIoTHubClient,
-                                                  xCMD->pulReceivedData,
-                                                  xCMD->ulReceivedDataLength,
-                                                  &ulRequestId ) != eAzureIoTHubClientSuccess )
+                                                        xCMD->pulReceivedData,
+                                                        xCMD->ulReceivedDataLength,
+                                                        &ulRequestId ) != eAzureIoTHubClientSuccess )
     {
         LogError( ( "Failed to send reported properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -934,7 +934,7 @@ void vHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMes
  *
  * */
 void vHandleCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
-                          void * pvContext )
+                     void * pvContext )
 {
     if( pxMethodCommandData == NULL )
     {
@@ -990,7 +990,7 @@ void vHandleCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
  *
  * */
 void vHandleDevicePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
-                               void * pvContext )
+                                     void * pvContext )
 {
     if( pxTwinMessage == NULL )
     {

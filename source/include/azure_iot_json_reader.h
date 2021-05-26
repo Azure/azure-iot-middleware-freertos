@@ -21,6 +21,9 @@
 
 #include "azure/core/az_json.h"
 
+/* TODO: remove this dep */
+#include "azure_iot_hub_client.h"
+
 /**
  * Defines symbols for the various kinds of JSON tokens that make up any JSON text.
  */
@@ -63,16 +66,6 @@ typedef struct AzureIoTJSONReader
 AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                                    const uint8_t * pucBuffer,
                                                    uint16_t usBufferLen );
-
-/**
- * @brief De-initializes an #AzureIoTJSONReader_t
- *
- * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance to de-initialize
- *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The #AzureIoTJSONReader_t is de-initialized successfully.
- */
-AzureIoTHubClientResult_t AzureIoTJSONReader_Deinit( AzureIoTJSONReader_t * pxReader );
 
 /**
  * @brief Reads the next token in the JSON text and updates the reader state.
@@ -175,9 +168,12 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReade
  * @brief Determines type of token currently #AzureIoTJSONReader_t points to.
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance.
+ * @param[out] pxTokenType The type of the token.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the type of token.
+ * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTHubClientSuccess If the token type was retrieved successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader );
+AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
+                                                        AzureIoTJSONTokenType_t * pxTokenType );
 
 #endif /* AZURE_IOT_JSON_READER_H */
