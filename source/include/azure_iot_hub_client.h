@@ -156,8 +156,6 @@ typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( AzureIoTHub
 /**
  * @brief Command callback to be invoked when a command request is received in the call to AzureIoTHubClient_ProcessLoop().
  *
- * @note This is used with Azure Plug and Play.
- *
  */
 typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommandRequest_t * pxMessage,
                                                         void * pvContext );
@@ -401,8 +399,6 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( Azu
 /**
  * @brief Subscribe to commands.
  *
- * @note This is used with Azure Plug and Play.
- *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] xCommandCallback The #AzureIoTHubClientCommandCallback_t to invoke when command messages arrive.
  * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
@@ -416,8 +412,6 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_
 
 /**
  * @brief Unsubscribe from commands.
- *
- * @note This is used with Azure Plug and Play.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @return An #AzureIoTHubClientResult_t with the result of the operation.
