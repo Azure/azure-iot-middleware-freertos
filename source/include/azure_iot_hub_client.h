@@ -144,9 +144,6 @@ typedef struct AzureIoTHubClientPropertiesResponse
     uint32_t ulRequestID;                      /**< The request ID for the property response. */
 
     AzureIoTHubMessageStatus_t xMessageStatus; /**< The operation status. */
-
-    const uint8_t * pucVersion;                /**< The pointer to the property document version. */
-    uint16_t usVersionLength;                  /**< The length of the property document version. */
 } AzureIoTHubClientPropertiesResponse_t;
 
 /**
