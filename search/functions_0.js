@@ -31,7 +31,7 @@ var searchData=
   ['azureiothubclientproperties_5fgetpropertiesversion_301',['AzureIoTHubClientProperties_GetPropertiesVersion',['../azure__iot__hub__client__properties_8h.html#a87334cecc46b7c0d4e11258f990651d7',1,'azure_iot_hub_client_properties.h']]],
   ['azureiotjsonreader_5fgettokenbool_302',['AzureIoTJSONReader_GetTokenBool',['../azure__iot__json__reader_8h.html#a6eee754658715b67ffa6a970c9cc4a6b',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5fgettokendouble_303',['AzureIoTJSONReader_GetTokenDouble',['../azure__iot__json__reader_8h.html#a9e5e44065b15cb56804f2dcc18727425',1,'azure_iot_json_reader.h']]],
-  ['azureiotjsonreader_5fgettokenint32_304',['AzureIoTJSONReader_GetTokenInt32',['../azure__iot__json__reader_8h.html#a277d2ca2946394a18265ac161e2f4f43',1,'azure_iot_json_reader.h']]],
+  ['azureiotjsonreader_5fgettokenint32_304',['AzureIoTJSONReader_GetTokenInt32',['../azure__iot__json__reader_8h.html#a288945e0bd0fedbf8ee6950ed4469ccb',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5fgettokenstring_305',['AzureIoTJSONReader_GetTokenString',['../azure__iot__json__reader_8h.html#adccbaab579c2d4b0eabb4a46387b8c66',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5finit_306',['AzureIoTJSONReader_Init',['../azure__iot__json__reader_8h.html#a6d57bae12f23b3dcb68c21758dd9e6f9',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5fnexttoken_307',['AzureIoTJSONReader_NextToken',['../azure__iot__json__reader_8h.html#a45acf1d1be1177cc6b14805817cadba7',1,'azure_iot_json_reader.h']]],

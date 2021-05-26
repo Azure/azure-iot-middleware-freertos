@@ -59,7 +59,7 @@ var searchData=
   ['azureiotjsonreader_59',['AzureIoTJSONReader',['../struct_azure_io_t_j_s_o_n_reader.html',1,'']]],
   ['azureiotjsonreader_5fgettokenbool_60',['AzureIoTJSONReader_GetTokenBool',['../azure__iot__json__reader_8h.html#a6eee754658715b67ffa6a970c9cc4a6b',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5fgettokendouble_61',['AzureIoTJSONReader_GetTokenDouble',['../azure__iot__json__reader_8h.html#a9e5e44065b15cb56804f2dcc18727425',1,'azure_iot_json_reader.h']]],
-  ['azureiotjsonreader_5fgettokenint32_62',['AzureIoTJSONReader_GetTokenInt32',['../azure__iot__json__reader_8h.html#a277d2ca2946394a18265ac161e2f4f43',1,'azure_iot_json_reader.h']]],
+  ['azureiotjsonreader_5fgettokenint32_62',['AzureIoTJSONReader_GetTokenInt32',['../azure__iot__json__reader_8h.html#a288945e0bd0fedbf8ee6950ed4469ccb',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5fgettokenstring_63',['AzureIoTJSONReader_GetTokenString',['../azure__iot__json__reader_8h.html#adccbaab579c2d4b0eabb4a46387b8c66',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5finit_64',['AzureIoTJSONReader_Init',['../azure__iot__json__reader_8h.html#a6d57bae12f23b3dcb68c21758dd9e6f9',1,'azure_iot_json_reader.h']]],
   ['azureiotjsonreader_5fnexttoken_65',['AzureIoTJSONReader_NextToken',['../azure__iot__json__reader_8h.html#a45acf1d1be1177cc6b14805817cadba7',1,'azure_iot_json_reader.h']]],
