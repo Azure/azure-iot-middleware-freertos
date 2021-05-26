@@ -106,13 +106,13 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t 
  * @brief Gets the JSON token's number as a 32-bit signed integer.
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance.
- * @param[out] pilValue A pointer to a variable to receive the value.
+ * @param[out] plValue A pointer to a variable to receive the value.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The number is returned.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
-                                                            int32_t * pilValue );
+                                                            int32_t * plValue );
 
 /**
  * @brief Gets the JSON token's number as a `double`.

@@ -42,7 +42,7 @@
  *
  * @note This API only builds the metadata for a component's properties.  The
  * application itself must specify the payload contents between calls
- * to this API and az_iot_hub_client_properties_builder_end_component() using
+ * to this API and AzureIoTHubClientProperties_BuilderEndComponent() using
  * \p pxJSONWriter to specify the JSON payload.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
@@ -68,7 +68,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderBeginComponent( Azu
  * component.
  *
  * @note This API should be used in conjunction with
- * az_iot_hub_client_properties_builder_begin_component().
+ * AzureIoTHubClientProperties_BuilderBeginComponent().
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
  * @param[in,out] pxJSONWriter The #AzureIoTJSONWriter_t to append the necessary characters for an IoT
@@ -171,7 +171,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus
  * @brief End a properties response payload with confirmation status.
  *
  * @note This API should be used in conjunction with
- * az_iot_hub_client_properties_builder_begin_response_status().
+ * AzureIoTHubClientProperties_BuilderBeginResponseStatus().
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
  * @param[in,out] pxJSONWriter The initialized #AzureIoTJSONWriter_t to append data to.
@@ -189,9 +189,9 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( 
  * @brief Read the Azure IoT Plug and Play property version.
  *
  * @warning This modifies the state of the json reader. To then use the same json reader
- * with az_iot_hub_client_properties_get_next_component_property(), you must call
- * az_json_reader_init() again after this call and before the call to
- * az_iot_hub_client_properties_get_next_component_property() or make an additional copy before
+ * with AzureIoTHubClientProperties_GetNextComponentProperty(), you must call
+ * AzureIoTJSONReader_Init() again after this call and before the call to
+ * AzureIoTHubClientProperties_GetNextComponentProperty() or make an additional copy before
  * calling this API.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
@@ -229,44 +229,44 @@ typedef enum AzureIoTHubClientPropertyType_t
 /**
  * @brief Iteratively read the Azure IoT Plug and Play component properties.
  *
- * Note that between calls, the #az_span pointed to by \p out_component_name shall not be modified,
- * only checked and compared. Internally, the #az_span is only changed if the component name changes
+ * Note that between calls, the uint8_t* pointed to by \p ppucComponentName shall not be modified,
+ * only checked and compared. Internally, the pointer is only changed if the component name changes
  * in the JSON document and is not necessarily set every invocation of the function.
  *
  * On success, the `pxJSONReader` will be set on a valid property name. After checking the
  * property name, the reader can be advanced to the property value by calling
- * az_json_reader_next_token(). Note that on the subsequent call to this API, it is expected that
+ * AzureIoTJSONReader_NextToken(). Note that on the subsequent call to this API, it is expected that
  * the json reader will be placed AFTER the read property name and value. That means that after
  * reading the property value (including single values or complex objects), the user must call
- * az_json_reader_next_token().
+ * AzureIoTJSONReader_NextToken().
  *
  * Below is a code snippet which you can use as a starting point:
  *
  * @code
  *
- * while (az_result_succeeded(az_iot_hub_client_properties_get_next_component_property(
- *       &hub_client, &jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE, &pucComponentName)))
+ * while (az_result_succeeded(AzureIoTHubClientProperties_GetNextComponentProperty(
+ *       &xHubClient, &jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE, &pucComponentName, &pusComponentNameLength)))
  * {
  *   // Check if property is of interest (substitute user_property for your own property name)
- *   if (az_json_token_is_text_equal(&jr.token, user_property))
+ *   if (AzureIoTJSONReader_TokenIsTextEqual(&jr, user_property, user_property_length))
  *   {
- *     az_json_reader_next_token(&jr);
+ *     AzureIoTJSONReader_NextToken(&jr);
  *
  *     // Get the property value here
- *     // Example: az_json_token_get_int32(&jr.token, &user_int);
+ *     // Example: AzureIoTJSONReader_GetTokenInt32(&jr.token, &user_int);
  *
  *     // Skip to next property value
- *     az_json_reader_next_token(&jr);
+ *     AzureIoTJSONReader_NextToken(&jr);
  *   }
  *   else
  *   {
  *     // The JSON reader must be advanced regardless of whether the property
  *     // is of interest or not.
- *     az_json_reader_next_token(&jr);
+ *     AzureIoTJSONReader_NextToken(&jr);
  *
  *     // Skip children in case the property value is an object
- *     az_json_reader_skip_children(&jr);
- *     az_json_reader_next_token(&jr);
+ *     AzureIoTJSONReader_SkipChildren(&jr);
+ *     AzureIoTJSONReader_NextToken(&jr);
  *   }
  * }
  *
@@ -274,8 +274,8 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @warning If you need to retrieve more than one \p xPropertyType, you should first complete the
  * scan of all components for the first property type (until the API returns
- * #AZ_ERROR_IOT_END_OF_PROPERTIES). Then you must call az_json_reader_init() again after this call
- * and before the next call to az_iot_hub_client_properties_get_next_component_property with the
+ * #AZ_ERROR_IOT_END_OF_PROPERTIES). Then you must call AzureIoTJSONReader_Init() again after this call
+ * and before the next call to `AzureIoTHubClientProperties_GetNextComponentProperty` with the
  * different \p xPropertyType.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t to use for this call.
@@ -296,7 +296,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and
- * the #az_span with a component name.
+ * the component name.
  * @retval #AZ_ERROR_JSON_INVALID_STATE If the json reader is passed in at an unexpected location.
  * @retval #AZ_ERROR_IOT_END_OF_PROPERTIES If there are no more properties left for the component.
  */

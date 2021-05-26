@@ -68,7 +68,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( Azure
  * escaped before writing.
  * @param[in] usPropertyName Length of pucPropertyName.
  * @param[in] xValue The value to be written as a JSON number.
- * @param[in] ulFractionalDigits The number of digits of the value to write after the decimal point and truncate the rest.
+ * @param[in] usFractionalDigits The number of digits of the value to write after the decimal point and truncate the rest.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The property name and double value was appended successfully.
