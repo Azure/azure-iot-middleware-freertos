@@ -62,7 +62,7 @@ typedef struct AzureIoTJSONReader
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                                    const uint8_t * pucBuffer,
-                                                   uint16_t usBufferLen );
+                                                   uint32_t usBufferLen );
 
 /**
  * @brief Reads the next token in the JSON text and updates the reader state.
@@ -140,8 +140,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
                                                              uint8_t * pucBuffer,
-                                                             uint16_t usBufferSize,
-                                                             uint16_t * pusBytesCopied );
+                                                             uint32_t usBufferSize,
+                                                             uint32_t * pusBytesCopied );
 
 /**
  * @brief Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is
@@ -158,8 +158,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
  * token kinds, it returns 0.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
-                                                               uint8_t * pucExpectedText,
-                                                               uint16_t usExpectedTextLength );
+                                                               const uint8_t * pucExpectedText,
+                                                               uint32_t usExpectedTextLength );
 
 /**
  * @brief Determines type of token currently #AzureIoTJSONReader_t points to.

@@ -41,7 +41,7 @@ typedef struct AzureIoTJSONWriter
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
                                                    uint8_t * pucBuffer,
-                                                   uint16_t usBufferLen );
+                                                   uint32_t usBufferLen );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is int32
@@ -93,7 +93,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( Azur
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
                                                                           const uint8_t * pucPropertyName,
-                                                                          uint16_t usPropertyNameLength,
+                                                                          uint32_t usPropertyNameLength,
                                                                           bool usValue );
 
 /**
@@ -112,9 +112,9 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureI
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONWriter_t * pxWriter,
                                                                             const uint8_t * pucPropertyName,
-                                                                            uint16_t usPropertyName,
+                                                                            uint32_t usPropertyName,
                                                                             const uint8_t * pucValue,
-                                                                            uint16_t usValueLen );
+                                                                            uint32_t usValueLen );
 
 /**
  * @brief Returns the length containing the JSON text written to the underlying buffer.
@@ -138,7 +138,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t 
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
                                                            const uint8_t * pucValue,
-                                                           uint16_t usValueLen );
+                                                           uint32_t usValueLen );
 
 /**
  * @brief Appends an existing UTF-8 encoded JSON text into the buffer, useful for appending nested
@@ -162,7 +162,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJsonText( AzureIoTJSONWriter_t * pxWriter,
                                                              const uint8_t * pucJSON,
-                                                             uint16_t usJSONLen );
+                                                             uint32_t usJSONLen );
 
 /**
  * @brief Appends the UTF-8 property name (as a JSON string) which is the first part of a name/value
@@ -178,7 +178,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJsonText( AzureIoTJSONWriter_
  */
 AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * pxWriter,
                                                                  const uint8_t * pusValue,
-                                                                 uint16_t usValueLen );
+                                                                 uint32_t usValueLen );
 
 /**
  * @brief Appends a boolean value (as a JSON literal `true` or `false`).

@@ -203,7 +203,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( 
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesDesiredPropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWriteablePropertyMessage.
  * @pre \p pulVersion must not be `NULL`.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
@@ -289,7 +289,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesDesiredPropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWriteablePropertyMessage.
  * If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
  * then \p xResponseType must be #eAzureIoTHubPropertiesGetMessage.
  * @pre \p ppucComponentName must not be `NULL`.
@@ -304,7 +304,7 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( 
                                                                                 AzureIoTJSONReader_t * pxJSONReader,
                                                                                 AzureIoTHubMessageType_t xResponseType,
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
-                                                                                uint8_t ** ppucComponentName,
-                                                                                uint16_t * pusComponentNameLength );
+                                                                                const uint8_t ** ppucComponentName,
+                                                                                uint32_t * pusComponentNameLength );
 
 #endif /*AZURE_IOT_HUB_CLIENT_PROPERTIES_H */
