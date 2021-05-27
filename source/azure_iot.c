@@ -12,6 +12,8 @@
 
 #include "azure_iot.h"
 
+#include "azure_iot_result.h"
+
 /* Using SHA256 hash - needs 32 bytes */
 #define azureiotBASE64_HASH_BUFFER_SIZE    ( 33 )
 
@@ -70,7 +72,7 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( const char * pcEncodedBytes,
 
     if( ulDecodedBytesLength < ulEncodedBytesLength )
     {
-        return eAzureIoTOutOfMemory;
+        return eAzureIoTErrorOutOfMemory;
     }
 
     /* Setup index into the ASCII name.  */
@@ -162,7 +164,7 @@ static AzureIoTResult_t prvAzureIoTBase64Decode( const char * pcEncodedBytes,
     /* Need space for a NULL terminator */
     if( j >= ulDecodedBytesLength )
     {
-        return eAzureIoTOutOfMemory;
+        return eAzureIoTErrorOutOfMemory;
     }
 
     /* Put a NULL character in.  */
@@ -214,7 +216,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
 
     if( ulEncodedBytesLength <= ulBytesLength )
     {
-        return eAzureIoTOutOfMemory;
+        return eAzureIoTErrorOutOfMemory;
     }
 
     /* Setup index into the pcEncodedBytes.  */
@@ -274,7 +276,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
     /* Need space for a NULL terminator */
     if( j >= ulEncodedBytesLength )
     {
-        return eAzureIoTOutOfMemory;
+        return eAzureIoTErrorOutOfMemory;
     }
 
     /* Put a NULL character in.  */
@@ -312,7 +314,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
         ( pucBuffer == NULL ) )
     {
         AZLogError( ( "AzureIoT_MessagePropertiesInit failed: Invalid argument" ) );
-        return eAzureIoTInvalidArgument;
+        return eAzureIoTErrorInvalidArgument;
     }
 
     xResult = az_iot_message_properties_init( &pxMessageProperties->_internal.xProperties,
@@ -320,7 +322,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesInit( AzureIoTMessageProperties_t * p
 
     if( az_result_failed( xResult ) )
     {
-        return eAzureIoTFailed;
+        return eAzureIoTErrorFailed;
     }
 
     return eAzureIoTSuccess;
@@ -342,7 +344,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
         ( pucValue == NULL ) || ( ulValueLength == 0 ) )
     {
         AZLogError( ( "AzureIoT_MessagePropertiesAppend failed: Invalid argument" ) );
-        return eAzureIoTInvalidArgument;
+        return eAzureIoTErrorInvalidArgument;
     }
 
     xResult = az_iot_message_properties_append( &pxMessageProperties->_internal.xProperties,
@@ -350,7 +352,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesAppend( AzureIoTMessageProperties_t *
 
     if( az_result_failed( xResult ) )
     {
-        return eAzureIoTFailed;
+        return eAzureIoTErrorFailed;
     }
 
     return eAzureIoTSuccess;
@@ -372,7 +374,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
         ( ppucOutValue == NULL ) || ( pulOutValueLength == NULL ) )
     {
         AZLogError( ( "AzureIoT_MessagePropertiesFind failed: Invalid argument" ) );
-        return eAzureIoTInvalidArgument;
+        return eAzureIoTErrorInvalidArgument;
     }
 
     xResult = az_iot_message_properties_find( &pxMessageProperties->_internal.xProperties,
@@ -380,7 +382,7 @@ AzureIoTResult_t AzureIoT_MessagePropertiesFind( AzureIoTMessageProperties_t * p
 
     if( az_result_failed( xResult ) )
     {
-        return eAzureIoTItemNotFound;
+        return eAzureIoTErrorItemNotFound;
     }
 
     *ppucOutValue = az_span_ptr( xOutValueSpan );
@@ -415,7 +417,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         ( pucOutput == NULL ) || ( pulOutputLength == NULL ) )
     {
         AZLogError( ( "AzureIoT_Base64HMACCalculate failed: Invalid argument" ) );
-        return eAzureIoTInvalidArgument;
+        return eAzureIoTErrorInvalidArgument;
     }
 
     xStatus = prvAzureIoTBase64Decode( ( char * ) pucKey, ulKeySize,
@@ -431,7 +433,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
 
     if( ulHashBufSize > ulBufferLength )
     {
-        return eAzureIoTOutOfMemory;
+        return eAzureIoTErrorOutOfMemory;
     }
 
     pucHashBuf = pucDecodedKeyBuf + ulBinaryKeyBufSize;
@@ -441,7 +443,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
                                pucMessage, ( uint32_t ) ulMessageSize,
                                pucHashBuf, ulHashBufSize, &ulHashBufSize ) )
     {
-        return eAzureIoTFailed;
+        return eAzureIoTErrorFailed;
     }
 
     xStatus = prvAzureIoTBase64Encode( pucHashBuf, ulHashBufSize,

@@ -65,7 +65,7 @@ static void vTestEntry( void ** ppvState )
     xTransport.xRecv = TLS_FreeRTOS_recv;
 
     assert_int_equal( AzureIoTHubClient_OptionsInit( &xHubOptions ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     xHubOptions.xTelemetryCallback = prvTelemetryPubackCallback;
 
@@ -79,39 +79,39 @@ static void vTestEntry( void ** ppvState )
                                               ucSharedBuffer, sizeof( ucSharedBuffer ),
                                               ulGetUnixTime,
                                               &xTransport ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTHubClient_SetSymmetricKey( &xAzureIoTHubClient,
                                                          ( const uint8_t * ) ppcArgv[ 4 ],
                                                          strlen( ppcArgv[ 4 ] ),
                                                          ulCalculateHMAC ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTHubClient_Connect( &xAzureIoTHubClient,
                                                  false, &xSessionPresent,
                                                  e2etestCONNACK_RECV_TIMEOUT_MS ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTHubClient_SubscribeCloudToDeviceMessage( &xAzureIoTHubClient,
                                                                        vHandleCloudMessage,
                                                                        &xAzureIoTHubClient,
                                                                        ULONG_MAX ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTHubClient_SubscribeDirectMethod( &xAzureIoTHubClient,
                                                                vHandleDirectMethod,
                                                                &xAzureIoTHubClient,
                                                                ULONG_MAX ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTHubClient_SubscribeDeviceTwin( &xAzureIoTHubClient,
                                                              vHandleDeviceTwinMessage,
                                                              &xAzureIoTHubClient,
                                                              ULONG_MAX ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 
     AzureIoTHubClient_Disconnect( &xAzureIoTHubClient );
     AzureIoTHubClient_Deinit( &xAzureIoTHubClient );

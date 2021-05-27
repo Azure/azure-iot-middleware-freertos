@@ -191,11 +191,11 @@ static void prvSetupTestProvisioningClient( AzureIoTProvisioningClient_t * pxTes
                                                        &xProvisioningOptions, ucBuffer, sizeof( ucBuffer ),
                                                        prvGetUnixTime,
                                                        &xTransportInterface ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_SetSymmetricKey( pxTestProvisioningClient,
                                                                   ucSymmetricKey, sizeof( ucSymmetricKey ) - 1,
                                                                   prvHmacFunction ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -207,7 +207,7 @@ static void prvRegistrationConnectStep( AzureIoTProvisioningClient_t * pxTestPro
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 }
 /*-----------------------------------------------------------*/
 
@@ -218,7 +218,7 @@ static void prvRegistrationSubscribeStep( AzureIoTProvisioningClient_t * pxTestP
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 }
 /*-----------------------------------------------------------*/
 
@@ -229,7 +229,7 @@ static void prvRegistrationAckSubscribeStep( AzureIoTProvisioningClient_t * pxTe
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 }
 /*-----------------------------------------------------------*/
 
@@ -240,7 +240,7 @@ static void prvRegistrationPublishStep( AzureIoTProvisioningClient_t * pxTestPro
     xPacketInfo.ucType = 0;
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 }
 /*-----------------------------------------------------------*/
 
@@ -264,20 +264,20 @@ static void prvRegistration( AzureIoTProvisioningClient_t * pxTestProvisioningCl
     prvGenerateGoodResponse( &xPublishInfo, 1 );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Read response */
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Wait for timeout */
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     ullUnixTime += 2;
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
@@ -285,18 +285,18 @@ static void prvRegistration( AzureIoTProvisioningClient_t * pxTestProvisioningCl
     xPacketInfo.ucType = 0;
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Registration response */
     prvGenerateGoodResponse( &xPublishInfo, 0 );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Process response */
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -314,7 +314,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, sizeof( ucBuffer ),
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail init when null IDScope passed */
     assert_int_not_equal( AzureIoTProvisioningClient_Init( &xTestProvisioningClient,
@@ -324,7 +324,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, sizeof( ucBuffer ),
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail init when null RegistrationId passed */
     assert_int_not_equal( AzureIoTProvisioningClient_Init( &xTestProvisioningClient,
@@ -334,7 +334,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, sizeof( ucBuffer ),
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail init when null Buffer passed */
     assert_int_not_equal( AzureIoTProvisioningClient_Init( &xTestProvisioningClient,
@@ -344,7 +344,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, NULL, 0,
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail init when null null AzureIoTGetCurrentTimeFunc_t passed */
     assert_int_not_equal( AzureIoTProvisioningClient_Init( &xTestProvisioningClient,
@@ -354,7 +354,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, sizeof( ucBuffer ),
                                                            NULL,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail init when null Transport passed */
     assert_int_not_equal( AzureIoTProvisioningClient_Init( &xTestProvisioningClient,
@@ -364,7 +364,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, sizeof( ucBuffer ),
                                                            prvGetUnixTime,
                                                            NULL ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail when smaller buffer is passed */
     assert_int_not_equal( AzureIoTProvisioningClient_Init( &xTestProvisioningClient,
@@ -374,7 +374,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, azureiotconfigUSERNAME_MAX,
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail init when AzureIoTMQTT_Init fails */
     will_return( AzureIoTMQTT_Init, eAzureIoTMQTTNoMemory );
@@ -385,7 +385,7 @@ static void testAzureIoTProvisioningClient_Init_Failure( void ** ppvState )
                                                            NULL, ucBuffer, sizeof( ucBuffer ),
                                                            prvGetUnixTime,
                                                            &xTransportInterface ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -403,7 +403,7 @@ static void testAzureIoTProvisioningClient_Init_Success( void ** ppvState )
                                                        NULL, ucBuffer, sizeof( ucBuffer ),
                                                        prvGetUnixTime,
                                                        &xTransportInterface ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -421,7 +421,7 @@ static void testAzureIoTProvisioningClient_Deinit_Success( void ** ppvState )
                                                        NULL, ucBuffer, sizeof( ucBuffer ),
                                                        prvGetUnixTime,
                                                        &xTransportInterface ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -437,13 +437,13 @@ static void testAzureIoTProvisioningClient_SymmetricKeySet_Failure( void ** ppvS
     assert_int_not_equal( AzureIoTProvisioningClient_SetSymmetricKey( &xTestProvisioningClient,
                                                                       NULL, 0,
                                                                       prvHmacFunction ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     /* Fail AzureIoTProvisioningClient_SetSymmetricKey when null hashing function is passed */
     assert_int_not_equal( AzureIoTProvisioningClient_SetSymmetricKey( &xTestProvisioningClient,
                                                                       ucSymmetricKey, sizeof( ucSymmetricKey ) - 1,
                                                                       NULL ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -456,7 +456,7 @@ static void testAzureIoTProvisioningClient_SymmetricKeySet_Success( void ** ppvS
     assert_int_equal( AzureIoTProvisioningClient_SetSymmetricKey( &xTestProvisioningClient,
                                                                   ucSymmetricKey, sizeof( ucSymmetricKey ) - 1,
                                                                   prvHmacFunction ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -473,7 +473,7 @@ static void testAzureIoTProvisioningClient_Register_ConnectFailure( void ** ppvS
     will_return( AzureIoTMQTT_Connect, eAzureIoTMQTTServerRefused );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningServerError );
+                      eAzureIoTErrorServerError );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -494,7 +494,7 @@ static void testAzureIoTProvisioningClient_Register_SubscribeFailure( void ** pp
     will_return( AzureIoTMQTT_Subscribe, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningSubscribeFailed );
+                      eAzureIoTErrorSubscribeFailed );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -518,7 +518,7 @@ static void testAzureIoTProvisioningClient_Register_SubscribeAckFailure( void **
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTServerRefused );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningFailed );
+                      eAzureIoTErrorFailed );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -546,7 +546,7 @@ static void testAzureIoTProvisioningClient_Register_PublishFailure( void ** ppvS
     xPacketInfo.ucType = 0;
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPublishFailed );
+                      eAzureIoTErrorPublishFailed );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -578,17 +578,17 @@ static void testAzureIoTProvisioningClient_Register_RegistrationFailure( void **
     prvGenerateFailureResponse( &xPublishInfo );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Read response */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningServerError );
+                      eAzureIoTErrorServerError );
 
     /* Read extended code */
     assert_int_equal( AzureIoTProvisioningClient_GetExtendedCode( &xTestProvisioningClient,
                                                                   &ulExtendedCode ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
     assert_int_equal( ulExpectedExtendedCode, ulExtendedCode );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
@@ -620,26 +620,26 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure( void ** ppvSta
     prvGenerateGoodResponse( &xPublishInfo, 1 );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Read response */
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Wait for timeout */
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     ullUnixTime += 2;
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPublishFailed );
+                      eAzureIoTErrorPublishFailed );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -670,20 +670,20 @@ static void testAzureIoTProvisioningClient_Register_InvalidResponseFailure( void
     prvGenerateGoodResponse( &xPublishInfo, 1 );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Read response */
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Wait for timeout */
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
     ullUnixTime += 2;
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
@@ -691,7 +691,7 @@ static void testAzureIoTProvisioningClient_Register_InvalidResponseFailure( void
     xPacketInfo.ucType = 0;
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Invalid registration response */
     prvGenerateResponse( &xPublishInfo, 0,
@@ -699,12 +699,12 @@ static void testAzureIoTProvisioningClient_Register_InvalidResponseFailure( void
                          sizeof( ucInvalidHubResponse ) - 1 );
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningPending );
+                      eAzureIoTErrorPending );
 
     /* Process Invalid response */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningFailed );
+                      eAzureIoTErrorFailed );
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
 /*-----------------------------------------------------------*/
@@ -739,7 +739,7 @@ static void testAzureIoTProvisioningClient_GetDeviceAndHub_Failure( void ** ppvS
     assert_int_not_equal( AzureIoTProvisioningClient_GetDeviceAndHub( &xTestProvisioningClient,
                                                                       ucTestHostname, &ulTestHostnameLength,
                                                                       ucTestDevice, &ulTestDeviceLength ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     prvRegistration( &xTestProvisioningClient );
 
@@ -748,7 +748,7 @@ static void testAzureIoTProvisioningClient_GetDeviceAndHub_Failure( void ** ppvS
     assert_int_not_equal( AzureIoTProvisioningClient_GetDeviceAndHub( &xTestProvisioningClient,
                                                                       ucTestHostname, &ulTestHostnameLength,
                                                                       ucTestDevice, &ulTestDeviceLength ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -771,7 +771,7 @@ static void testAzureIoTProvisioningClient_GetDeviceAndHub_Success( void ** ppvS
     assert_int_equal( AzureIoTProvisioningClient_GetDeviceAndHub( &xTestProvisioningClient,
                                                                   ucTestHostname, &ulTestHostnameLength,
                                                                   ucTestDevice, &ulTestDeviceLength ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( ulTestDeviceLength, sizeof( ucDeviceId ) - 1 );
     assert_memory_equal( ucTestDevice, ucDeviceId, ulTestDeviceLength );
@@ -796,7 +796,7 @@ static void testAzureIoTProvisioningClient_WithCustomPayload_Failure( void ** pp
 
     assert_int_equal( AzureIoTProvisioningClient_SetRegistrationPayload( &xTestProvisioningClient,
                                                                          ucCustomPayload, sizeof( ucCustomPayload ) - 2 ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 
     /* Connect */
     prvRegistrationConnectStep( &xTestProvisioningClient );
@@ -810,13 +810,13 @@ static void testAzureIoTProvisioningClient_WithCustomPayload_Failure( void ** pp
     /* Publish payload generation failed */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
-                      eAzureIoTProvisioningFailed );
+                      eAzureIoTErrorFailed );
 
     /* After failed registration, AzureIoTProvisioningClient_GetDeviceAndHub should return error */
     assert_int_not_equal( AzureIoTProvisioningClient_GetDeviceAndHub( &xTestProvisioningClient,
                                                                       ucTestHostname, &ulTestHostnameLength,
                                                                       ucTestDevice, &ulTestDeviceLength ),
-                          eAzureIoTProvisioningSuccess );
+                          eAzureIoTSuccess );
 
     AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
 }
@@ -836,14 +836,14 @@ static void testAzureIoTProvisioningClient_WithCustomPayload_Success( void ** pp
 
     assert_int_equal( AzureIoTProvisioningClient_SetRegistrationPayload( &xTestProvisioningClient,
                                                                          ucCustomPayload, sizeof( ucCustomPayload ) - 1 ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 
     prvRegistration( &xTestProvisioningClient );
 
     assert_int_equal( AzureIoTProvisioningClient_GetDeviceAndHub( &xTestProvisioningClient,
                                                                   ucTestHostname, &ulTestHostnameLength,
                                                                   ucTestDevice, &ulTestDeviceLength ),
-                      eAzureIoTProvisioningSuccess );
+                      eAzureIoTSuccess );
 
     assert_int_equal( ulTestDeviceLength, sizeof( ucDeviceId ) - 1 );
     assert_memory_equal( ucTestDevice, ucDeviceId, ulTestDeviceLength );

@@ -31,12 +31,12 @@ static void testAzureIoTMessagePropertiesInit_Failure( void ** ppvState )
 
     /* Fail init when null Message control block */
     assert_int_equal( AzureIoT_MessagePropertiesInit( NULL, ucBuffer, 0, sizeof( ucBuffer ) ),
-                      eAzureIoTInvalidArgument );
+                      eAzureIoTErrorInvalidArgument );
 
     /* Fail init when null Buffer */
     assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
                                                       NULL, 0, 0 ),
-                      eAzureIoTInvalidArgument );
+                      eAzureIoTErrorInvalidArgument );
 }
 /*-----------------------------------------------------------*/
 
@@ -67,19 +67,19 @@ static void testAzureIoTMessagePropertiesAppend_Failure( void ** ppvState )
     assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
                                                         NULL, 0, ucTestValue,
                                                         sizeof( ucTestValue ) - 1 ),
-                      eAzureIoTInvalidArgument );
+                      eAzureIoTErrorInvalidArgument );
 
     /* Failed for NULL value passed */
     assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
                                                         NULL, 0, ucTestValue,
                                                         sizeof( ucTestValue ) - 1 ),
-                      eAzureIoTInvalidArgument );
+                      eAzureIoTErrorInvalidArgument );
 
     /* Failed for bigger data append - buffer was initialized to be size sizeof( ucTestKey ) and isn't big enough for request */
     assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
                                                         ucTestKey, sizeof( ucTestKey ) - 1,
                                                         ucTestValue, sizeof( ucTestValue ) - 1 ),
-                      eAzureIoTFailed );
+                      eAzureIoTErrorFailed );
 }
 /*-----------------------------------------------------------*/
 
@@ -121,13 +121,13 @@ static void testAzureIoTMessagePropertiesFind_Failure( void ** ppvState )
     /* Failed for NULL key */
     assert_int_equal( AzureIoT_MessagePropertiesFind( &xTestMessageProperties,
                                                       NULL, 0, &pucOutValue, &ulOutValueLength ),
-                      eAzureIoTInvalidArgument );
+                      eAzureIoTErrorInvalidArgument );
 
     /* Failed for NULL outvalue */
     assert_int_equal( AzureIoT_MessagePropertiesFind( &xTestMessageProperties,
                                                       ucTestKey, sizeof( ucTestKey ) - 1,
                                                       NULL, 0 ),
-                      eAzureIoTInvalidArgument );
+                      eAzureIoTErrorInvalidArgument );
 }
 /*-----------------------------------------------------------*/
 
