@@ -69,7 +69,6 @@ $(function() {
 <a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
-<a href="#enum-members">Enumerations</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">azure_iot.h File Reference</div>  </div>
@@ -79,6 +78,7 @@ $(function() {
 <p>Azure IoT FreeRTOS middleware common APIs and structs.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;azure_iot_config.h&quot;</code><br />
+<code>#include &quot;azure_iot_result.h&quot;</code><br />
 <code>#include &quot;azure_iot_config_defaults.h&quot;</code><br />
 <code>#include &quot;FreeRTOS.h&quot;</code><br />
 <code>#include &quot;azure/az_iot.h&quot;</code><br />
@@ -109,20 +109,6 @@ Typedefs</h2></td></tr>
 typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>) (const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</td></tr>
 <tr class="memdesc:a5824b14bbf563402fa8d15279fdb74cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The HMAC256 function used by the SDK to generate SAS keys. <br /></td></tr>
 <tr class="separator:a5824b14bbf563402fa8d15279fdb74cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
-Enumerations</h2></td></tr>
-<tr class="memitem:a1225ecf72e3eb47c48db7aabfb9c3baf"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3baf">AzureIoTResult</a> { <br />
-&#160;&#160;<a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3bafa9cb33f14023f8406f8d0ed21d3447822">eAzureIoTSuccess</a> = 0, 
-<a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3bafafee1eca45105cd6e32e07bb0280afd20">eAzureIoTInvalidArgument</a>, 
-<a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3bafa9648f61b0bb4f506bff7497194696e96">eAzureIoTOutOfMemory</a>, 
-<a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3bafa955823bc492d6c1b1744018e3184a4be">eAzureIoTItemNotFound</a>, 
-<br />
-&#160;&#160;<a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3bafaa6b1cf0f3001850593892d644aa74f85">eAzureIoTFailed</a>
-<br />
- }</td></tr>
-<tr class="memdesc:a1225ecf72e3eb47c48db7aabfb9c3baf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Result values used for Azure IoT functions.  <a href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3baf">More...</a><br /></td></tr>
-<tr class="separator:a1225ecf72e3eb47c48db7aabfb9c3baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -163,35 +149,6 @@ Functions</h2></td></tr>
 
 <p>The platform get time function to be used by the SDK for MQTT connections. </p>
 <dl class="section note"><dt>Note</dt><dd>Must return the time since Unix epoch. </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Enumeration Type Documentation</h2>
-<a id="a1225ecf72e3eb47c48db7aabfb9c3baf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1225ecf72e3eb47c48db7aabfb9c3baf">&#9670;&nbsp;</a></span>AzureIoTResult</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">enum <a class="el" href="azure__iot_8h.html#a1225ecf72e3eb47c48db7aabfb9c3baf">AzureIoTResult</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Result values used for Azure IoT functions. </p>
-<table class="fieldtable">
-<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a1225ecf72e3eb47c48db7aabfb9c3bafa9cb33f14023f8406f8d0ed21d3447822"></a>eAzureIoTSuccess&#160;</td><td class="fielddoc"><p>Success. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a1225ecf72e3eb47c48db7aabfb9c3bafafee1eca45105cd6e32e07bb0280afd20"></a>eAzureIoTInvalidArgument&#160;</td><td class="fielddoc"><p>Input argument does not comply with the expected range of values. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a1225ecf72e3eb47c48db7aabfb9c3bafa9648f61b0bb4f506bff7497194696e96"></a>eAzureIoTOutOfMemory&#160;</td><td class="fielddoc"><p>The system is out of memory. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a1225ecf72e3eb47c48db7aabfb9c3bafa955823bc492d6c1b1744018e3184a4be"></a>eAzureIoTItemNotFound&#160;</td><td class="fielddoc"><p>The item was not found. </p>
-</td></tr>
-<tr><td class="fieldname"><a id="a1225ecf72e3eb47c48db7aabfb9c3bafaa6b1cf0f3001850593892d644aa74f85"></a>eAzureIoTFailed&#160;</td><td class="fielddoc"><p>There was a failure. </p>
-</td></tr>
-</table>
 
 </div>
 </div>
