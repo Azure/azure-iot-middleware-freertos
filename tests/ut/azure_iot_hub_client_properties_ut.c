@@ -109,18 +109,22 @@ static void testAzureIoTHubClientProperties_BuilderEndResponseStatus_Failure( vo
     /* Fail end response when client is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndResponseStatus( NULL,
                                                                             &xJSONWriter ), eAzureIoTHubClientInvalidArgument );
+
+    /* Fail end response when JSON Writer is NULL */
+    assert_int_equal( AzureIoTHubClientProperties_BuilderEndResponseStatus( &xTestIoTHubClient,
+                                                                            NULL ), eAzureIoTHubClientInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_GetPropertiesVersion_Failure( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
-    AzureIoTJSONWriter_t xJSONWriter;
+    AzureIoTJSONReader_t xJSONReader;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesGetMessage;
     uint32_t ulVersion;
 
     /* Fail get properties version when client is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( NULL,
-                                                                        &xJSONWriter,
+                                                                        &xJSONReader,
                                                                         xResponseType,
                                                                         &ulVersion ), eAzureIoTHubClientInvalidArgument );
 }
