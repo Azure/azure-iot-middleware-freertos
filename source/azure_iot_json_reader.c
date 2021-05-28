@@ -132,7 +132,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
     az_result xCoreResult;
 
     if( az_result_failed( xCoreResult = az_json_token_get_string( &pxReader->_internal.xCoreReader.token,
-                                                                  (char*)pucBuffer, usBufferSize, (int32_t*) pusBytesCopied ) ) )
+                                                                  ( char * ) pucBuffer, usBufferSize, ( int32_t * ) pusBytesCopied ) ) )
     {
         AZLogError( ( "Could not get string in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
@@ -160,7 +160,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReade
 }
 
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
-                                                      AzureIoTJSONTokenType_t * pxTokenType )
+                                                        AzureIoTJSONTokenType_t * pxTokenType )
 {
     AzureIoTHubClientResult_t xResult;
 
