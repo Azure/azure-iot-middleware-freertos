@@ -30,6 +30,7 @@ add_library(az_iot_middleware_freertos
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_provisioning_client.c
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_hub_client_properties.c
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot_json_reader.c
+  ${CMAKE_CURRENT_LIST_DIR}/azure_iot_json_writer.c
   ${CMAKE_CURRENT_LIST_DIR}/azure_iot.c
 )
 

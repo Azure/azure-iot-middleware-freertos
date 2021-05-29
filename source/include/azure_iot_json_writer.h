@@ -21,6 +21,9 @@
 
 #include "azure/core/az_json.h"
 
+/* TODO: remove this dep */
+#include "azure_iot_hub_client.h"
+
 typedef struct AzureIoTJSONWriter
 {
     struct
@@ -121,9 +124,9 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( Azur
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
- * @return An uint16_t containing the length of JSON text built so far.
+ * @return An int32_t containing the length of JSON text built so far. Will return -1 if there was an error.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter );
+int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter );
 
 /**
  * @brief Appends the UTF-8 text value (as a JSON string) into the buffer.
