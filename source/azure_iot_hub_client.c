@@ -327,7 +327,7 @@ static uint32_t prvAzureIoTHubClientDevicePropertiesProcess( AzureIoTHubClientRe
         {
             if( az_span_size( xOutRequest.request_id ) == 0 )
             {
-                xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesDesiredPropertyMessage;
+                xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesWriteablePropertyMessage;
             }
             else
             {

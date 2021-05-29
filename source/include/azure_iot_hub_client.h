@@ -36,11 +36,11 @@ typedef enum AzureIoTHubMessageQoS
 
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIoTHubCloudToDeviceMessage = 1,          /**< The message is a cloud message. */
-    eAzureIoTHubCommandMessage,                    /**< The message is a command message. */
-    eAzureIoTHubPropertiesGetMessage,              /**< The message is a property get response (payload contains the property document). */
-    eAzureIoTHubPropertiesReportedResponseMessage, /**< The message is a reported property status response. */
-    eAzureIoTHubPropertiesDesiredPropertyMessage,  /**< The message is a desired property message (incoming from the service). */
+    eAzureIoTHubCloudToDeviceMessage = 1,           /**< The message is a cloud message. */
+    eAzureIoTHubCommandMessage,                     /**< The message is a command message. */
+    eAzureIoTHubPropertiesGetMessage,               /**< The message is a property get response (payload contains the property document). */
+    eAzureIoTHubPropertiesReportedResponseMessage,  /**< The message is a reported property status response. */
+    eAzureIoTHubPropertiesWriteablePropertyMessage, /**< The message is a writeable property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
 
 typedef enum AzureIoTHubClientResult
