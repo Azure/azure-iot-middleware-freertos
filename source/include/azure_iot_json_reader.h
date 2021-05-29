@@ -21,9 +21,6 @@
 
 #include "azure/core/az_json.h"
 
-/* TODO: remove this dep */
-#include "azure_iot_hub_client.h"
-
 /**
  * Defines symbols for the various kinds of JSON tokens that make up any JSON text.
  */
@@ -65,7 +62,7 @@ typedef struct AzureIoTJSONReader
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                                    const uint8_t * pucBuffer,
-                                                   uint16_t usBufferLen );
+                                                   uint32_t usBufferLen );
 
 /**
  * @brief Reads the next token in the JSON text and updates the reader state.
@@ -109,13 +106,13 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t 
  * @brief Gets the JSON token's number as a 32-bit signed integer.
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance.
- * @param[out] pilValue A pointer to a variable to receive the value.
+ * @param[out] plValue A pointer to a variable to receive the value.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The number is returned.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
-                                                            int32_t * pilValue );
+                                                            int32_t * plValue );
 
 /**
  * @brief Gets the JSON token's number as a `double`.
@@ -143,8 +140,8 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
                                                              uint8_t * pucBuffer,
-                                                             uint16_t usBufferSize,
-                                                             uint16_t * pusBytesCopied );
+                                                             uint32_t usBufferSize,
+                                                             uint32_t * pusBytesCopied );
 
 /**
  * @brief Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is
@@ -161,19 +158,16 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
  * token kinds, it returns 0.
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
-                                                               uint8_t * pucExpectedText,
-                                                               uint16_t usExpectedTextLength );
+                                                               const uint8_t * pucExpectedText,
+                                                               uint32_t usExpectedTextLength );
 
 /**
  * @brief Determines type of token currently #AzureIoTJSONReader_t points to.
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance.
- * @param[out] pxTokenType The type of the token.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess If the token type was retrieved successfully.
+ * @return An #AzureIoTHubClientResult_t value indicating the type of token.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
-                                                        AzureIoTJSONTokenType_t * pxTokenType );
+AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader );
 
 #endif /* AZURE_IOT_JSON_READER_H */
