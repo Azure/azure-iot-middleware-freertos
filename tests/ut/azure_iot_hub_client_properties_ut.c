@@ -205,8 +205,8 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesGetMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWriteable;
-    uint8_t * pucComponentName;
-    uint16_t usComponentNameLength;
+    const uint8_t * pucComponentName;
+    uint32_t usComponentNameLength;
 
     /* Fail get next component property when client is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( NULL,

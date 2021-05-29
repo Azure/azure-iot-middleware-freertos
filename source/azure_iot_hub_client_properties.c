@@ -174,8 +174,8 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( 
                                                                                 AzureIoTJSONReader_t * pxJSONReader,
                                                                                 AzureIoTHubMessageType_t xResponseType,
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
-                                                                                uint8_t ** ppucComponentName,
-                                                                                uint16_t * pusComponentNameLength )
+                                                                                const uint8_t ** ppucComponentName,
+                                                                                uint32_t * pusComponentNameLength )
 {
     AzureIoTHubClientResult_t xResult;
     az_result xCoreResult;

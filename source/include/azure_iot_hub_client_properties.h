@@ -285,7 +285,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  * type associated with the payload.
  * @param[in] xPropertyType The #AzureIoTHubClientPropertyType_t to scan for.
  * @param[out] ppucComponentName The output component name for the property returned.
- * @param[out] pusComponentNameLength The length of the output \p ppucComponentName.
+ * @param[out] pulComponentNameLength The length of the output \p ppucComponentName.
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
@@ -305,6 +305,6 @@ AzureIoTHubClientResult_t AzureIoTHubClientProperties_GetNextComponentProperty( 
                                                                                 AzureIoTHubMessageType_t xResponseType,
                                                                                 AzureIoTHubClientPropertyType_t xPropertyType,
                                                                                 const uint8_t ** ppucComponentName,
-                                                                                uint32_t * pusComponentNameLength );
+                                                                                uint32_t * pulComponentNameLength );
 
 #endif /*AZURE_IOT_HUB_CLIENT_PROPERTIES_H */
