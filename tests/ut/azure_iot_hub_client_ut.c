@@ -14,18 +14,18 @@
 #include "azure_iot_hub_client.h"
 /*-----------------------------------------------------------*/
 
-#define testCLOUD_CALLBACK_ID             ( 1 )
-#define testMETHOD_CALLBACK_ID            ( 2 )
-#define testTWIN_CALLBACK_ID              ( 3 )
-#define testEMPTY_JSON                    "{}"
-#define testCLOUD_MESSAGE_TOPIC           "devices/unittest/messages/devicebound/test=1"
-#define testCLOUD_MESSAGE                 "Hello"
-#define testMETHOD_MESSAGE_TOPIC          "$iothub/methods/POST/echo/?$rid=1"
-#define testMETHOD_MESSAGE                testEMPTY_JSON
-#define testTWIN_GET_MESSAGE_TOPIC        "$iothub/twin/res/200/?$rid=2"
-#define testTWIN_MESSAGE                  "{\"desired\":{\"telemetrySendFrequency\":\"5m\"},\"reported\":{\"telemetrySendFrequency\":\"5m\"}}"
-#define testTWIN_DESIRED_MESSAGE_TOPIC    "$iothub/twin/PATCH/properties/desired/?$version=1"
-#define testTWIN_DESIRED_MESSAGE          "{\"telemetrySendFrequency\":\"5m\"}"
+#define testCLOUD_CALLBACK_ID                 ( 1 )
+#define testCOMMAND_CALLBACK_ID               ( 2 )
+#define testPROPERTY_CALLBACK_ID              ( 3 )
+#define testEMPTY_JSON                        "{}"
+#define testCLOUD_MESSAGE_TOPIC               "devices/unittest/messages/devicebound/test=1"
+#define testCLOUD_MESSAGE                     "Hello"
+#define testCOMMAND_MESSAGE_TOPIC             "$iothub/methods/POST/echo/?$rid=1"
+#define testCOMMAND_MESSAGE                   testEMPTY_JSON
+#define testPROPERTY_GET_MESSAGE_TOPIC        "$iothub/twin/res/200/?$rid=2"
+#define testPROPERTY_MESSAGE                  "{\"desired\":{\"telemetrySendFrequency\":\"5m\"},\"reported\":{\"telemetrySendFrequency\":\"5m\"}}"
+#define testPROPERTY_DESIRED_MESSAGE_TOPIC    "$iothub/twin/PATCH/properties/desired/?$version=1"
+#define testPROPERTY_DESIRED_MESSAGE          "{\"telemetrySendFrequency\":\"5m\"}"
 /*-----------------------------------------------------------*/
 
 typedef struct ReceiveTestData
@@ -50,8 +50,8 @@ static const uint8_t ucHostname[] = "unittest.azure-devices.net";
 static const uint8_t ucDeviceId[] = "testiothub";
 static const uint8_t ucTestSymmetricKey[] = "dEI++++bZ1DZ6667LMlBNv88888IVnrQEWh999994FcdGuvXZE7Yr1BBS+sctwjuLTTTc7/3AuwUYsxUubZXg==";
 static const uint8_t ucTestTelemetryPayload[] = "Unit Test Payload";
-static const uint8_t ucTestMethodResponsePayload[] = "{\"Method\":\"Unit Test MethodResponse\"}";
-static const uint8_t ucTestTwinReportedPayload[] = "{\"Property\":\"Unit Test Payload\"}";
+static const uint8_t ucTestCommandResponsePayload[] = "{\"Command\":\"Unit Test CommandResponse\"}";
+static const uint8_t ucTestPropertyReportedPayload[] = "{\"Property\":\"Unit Test Payload\"}";
 static uint8_t ucBuffer[ 512 ];
 static AzureIoTTransportInterface_t xTransportInterface =
 {
@@ -70,25 +70,25 @@ static const ReceiveTestData_t xTestReceiveData[] =
         .ulCallbackFunctionId = testCLOUD_CALLBACK_ID
     },
     {
-        .pucTopic = ( const uint8_t * ) testMETHOD_MESSAGE_TOPIC,
-        .ulTopicLength = sizeof( testMETHOD_MESSAGE_TOPIC ) - 1,
-        .pucPayload = ( const uint8_t * ) testMETHOD_MESSAGE,
-        .ulPayloadLength = sizeof( testMETHOD_MESSAGE ) - 1,
-        .ulCallbackFunctionId = testMETHOD_CALLBACK_ID
+        .pucTopic = ( const uint8_t * ) testCOMMAND_MESSAGE_TOPIC,
+        .ulTopicLength = sizeof( testCOMMAND_MESSAGE_TOPIC ) - 1,
+        .pucPayload = ( const uint8_t * ) testCOMMAND_MESSAGE,
+        .ulPayloadLength = sizeof( testCOMMAND_MESSAGE ) - 1,
+        .ulCallbackFunctionId = testCOMMAND_CALLBACK_ID
     },
     {
-        .pucTopic = ( const uint8_t * ) testTWIN_GET_MESSAGE_TOPIC,
-        .ulTopicLength = sizeof( testTWIN_GET_MESSAGE_TOPIC ) - 1,
-        .pucPayload = ( const uint8_t * ) testTWIN_MESSAGE,
-        .ulPayloadLength = sizeof( testTWIN_MESSAGE ) - 1,
-        .ulCallbackFunctionId = testTWIN_CALLBACK_ID
+        .pucTopic = ( const uint8_t * ) testPROPERTY_GET_MESSAGE_TOPIC,
+        .ulTopicLength = sizeof( testPROPERTY_GET_MESSAGE_TOPIC ) - 1,
+        .pucPayload = ( const uint8_t * ) testPROPERTY_MESSAGE,
+        .ulPayloadLength = sizeof( testPROPERTY_MESSAGE ) - 1,
+        .ulCallbackFunctionId = testPROPERTY_CALLBACK_ID
     },
     {
-        .pucTopic = ( const uint8_t * ) testTWIN_DESIRED_MESSAGE_TOPIC,
-        .ulTopicLength = sizeof( testTWIN_DESIRED_MESSAGE_TOPIC ) - 1,
-        .pucPayload = ( const uint8_t * ) testTWIN_DESIRED_MESSAGE,
-        .ulPayloadLength = sizeof( testTWIN_DESIRED_MESSAGE ) - 1,
-        .ulCallbackFunctionId = testTWIN_CALLBACK_ID
+        .pucTopic = ( const uint8_t * ) testPROPERTY_DESIRED_MESSAGE_TOPIC,
+        .ulTopicLength = sizeof( testPROPERTY_DESIRED_MESSAGE_TOPIC ) - 1,
+        .pucPayload = ( const uint8_t * ) testPROPERTY_DESIRED_MESSAGE,
+        .ulPayloadLength = sizeof( testPROPERTY_DESIRED_MESSAGE ) - 1,
+        .ulCallbackFunctionId = testPROPERTY_CALLBACK_ID
     }
 };
 static const ReceiveTestData_t xTestRandomReceiveData[] =
@@ -193,10 +193,10 @@ static void prvTestCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
 {
     assert_true( pxMessage != NULL );
     assert_true( pvContext == NULL );
-    assert_int_equal( pxMessage->ulPayloadLength, sizeof( testMETHOD_MESSAGE ) - 1 );
-    assert_memory_equal( pxMessage->pvMessagePayload, testMETHOD_MESSAGE, sizeof( testMETHOD_MESSAGE ) - 1 );
+    assert_int_equal( pxMessage->ulPayloadLength, sizeof( testCOMMAND_MESSAGE ) - 1 );
+    assert_memory_equal( pxMessage->pvMessagePayload, testCOMMAND_MESSAGE, sizeof( testCOMMAND_MESSAGE ) - 1 );
 
-    ulReceivedCallbackFunctionId = testMETHOD_CALLBACK_ID;
+    ulReceivedCallbackFunctionId = testCOMMAND_CALLBACK_ID;
 }
 /*-----------------------------------------------------------*/
 
@@ -208,20 +208,20 @@ static void prvTestDeviceProperties( AzureIoTHubClientPropertiesResponse_t * pxM
 
     if( pxMessage->xMessageType == eAzureIoTHubPropertiesGetMessage )
     {
-        assert_int_equal( pxMessage->ulPayloadLength, sizeof( testTWIN_MESSAGE ) - 1 );
-        assert_memory_equal( pxMessage->pvMessagePayload, testTWIN_MESSAGE, sizeof( testTWIN_MESSAGE ) - 1 );
+        assert_int_equal( pxMessage->ulPayloadLength, sizeof( testPROPERTY_MESSAGE ) - 1 );
+        assert_memory_equal( pxMessage->pvMessagePayload, testPROPERTY_MESSAGE, sizeof( testPROPERTY_MESSAGE ) - 1 );
     }
     else if( pxMessage->xMessageType == eAzureIoTHubPropertiesDesiredPropertyMessage )
     {
-        assert_int_equal( pxMessage->ulPayloadLength, sizeof( testTWIN_DESIRED_MESSAGE ) - 1 );
-        assert_memory_equal( pxMessage->pvMessagePayload, testTWIN_DESIRED_MESSAGE, sizeof( testTWIN_DESIRED_MESSAGE ) - 1 );
+        assert_int_equal( pxMessage->ulPayloadLength, sizeof( testPROPERTY_DESIRED_MESSAGE ) - 1 );
+        assert_memory_equal( pxMessage->pvMessagePayload, testPROPERTY_DESIRED_MESSAGE, sizeof( testPROPERTY_DESIRED_MESSAGE ) - 1 );
     }
     else
     {
         assert_int_equal( pxMessage->xMessageType, eAzureIoTHubPropertiesReportedResponseMessage );
     }
 
-    ulReceivedCallbackFunctionId = testTWIN_CALLBACK_ID;
+    ulReceivedCallbackFunctionId = testPROPERTY_CALLBACK_ID;
 }
 /*-----------------------------------------------------------*/
 
@@ -1178,14 +1178,14 @@ static void testAzureIoTHubClient_SendCommandResponse_InvalidArgFailure( void **
 
     /* Fail SendCommandResponse when client is NULL */
     assert_int_equal( AzureIoTHubClient_SendCommandResponse( NULL,
-                                                             &req, 200, ucTestMethodResponsePayload,
-                                                             sizeof( ucTestMethodResponsePayload ) ),
+                                                             &req, 200, ucTestCommandResponsePayload,
+                                                             sizeof( ucTestCommandResponsePayload ) ),
                       eAzureIoTHubClientInvalidArgument );
 
     /* Fail SendCommandResponse when request context is NULL */
     assert_int_equal( AzureIoTHubClient_SendCommandResponse( &xTestIoTHubClient,
-                                                             NULL, 200, ucTestMethodResponsePayload,
-                                                             sizeof( ucTestMethodResponsePayload ) ),
+                                                             NULL, 200, ucTestCommandResponsePayload,
+                                                             sizeof( ucTestCommandResponsePayload ) ),
                       eAzureIoTHubClientInvalidArgument );
 }
 /*-----------------------------------------------------------*/
@@ -1206,8 +1206,8 @@ static void testAzureIoTHubClient_SendCommandResponse_SendFailure( void ** ppvSt
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTHubClient_SendCommandResponse( &xTestIoTHubClient,
-                                                             &req, 200, ucTestMethodResponsePayload,
-                                                             sizeof( ucTestMethodResponsePayload ) ),
+                                                             &req, 200, ucTestCommandResponsePayload,
+                                                             sizeof( ucTestCommandResponsePayload ) ),
                       eAzureIoTHubClientPublishFailed );
 }
 /*-----------------------------------------------------------*/
@@ -1249,10 +1249,10 @@ static void testAzureIoTHubClient_SendCommandResponse_Success( void ** ppvState 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
-    pucPublishPayload = ucTestMethodResponsePayload;
+    pucPublishPayload = ucTestCommandResponsePayload;
     assert_int_equal( AzureIoTHubClient_SendCommandResponse( &xTestIoTHubClient,
-                                                             &req, 200, ucTestMethodResponsePayload,
-                                                             sizeof( ucTestMethodResponsePayload ) - 1 ),
+                                                             &req, 200, ucTestCommandResponsePayload,
+                                                             sizeof( ucTestCommandResponsePayload ) - 1 ),
                       eAzureIoTHubClientSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -1268,8 +1268,8 @@ static void testAzureIoTHubClient_SendDevicePropertiesReported_InvalidArgFailure
 
     /* Fail SendDevicePropertiesReported when client is NULL */
     assert_int_equal( AzureIoTHubClient_SendDevicePropertiesReported( NULL,
-                                                                      ucTestTwinReportedPayload,
-                                                                      sizeof( ucTestTwinReportedPayload ) - 1,
+                                                                      ucTestPropertyReportedPayload,
+                                                                      sizeof( ucTestPropertyReportedPayload ) - 1,
                                                                       &requestId ),
                       eAzureIoTHubClientInvalidArgument );
 
@@ -1291,8 +1291,8 @@ static void testAzureIoTHubClient_SendDevicePropertiesReported_NotSubscribeFailu
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
     assert_int_equal( AzureIoTHubClient_SendDevicePropertiesReported( &xTestIoTHubClient,
-                                                                      ucTestTwinReportedPayload,
-                                                                      sizeof( ucTestTwinReportedPayload ) - 1,
+                                                                      ucTestPropertyReportedPayload,
+                                                                      sizeof( ucTestPropertyReportedPayload ) - 1,
                                                                       &requestId ),
                       eAzureIoTHubClientTopicNotSubscribed );
 }
@@ -1318,10 +1318,10 @@ static void testAzureIoTHubClient_SendDevicePropertiesReported_SendFailure( void
                       eAzureIoTHubClientSuccess );
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
-    pucPublishPayload = ucTestTwinReportedPayload;
+    pucPublishPayload = ucTestPropertyReportedPayload;
     assert_int_equal( AzureIoTHubClient_SendDevicePropertiesReported( &xTestIoTHubClient,
-                                                                      ucTestTwinReportedPayload,
-                                                                      sizeof( ucTestTwinReportedPayload ) - 1,
+                                                                      ucTestPropertyReportedPayload,
+                                                                      sizeof( ucTestPropertyReportedPayload ) - 1,
                                                                       &requestId ),
                       eAzureIoTHubClientPublishFailed );
 }
@@ -1347,10 +1347,10 @@ static void testAzureIoTHubClient_SendDevicePropertiesReported_Success( void ** 
                       eAzureIoTHubClientSuccess );
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
-    pucPublishPayload = ucTestTwinReportedPayload;
+    pucPublishPayload = ucTestPropertyReportedPayload;
     assert_int_equal( AzureIoTHubClient_SendDevicePropertiesReported( &xTestIoTHubClient,
-                                                                      ucTestTwinReportedPayload,
-                                                                      sizeof( ucTestTwinReportedPayload ) - 1,
+                                                                      ucTestPropertyReportedPayload,
+                                                                      sizeof( ucTestPropertyReportedPayload ) - 1,
                                                                       &requestId ),
                       eAzureIoTHubClientSuccess );
 }
