@@ -39,6 +39,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxRead
 
     if( ( pxReader == NULL ) || ( pucBuffer == NULL ) || ( usBufferLen == 0 ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_Init failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -61,6 +62,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * p
 
     if( ( pxReader == NULL ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_NextToken failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -80,6 +82,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t 
 
     if( ( pxReader == NULL ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_SkipChildren failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -101,6 +104,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t 
 
     if( ( pxReader == NULL ) || ( pxValue == NULL ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_GetTokenBool failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -122,6 +126,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t
 
     if( ( pxReader == NULL ) || ( pilValue == NULL ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_GetTokenInt32 failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -143,6 +148,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_
 
     if( ( pxReader == NULL ) || ( pxValue == NULL ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_GetTokenDouble failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -166,6 +172,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
 
     if( ( pxReader == NULL ) || ( pucBuffer == NULL ) || ( usBufferSize == 0 ) || ( pusBytesCopied == NULL ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_TokenType failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
@@ -190,6 +197,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReade
 
     if( ( pxReader == NULL ) || ( pucExpectedText == NULL ) || ( ulExpectedTextLength == 0 ) )
     {
+        AZLogError( ( "AzureIoTJSONReader_TokenType failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
