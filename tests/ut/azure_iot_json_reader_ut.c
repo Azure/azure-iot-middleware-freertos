@@ -70,7 +70,6 @@
 /*
  * {
  * "property_one": ["value_one", "value_two"],
- * "property_two": "value_two"
  * }
  */
 #define azureiotjsonreaderutTEST_JSON_ARRAY \

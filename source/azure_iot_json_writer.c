@@ -32,6 +32,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWrit
         AZLogError( ( "Could not initialize the JSON reader: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -58,6 +62,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( Azure
     {
         AZLogError( ( "Could not append property and int32: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -87,6 +95,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( Azur
         AZLogError( ( "Could not append property and double: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -113,6 +125,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureI
     {
         AZLogError( ( "Could not append property and bool: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -144,6 +160,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( Azur
     {
         AZLogError( ( "Could not append property and string: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -181,6 +201,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
         AZLogError( ( "Could not append string: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -205,6 +229,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_
     {
         AZLogError( ( "Could not append JSON text: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -231,6 +259,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWri
         AZLogError( ( "Could not append property name: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -252,6 +284,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * 
         AZLogError( ( "Could not append bool: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -272,6 +308,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
     {
         AZLogError( ( "Could not append int32: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -295,6 +335,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t 
         AZLogError( ( "Could not append double: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -314,6 +358,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendNull( AzureIoTJSONWriter_t * 
     {
         AZLogError( ( "Could not append NULL: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -335,6 +383,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBeginObject( AzureIoTJSONWrit
         AZLogError( ( "Could not append begin object: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -354,6 +406,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBeginArray( AzureIoTJSONWrite
     {
         AZLogError( ( "Could not append begin array: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -375,6 +431,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter
         AZLogError( ( "Could not append end object: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -394,6 +454,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendEndArray( AzureIoTJSONWriter_
     {
         AZLogError( ( "Could not append end array: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
