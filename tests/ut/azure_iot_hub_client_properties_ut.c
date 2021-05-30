@@ -15,7 +15,56 @@
 #include "azure_iot_hub_client.h"
 /*-----------------------------------------------------------*/
 
-static const uint8_t ucHostname[] = "unittest.azure-devices.net";
+/*
+ *
+ * {
+ * "component": {
+ *  "__t": "c",
+ *  "property": "value"
+ * }
+ * }
+ *
+ */
+#define azureiothubclientpropertiesTEST_JSON_COMPONENT \
+    "{\"component\":{\"__t\":\"c\",\"property\":\"value\"}}"
+
+/*
+ *
+ * {
+ *   "property": {
+ *     "ac": 200,
+ *     "av": 1,
+ *     "ad": "success",
+ *     "value": "val"
+ *   }
+ * }
+ *
+ */
+#define azureiothubclientpropertiesTEST_JSON_RESPONSE \
+    "{\"property\":{\"ac\":200,\"av\":1,\"ad\":\"success\",\"value\":\"val\"}}"
+
+/*
+ *
+ * {
+ *   "one_component": {
+ *     "thing_one": 1,
+ *     "thing_two": "string"
+ *   },
+ *   "two_component": {
+ *     "prop_one": 45,
+ *     "prop_two": "string"
+ *   },
+ *   "not_component": 42,
+ *   "$version": 5
+ * }
+ *
+ */
+#define azureiothubclientpropertiesTEST_JSON_VERSION                                                 \
+    "{\"one_component\":{\"thing_one\":1,\"thing_two\":\"string\"},\"two_component\":{\"prop_one\":" \
+    "45,\"prop_two\":\"string\"},\"not_component\":42,\"$version\":5}"
+
+
+static const uint8_t ucHostname[] = "unittest.azure - devices.net";
 static const uint8_t ucDeviceId[] = "testiothub";
 
 static uint8_t ucBuffer[ 512 ];
@@ -26,8 +75,18 @@ static AzureIoTTransportInterface_t xTransportInterface =
     .xRecv            = ( AzureIoTTransportRecv_t ) 0xACACACAC
 };
 
+static uint8_t ucJSONWriterBuffer[ 128 ];
+
+void prvInitJSONWriter( AzureIoTJSONWriter_t * pxWriter );
 TickType_t xTaskGetTickCount( void );
 uint32_t ulGetAllTests();
+
+void prvInitJSONWriter( AzureIoTJSONWriter_t * pxWriter )
+{
+    memset( ucJSONWriterBuffer, 0, sizeof( ucJSONWriterBuffer ) );
+    assert_int_equal( AzureIoTJSONWriter_Init( pxWriter, ucJSONWriterBuffer, sizeof( ucJSONWriterBuffer ) ), eAzureIoTHubClientSuccess );
+}
+
 
 TickType_t xTaskGetTickCount( void )
 {
@@ -103,6 +162,32 @@ static void testAzureIoTHubClientProperties_BuilderEndComponent_Failure( void **
                                                                        NULL ), eAzureIoTHubClientInvalidArgument );
 }
 
+static void testAzureIoTHubClientProperties_BuilderComponent_Success( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    AzureIoTJSONWriter_t xJSONWriter;
+    const char * pucComponentName = "component";
+
+    prvInitJSONWriter( &xJSONWriter );
+
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClientProperties_BuilderBeginComponent( &xTestIoTHubClient,
+                                                                         &xJSONWriter,
+                                                                         pucComponentName,
+                                                                         strlen( pucComponentName ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xJSONWriter,
+                                                             "property",
+                                                             strlen( "property" ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendString( &xJSONWriter,
+                                                       "value",
+                                                       strlen( "value" ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClientProperties_BuilderEndComponent( &xTestIoTHubClient,
+                                                                       &xJSONWriter ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+
+    assert_string_equal( azureiothubclientpropertiesTEST_JSON_COMPONENT, ucJSONWriterBuffer );
+}
+
 static void testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
@@ -167,6 +252,36 @@ static void testAzureIoTHubClientProperties_BuilderEndResponseStatus_Failure( vo
                                                                             NULL ), eAzureIoTHubClientInvalidArgument );
 }
 
+static void testAzureIoTHubClientProperties_BuilderResponse_Success( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    AzureIoTJSONWriter_t xJSONWriter;
+    const char * pucPropertyName = "property";
+    int32_t lAckCode = 200;
+    int32_t lAckVersion = 1;
+    const char * pucAckDescription = "success";
+
+    prvInitJSONWriter( &xJSONWriter );
+
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClientProperties_BuilderBeginResponseStatus( &xTestIoTHubClient,
+                                                                              &xJSONWriter,
+                                                                              pucPropertyName,
+                                                                              strlen( pucPropertyName ),
+                                                                              lAckCode,
+                                                                              lAckVersion,
+                                                                              pucAckDescription,
+                                                                              strlen( pucAckDescription ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendString( &xJSONWriter,
+                                                       "val",
+                                                       strlen( "val" ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClientProperties_BuilderEndResponseStatus( &xTestIoTHubClient,
+                                                                            &xJSONWriter ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+
+    assert_string_equal( azureiothubclientpropertiesTEST_JSON_RESPONSE, ucJSONWriterBuffer );
+}
+
 static void testAzureIoTHubClientProperties_GetPropertiesVersion_Failure( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
@@ -197,6 +312,26 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersion_Failure( void *
                                                                         &xJSONReader,
                                                                         xResponseType,
                                                                         NULL ), eAzureIoTHubClientInvalidArgument );
+}
+
+static void testAzureIoTHubClientProperties_GetPropertiesVersion_Success( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    AzureIoTJSONReader_t xJSONReader;
+    AzureIoTJSONTokenType_t xTokenType;
+    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+    uint32_t ulVersion;
+
+    assert_int_equal( AzureIoTJSONReader_Init(
+                          &xJSONReader,
+                          azureiothubclientpropertiesTEST_JSON_VERSION,
+                          strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
+                      eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( &xTestIoTHubClient,
+                                                                        &xJSONReader,
+                                                                        xResponseType,
+                                                                        &ulVersion ), eAzureIoTHubClientSuccess );
+    assert_int_equal( ulVersion, 5 );
 }
 
 static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( void ** ppvState )
@@ -254,12 +389,16 @@ uint32_t ulGetAllTests()
     const struct CMUnitTest tests[] =
     {
         cmocka_unit_test( testAzureIoTHubClientProperties_BuilderBeginComponent_Failure ),
+        cmocka_unit_test( testAzureIoTHubClientProperties_BuilderComponent_Success ),
         cmocka_unit_test( testAzureIoTHubClientProperties_BuilderEndComponent_Failure ),
+        cmocka_unit_test( testAzureIoTHubClientProperties_BuilderComponent_Success ),
         cmocka_unit_test( testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure ),
         cmocka_unit_test( testAzureIoTHubClientProperties_BuilderEndResponseStatus_Failure ),
+        cmocka_unit_test( testAzureIoTHubClientProperties_BuilderResponse_Success ),
         cmocka_unit_test( testAzureIoTHubClientProperties_GetPropertiesVersion_Failure ),
+        cmocka_unit_test( testAzureIoTHubClientProperties_GetPropertiesVersion_Success ),
         cmocka_unit_test( testAzureIoTHubClientProperties_GetNextComponentProperty_Failure ),
     };
 
-    return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_hub_client_properties_ut", tests, NULL, NULL );
+    return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_hub_client_properties_ut ", tests, NULL, NULL );
 }
