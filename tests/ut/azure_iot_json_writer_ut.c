@@ -283,7 +283,7 @@ static void testAzureIoTJSONWriter_AppendBool_Failure( void ** ppvState )
                                                      xValue ), eAzureIoTHubClientInvalidArgument );
 }
 
-static void testAzureIoTJSONWriter_AppendBool_Failure( void ** ppvState )
+static void testAzureIoTJSONWriter_AppendInt32_Failure( void ** ppvState )
 {
     AzureIoTJSONWriter_t xWriter;
 
@@ -293,12 +293,53 @@ static void testAzureIoTJSONWriter_AppendBool_Failure( void ** ppvState )
 
     /* Fail append int32 if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendInt32( NULL,
-                                                     lValue ), eAzureIoTHubClientInvalidArgument );
+                                                      lValue ), eAzureIoTHubClientInvalidArgument );
 }
 
-AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter,
-                                                          int32_t lValue )
+static void testAzureIoTJSONWriter_AppendDouble_Failure( void ** ppvState )
+{
+    AzureIoTJSONWriter_t xWriter;
 
+    prvInitJSONWriter( &xWriter );
+
+    double xValue = 42.42;
+    int16_t usFractionalDigits = 2;
+
+    /* Fail append int32 if JSON writer is NULL */
+    assert_int_equal( AzureIoTJSONWriter_AppendDouble( NULL,
+                                                       xValue,
+                                                       usFractionalDigits ), eAzureIoTHubClientInvalidArgument );
+}
+
+static void testAzureIoTJSONWriter_AppendNULL_Failure( void ** ppvState )
+{
+      /* Fail append NULL if JSON writer is NULL */
+    assert_int_equal( AzureIoTJSONWriter_AppendNull( NULL ), eAzureIoTHubClientInvalidArgument );
+}
+
+static void testAzureIoTJSONWriter_AppendBeginObject_Failure( void ** ppvState )
+{
+      /* Fail append begin object if JSON writer is NULL */
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( NULL ), eAzureIoTHubClientInvalidArgument );
+}
+
+static void testAzureIoTJSONWriter_AppendEndObject_Failure( void ** ppvState )
+{
+      /* Fail append end object if JSON writer is NULL */
+    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( NULL ), eAzureIoTHubClientInvalidArgument );
+}
+
+static void testAzureIoTJSONWriter_AppendBeginArray_Failure( void ** ppvState )
+{
+      /* Fail append begin array if JSON writer is NULL */
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginArray( NULL ), eAzureIoTHubClientInvalidArgument );
+}
+
+static void testAzureIoTJSONWriter_AppendEndArray_Failure( void ** ppvState )
+{
+      /* Fail append end array if JSON writer is NULL */
+    assert_int_equal( AzureIoTJSONWriter_AppendEndArray( NULL ), eAzureIoTHubClientInvalidArgument );
+}
 
 uint32_t ulGetAllTests()
 {
@@ -314,6 +355,13 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTJSONWriter_AppendJSON_Failure ),
         cmocka_unit_test( testAzureIoTJSONWriter_AppendPropertyName_Failure ),
         cmocka_unit_test( testAzureIoTJSONWriter_AppendBool_Failure ),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendInt32_Failure ),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendDouble_Failure ),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendNULL_Failure ),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendBeginObject_Failure),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendEndObject_Failure),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendBeginArray_Failure),
+        cmocka_unit_test( testAzureIoTJSONWriter_AppendEndArray_Failure),
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_json_writer_ut", tests, NULL, NULL );
