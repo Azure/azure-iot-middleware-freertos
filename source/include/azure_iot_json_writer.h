@@ -163,7 +163,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
  * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
  * @retval #eAzureIoTHubClientSuccess The provided json_text was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJsonText( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWriter,
                                                              const uint8_t * pucJSON,
                                                              uint32_t ulJSONLen );
 

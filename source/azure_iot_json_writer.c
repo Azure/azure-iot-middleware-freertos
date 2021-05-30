@@ -185,7 +185,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
     return xResult;
 }
 
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJsonText( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWriter,
                                                              const uint8_t * pucJSON,
                                                              uint32_t ulJSONLen )
 {
@@ -195,7 +195,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJsonText( AzureIoTJSONWriter_
 
     if( ( pxWriter == NULL ) || ( pucJSON == NULL ) || ( ulJSONLen == 0 ) )
     {
-        AZLogError( ( "AzureIoTJSONWriter_AppendJsonText failed: invalid argument" ) );
+        AZLogError( ( "AzureIoTJSONWriter_AppendJSONText failed: invalid argument" ) );
         return eAzureIoTHubClientInvalidArgument;
     }
 
