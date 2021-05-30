@@ -50,6 +50,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxRead
         AZLogError( ( "Could not initialize the JSON reader: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -71,6 +75,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * p
         AZLogError( ( "Could not get next JSON token: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -90,6 +98,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t 
     {
         AZLogError( ( "Could not skip children in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -113,6 +125,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t 
         AZLogError( ( "Could not get boolean in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -135,6 +151,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t
         AZLogError( ( "Could not get int32_t in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -156,6 +176,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_
     {
         AZLogError( ( "Could not get double in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
@@ -182,6 +206,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
         AZLogError( ( "Could not get string in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
     }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
+    }
 
     return xResult;
 }
@@ -207,6 +235,10 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReade
     {
         AZLogError( ( "Could not compare text in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTHubClientFailed;
+    }
+    else
+    {
+        xResult = eAzureIoTHubClientSuccess;
     }
 
     return xResult;
