@@ -217,7 +217,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * p
 {
     AzureIoTHubClientResult_t xResult;
 
-    if( pxReader == NULL )
+    if( ( pxReader == NULL ) || ( pxTokenType == NULL ) )
     {
         AZLogError( ( "AzureIoTJSONReader_TokenType failed: invalid argument" ) );
         xResult = eAzureIoTHubClientInvalidArgument;
