@@ -384,6 +384,51 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
                                                                             NULL ), eAzureIoTHubClientInvalidArgument );
 }
 
+static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    AzureIoTJSONReader_t xJSONReader;
+    AzureIoTJSONTokenType_t xTokenType;
+    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+    AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWriteable;
+    uint32_t ulVersion;
+    const uint8_t * ucComponentName;
+    uint32_t ulComponentNameLength;
+    AzureIoTHubClientOptions_t xOptions;
+    char * ucComponentNameList[] = { "one_component", "two_component" };
+
+    AzureIoTHubClient_OptionsInit( &xOptions );
+    xOptions.ppucComponentNames = ucComponentNameList;
+    xOptions.ulComponentNamesLength = 2;
+
+    AzureIoTHubClient_Init( &xTestIoTHubClient,
+                            ucHostname,
+                            strlen( ucHostname ),
+                            ucDeviceId,
+                            strlen( ucDeviceId ),
+                            &xOptions,
+                            ucBuffer, sizeof( ucBuffer ),
+                            prvGetUnixTime,
+                            &xTransportInterface );
+
+    assert_int_equal( AzureIoTJSONReader_Init(
+                          &xJSONReader,
+                          azureiothubclientpropertiesTEST_JSON_VERSION,
+                          strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
+                      eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
+                                                                            &xJSONReader,
+                                                                            xResponseType,
+                                                                            xPropertyType,
+                                                                            &ucComponentName,
+                                                                            &ulComponentNameLength ), eAzureIoTHubClientSuccess );
+
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTHubClientSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
+    assert_memory_equal( "one_component", ucComponentName, strlen( "one_component"));
+    assert_int_equal( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "property_two", strlen( "property_two" ) ), eAzureIoTHubClientSuccess );
+}
+
 uint32_t ulGetAllTests()
 {
     const struct CMUnitTest tests[] =
@@ -398,6 +443,7 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTHubClientProperties_GetPropertiesVersion_Failure ),
         cmocka_unit_test( testAzureIoTHubClientProperties_GetPropertiesVersion_Success ),
         cmocka_unit_test( testAzureIoTHubClientProperties_GetNextComponentProperty_Failure ),
+        cmocka_unit_test( testAzureIoTHubClientProperties_GetNextComponentProperty_Success ),
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_hub_client_properties_ut ", tests, NULL, NULL );

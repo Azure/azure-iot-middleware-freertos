@@ -195,6 +195,9 @@ typedef struct AzureIoTHubClientOptions
                                                         *   identify the capabilities of this device based on the Digital Twin document. */
     uint32_t ulModelIDLength;                          /**< The length of the model ID. */
 
+    char ** ppucComponentNames;               /**< The names of the components associated with the device. */
+    uint32_t ulComponentNamesLength;                   /**< The number of component names in the component names list */
+
     const uint8_t * pucUserAgent;                      /**< The user agent to use for this device. */
     uint32_t ulUserAgentLength;                        /**< The length of the user agent. */
 
