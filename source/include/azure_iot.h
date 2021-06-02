@@ -24,6 +24,8 @@
     #include "azure_iot_config.h"
 #endif
 
+#include "azure_iot_result.h"
+
 /* Include config defaults header to get default values of configs not
  * defined in azure_iot_mqtt_config.h file. */
 #include "azure_iot_config_defaults.h"
@@ -38,18 +40,6 @@
  * @brief Milliseconds per FreeRTOS tick.
  */
 #define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )
-
-/**
- * @brief Result values used for Azure IoT functions.
- */
-typedef enum AzureIoTResult
-{
-    eAzureIoTSuccess = 0,     /**< Success. */
-    eAzureIoTInvalidArgument, /**< Input argument does not comply with the expected range of values. */
-    eAzureIoTOutOfMemory,     /**< The system is out of memory. */
-    eAzureIoTItemNotFound,    /**< The item was not found. */
-    eAzureIoTFailed,          /**< There was a failure. */
-} AzureIoTResult_t;
 
 /**
  * @brief The bag of properties associated with a message.
