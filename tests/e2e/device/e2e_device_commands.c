@@ -155,7 +155,7 @@ static uint32_t prvStartProvisioning( az_span * pxEndpoint,
 {
     NetworkContext_t xNetworkContext = { 0 };
     TlsTransportParams_t xTlsTransportParams = { 0 };
-    AzureIoTProvisioningClientResult_t xResult;
+    AzureIoTResult_t xResult;
     AzureIoTTransportInterface_t xTransport;
     NetworkCredentials_t xNetworkCredentials = { 0 };
     uint32_t ulHostnameLength = ( uint32_t ) az_span_size( *pxHostname );
@@ -189,7 +189,7 @@ static uint32_t prvStartProvisioning( az_span * pxEndpoint,
                                          az_span_size( *pxRegistrationId ),
                                          NULL, ucSharedBuffer,
                                          sizeof( ucSharedBuffer ), ulGetUnixTime,
-                                         &xTransport ) != eAzureIoTProvisioningSuccess )
+                                         &xTransport ) != eAzureIoTSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "failed to init provisioning client!" );
     }
@@ -197,7 +197,7 @@ static uint32_t prvStartProvisioning( az_span * pxEndpoint,
     if( AzureIoTProvisioningClient_SetSymmetricKey( &xAzureIoTProvisioningClient,
                                                     ( const uint8_t * ) az_span_ptr( *pxSymmetricKey ),
                                                     az_span_size( *pxSymmetricKey ),
-                                                    ulCalculateHMAC ) != eAzureIoTProvisioningSuccess )
+                                                    ulCalculateHMAC ) != eAzureIoTSuccess )
     {
         AzureIoTProvisioningClient_Deinit( &xAzureIoTProvisioningClient );
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "failed to set symmetric key!" );
@@ -207,9 +207,9 @@ static uint32_t prvStartProvisioning( az_span * pxEndpoint,
     {
         xResult = AzureIoTProvisioningClient_Register( &xAzureIoTProvisioningClient,
                                                        e2etestProvisioning_Registration_TIMEOUT_MS );
-    } while( xResult == eAzureIoTProvisioningPending );
+    } while( xResult == eAzureIoTErrorPending );
 
-    if( xResult != eAzureIoTProvisioningSuccess )
+    if( xResult != eAzureIoTSuccess )
     {
         AzureIoTProvisioningClient_Deinit( &xAzureIoTProvisioningClient );
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "failed to register !" );
@@ -219,7 +219,7 @@ static uint32_t prvStartProvisioning( az_span * pxEndpoint,
                                                     az_span_ptr( *pxHostname ),
                                                     &ulHostnameLength,
                                                     az_span_ptr( *pxDeviceId ),
-                                                    &ulDeviceIdLength ) != eAzureIoTProvisioningSuccess )
+                                                    &ulDeviceIdLength ) != eAzureIoTSuccess )
     {
         AzureIoTProvisioningClient_Deinit( &xAzureIoTProvisioningClient );
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "failed to get iothub info!" );
@@ -462,7 +462,7 @@ static uint32_t prvE2ETestSendTelemetryCommandExecute( E2E_TEST_COMMAND_HANDLE x
             ( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                                az_span_ptr( xPayloadSpan ),
                                                az_span_size( xPayloadSpan ),
-                                               &xProperties, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTHubClientSuccess ) )
+                                               &xProperties, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTSuccess ) )
         {
             ulStatus = e2etestE2E_TEST_FAILED;
             LogError( ( "Telemetry message send failed!", ulStatus ) );
@@ -495,13 +495,13 @@ static uint32_t prvE2ETestSendTelemetryCommandExecute( E2E_TEST_COMMAND_HANDLE x
 static uint32_t prvE2ETestEchoCommandExecute( E2E_TEST_COMMAND_HANDLE xCMD,
                                               AzureIoTHubClient_t * pxAzureIoTHubClient )
 {
-    AzureIoTHubClientResult_t xStatus;
+    AzureIoTResult_t xStatus;
     uint16_t usTelemetryPacketID;
 
     if( ( xStatus = AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                                      xCMD->pulReceivedData,
                                                      xCMD->ulReceivedDataLength,
-                                                     NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) ) != eAzureIoTHubClientSuccess )
+                                                     NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) ) != eAzureIoTSuccess )
     {
         LogError( ( "Telemetry message send failed!, error code %d", xStatus ) );
     }
@@ -590,7 +590,7 @@ static uint32_t prvE2ETestDeviceProvisioningCommandExecute( E2E_TEST_COMMAND_HAN
 
     if( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                          ucMessageBuffer, ulMessageLength,
-                                         NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTHubClientSuccess )
+                                         NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Fail to send telemetry" );
     }
@@ -620,13 +620,13 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     if( AzureIoTHubClient_SendDevicePropertiesReported( pxAzureIoTHubClient,
                                                         xCMD->pulReceivedData,
                                                         xCMD->ulReceivedDataLength,
-                                                        &ulRequestId ) != eAzureIoTHubClientSuccess )
+                                                        &ulRequestId ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to send reported properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
     }
     else if( AzureIoTHubClient_ProcessLoop( pxAzureIoTHubClient,
-                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTHubClientSuccess )
+                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTSuccess )
     {
         LogError( ( "recevice timeout" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -642,7 +642,7 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     else if( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                               xCMD->pulReceivedData,
                                               xCMD->ulReceivedDataLength,
-                                              NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTHubClientSuccess )
+                                              NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to send response" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -677,13 +677,13 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     uint32_t ulStatus;
     uint16_t usTelemetryPacketID;
 
-    if( AzureIoTHubClient_GetDeviceProperties( pxAzureIoTHubClient ) != eAzureIoTHubClientSuccess )
+    if( AzureIoTHubClient_GetDeviceProperties( pxAzureIoTHubClient ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to request twin properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
     }
     else if( AzureIoTHubClient_ProcessLoop( pxAzureIoTHubClient,
-                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTHubClientSuccess )
+                                            e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTSuccess )
     {
         LogError( ( "recevice timeout" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -696,7 +696,7 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     else if( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                               pxTwinMessage->pvMessagePayload,
                                               pxTwinMessage->ulPayloadLength,
-                                              NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTHubClientSuccess )
+                                              NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to send response" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -743,7 +743,7 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
 
     if( ( pxTwinMessage == NULL ) &&
         ( AzureIoTHubClient_ProcessLoop( pxAzureIoTHubClient,
-                                         e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTHubClientSuccess ) )
+                                         e2etestPROCESS_LOOP_WAIT_TIMEOUT_IN_SEC ) != eAzureIoTSuccess ) )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to receive desired properties" );
     }
@@ -767,7 +767,7 @@ static uint32_t prvE2ETestVerifyDesiredPropertiesCommandExecute( E2E_TEST_COMMAN
     if( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                          ucScratchBuffer2,
                                          strlen( ucScratchBuffer2 ),
-                                         NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTHubClientSuccess )
+                                         NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to send response" );
     }
@@ -1025,7 +1025,7 @@ void vHandleDevicePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxM
  * */
 uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
 {
-    AzureIoTHubClientResult_t xResult;
+    AzureIoTResult_t xResult;
     E2E_TEST_COMMAND xCMD = { 0 };
     uint32_t ulStatus = e2etestE2E_TEST_SUCCESS;
     uint8_t * pucData = NULL;
@@ -1037,7 +1037,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
     if( AzureIoTHubClient_SendTelemetry( pxAzureIoTHubClient,
                                          e2etestE2E_TEST_CONNECTED_MESSAGE,
                                          sizeof( e2etestE2E_TEST_CONNECTED_MESSAGE ) - 1,
-                                         NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTHubClientSuccess )
+                                         NULL, eAzureIoTHubMessageQoS1, &usTelemetryPacketID ) != eAzureIoTSuccess )
     {
         RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Report connected failed!" );
     }

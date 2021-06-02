@@ -84,7 +84,7 @@ uint32_t ulGetAllTests();
 void prvInitJSONWriter( AzureIoTJSONWriter_t * pxWriter )
 {
     memset( ucJSONWriterBuffer, 0, sizeof( ucJSONWriterBuffer ) );
-    assert_int_equal( AzureIoTJSONWriter_Init( pxWriter, ucJSONWriterBuffer, sizeof( ucJSONWriterBuffer ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_Init( pxWriter, ucJSONWriterBuffer, sizeof( ucJSONWriterBuffer ) ), eAzureIoTSuccess );
 }
 
 
@@ -113,7 +113,7 @@ static void prvSetupTestIoTHubClient( AzureIoTHubClient_t * pxTestIoTHubClient )
                                               sizeof( ucBuffer ),
                                               prvGetUnixTime,
                                               &xTransportInterface ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -127,25 +127,25 @@ static void testAzureIoTHubClientProperties_BuilderBeginComponent_Failure( void 
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginComponent( NULL,
                                                                          &xJSONWriter,
                                                                          pucComponentName,
-                                                                         strlen( pucComponentName ) ), eAzureIoTHubClientInvalidArgument );
+                                                                         strlen( pucComponentName ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail begin component when JSON writer is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginComponent( &xTestIoTHubClient,
                                                                          NULL,
                                                                          pucComponentName,
-                                                                         strlen( pucComponentName ) ), eAzureIoTHubClientInvalidArgument );
+                                                                         strlen( pucComponentName ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail begin component when component name is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginComponent( &xTestIoTHubClient,
                                                                          &xJSONWriter,
                                                                          NULL,
-                                                                         strlen( pucComponentName ) ), eAzureIoTHubClientInvalidArgument );
+                                                                         strlen( pucComponentName ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail begin component when component name length is zero */
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginComponent( &xTestIoTHubClient,
                                                                          &xJSONWriter,
                                                                          pucComponentName,
-                                                                         0 ), eAzureIoTHubClientInvalidArgument );
+                                                                         0 ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_BuilderEndComponent_Failure( void ** ppvState )
@@ -155,11 +155,11 @@ static void testAzureIoTHubClientProperties_BuilderEndComponent_Failure( void **
 
     /* Fail end component when client is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndComponent( NULL,
-                                                                       &xJSONWriter ), eAzureIoTHubClientInvalidArgument );
+                                                                       &xJSONWriter ), eAzureIoTErrorInvalidArgument );
 
     /* Fail end component when JSON writer is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndComponent( &xTestIoTHubClient,
-                                                                       NULL ), eAzureIoTHubClientInvalidArgument );
+                                                                       NULL ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_BuilderComponent_Success( void ** ppvState )
@@ -170,20 +170,20 @@ static void testAzureIoTHubClientProperties_BuilderComponent_Success( void ** pp
 
     prvInitJSONWriter( &xJSONWriter );
 
-    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xJSONWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginComponent( &xTestIoTHubClient,
                                                                          &xJSONWriter,
                                                                          pucComponentName,
-                                                                         strlen( pucComponentName ) ), eAzureIoTHubClientSuccess );
+                                                                         strlen( pucComponentName ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xJSONWriter,
                                                              "property",
-                                                             strlen( "property" ) ), eAzureIoTHubClientSuccess );
+                                                             strlen( "property" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xJSONWriter,
                                                        "value",
-                                                       strlen( "value" ) ), eAzureIoTHubClientSuccess );
+                                                       strlen( "value" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndComponent( &xTestIoTHubClient,
-                                                                       &xJSONWriter ), eAzureIoTHubClientSuccess );
-    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+                                                                       &xJSONWriter ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTSuccess );
 
     assert_string_equal( azureiothubclientpropertiesTEST_JSON_COMPONENT, ucJSONWriterBuffer );
 }
@@ -205,7 +205,7 @@ static void testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure( 
                                                                               lAckCode,
                                                                               lAckVersion,
                                                                               pucAckDescription,
-                                                                              strlen( pucAckDescription ) ), eAzureIoTHubClientInvalidArgument );
+                                                                              strlen( pucAckDescription ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail begin response when JSON writer NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginResponseStatus( &xTestIoTHubClient,
@@ -215,7 +215,7 @@ static void testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure( 
                                                                               lAckCode,
                                                                               lAckVersion,
                                                                               pucAckDescription,
-                                                                              strlen( pucAckDescription ) ), eAzureIoTHubClientInvalidArgument );
+                                                                              strlen( pucAckDescription ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail begin response when property name is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginResponseStatus( &xTestIoTHubClient,
@@ -225,7 +225,7 @@ static void testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure( 
                                                                               lAckCode,
                                                                               lAckVersion,
                                                                               pucAckDescription,
-                                                                              strlen( pucAckDescription ) ), eAzureIoTHubClientInvalidArgument );
+                                                                              strlen( pucAckDescription ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail begin response when property name length is 0 */
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginResponseStatus( &xTestIoTHubClient,
@@ -235,7 +235,7 @@ static void testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure( 
                                                                               lAckCode,
                                                                               lAckVersion,
                                                                               pucAckDescription,
-                                                                              strlen( pucAckDescription ) ), eAzureIoTHubClientInvalidArgument );
+                                                                              strlen( pucAckDescription ) ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_BuilderEndResponseStatus_Failure( void ** ppvState )
@@ -245,11 +245,11 @@ static void testAzureIoTHubClientProperties_BuilderEndResponseStatus_Failure( vo
 
     /* Fail end response when client is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndResponseStatus( NULL,
-                                                                            &xJSONWriter ), eAzureIoTHubClientInvalidArgument );
+                                                                            &xJSONWriter ), eAzureIoTErrorInvalidArgument );
 
     /* Fail end response when JSON Writer is NULL */
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndResponseStatus( &xTestIoTHubClient,
-                                                                            NULL ), eAzureIoTHubClientInvalidArgument );
+                                                                            NULL ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_BuilderResponse_Success( void ** ppvState )
@@ -263,7 +263,7 @@ static void testAzureIoTHubClientProperties_BuilderResponse_Success( void ** ppv
 
     prvInitJSONWriter( &xJSONWriter );
 
-    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xJSONWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_BuilderBeginResponseStatus( &xTestIoTHubClient,
                                                                               &xJSONWriter,
                                                                               pucPropertyName,
@@ -271,13 +271,13 @@ static void testAzureIoTHubClientProperties_BuilderResponse_Success( void ** ppv
                                                                               lAckCode,
                                                                               lAckVersion,
                                                                               pucAckDescription,
-                                                                              strlen( pucAckDescription ) ), eAzureIoTHubClientSuccess );
+                                                                              strlen( pucAckDescription ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xJSONWriter,
                                                        "val",
-                                                       strlen( "val" ) ), eAzureIoTHubClientSuccess );
+                                                       strlen( "val" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_BuilderEndResponseStatus( &xTestIoTHubClient,
-                                                                            &xJSONWriter ), eAzureIoTHubClientSuccess );
-    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTHubClientSuccess );
+                                                                            &xJSONWriter ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTSuccess );
 
     assert_string_equal( azureiothubclientpropertiesTEST_JSON_RESPONSE, ucJSONWriterBuffer );
 }
@@ -293,25 +293,25 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersion_Failure( void *
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( NULL,
                                                                         &xJSONReader,
                                                                         xResponseType,
-                                                                        &ulVersion ), eAzureIoTHubClientInvalidArgument );
+                                                                        &ulVersion ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get properties version when JSON reader is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( &xTestIoTHubClient,
                                                                         NULL,
                                                                         xResponseType,
-                                                                        &ulVersion ), eAzureIoTHubClientInvalidArgument );
+                                                                        &ulVersion ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get properties version when response type is not alllowed */
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( &xTestIoTHubClient,
                                                                         &xJSONReader,
                                                                         eAzureIoTHubPropertiesReportedResponseMessage,
-                                                                        &ulVersion ), eAzureIoTHubClientInvalidArgument );
+                                                                        &ulVersion ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get properties verion when version pointer is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( &xTestIoTHubClient,
                                                                         &xJSONReader,
                                                                         xResponseType,
-                                                                        NULL ), eAzureIoTHubClientInvalidArgument );
+                                                                        NULL ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_GetPropertiesVersion_Success( void ** ppvState )
@@ -326,11 +326,11 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersion_Success( void *
                           &xJSONReader,
                           azureiothubclientpropertiesTEST_JSON_VERSION,
                           strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( &xTestIoTHubClient,
                                                                         &xJSONReader,
                                                                         xResponseType,
-                                                                        &ulVersion ), eAzureIoTHubClientSuccess );
+                                                                        &ulVersion ), eAzureIoTSuccess );
     assert_int_equal( ulVersion, 5 );
 }
 
@@ -349,7 +349,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
                                                                             xResponseType,
                                                                             xPropertyType,
                                                                             &pucComponentName,
-                                                                            &usComponentNameLength ), eAzureIoTHubClientInvalidArgument );
+                                                                            &usComponentNameLength ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get next component property when JSON reader is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
@@ -357,7 +357,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
                                                                             xResponseType,
                                                                             xPropertyType,
                                                                             &pucComponentName,
-                                                                            &usComponentNameLength ), eAzureIoTHubClientInvalidArgument );
+                                                                            &usComponentNameLength ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get next component property when response type is not allowed */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
@@ -365,7 +365,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
                                                                             eAzureIoTHubPropertiesReportedResponseMessage,
                                                                             xPropertyType,
                                                                             &pucComponentName,
-                                                                            &usComponentNameLength ), eAzureIoTHubClientInvalidArgument );
+                                                                            &usComponentNameLength ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get next component property when component name pointer is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
@@ -373,7 +373,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
                                                                             xResponseType,
                                                                             xPropertyType,
                                                                             NULL,
-                                                                            &usComponentNameLength ), eAzureIoTHubClientInvalidArgument );
+                                                                            &usComponentNameLength ), eAzureIoTErrorInvalidArgument );
 
     /* Fail get next component property when component name length pointer is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
@@ -381,7 +381,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
                                                                             xResponseType,
                                                                             xPropertyType,
                                                                             &pucComponentName,
-                                                                            NULL ), eAzureIoTHubClientInvalidArgument );
+                                                                            NULL ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( void ** ppvState )
@@ -415,18 +415,18 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
                           &xJSONReader,
                           azureiothubclientpropertiesTEST_JSON_VERSION,
                           strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
-                      eAzureIoTHubClientSuccess );
+                      eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
                                                                             &xJSONReader,
                                                                             xResponseType,
                                                                             xPropertyType,
                                                                             &ucComponentName,
-                                                                            &ulComponentNameLength ), eAzureIoTHubClientSuccess );
+                                                                            &ulComponentNameLength ), eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
     assert_memory_equal( "one_component", ucComponentName, strlen( "one_component"));
-    assert_int_equal( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "property_two", strlen( "property_two" ) ), eAzureIoTHubClientSuccess );
+    assert_int_equal( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "property_two", strlen( "property_two" ) ), eAzureIoTSuccess );
 }
 
 uint32_t ulGetAllTests()

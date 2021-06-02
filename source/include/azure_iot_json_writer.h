@@ -39,10 +39,10 @@ typedef struct AzureIoTJSONWriter
  * @param[in] pucBuffer A buffer pointer to which JSON text will be written.
  * @param[in] usBufferLen Length of buffer.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess Successfully initialized JSON writer.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess Successfully initialized JSON writer.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
                                                    uint8_t * pucBuffer,
                                                    uint32_t usBufferLen );
 
@@ -55,10 +55,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWrit
  * @param[in] ulPropertyNameLength Length of pucPropertyName.
  * @param[in] lValue The value to be written as a JSON number.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The property name and int32 value was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The property name and int32 value was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWriter_t * pxWriter,
                                                                            const uint8_t * pucPropertyName,
                                                                            uint32_t ulPropertyNameLength,
                                                                            int32_t lValue );
@@ -73,10 +73,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( Azure
  * @param[in] xValue The value to be written as a JSON number.
  * @param[in] usFractionalDigits The number of digits of the value to write after the decimal point and truncate the rest.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The property name and double value was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The property name and double value was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONWriter_t * pxWriter,
                                                                             const uint8_t * pucPropertyName,
                                                                             uint32_t ulPropertyNameLength,
                                                                             double xValue,
@@ -91,10 +91,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( Azur
  * @param[in] ulPropertyNameLength Length of pucPropertyName.
  * @param[in] usValue The value to be written as a JSON literal `true` or `false`.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The property name and bool value was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The property name and bool value was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
                                                                           const uint8_t * pucPropertyName,
                                                                           uint32_t ulPropertyNameLength,
                                                                           bool usValue );
@@ -110,10 +110,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureI
  * escaped before writing.
  * @param[in] ulValueLen Length of value.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The property name and string value was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The property name and string value was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONWriter_t * pxWriter,
                                                                             const uint8_t * pucPropertyName,
                                                                             uint32_t ulPropertyNameLength,
                                                                             const uint8_t * pucValue,
@@ -136,10 +136,10 @@ int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter );
  * The value is escaped before writing.
  * @param[in] ulValueLen Length of value.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The string value was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The string value was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
                                                            const uint8_t * pucValue,
                                                            uint32_t ulValueLen );
 
@@ -160,10 +160,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t 
  * @remarks The function validates that the provided JSON to be appended is valid and properly
  * escaped, and fails otherwise.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The provided json_text was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The provided json_text was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWriter,
                                                              const uint8_t * pucJSON,
                                                              uint32_t ulJSONLen );
 
@@ -176,10 +176,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_
  * escaped before writing.
  * @param[in] ulValueLen Length of name.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The property name was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The property name was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * pxWriter,
                                                                  const uint8_t * pusValue,
                                                                  uint32_t ulValueLen );
 
@@ -189,10 +189,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWri
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] xValue The value to be written as a JSON literal `true` or `false`.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The bool was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The bool was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
                                                          bool xValue );
 
 /**
@@ -201,10 +201,10 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * 
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] lValue The value to be written as a JSON number.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The number was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The number was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter,
                                                           int32_t lValue );
 
 /**
@@ -215,8 +215,8 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
  * @param[in] usFractionalDigits The number of digits of the \p value to write after the decimal
  * point and truncate the rest.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess The number was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess The number was appended successfully.
  *
  * @remark Only finite double values are supported. Values such as `NAN` and `INFINITY` are not
  * allowed and would lead to invalid JSON being written.
@@ -227,7 +227,7 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t *
  * @remark The \p usFractionalDigits must be between 0 and 15 (inclusive). Any value passed in that
  * is larger will be clamped down to 15.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
+AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
                                                            double xValue,
                                                            uint16_t usFractionalDigits );
 
@@ -236,49 +236,49 @@ AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t 
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess `null` was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess `null` was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendNull( AzureIoTJSONWriter_t * pxWriter );
+AzureIoTResult_t AzureIoTJSONWriter_AppendNull( AzureIoTJSONWriter_t * pxWriter );
 
 /**
  * @brief Appends the beginning of a JSON object (i.e. `{`).
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess Object start was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess Object start was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBeginObject( AzureIoTJSONWriter_t * pxWriter );
+AzureIoTResult_t AzureIoTJSONWriter_AppendBeginObject( AzureIoTJSONWriter_t * pxWriter );
 
 /**
  * @brief Appends the beginning of a JSON array (i.e. `[`).
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess Array start was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess Array start was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendBeginArray( AzureIoTJSONWriter_t * pxWriter );
+AzureIoTResult_t AzureIoTJSONWriter_AppendBeginArray( AzureIoTJSONWriter_t * pxWriter );
 
 /**
  * @brief Appends the end of the current JSON object (i.e. `}`).
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess Object end was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess Object end was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter_t * pxWriter );
+AzureIoTResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter_t * pxWriter );
 
 /**
  * @brief Appends the end of the current JSON array (i.e. `]`).
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
- * @return An #AzureIoTHubClientResult_t value indicating the result of the operation.
- * @retval #eAzureIoTHubClientSuccess Array end was appended successfully.
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval #eAzureIoTSuccess Array end was appended successfully.
  */
-AzureIoTHubClientResult_t AzureIoTJSONWriter_AppendEndArray( AzureIoTJSONWriter_t * pxWriter );
+AzureIoTResult_t AzureIoTJSONWriter_AppendEndArray( AzureIoTJSONWriter_t * pxWriter );
 
 #endif /* AZURE_IOT_JSON_WRITER_H */
