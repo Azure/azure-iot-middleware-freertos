@@ -21,6 +21,9 @@
 
 #include "azure/core/az_json.h"
 
+/* TODO: REMOVE ONCE NEW RESULTS */
+#include "azure_iot_hub_client.h"
+
 /**
  * Defines symbols for the various kinds of JSON tokens that make up any JSON text.
  */
@@ -149,7 +152,7 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance containing the JSON string token.
  * @param[in] pucExpectedText A pointer to lookup text to compare the token against.
- * @param[in] usExpectedTextLength Length of \p pucExpectedText.
+ * @param[in] ulExpectedTextLength Length of \p pucExpectedText.
  *
  * @return `1` if the current JSON token value in the JSON source semantically matches the
  * expected lookup text, with the exact casing; otherwise, `0`.
@@ -159,15 +162,17 @@ AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_
  */
 AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
                                                                const uint8_t * pucExpectedText,
-                                                               uint32_t usExpectedTextLength );
+                                                               uint32_t ulExpectedTextLength );
 
 /**
  * @brief Determines type of token currently #AzureIoTJSONReader_t points to.
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance.
+ * @param[out] pxTokenType The returned type of the token.
  *
  * @return An #AzureIoTHubClientResult_t value indicating the type of token.
  */
-AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader );
+AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
+                                                        AzureIoTJSONTokenType_t * pxTokenType );
 
 #endif /* AZURE_IOT_JSON_READER_H */
