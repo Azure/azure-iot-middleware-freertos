@@ -17,23 +17,33 @@
 #define AZURE_IOT_HUB_CLIENT_H
 
 #include "azure_iot.h"
+#include "azure_iot_result.h"
 
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
 #include <azure/core/_az_cfg_prefix.h>
 
+/**
+ * @brief Total number of features which could be subscribed to.
+ */
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient AzureIoTHubClient_t;
 
+/**
+ * @brief MQTT quality of service values used for messages.
+ */
 typedef enum AzureIoTHubMessageQoS
 {
     eAzureIoTHubMessageQoS0 = 0, /** Delivery at most once. */
     eAzureIoTHubMessageQoS1 = 1  /** Delivery at least once. */
 } AzureIoTHubMessageQoS_t;
 
+/**
+ * @brief Enumeration to dictate Azure IoT message types.
+ */
 typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,           /**< The message is a cloud message. */
@@ -43,22 +53,9 @@ typedef enum AzureIoTHubMessageType
     eAzureIoTHubPropertiesWriteablePropertyMessage, /**< The message is a writeable property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
 
-typedef enum AzureIoTHubClientResult
-{
-    eAzureIoTHubClientSuccess = 0,        /**< Success. */
-    eAzureIoTHubClientInvalidArgument,    /**< Input argument does not comply with the expected range of values. */
-    eAzureIoTHubClientPending,            /**< The status of the operation is pending. */
-    eAzureIoTHubClientOutOfMemory,        /**< The system is out of memory. */
-    eAzureIoTHubClientInitFailed,         /**< The initialization failed. */
-    eAzureIoTHubClientSubackWaitTimeout,  /**< There was timeout while waiting for SUBACK. */
-    eAzureIoTHubClientTopicNotSubscribed, /**< Topic not subscribed. */
-    eAzureIoTHubClientPublishFailed,      /**< Failed to publish. */
-    eAzureIoTHubClientSubscribeFailed,    /**< Failed to subscribe. */
-    eAzureIoTHubClientUnsubscribeFailed,  /**< Failed to unsubscribe. */
-    eAzureIoTHubClientTopicNoMatch,       /**< The received message was not for the currently processed feature. */
-    eAzureIoTHubClientFailed,             /**< There was a failure. */
-} AzureIoTHubClientResult_t;
-
+/**
+ * @brief Status codes for Azure IoT Hub responses.
+ */
 typedef enum AzureIoTHubMessageStatus
 {
     /* Default, unset value */
@@ -129,9 +126,6 @@ typedef struct AzureIoTHubClientPropertiesResponse
     uint32_t ulRequestID;                      /**< The request ID for the property response. */
 
     AzureIoTHubMessageStatus_t xMessageStatus; /**< The operation status. */
-
-    const uint8_t * pucVersion;                /**< The pointer to the property document version. */
-    uint16_t usVersionLength;                  /**< The length of the property document version. */
 } AzureIoTHubClientPropertiesResponse_t;
 
 /**
@@ -144,8 +138,6 @@ typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( AzureIoTHub
 /**
  * @brief Command callback to be invoked when a command request is received in the call to AzureIoTHubClient_ProcessLoop().
  *
- * @note This is used with Azure Plug and Play.
- *
  */
 typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommandRequest_t * pxMessage,
                                                         void * pvContext );
@@ -157,7 +149,11 @@ typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommand
 typedef void ( * AzureIoTHubClientPropertiesCallback_t ) ( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                                            void * pvContext );
 
-/* Receive context to be used internally to the processing of messages */
+/**
+ * @brief Receive context to be used internally for the processing of messages.
+ *
+ * @warning Used internally.
+ */
 typedef struct AzureIoTHubClientReceiveContext
 {
     struct
@@ -175,7 +171,7 @@ typedef struct AzureIoTHubClientReceiveContext
             AzureIoTHubClientCommandCallback_t xCommandCallback;
             AzureIoTHubClientPropertiesCallback_t xPropertiesCallback;
         } callbacks;
-    } _internal;
+    } _internal; /**< @brief Internal to the SDK */
 } AzureIoTHubClientReceiveContext_t;
 
 /**
@@ -195,9 +191,6 @@ typedef struct AzureIoTHubClientOptions
                                                         *   identify the capabilities of this device based on the Digital Twin document. */
     uint32_t ulModelIDLength;                          /**< The length of the model ID. */
 
-    char ** ppucComponentNames;               /**< The names of the components associated with the device. */
-    uint32_t ulComponentNamesLength;                   /**< The number of component names in the component names list */
-
     const uint8_t * pucUserAgent;                      /**< The user agent to use for this device. */
     uint32_t ulUserAgentLength;                        /**< The length of the user agent. */
 
@@ -205,6 +198,10 @@ typedef struct AzureIoTHubClientOptions
                                                         *   Can be NULL if user does not want to be notified.*/
 } AzureIoTHubClientOptions_t;
 
+/**
+ * @struct AzureIoTHubClient_t
+ * @brief Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.
+ */
 struct AzureIoTHubClient
 {
     struct
@@ -237,16 +234,16 @@ struct AzureIoTHubClient
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
     }
-    _internal;
+    _internal; /**< @brief Internal to the SDK */
 };
 
 /**
  * @brief Initialize the Azure IoT Hub Options with default values.
  *
  * @param[out] pxHubClientOptions The #AzureIoTHubClientOptions_t instance to set with default values.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOptions_t * pxHubClientOptions );
+AzureIoTResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOptions_t * pxHubClientOptions );
 
 /**
  * @brief Initialize the Azure IoT Hub Client.
@@ -266,18 +263,18 @@ AzureIoTHubClientResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOption
  * @param[in] ulBufferLength The length of the \p pucBuffer.
  * @param[in] xGetTimeFunction A function pointer to a function which gives the current epoch time.
  * @param[in] pxTransportInterface The #AzureIoTTransportInterface_t to use for the MQTT library.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                  const uint8_t * pucHostname,
-                                                  uint16_t ulHostnameLength,
-                                                  const uint8_t * pucDeviceID,
-                                                  uint16_t ulDeviceIDLength,
-                                                  AzureIoTHubClientOptions_t * pxHubClientOptions,
-                                                  uint8_t * pucBuffer,
-                                                  uint32_t ulBufferLength,
-                                                  AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
-                                                  const AzureIoTTransportInterface_t * pxTransportInterface );
+AzureIoTResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                         const uint8_t * pucHostname,
+                                         uint16_t ulHostnameLength,
+                                         const uint8_t * pucDeviceID,
+                                         uint16_t ulDeviceIDLength,
+                                         AzureIoTHubClientOptions_t * pxHubClientOptions,
+                                         uint8_t * pucBuffer,
+                                         uint32_t ulBufferLength,
+                                         AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
+                                         const AzureIoTTransportInterface_t * pxTransportInterface );
 
 /**
  * @brief Deinitialize the Azure IoT Hub Client.
@@ -295,12 +292,12 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClient_t * pxAzureIoTHubClient );
  * @param[in] pucSymmetricKey The symmetric key to use for the connection.
  * @param[in] ulSymmetricKeyLength The length of the \p pucSymmetricKey.
  * @param[in] xHMACFunction The #AzureIoTGetHMACFunc_t function pointer to a function which computes the HMAC256 over a set of bytes.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                             const uint8_t * pucSymmetricKey,
-                                                             uint32_t ulSymmetricKeyLength,
-                                                             AzureIoTGetHMACFunc_t xHMACFunction );
+AzureIoTResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                    const uint8_t * pucSymmetricKey,
+                                                    uint32_t ulSymmetricKeyLength,
+                                                    AzureIoTGetHMACFunc_t xHMACFunction );
 
 /**
  * @brief Connect via MQTT to the IoT Hub endpoint.
@@ -310,20 +307,20 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t
  * @param[in] pxOutSessionPresent Whether a previous session was present.
  * Only relevant if not establishing a clean session.
  * @param[in] ulTimeoutMilliseconds The maximum time in milliseconds to wait for a CONNACK.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                     bool xCleanSession,
-                                                     bool * pxOutSessionPresent,
-                                                     uint32_t ulTimeoutMilliseconds );
+AzureIoTResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                            bool xCleanSession,
+                                            bool * pxOutSessionPresent,
+                                            uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Disconnect from the IoT Hub endpoint.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
  * @brief Send telemetry data to IoT Hub.
@@ -337,14 +334,14 @@ AzureIoTHubClientResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * px
  *                                  Can be notified of PUBACK for QOS 1 using the #AzureIoTHubClientOptions_t `xTelemetryCallback` option.
  *                                  If xQOS is `eAzureIoTHubMessageQoS0` this value will not be sent on return.
  *                                  Can be `NULL`.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                           const uint8_t * pucTelemetryData,
-                                                           uint32_t ulTelemetryDataLength,
-                                                           AzureIoTMessageProperties_t * pxProperties,
-                                                           AzureIoTHubMessageQoS_t xQOS,
-                                                           uint16_t * pusTelemetryPacketID );
+AzureIoTResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                  const uint8_t * pucTelemetryData,
+                                                  uint32_t ulTelemetryDataLength,
+                                                  AzureIoTMessageProperties_t * pxProperties,
+                                                  AzureIoTHubMessageQoS_t xQOS,
+                                                  uint16_t * pusTelemetryPacketID );
 
 /**
  * @brief Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.
@@ -354,10 +351,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t *
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] ulTimeoutMilliseconds Minimum time (in milliseconds) for the loop to run. If `0` is passed, it will only run once.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                         uint32_t ulTimeoutMilliseconds );
+AzureIoTResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Subscribe to cloud to device messages.
@@ -366,33 +363,31 @@ AzureIoTHubClientResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * p
  * @param[in] xCloudToDeviceMessageCallback The #AzureIoTHubClientCloudToDeviceMessageCallback_t to invoke when a CloudToDevice messages arrive.
  * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
  * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for subscribe operation to complete.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                           AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback,
-                                                                           void * prvCallbackContext,
-                                                                           uint32_t ulTimeoutMilliseconds );
+AzureIoTResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                  AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback,
+                                                                  void * prvCallbackContext,
+                                                                  uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Unsubscribe from cloud to device messages.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
  * @brief Subscribe to commands.
- *
- * @note This is used with Azure Plug and Play.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] xCommandCallback The #AzureIoTHubClientCommandCallback_t to invoke when command messages arrive.
  * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
  * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for Subscribe operation to complete.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                               AzureIoTHubClientCommandCallback_t xCommandCallback,
                                                               void * prvCallbackContext,
                                                               uint32_t ulTimeoutMilliseconds );
@@ -400,12 +395,10 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_
 /**
  * @brief Unsubscribe from commands.
  *
- * @note This is used with Azure Plug and Play.
- *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
  * @brief Send a response to a received command message.
@@ -415,9 +408,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClien
  * @param[in] ulStatus A code that indicates the result of the method, as defined by the user.
  * @param[in] pucCommandPayload __[nullable]__ An optional method response payload.
  * @param[in] ulCommandPayloadLength The length of the method response payload.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                  const AzureIoTHubClientCommandRequest_t * pxMessage,
                                                                  uint32_t ulStatus,
                                                                  const uint8_t * pucCommandPayload,
@@ -430,9 +423,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClie
  * @param[in] xPropertiesCallback The #AzureIoTHubClientPropertiesCallback_t to invoke when device property messages arrive.
  * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
  * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for Subscribe operation to complete.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                        AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
                                                                        void * prvCallbackContext,
                                                                        uint32_t ulTimeoutMilliseconds );
@@ -441,9 +434,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTH
  * @brief Unsubscribe from device properties.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
  * @brief Send reported device properties to Azure IoT Hub.
@@ -454,9 +447,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIo
  * @param[in] pucReportedPayload The payload of properly formatted, reported properties.
  * @param[in] ulReportedPayloadLength The length of the reported property payload.
  * @param[out] pulRequestID Pointer to request ID used to send the reported property.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_SendDevicePropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
+AzureIoTResult_t AzureIoTHubClient_SendDevicePropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                           const uint8_t * pucReportedPayload,
                                                                           uint32_t ulReportedPayloadLength,
                                                                           uint32_t * pulRequestID );
@@ -471,9 +464,9 @@ AzureIoTHubClientResult_t AzureIoTHubClient_SendDevicePropertiesReported( AzureI
  * and the payload (on success) will be the property document.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @return An #AzureIoTHubClientResult_t with the result of the operation.
+ * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTHubClientResult_t AzureIoTHubClient_GetDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_GetDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 #include <azure/core/_az_cfg_suffix.h>
 

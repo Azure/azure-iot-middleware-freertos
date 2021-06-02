@@ -24,6 +24,8 @@
     #include "azure_iot_config.h"
 #endif
 
+#include "azure_iot_result.h"
+
 /* Include config defaults header to get default values of configs not
  * defined in azure_iot_mqtt_config.h file. */
 #include "azure_iot_config_defaults.h"
@@ -39,15 +41,6 @@
  */
 #define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )
 
-typedef enum AzureIoTResult
-{
-    eAzureIoTSuccess = 0,     /**< Success. */
-    eAzureIoTInvalidArgument, /**< Input argument does not comply with the expected range of values. */
-    eAzureIoTOutOfMemory,     /**< The system is out of memory. */
-    eAzureIoTItemNotFound,    /**< The item was not found. */
-    eAzureIoTFailed,          /**< There was a failure. */
-} AzureIoTResult_t;
-
 /**
  * @brief The bag of properties associated with a message.
  *
@@ -57,11 +50,19 @@ typedef struct AzureIoTMessageProperties
     struct
     {
         az_iot_message_properties xProperties;
-    } _internal;
+    } _internal; /**< @brief Internal to the SDK */
 } AzureIoTMessageProperties_t;
 
+/**
+ * @brief The platform get time function to be used by the SDK for MQTT connections.
+ *
+ * @note Must return the time since Unix epoch.
+ */
 typedef uint64_t ( * AzureIoTGetCurrentTimeFunc_t )( void );
 
+/**
+ * @brief The HMAC256 function used by the SDK to generate SAS keys.
+ */
 typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
                                               uint32_t ulKeyLength,
                                               const uint8_t * pucData,
