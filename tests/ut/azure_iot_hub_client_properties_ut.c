@@ -397,17 +397,15 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     int32_t lValue = 0;
 
     AzureIoTHubClientOptions_t xOptions;
-    AzureIoTHubClientComponent_t component_one = azureiothubCREATE_COMPONENT( "one_component" );
-    AzureIoTHubClientComponent_t component_two = azureiothubCREATE_COMPONENT( "two_component" );
-    AzureIoTHubClientComponent_t * pxComponentNameList[] =
+    AzureIoTHubClientComponent_t pxComponentNameList[] =
     {
-        &component_one, &component_two
+        azureiothubCREATE_COMPONENT( "one_component" ), azureiothubCREATE_COMPONENT( "two_component" )
     };
 
     will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
 
     AzureIoTHubClient_OptionsInit( &xOptions );
-    xOptions.pxComponentList = pxComponentNameList[ 0 ];
+    xOptions.pxComponentList = pxComponentNameList;
     xOptions.ulComponentListLength = 2;
 
     AzureIoTHubClient_Init( &xTestIoTHubClient,
