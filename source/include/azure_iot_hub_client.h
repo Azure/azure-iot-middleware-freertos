@@ -23,7 +23,7 @@
 #include "azure_iot_transport_interface.h"
 
 #include "azure/az_core.h"
-#include "azure/az_iot.h"
+#include "azure/iot/az_iot_hub_client.h"
 
 #include <azure/core/_az_cfg_prefix.h>
 
@@ -32,18 +32,19 @@
  */
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
-/* Forward declaration for Azure IoT Hub Client */
-typedef struct AzureIoTHubClient   AzureIoTHubClient_t;
-
-/**
- * @brief Type for Azure IoT Plug and Play component. The
- */
-typedef az_span                    AzureIoTHubClientComponent_t;
-
 /**
  * @brief Macro which should be used to create an array of #AzureIoTHubClientComponent_t
  */
 #define azureiothubCREATE_COMPONENT( x )    ( AzureIoTHubClientComponent_t ) AZ_SPAN_LITERAL_FROM_STR( x )
+
+/* Forward declaration for Azure IoT Hub Client */
+typedef struct AzureIoTHubClient   AzureIoTHubClient_t;
+
+/**
+ * @brief Type for Azure IoT Plug and Play component. The list of component names can be set
+ * as an option for the Azure IoT Hub Client
+ */
+typedef az_span                    AzureIoTHubClientComponent_t;
 
 /**
  * @brief MQTT quality of service values used for messages.
