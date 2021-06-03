@@ -154,15 +154,15 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxRea
  * @param[in] pucExpectedText A pointer to lookup text to compare the token against.
  * @param[in] ulExpectedTextLength Length of \p pucExpectedText.
  *
- * @return `1` if the current JSON token value in the JSON source semantically matches the
- * expected lookup text, with the exact casing; otherwise, `0`.
+ * @return true if the current JSON token value in the JSON source semantically matches the
+ * expected lookup text, with the exact casing; otherwise, false.
  *
  * @remarks This operation is only valid for the string and property name token kinds. For all other
- * token kinds, it returns 0.
+ * token kinds, it returns false.
  */
-AzureIoTResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
-                                                      const uint8_t * pucExpectedText,
-                                                      uint32_t ulExpectedTextLength );
+bool AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
+                                          const uint8_t * pucExpectedText,
+                                          uint32_t ulExpectedTextLength );
 
 /**
  * @brief Determines type of token currently #AzureIoTJSONReader_t points to.

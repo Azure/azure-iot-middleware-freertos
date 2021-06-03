@@ -215,33 +215,21 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxRea
 }
 
 
-AzureIoTResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
-                                                      const uint8_t * pucExpectedText,
-                                                      uint32_t ulExpectedTextLength )
+bool AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
+                                          const uint8_t * pucExpectedText,
+                                          uint32_t ulExpectedTextLength )
 {
-    AzureIoTResult_t xResult;
-    az_result xCoreResult;
     az_span xExpectedTextSpan;
 
     if( ( pxReader == NULL ) || ( pucExpectedText == NULL ) || ( ulExpectedTextLength == 0 ) )
     {
         AZLogError( ( "AzureIoTJSONReader_TokenType failed: invalid argument" ) );
-        return eAzureIoTErrorInvalidArgument;
+        return false;
     }
 
     xExpectedTextSpan = az_span_create( ( uint8_t * ) pucExpectedText, ( int32_t ) ulExpectedTextLength );
 
-    if( az_result_failed( xCoreResult = az_json_token_is_text_equal( &pxReader->_internal.xCoreReader.token, xExpectedTextSpan ) ) )
-    {
-        AZLogError( ( "Could not compare text in JSON: core error=0x%08x", xCoreResult ) );
-        xResult = eAzureIoTErrorFailed;
-    }
-    else
-    {
-        xResult = eAzureIoTSuccess;
-    }
-
-    return xResult;
+    return az_json_token_is_text_equal( &pxReader->_internal.xCoreReader.token, xExpectedTextSpan );
 }
 
 AzureIoTResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,

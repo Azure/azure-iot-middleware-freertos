@@ -52,7 +52,7 @@
  *   },
  *   "two_component": {
  *     "prop_one": 45,
- *     "prop_two": "string"
+ *     "prop_two": "foo"
  *   },
  *   "not_component": 42,
  *   "$version": 5
@@ -61,10 +61,10 @@
  */
 #define azureiothubclientpropertiesTEST_JSON_VERSION                                                 \
     "{\"one_component\":{\"thing_one\":1,\"thing_two\":\"string\"},\"two_component\":{\"prop_one\":" \
-    "45,\"prop_two\":\"string\"},\"not_component\":42,\"$version\":5}"
+    "45,\"prop_two\":\"foo\"},\"not_component\":42,\"$version\":5}"
 
 
-static const uint8_t ucHostname[] = "unittest.azure - devices.net";
+static const uint8_t ucHostname[] = "unittest.azure-devices.net";
 static const uint8_t ucDeviceId[] = "testiothub";
 
 static uint8_t ucBuffer[ 512 ];
@@ -395,6 +395,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     const uint8_t * ucComponentName;
     uint32_t ulComponentNameLength;
     int32_t lValue = 0;
+
     AzureIoTHubClientOptions_t xOptions;
     AzureIoTHubClientComponent_t component_one = azureiothubCREATE_COMPONENT( "one_component" );
     AzureIoTHubClientComponent_t component_two = azureiothubCREATE_COMPONENT( "two_component" );
@@ -424,6 +425,8 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
                           azureiothubclientpropertiesTEST_JSON_VERSION,
                           strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
                       eAzureIoTSuccess );
+
+    /* First component | first property */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
                                                                             &xJSONReader,
                                                                             xResponseType,
@@ -434,14 +437,16 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     assert_memory_equal( "one_component", ucComponentName, strlen( "one_component" ) );
     assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
-    assert_int_equal( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "thing_one", strlen( "thing_one" ) ), eAzureIoTSuccess );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "thing_one", strlen( "thing_one" ) ) );
     assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+    /*Advance to property value */
     assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenNUMBER );
     assert_int_equal( AzureIoTJSONReader_GetTokenInt32( &xJSONReader, &lValue ), eAzureIoTSuccess );
     assert_int_equal( lValue, 1 );
     assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
 
+    /* First component | second property */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
                                                                             &xJSONReader,
                                                                             xResponseType,
@@ -452,7 +457,71 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
     assert_memory_equal( "one_component", ucComponentName, strlen( "one_component" ) );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
-    assert_int_equal( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "thing_two", strlen( "thing_two" ) ), eAzureIoTSuccess );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "thing_two", strlen( "thing_two" ) ) );
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+    /*Advance to property value */
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenSTRING );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "string", strlen( "string" ) ) );
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+
+    /* Second component | first property */
+    assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
+                                                                            &xJSONReader,
+                                                                            xResponseType,
+                                                                            xPropertyType,
+                                                                            &ucComponentName,
+                                                                            &ulComponentNameLength ), eAzureIoTSuccess );
+    assert_memory_equal( "two_component", ucComponentName, strlen( "two_component" ) );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "prop_one", strlen( "prop_one" ) ) );
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+    /*Advance to property value */
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenNUMBER );
+    assert_int_equal( AzureIoTJSONReader_GetTokenInt32( &xJSONReader, &lValue ), eAzureIoTSuccess );
+    assert_int_equal( lValue, 45 );
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+
+    /* Second component | second property */
+    assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
+                                                                            &xJSONReader,
+                                                                            xResponseType,
+                                                                            xPropertyType,
+                                                                            &ucComponentName,
+                                                                            &ulComponentNameLength ), eAzureIoTSuccess );
+
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_memory_equal( "two_component", ucComponentName, strlen( "two_component" ) );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "prop_two", strlen( "prop_two" ) ) );
+    /*Advance to property value */
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenSTRING );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "foo", strlen( "foo" ) ) );
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+
+    /* Non component | first property */
+    assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
+                                                                            &xJSONReader,
+                                                                            xResponseType,
+                                                                            xPropertyType,
+                                                                            &ucComponentName,
+                                                                            &ulComponentNameLength ), eAzureIoTSuccess );
+    assert_null( ucComponentName );
+    assert_int_equal( ulComponentNameLength, 0 );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "not_component", strlen( "not_component" ) ) );
+    /*Advance to property value */
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xJSONReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenNUMBER );
+    assert_int_equal( AzureIoTJSONReader_GetTokenInt32( &xJSONReader, &lValue ), eAzureIoTSuccess );
+    assert_int_equal( lValue, 42 );
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
 }
 
 uint32_t ulGetAllTests()
