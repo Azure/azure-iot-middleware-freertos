@@ -43,7 +43,7 @@ typedef az_span                    AzureIoTHubClientComponent_t;
 /**
  * @brief Macro which should be used to create an array of #AzureIoTHubClientComponent_t
  */
-#define azureiothubCREATE_COMPONENT( x )    ( AzureIoTHubClientComponent_t ) AZ_SPAN_FROM_STR( x )
+#define azureiothubCREATE_COMPONENT( x )    ( AzureIoTHubClientComponent_t ) AZ_SPAN_LITERAL_FROM_STR( x )
 
 /**
  * @brief MQTT quality of service values used for messages.
