@@ -23,7 +23,7 @@
 #include "azure_iot_transport_interface.h"
 
 #include "azure/az_core.h"
-#include "azure/az_iot.h"
+#include "azure/iot/az_iot_hub_client.h"
 
 #include <azure/core/_az_cfg_prefix.h>
 
@@ -31,6 +31,11 @@
  * @brief Total number of features which could be subscribed to.
  */
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
+
+/**
+ * @brief Macro which should be used to create an array of #AzureIoTHubClientComponent_t
+ */
+#define azureiothubCREATE_COMPONENT( x )    ( AzureIoTHubClientComponent_t ) AZ_SPAN_LITERAL_FROM_STR( x )
 
 /* Forward declaration for Azure IoT Hub Client */
 typedef struct AzureIoTHubClient   AzureIoTHubClient_t;
@@ -40,11 +45,6 @@ typedef struct AzureIoTHubClient   AzureIoTHubClient_t;
  * as an option for the Azure IoT Hub Client
  */
 typedef az_span                    AzureIoTHubClientComponent_t;
-
-/**
- * @brief Macro which should be used to create an array of #AzureIoTHubClientComponent_t
- */
-#define azureiothubCREATE_COMPONENT( x )    ( AzureIoTHubClientComponent_t ) AZ_SPAN_LITERAL_FROM_STR( x )
 
 /**
  * @brief MQTT quality of service values used for messages.
