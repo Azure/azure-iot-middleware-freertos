@@ -29,8 +29,8 @@
 #include "azure_iot_json_reader.h"
 
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
-                                                   const uint8_t * pucBuffer,
-                                                   uint32_t usBufferLen )
+                                          const uint8_t * pucBuffer,
+                                          uint32_t usBufferLen )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -109,7 +109,7 @@ AzureIoTResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReade
 
 
 AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReader,
-                                                           bool * pxValue )
+                                                  bool * pxValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -135,7 +135,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReade
 
 
 AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
-                                                            int32_t * pilValue )
+                                                   int32_t * pilValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -161,7 +161,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxRead
 
 
 AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxReader,
-                                                             double * pxValue )
+                                                    double * pxValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -187,9 +187,9 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
 
 
 AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
-                                                             uint8_t * pucBuffer,
-                                                             uint32_t usBufferSize,
-                                                             uint32_t * pusBytesCopied )
+                                                    uint8_t * pucBuffer,
+                                                    uint32_t usBufferSize,
+                                                    uint32_t * pusBytesCopied )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -216,8 +216,8 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxRea
 
 
 AzureIoTResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
-                                                               const uint8_t * pucExpectedText,
-                                                               uint32_t ulExpectedTextLength )
+                                                      const uint8_t * pucExpectedText,
+                                                      uint32_t ulExpectedTextLength )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -245,7 +245,7 @@ AzureIoTResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxR
 }
 
 AzureIoTResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
-                                                        AzureIoTJSONTokenType_t * pxTokenType )
+                                               AzureIoTJSONTokenType_t * pxTokenType )
 {
     AzureIoTResult_t xResult;
 

@@ -59,9 +59,9 @@
  * @retval #eAzureIoTSuccess The JSON payload was prefixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                             AzureIoTJSONWriter_t * pxJSONWriter,
-                                                                             const uint8_t * pucComponentName,
-                                                                             uint16_t usComponentNameLength );
+                                                                    AzureIoTJSONWriter_t * pxJSONWriter,
+                                                                    const uint8_t * pucComponentName,
+                                                                    uint16_t usComponentNameLength );
 
 /**
  * @brief Append the necessary characters to end a reported properties JSON payload belonging to a
@@ -81,7 +81,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubC
  * @retval #eAzureIoTSuccess The JSON payload was suffixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                           AzureIoTJSONWriter_t * pxJSONWriter );
+                                                                  AzureIoTJSONWriter_t * pxJSONWriter );
 
 /**
  * @brief Begin a property response to a writeable property request from the service.
@@ -159,13 +159,13 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubCli
  * @retval #eAzureIoTSuccess The JSON payload was prefixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                                  AzureIoTJSONWriter_t * pxJSONWriter,
-                                                                                  const uint8_t * pucPropertyName,
-                                                                                  uint16_t usPropertyNameLength,
-                                                                                  int32_t lAckCode,
-                                                                                  int32_t lAckVersion,
-                                                                                  const uint8_t * pucAckDescription,
-                                                                                  uint16_t usAckDescriptionLength );
+                                                                         AzureIoTJSONWriter_t * pxJSONWriter,
+                                                                         const uint8_t * pucPropertyName,
+                                                                         uint16_t usPropertyNameLength,
+                                                                         int32_t lAckCode,
+                                                                         int32_t lAckVersion,
+                                                                         const uint8_t * pucAckDescription,
+                                                                         uint16_t usAckDescriptionLength );
 
 /**
  * @brief End a properties response payload with confirmation status.
@@ -183,7 +183,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIo
  * @retval #eAzureIoTSuccess The JSON payload was suffixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                                AzureIoTJSONWriter_t * pxJSONWriter );
+                                                                       AzureIoTJSONWriter_t * pxJSONWriter );
 
 /**
  * @brief Read the Azure IoT Plug and Play property version.
@@ -210,9 +210,9 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTH
  * @retval #eAzureIoTSuccess If the function returned a valid version.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                            AzureIoTJSONReader_t * pxJSONReader,
-                                                                            AzureIoTHubMessageType_t xResponseType,
-                                                                            uint32_t * pulVersion );
+                                                                   AzureIoTJSONReader_t * pxJSONReader,
+                                                                   AzureIoTHubMessageType_t xResponseType,
+                                                                   uint32_t * pulVersion );
 
 /**
  * @brief Property type
@@ -301,10 +301,10 @@ typedef enum AzureIoTHubClientPropertyType_t
  * @retval #AZ_ERROR_IOT_END_OF_PROPERTIES If there are no more properties left for the component.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                                AzureIoTJSONReader_t * pxJSONReader,
-                                                                                AzureIoTHubMessageType_t xResponseType,
-                                                                                AzureIoTHubClientPropertyType_t xPropertyType,
-                                                                                const uint8_t ** ppucComponentName,
-                                                                                uint32_t * pulComponentNameLength );
+                                                                       AzureIoTJSONReader_t * pxJSONReader,
+                                                                       AzureIoTHubMessageType_t xResponseType,
+                                                                       AzureIoTHubClientPropertyType_t xPropertyType,
+                                                                       const uint8_t ** ppucComponentName,
+                                                                       uint32_t * pulComponentNameLength );
 
 #endif /*AZURE_IOT_HUB_CLIENT_PROPERTIES_H */

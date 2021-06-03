@@ -64,8 +64,8 @@ typedef struct AzureIoTJSONReader
  *
  */
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
-                                                   const uint8_t * pucBuffer,
-                                                   uint32_t usBufferLen );
+                                          const uint8_t * pucBuffer,
+                                          uint32_t usBufferLen );
 
 /**
  * @brief Reads the next token in the JSON text and updates the reader state.
@@ -103,7 +103,7 @@ AzureIoTResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReade
  * @retval #eAzureIoTSuccess The boolean value is returned.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReader,
-                                                           bool * pxValue );
+                                                  bool * pxValue );
 
 /**
  * @brief Gets the JSON token's number as a 32-bit signed integer.
@@ -115,7 +115,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReade
  * @retval #eAzureIoTSuccess The number is returned.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
-                                                            int32_t * plValue );
+                                                   int32_t * plValue );
 
 /**
  * @brief Gets the JSON token's number as a `double`.
@@ -127,7 +127,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxRead
  * @retval #eAzureIoTSuccess The number is returned.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxReader,
-                                                             double * pxValue );
+                                                    double * pxValue );
 
 /**
  * @brief Gets the JSON token's string after unescaping it, if required.
@@ -142,9 +142,9 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
  * @retval #eAzureIoTSuccess The property name was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
-                                                             uint8_t * pucBuffer,
-                                                             uint32_t usBufferSize,
-                                                             uint32_t * pusBytesCopied );
+                                                    uint8_t * pucBuffer,
+                                                    uint32_t usBufferSize,
+                                                    uint32_t * pusBytesCopied );
 
 /**
  * @brief Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is
@@ -161,8 +161,8 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxRea
  * token kinds, it returns 0.
  */
 AzureIoTResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
-                                                               const uint8_t * pucExpectedText,
-                                                               uint32_t ulExpectedTextLength );
+                                                      const uint8_t * pucExpectedText,
+                                                      uint32_t ulExpectedTextLength );
 
 /**
  * @brief Determines type of token currently #AzureIoTJSONReader_t points to.
@@ -173,6 +173,6 @@ AzureIoTResult_t AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxR
  * @return An #AzureIoTResult_t value indicating the type of token.
  */
 AzureIoTResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
-                                                        AzureIoTJSONTokenType_t * pxTokenType );
+                                               AzureIoTJSONTokenType_t * pxTokenType );
 
 #endif /* AZURE_IOT_JSON_READER_H */

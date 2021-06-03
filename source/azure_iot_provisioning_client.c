@@ -257,9 +257,9 @@ static void prvProvClientSubscribe( AzureIoTProvisioningClient_t * pxAzureProvCl
 /*-----------------------------------------------------------*/
 
 static AzureIoTResult_t prvProvClientCreateRequestPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                             uint8_t * pucPayload,
-                                                                             uint32_t ulPayloadLength,
-                                                                             uint32_t * pulBytesUsed )
+                                                           uint8_t * pucPayload,
+                                                           uint32_t ulPayloadLength,
+                                                           uint32_t * pulBytesUsed )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -497,7 +497,7 @@ static void prvProvClientTriggerAction( AzureIoTProvisioningClient_t * pxAzurePr
  *
  */
 static AzureIoTResult_t prvProvClientRunWorkflow( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                    uint32_t ulTimeoutMilliseconds )
+                                                  uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
@@ -743,17 +743,17 @@ AzureIoTResult_t AzureIoTProvisioningClient_OptionsInit( AzureIoTProvisioningCli
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                    const uint8_t * pucEndpoint,
-                                                                    uint32_t ulEndpointLength,
-                                                                    const uint8_t * pucIDScope,
-                                                                    uint32_t ulIDScopeLength,
-                                                                    const uint8_t * pucRegistrationID,
-                                                                    uint32_t ulRegistrationIDLength,
-                                                                    AzureIoTProvisioningClientOptions_t * pxProvisioningClientOptions,
-                                                                    uint8_t * pucBuffer,
-                                                                    uint32_t ulBufferLength,
-                                                                    AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
-                                                                    const AzureIoTTransportInterface_t * pxTransportInterface )
+                                                  const uint8_t * pucEndpoint,
+                                                  uint32_t ulEndpointLength,
+                                                  const uint8_t * pucIDScope,
+                                                  uint32_t ulIDScopeLength,
+                                                  const uint8_t * pucRegistrationID,
+                                                  uint32_t ulRegistrationIDLength,
+                                                  AzureIoTProvisioningClientOptions_t * pxProvisioningClientOptions,
+                                                  uint8_t * pucBuffer,
+                                                  uint32_t ulBufferLength,
+                                                  AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
+                                                  const AzureIoTTransportInterface_t * pxTransportInterface )
 {
     AzureIoTResult_t xResult;
     az_span xEndpoint = az_span_create( ( uint8_t * ) pucEndpoint, ( int32_t ) ulEndpointLength );
@@ -847,9 +847,9 @@ void AzureIoTProvisioningClient_Deinit( AzureIoTProvisioningClient_t * pxAzurePr
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_SetSymmetricKey( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                               const uint8_t * pucSymmetricKey,
-                                                                               uint32_t ulSymmetricKeyLength,
-                                                                               AzureIoTGetHMACFunc_t xHmacFunction )
+                                                             const uint8_t * pucSymmetricKey,
+                                                             uint32_t ulSymmetricKeyLength,
+                                                             AzureIoTGetHMACFunc_t xHmacFunction )
 {
     AzureIoTResult_t xResult;
 
@@ -874,7 +874,7 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetSymmetricKey( AzureIoTProvisionin
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                        uint32_t ulTimeoutMilliseconds )
+                                                      uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTResult_t xResult;
 
@@ -898,10 +898,10 @@ AzureIoTResult_t AzureIoTProvisioningClient_Register( AzureIoTProvisioningClient
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_GetDeviceAndHub( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                               uint8_t * pucHubHostname,
-                                                                               uint32_t * pulHostnameLength,
-                                                                               uint8_t * pucDeviceID,
-                                                                               uint32_t * pulDeviceIDLength )
+                                                             uint8_t * pucHubHostname,
+                                                             uint32_t * pulHostnameLength,
+                                                             uint8_t * pucDeviceID,
+                                                             uint32_t * pulDeviceIDLength )
 {
     uint32_t ulHostnameLength;
     uint32_t ulDeviceIDLength;
@@ -951,7 +951,7 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetDeviceAndHub( AzureIoTProvisionin
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_GetExtendedCode( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                               uint32_t * pulExtendedErrorCode )
+                                                             uint32_t * pulExtendedErrorCode )
 {
     AzureIoTResult_t xResult;
 
@@ -978,8 +978,8 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetExtendedCode( AzureIoTProvisionin
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                                      const uint8_t * pucPayload,
-                                                                                      uint32_t ulPayloadLength )
+                                                                    const uint8_t * pucPayload,
+                                                                    uint32_t ulPayloadLength )
 {
     AzureIoTResult_t xResult;
 

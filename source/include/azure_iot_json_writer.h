@@ -43,8 +43,8 @@ typedef struct AzureIoTJSONWriter
  * @retval #eAzureIoTSuccess Successfully initialized JSON writer.
  */
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
-                                                   uint8_t * pucBuffer,
-                                                   uint32_t usBufferLen );
+                                          uint8_t * pucBuffer,
+                                          uint32_t usBufferLen );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is int32
@@ -59,9 +59,9 @@ AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
  * @retval #eAzureIoTSuccess The property name and int32 value was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWriter_t * pxWriter,
-                                                                           const uint8_t * pucPropertyName,
-                                                                           uint32_t ulPropertyNameLength,
-                                                                           int32_t lValue );
+                                                                  const uint8_t * pucPropertyName,
+                                                                  uint32_t ulPropertyNameLength,
+                                                                  int32_t lValue );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is double
@@ -77,10 +77,10 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWr
  * @retval #eAzureIoTSuccess The property name and double value was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                            const uint8_t * pucPropertyName,
-                                                                            uint32_t ulPropertyNameLength,
-                                                                            double xValue,
-                                                                            uint16_t usFractionalDigits );
+                                                                   const uint8_t * pucPropertyName,
+                                                                   uint32_t ulPropertyNameLength,
+                                                                   double xValue,
+                                                                   uint16_t usFractionalDigits );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is boolean
@@ -95,9 +95,9 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONW
  * @retval #eAzureIoTSuccess The property name and bool value was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                          const uint8_t * pucPropertyName,
-                                                                          uint32_t ulPropertyNameLength,
-                                                                          bool usValue );
+                                                                 const uint8_t * pucPropertyName,
+                                                                 uint32_t ulPropertyNameLength,
+                                                                 bool usValue );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is string
@@ -114,10 +114,10 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWri
  * @retval #eAzureIoTSuccess The property name and string value was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                            const uint8_t * pucPropertyName,
-                                                                            uint32_t ulPropertyNameLength,
-                                                                            const uint8_t * pucValue,
-                                                                            uint32_t ulValueLen );
+                                                                   const uint8_t * pucPropertyName,
+                                                                   uint32_t ulPropertyNameLength,
+                                                                   const uint8_t * pucValue,
+                                                                   uint32_t ulValueLen );
 
 /**
  * @brief Returns the length containing the JSON text written to the underlying buffer.
@@ -140,8 +140,8 @@ int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter );
  * @retval #eAzureIoTSuccess The string value was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
-                                                           const uint8_t * pucValue,
-                                                           uint32_t ulValueLen );
+                                                  const uint8_t * pucValue,
+                                                  uint32_t ulValueLen );
 
 /**
  * @brief Appends an existing UTF-8 encoded JSON text into the buffer, useful for appending nested
@@ -164,8 +164,8 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWrite
  * @retval #eAzureIoTSuccess The provided json_text was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWriter,
-                                                             const uint8_t * pucJSON,
-                                                             uint32_t ulJSONLen );
+                                                    const uint8_t * pucJSON,
+                                                    uint32_t ulJSONLen );
 
 /**
  * @brief Appends the UTF-8 property name (as a JSON string) which is the first part of a name/value
@@ -180,8 +180,8 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWri
  * @retval #eAzureIoTSuccess The property name was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * pxWriter,
-                                                                 const uint8_t * pusValue,
-                                                                 uint32_t ulValueLen );
+                                                        const uint8_t * pusValue,
+                                                        uint32_t ulValueLen );
 
 /**
  * @brief Appends a boolean value (as a JSON literal `true` or `false`).
@@ -193,7 +193,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * p
  * @retval #eAzureIoTSuccess The bool was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
-                                                         bool xValue );
+                                                bool xValue );
 
 /**
  * @brief Appends an `int32_t` number value.
@@ -205,7 +205,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
  * @retval #eAzureIoTSuccess The number was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter,
-                                                          int32_t lValue );
+                                                 int32_t lValue );
 
 /**
  * @brief Appends a `double` number value.
@@ -228,8 +228,8 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter
  * is larger will be clamped down to 15.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
-                                                           double xValue,
-                                                           uint16_t usFractionalDigits );
+                                                  double xValue,
+                                                  uint16_t usFractionalDigits );
 
 /**
  * @brief Appends the JSON literal `null`.

@@ -12,8 +12,8 @@
 #include "azure_iot_hub_client.h"
 
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
-                                                   uint8_t * pucBuffer,
-                                                   uint32_t usBufferLen )
+                                          uint8_t * pucBuffer,
+                                          uint32_t usBufferLen )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -41,9 +41,9 @@ AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWriter_t * pxWriter,
-                                                                           const uint8_t * pucPropertyName,
-                                                                           uint32_t ulPropertyNameLength,
-                                                                           int32_t lValue )
+                                                                  const uint8_t * pucPropertyName,
+                                                                  uint32_t ulPropertyNameLength,
+                                                                  int32_t lValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -72,10 +72,10 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWr
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                            const uint8_t * pucPropertyName,
-                                                                            uint32_t ulPropertyNameLength,
-                                                                            double xValue,
-                                                                            uint16_t usFractionalDigits )
+                                                                   const uint8_t * pucPropertyName,
+                                                                   uint32_t ulPropertyNameLength,
+                                                                   double xValue,
+                                                                   uint16_t usFractionalDigits )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -104,9 +104,9 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONW
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                          const uint8_t * pucPropertyName,
-                                                                          uint32_t ulPropertyNameLength,
-                                                                          bool usValue )
+                                                                 const uint8_t * pucPropertyName,
+                                                                 uint32_t ulPropertyNameLength,
+                                                                 bool usValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -135,10 +135,10 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWri
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONWriter_t * pxWriter,
-                                                                            const uint8_t * pucPropertyName,
-                                                                            uint32_t ulPropertyNameLength,
-                                                                            const uint8_t * pucValue,
-                                                                            uint32_t ulValueLen )
+                                                                   const uint8_t * pucPropertyName,
+                                                                   uint32_t ulPropertyNameLength,
+                                                                   const uint8_t * pucValue,
+                                                                   uint32_t ulValueLen )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -181,8 +181,8 @@ int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter )
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
-                                                           const uint8_t * pucValue,
-                                                           uint32_t ulValueLen )
+                                                  const uint8_t * pucValue,
+                                                  uint32_t ulValueLen )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -210,8 +210,8 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWrite
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWriter,
-                                                             const uint8_t * pucJSON,
-                                                             uint32_t ulJSONLen )
+                                                    const uint8_t * pucJSON,
+                                                    uint32_t ulJSONLen )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -239,8 +239,8 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWri
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * pxWriter,
-                                                                 const uint8_t * pusValue,
-                                                                 uint32_t ulValueLen )
+                                                        const uint8_t * pusValue,
+                                                        uint32_t ulValueLen )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -268,7 +268,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * p
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
-                                                         bool xValue )
+                                                bool xValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -293,7 +293,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter,
-                                                          int32_t lValue )
+                                                 int32_t lValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -318,8 +318,8 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
-                                                           double xValue,
-                                                           uint16_t usFractionalDigits )
+                                                  double xValue,
+                                                  uint16_t usFractionalDigits )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;

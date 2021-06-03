@@ -397,10 +397,10 @@ static uint32_t prvGetTimeMs( void )
  *
  * */
 static AzureIoTResult_t prvGetPropertiesRequestId( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                            az_span xSpan,
-                                                            bool xOddSeq,
-                                                            uint32_t * pulRequestId,
-                                                            az_span * pxSpan )
+                                                   az_span xSpan,
+                                                   bool xOddSeq,
+                                                   uint32_t * pulRequestId,
+                                                   az_span * pxSpan )
 {
     AzureIoTResult_t xResult;
     az_span xRemainder;
@@ -449,8 +449,8 @@ static AzureIoTResult_t prvGetPropertiesRequestId( AzureIoTHubClient_t * pxAzure
  *
  **/
 static AzureIoTResult_t prvWaitForSubAck( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                   AzureIoTHubClientReceiveContext_t * pxContext,
-                                                   uint32_t ulTimeoutMilliseconds )
+                                          AzureIoTHubClientReceiveContext_t * pxContext,
+                                          uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTResult_t xResult = eAzureIoTErrorSubackWaitTimeout;
     uint32_t ulWaitTime;
@@ -588,15 +588,15 @@ AzureIoTResult_t AzureIoTHubClient_OptionsInit( AzureIoTHubClientOptions_t * pxH
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                  const uint8_t * pucHostname,
-                                                  uint16_t ulHostnameLength,
-                                                  const uint8_t * pucDeviceId,
-                                                  uint16_t ulDeviceIdLength,
-                                                  AzureIoTHubClientOptions_t * pxHubClientOptions,
-                                                  uint8_t * pucBuffer,
-                                                  uint32_t ulBufferLength,
-                                                  AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
-                                                  const AzureIoTTransportInterface_t * pxTransportInterface )
+                                         const uint8_t * pucHostname,
+                                         uint16_t ulHostnameLength,
+                                         const uint8_t * pucDeviceId,
+                                         uint16_t ulDeviceIdLength,
+                                         AzureIoTHubClientOptions_t * pxHubClientOptions,
+                                         uint8_t * pucBuffer,
+                                         uint32_t ulBufferLength,
+                                         AzureIoTGetCurrentTimeFunc_t xGetTimeFunction,
+                                         const AzureIoTTransportInterface_t * pxTransportInterface )
 {
     AzureIoTResult_t xResult;
     AzureIoTMQTTResult_t xMQTTResult;
@@ -644,6 +644,8 @@ AzureIoTResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureIoTHubClie
             xHubOptions.module_id = az_span_create( ( uint8_t * ) pxHubClientOptions->pucModuleID, ( int32_t ) pxHubClientOptions->ulModuleIDLength );
             xHubOptions.model_id = az_span_create( ( uint8_t * ) pxHubClientOptions->pucModelID, ( int32_t ) pxHubClientOptions->ulModelIDLength );
             xHubOptions.user_agent = az_span_create( ( uint8_t * ) pxHubClientOptions->pucUserAgent, ( int32_t ) pxHubClientOptions->ulUserAgentLength );
+            xHubOptions.component_names = ( az_span * ) pxHubClientOptions->pxComponentList;
+            xHubOptions.component_names_length = ( int32_t ) pxHubClientOptions->ulComponentListLength;
         }
         else
         {
@@ -688,9 +690,9 @@ void AzureIoTHubClient_Deinit( AzureIoTHubClient_t * pxAzureIoTHubClient )
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                             const uint8_t * pucSymmetricKey,
-                                                             uint32_t ulSymmetricKeyLength,
-                                                             AzureIoTGetHMACFunc_t xHMACFunction )
+                                                    const uint8_t * pucSymmetricKey,
+                                                    uint32_t ulSymmetricKeyLength,
+                                                    AzureIoTGetHMACFunc_t xHMACFunction )
 {
     AzureIoTResult_t xResult;
 
@@ -715,9 +717,9 @@ AzureIoTResult_t AzureIoTHubClient_SetSymmetricKey( AzureIoTHubClient_t * pxAzur
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                     bool xCleanSession,
-                                                     bool * pxOutSessionPresent,
-                                                     uint32_t ulTimeoutMilliseconds )
+                                            bool xCleanSession,
+                                            bool * pxOutSessionPresent,
+                                            uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTConnectInfo_t xConnectInfo = { 0 };
     AzureIoTResult_t xResult;
@@ -819,11 +821,11 @@ AzureIoTResult_t AzureIoTHubClient_Disconnect( AzureIoTHubClient_t * pxAzureIoTH
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                           const uint8_t * pucTelemetryData,
-                                                           uint32_t ulTelemetryDataLength,
-                                                           AzureIoTMessageProperties_t * pxProperties,
-                                                           AzureIoTHubMessageQoS_t xQOS,
-                                                           uint16_t * pusTelemetryPacketID )
+                                                  const uint8_t * pucTelemetryData,
+                                                  uint32_t ulTelemetryDataLength,
+                                                  AzureIoTMessageProperties_t * pxProperties,
+                                                  AzureIoTHubMessageQoS_t xQOS,
+                                                  uint16_t * pusTelemetryPacketID )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
@@ -884,7 +886,7 @@ AzureIoTResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureI
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                         uint32_t ulTimeoutMilliseconds )
+                                                uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
@@ -911,9 +913,9 @@ AzureIoTResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * pxAzureIoT
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SubscribeCloudToDeviceMessage( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                           AzureIoTHubClientCloudToDeviceMessageCallback_t xCallback,
-                                                                           void * prvCallbackContext,
-                                                                           uint32_t ulTimeoutMilliseconds )
+                                                                  AzureIoTHubClientCloudToDeviceMessageCallback_t xCallback,
+                                                                  void * prvCallbackContext,
+                                                                  uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
     AzureIoTMQTTResult_t xMQTTResult;
@@ -1006,9 +1008,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubC
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                              AzureIoTHubClientCommandCallback_t xCallback,
-                                                              void * prvCallbackContext,
-                                                              uint32_t ulTimeoutMilliseconds )
+                                                     AzureIoTHubClientCommandCallback_t xCallback,
+                                                     void * prvCallbackContext,
+                                                     uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
     AzureIoTMQTTResult_t xMQTTResult;
@@ -1102,10 +1104,10 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClient_t * pxA
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                 const AzureIoTHubClientCommandRequest_t * pxMessage,
-                                                                 uint32_t ulStatus,
-                                                                 const uint8_t * pucCommandPayload,
-                                                                 uint32_t ulCommandPayloadLength )
+                                                        const AzureIoTHubClientCommandRequest_t * pxMessage,
+                                                        uint32_t ulStatus,
+                                                        const uint8_t * pucCommandPayload,
+                                                        uint32_t ulCommandPayloadLength )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
@@ -1169,9 +1171,9 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                       AzureIoTHubClientPropertiesCallback_t xCallback,
-                                                                       void * prvCallbackContext,
-                                                                       uint32_t ulTimeoutMilliseconds )
+                                                              AzureIoTHubClientPropertiesCallback_t xCallback,
+                                                              void * prvCallbackContext,
+                                                              uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t xMqttSubscription[ 2 ] = { { 0 }, { 0 } };
     AzureIoTMQTTResult_t xMQTTResult;
@@ -1273,9 +1275,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIoTHubClien
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SendDevicePropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                          const uint8_t * pucReportedPayload,
-                                                                          uint32_t ulReportedPayloadLength,
-                                                                          uint32_t * pulRequestId )
+                                                                 const uint8_t * pucReportedPayload,
+                                                                 uint32_t ulReportedPayloadLength,
+                                                                 uint32_t * pulRequestId )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;

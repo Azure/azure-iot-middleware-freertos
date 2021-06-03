@@ -22,6 +22,9 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+#include "azure/az_core.h"
+#include "azure/az_iot.h"
+
 #include <azure/core/_az_cfg_prefix.h>
 
 /**
@@ -30,7 +33,17 @@
 #define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
 
 /* Forward declaration for Azure IoT Hub Client */
-typedef struct AzureIoTHubClient AzureIoTHubClient_t;
+typedef struct AzureIoTHubClient   AzureIoTHubClient_t;
+
+/**
+ * @brief Type for Azure IoT Plug and Play component. The
+ */
+typedef az_span                    AzureIoTHubClientComponent_t;
+
+/**
+ * @brief Macro which should be used to create an array of #AzureIoTHubClientComponent_t
+ */
+#define azureiothubCREATE_COMPONENT( x )    ( AzureIoTHubClientComponent_t ) AZ_SPAN_FROM_STR( x )
 
 /**
  * @brief MQTT quality of service values used for messages.
@@ -190,6 +203,9 @@ typedef struct AzureIoTHubClientOptions
     const uint8_t * pucModelID;                        /**< The Azure Digital Twin Definition Language model ID used to
                                                         *   identify the capabilities of this device based on the Digital Twin document. */
     uint32_t ulModelIDLength;                          /**< The length of the model ID. */
+
+    AzureIoTHubClientComponent_t * pxComponentList;    /**< The list of component names to use for the device. */
+    uint32_t ulComponentListLength;                    /**< The number of components in the list. */
 
     const uint8_t * pucUserAgent;                      /**< The user agent to use for this device. */
     uint32_t ulUserAgentLength;                        /**< The length of the user agent. */
@@ -388,9 +404,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubC
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                              AzureIoTHubClientCommandCallback_t xCommandCallback,
-                                                              void * prvCallbackContext,
-                                                              uint32_t ulTimeoutMilliseconds );
+                                                     AzureIoTHubClientCommandCallback_t xCommandCallback,
+                                                     void * prvCallbackContext,
+                                                     uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Unsubscribe from commands.
@@ -411,10 +427,10 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClient_t * pxA
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                 const AzureIoTHubClientCommandRequest_t * pxMessage,
-                                                                 uint32_t ulStatus,
-                                                                 const uint8_t * pucCommandPayload,
-                                                                 uint32_t ulCommandPayloadLength );
+                                                        const AzureIoTHubClientCommandRequest_t * pxMessage,
+                                                        uint32_t ulStatus,
+                                                        const uint8_t * pucCommandPayload,
+                                                        uint32_t ulCommandPayloadLength );
 
 /**
  * @brief Subscribe to device properties.
@@ -426,9 +442,9 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                       AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
-                                                                       void * prvCallbackContext,
-                                                                       uint32_t ulTimeoutMilliseconds );
+                                                              AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
+                                                              void * prvCallbackContext,
+                                                              uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Unsubscribe from device properties.
@@ -450,9 +466,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIoTHubClien
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SendDevicePropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                          const uint8_t * pucReportedPayload,
-                                                                          uint32_t ulReportedPayloadLength,
-                                                                          uint32_t * pulRequestID );
+                                                                 const uint8_t * pucReportedPayload,
+                                                                 uint32_t ulReportedPayloadLength,
+                                                                 uint32_t * pulRequestID );
 
 /**
  * @brief Request to get the device property document.
