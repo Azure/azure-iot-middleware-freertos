@@ -55,14 +55,14 @@ void vHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMes
  * Callback use for Direct method messages
  *
  **/
-void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
+void vHandleCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
                           void * pvContext );
 
 /**
  * Callback use for Twin messages
  *
  **/
-void vHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
+void vHandleDevicePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                void * pvContext );
 
 /**
