@@ -10,7 +10,7 @@
 
 #include <cmocka.h>
 
-#include "azure_iot_hub_client_properties.h"
+#include "azure_iot_json_reader.h"
 #include "azure_iot_mqtt.h"
 #include "azure_iot_hub_client.h"
 /*-----------------------------------------------------------*/

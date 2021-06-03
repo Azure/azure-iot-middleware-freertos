@@ -6,27 +6,12 @@
  * @brief Implementation of the Azure IoT JSON reader.
  */
 
-#include "azure_iot_json_reader.h"
-
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
-/* SPDX-License-Identifier: MIT */
-
-/**
- * @file azure_iot_json_reader.h
- *
- * @brief The JSON reader used by the middleware for PnP properties.
- *
- * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
- * prefixed with an underscore ('_') directly in your application code. These symbols
- * are part of Azure SDK's internal implementation; we do not document these symbols
- * and they are subject to change in future versions of the SDK which would break your code.
- *
- */
-
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "azure_iot_json_reader.h"
+
+#include "azure_iot_result.h"
 
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                           const uint8_t * pucBuffer,

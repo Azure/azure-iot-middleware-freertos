@@ -5,11 +5,12 @@
  * @file azure_iot_json_writer.c
  * @brief Implementation of the Azure IoT JSON writer.
  */
+#include <stdbool.h>
+#include <stdint.h>
 
 #include "azure_iot_json_writer.h"
 
-/* TODO: remove this dep */
-#include "azure_iot_hub_client.h"
+#include "azure_iot_result.h"
 
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
                                           uint8_t * pucBuffer,
