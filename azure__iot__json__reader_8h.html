@@ -110,33 +110,33 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:afd3e67a96cc1e4558228bc2d94cc2735"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#afd3e67a96cc1e4558228bc2d94cc2735">AzureIoTJSONReader_Init</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t usBufferLen)</td></tr>
-<tr class="memdesc:afd3e67a96cc1e4558228bc2d94cc2735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#afd3e67a96cc1e4558228bc2d94cc2735">More...</a><br /></td></tr>
-<tr class="separator:afd3e67a96cc1e4558228bc2d94cc2735"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45acf1d1be1177cc6b14805817cadba7"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a45acf1d1be1177cc6b14805817cadba7">AzureIoTJSONReader_NextToken</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
-<tr class="memdesc:a45acf1d1be1177cc6b14805817cadba7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the next token in the JSON text and updates the reader state.  <a href="azure__iot__json__reader_8h.html#a45acf1d1be1177cc6b14805817cadba7">More...</a><br /></td></tr>
-<tr class="separator:a45acf1d1be1177cc6b14805817cadba7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6697efd4957e233be79038d0eb55b20d"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a6697efd4957e233be79038d0eb55b20d">AzureIoTJSONReader_SkipChildren</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
-<tr class="memdesc:a6697efd4957e233be79038d0eb55b20d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads and skips over any nested JSON elements.  <a href="azure__iot__json__reader_8h.html#a6697efd4957e233be79038d0eb55b20d">More...</a><br /></td></tr>
-<tr class="separator:a6697efd4957e233be79038d0eb55b20d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6eee754658715b67ffa6a970c9cc4a6b"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a6eee754658715b67ffa6a970c9cc4a6b">AzureIoTJSONReader_GetTokenBool</a> (AzureIoTJSONReader_t *pxReader, bool *pxValue)</td></tr>
-<tr class="memdesc:a6eee754658715b67ffa6a970c9cc4a6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's boolean value.  <a href="azure__iot__json__reader_8h.html#a6eee754658715b67ffa6a970c9cc4a6b">More...</a><br /></td></tr>
-<tr class="separator:a6eee754658715b67ffa6a970c9cc4a6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a288945e0bd0fedbf8ee6950ed4469ccb"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a288945e0bd0fedbf8ee6950ed4469ccb">AzureIoTJSONReader_GetTokenInt32</a> (AzureIoTJSONReader_t *pxReader, int32_t *plValue)</td></tr>
-<tr class="memdesc:a288945e0bd0fedbf8ee6950ed4469ccb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a 32-bit signed integer.  <a href="azure__iot__json__reader_8h.html#a288945e0bd0fedbf8ee6950ed4469ccb">More...</a><br /></td></tr>
-<tr class="separator:a288945e0bd0fedbf8ee6950ed4469ccb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e5e44065b15cb56804f2dcc18727425"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a9e5e44065b15cb56804f2dcc18727425">AzureIoTJSONReader_GetTokenDouble</a> (AzureIoTJSONReader_t *pxReader, double *pxValue)</td></tr>
-<tr class="memdesc:a9e5e44065b15cb56804f2dcc18727425"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a <code>double</code>.  <a href="azure__iot__json__reader_8h.html#a9e5e44065b15cb56804f2dcc18727425">More...</a><br /></td></tr>
-<tr class="separator:a9e5e44065b15cb56804f2dcc18727425"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a728e08b87e69ef42ede7774acc98286c"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a728e08b87e69ef42ede7774acc98286c">AzureIoTJSONReader_GetTokenString</a> (AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t usBufferSize, uint32_t *pusBytesCopied)</td></tr>
-<tr class="memdesc:a728e08b87e69ef42ede7774acc98286c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's string after unescaping it, if required.  <a href="azure__iot__json__reader_8h.html#a728e08b87e69ef42ede7774acc98286c">More...</a><br /></td></tr>
-<tr class="separator:a728e08b87e69ef42ede7774acc98286c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a244046f79b9cf4601f194057f47c46b0"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a244046f79b9cf4601f194057f47c46b0">AzureIoTJSONReader_TokenIsTextEqual</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</td></tr>
-<tr class="memdesc:a244046f79b9cf4601f194057f47c46b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison.  <a href="azure__iot__json__reader_8h.html#a244046f79b9cf4601f194057f47c46b0">More...</a><br /></td></tr>
-<tr class="separator:a244046f79b9cf4601f194057f47c46b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4e02165f8823bee38ef6746236e35af9"><td class="memItemLeft" align="right" valign="top">AzureIoTHubClientResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a4e02165f8823bee38ef6746236e35af9">AzureIoTJSONReader_TokenType</a> (AzureIoTJSONReader_t *pxReader, AzureIoTJSONTokenType_t *pxTokenType)</td></tr>
-<tr class="memdesc:a4e02165f8823bee38ef6746236e35af9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines type of token currently #AzureIoTJSONReader_t points to.  <a href="azure__iot__json__reader_8h.html#a4e02165f8823bee38ef6746236e35af9">More...</a><br /></td></tr>
-<tr class="separator:a4e02165f8823bee38ef6746236e35af9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95f8e7a6778cee5ef9314354c1b1f0f4"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a95f8e7a6778cee5ef9314354c1b1f0f4">AzureIoTJSONReader_Init</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t usBufferLen)</td></tr>
+<tr class="memdesc:a95f8e7a6778cee5ef9314354c1b1f0f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#a95f8e7a6778cee5ef9314354c1b1f0f4">More...</a><br /></td></tr>
+<tr class="separator:a95f8e7a6778cee5ef9314354c1b1f0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5425081ad5dd69ca00537a37761fcd75"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
+<tr class="memdesc:a5425081ad5dd69ca00537a37761fcd75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the next token in the JSON text and updates the reader state.  <a href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">More...</a><br /></td></tr>
+<tr class="separator:a5425081ad5dd69ca00537a37761fcd75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40860e6cf94d171a454b85dcfd9b6341"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
+<tr class="memdesc:a40860e6cf94d171a454b85dcfd9b6341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads and skips over any nested JSON elements.  <a href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">More...</a><br /></td></tr>
+<tr class="separator:a40860e6cf94d171a454b85dcfd9b6341"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aded393d5f09978d32a7976bb666c3a46"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">AzureIoTJSONReader_GetTokenBool</a> (AzureIoTJSONReader_t *pxReader, bool *pxValue)</td></tr>
+<tr class="memdesc:aded393d5f09978d32a7976bb666c3a46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's boolean value.  <a href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">More...</a><br /></td></tr>
+<tr class="separator:aded393d5f09978d32a7976bb666c3a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">AzureIoTJSONReader_GetTokenInt32</a> (AzureIoTJSONReader_t *pxReader, int32_t *plValue)</td></tr>
+<tr class="memdesc:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a 32-bit signed integer.  <a href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">More...</a><br /></td></tr>
+<tr class="separator:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9610a3717afd11e0f65b7d7da202c545"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a> (AzureIoTJSONReader_t *pxReader, double *pxValue)</td></tr>
+<tr class="memdesc:a9610a3717afd11e0f65b7d7da202c545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a <code>double</code>.  <a href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">More...</a><br /></td></tr>
+<tr class="separator:a9610a3717afd11e0f65b7d7da202c545"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c0140518f99b399096117fb7394b295"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a5c0140518f99b399096117fb7394b295">AzureIoTJSONReader_GetTokenString</a> (AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t usBufferSize, uint32_t *pusBytesCopied)</td></tr>
+<tr class="memdesc:a5c0140518f99b399096117fb7394b295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's string after unescaping it, if required.  <a href="azure__iot__json__reader_8h.html#a5c0140518f99b399096117fb7394b295">More...</a><br /></td></tr>
+<tr class="separator:a5c0140518f99b399096117fb7394b295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</td></tr>
+<tr class="memdesc:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison.  <a href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">More...</a><br /></td></tr>
+<tr class="separator:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">AzureIoTJSONReader_TokenType</a> (AzureIoTJSONReader_t *pxReader, AzureIoTJSONTokenType_t *pxTokenType)</td></tr>
+<tr class="memdesc:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines type of token currently #AzureIoTJSONReader_t points to.  <a href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">More...</a><br /></td></tr>
+<tr class="separator:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The JSON reader used by the middleware for PnP properties. </p>
@@ -158,14 +158,14 @@ Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a6eee754658715b67ffa6a970c9cc4a6b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6eee754658715b67ffa6a970c9cc4a6b">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenBool()</h2>
+<a id="aded393d5f09978d32a7976bb666c3a46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aded393d5f09978d32a7976bb666c3a46">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenBool()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenBool </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenBool </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -192,24 +192,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The boolean value is returned. </td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The boolean value is returned. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a9e5e44065b15cb56804f2dcc18727425"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e5e44065b15cb56804f2dcc18727425">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenDouble()</h2>
+<a id="a9610a3717afd11e0f65b7d7da202c545"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9610a3717afd11e0f65b7d7da202c545">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenDouble()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenDouble </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -236,24 +236,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The number is returned. </td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The number is returned. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a288945e0bd0fedbf8ee6950ed4469ccb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a288945e0bd0fedbf8ee6950ed4469ccb">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenInt32()</h2>
+<a id="ace9bfb2526b7c9eea608e36bf177ba1f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace9bfb2526b7c9eea608e36bf177ba1f">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenInt32()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenInt32 </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32 </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -280,24 +280,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The number is returned. </td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The number is returned. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a728e08b87e69ef42ede7774acc98286c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a728e08b87e69ef42ede7774acc98286c">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenString()</h2>
+<a id="a5c0140518f99b399096117fb7394b295"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5c0140518f99b399096117fb7394b295">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenString()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_GetTokenString </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenString </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -338,24 +338,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The property name was appended successfully. </td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The property name was appended successfully. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="afd3e67a96cc1e4558228bc2d94cc2735"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afd3e67a96cc1e4558228bc2d94cc2735">&#9670;&nbsp;</a></span>AzureIoTJSONReader_Init()</h2>
+<a id="a95f8e7a6778cee5ef9314354c1b1f0f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95f8e7a6778cee5ef9314354c1b1f0f4">&#9670;&nbsp;</a></span>AzureIoTJSONReader_Init()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_Init </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_Init </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -389,10 +389,10 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The #AzureIoTJSONReader_t is initialized successfully. </td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The #AzureIoTJSONReader_t is initialized successfully. </td></tr>
     <tr><td class="paramname">other</td><td>Initialization failed. </td></tr>
   </table>
   </dd>
@@ -400,14 +400,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a45acf1d1be1177cc6b14805817cadba7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45acf1d1be1177cc6b14805817cadba7">&#9670;&nbsp;</a></span>AzureIoTJSONReader_NextToken()</h2>
+<a id="a5425081ad5dd69ca00537a37761fcd75"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5425081ad5dd69ca00537a37761fcd75">&#9670;&nbsp;</a></span>AzureIoTJSONReader_NextToken()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_NextToken </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_NextToken </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em></td><td>)</td>
@@ -423,24 +423,24 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The token was read successfully. </td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The token was read successfully. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a6697efd4957e233be79038d0eb55b20d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6697efd4957e233be79038d0eb55b20d">&#9670;&nbsp;</a></span>AzureIoTJSONReader_SkipChildren()</h2>
+<a id="a40860e6cf94d171a454b85dcfd9b6341"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40860e6cf94d171a454b85dcfd9b6341">&#9670;&nbsp;</a></span>AzureIoTJSONReader_SkipChildren()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_SkipChildren </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_SkipChildren </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em></td><td>)</td>
@@ -456,25 +456,25 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the result of the operation. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTHubClientSuccess</td><td>The children of the current JSON token are skipped successfully.</td></tr>
+    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The children of the current JSON token are skipped successfully.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section remark"><dt>Remarks</dt><dd>If the current token kind is a property name, the reader first moves to the property value. Then, if the token kind is start of an object or array, the reader moves to the matching end object or array. For all other token kinds, the reader doesn't move and returns #eAzureIoTHubClientSuccess. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>If the current token kind is a property name, the reader first moves to the property value. Then, if the token kind is start of an object or array, the reader moves to the matching end object or array. For all other token kinds, the reader doesn't move and returns #eAzureIoTSuccess. </dd></dl>
 
 </div>
 </div>
-<a id="a244046f79b9cf4601f194057f47c46b0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a244046f79b9cf4601f194057f47c46b0">&#9670;&nbsp;</a></span>AzureIoTJSONReader_TokenIsTextEqual()</h2>
+<a id="ad215e5c3541d1fa55b63dc8866ccb9a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad215e5c3541d1fa55b63dc8866ccb9a9">&#9670;&nbsp;</a></span>AzureIoTJSONReader_TokenIsTextEqual()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_TokenIsTextEqual </td>
+          <td class="memname">bool AzureIoTJSONReader_TokenIsTextEqual </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -508,19 +508,19 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd><code>1</code> if the current JSON token value in the JSON source semantically matches the expected lookup text, with the exact casing; otherwise, <code>0</code>.</dd></dl>
-<dl class="section remark"><dt>Remarks</dt><dd>This operation is only valid for the string and property name token kinds. For all other token kinds, it returns 0. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the current JSON token value in the JSON source semantically matches the expected lookup text, with the exact casing; otherwise, false.</dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>This operation is only valid for the string and property name token kinds. For all other token kinds, it returns false. </dd></dl>
 
 </div>
 </div>
-<a id="a4e02165f8823bee38ef6746236e35af9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4e02165f8823bee38ef6746236e35af9">&#9670;&nbsp;</a></span>AzureIoTJSONReader_TokenType()</h2>
+<a id="a7ff8b6f96104b9c52735bc6dc41a814f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7ff8b6f96104b9c52735bc6dc41a814f">&#9670;&nbsp;</a></span>AzureIoTJSONReader_TokenType()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">AzureIoTHubClientResult_t AzureIoTJSONReader_TokenType </td>
+          <td class="memname">AzureIoTResult_t AzureIoTJSONReader_TokenType </td>
           <td>(</td>
           <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
@@ -547,7 +547,7 @@ Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTHubClientResult_t value indicating the type of token. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the type of token. </dd></dl>
 
 </div>
 </div>
