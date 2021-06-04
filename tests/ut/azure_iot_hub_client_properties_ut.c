@@ -25,8 +25,8 @@
  * }
  *
  */
-#define azureiothubclientpropertiesTEST_JSON_COMPONENT \
-    "{\"component\":{\"__t\":\"c\",\"property\":\"value\"}}"
+static const uint8_t ucTestJSONComponent[] =
+    "{\"component\":{\"__t\":\"c\",\"property\":\"value\"}}";
 
 /*
  *
@@ -40,8 +40,8 @@
  * }
  *
  */
-#define azureiothubclientpropertiesTEST_JSON_RESPONSE \
-    "{\"property\":{\"ac\":200,\"av\":1,\"ad\":\"success\",\"value\":\"val\"}}"
+static const uint8_t ucTestJSONResponse[] =
+    "{\"property\":{\"ac\":200,\"av\":1,\"ad\":\"success\",\"value\":\"val\"}}";
 
 /*
  *
@@ -59,9 +59,9 @@
  * }
  *
  */
-#define azureiothubclientpropertiesTEST_JSON_VERSION                                                 \
+static const uint8_t ucTestJSONVersion[] =
     "{\"one_component\":{\"thing_one\":1,\"thing_two\":\"string\"},\"two_component\":{\"prop_one\":" \
-    "45,\"prop_two\":\"foo\"},\"not_component\":42,\"$version\":5}"
+    "45,\"prop_two\":\"foo\"},\"not_component\":42,\"$version\":5}";
 
 
 static const uint8_t ucHostname[] = "unittest.azure-devices.net";
@@ -97,23 +97,6 @@ TickType_t xTaskGetTickCount( void )
 static uint64_t prvGetUnixTime( void )
 {
     return 0xFFFFFFFFFFFFFFFF;
-}
-/*-----------------------------------------------------------*/
-
-static void prvSetupTestIoTHubClient( AzureIoTHubClient_t * pxTestIoTHubClient )
-{
-    AzureIoTHubClientOptions_t xHubClientOptions = { 0 };
-
-    will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
-    assert_int_equal( AzureIoTHubClient_Init( pxTestIoTHubClient,
-                                              ucHostname, sizeof( ucHostname ) - 1,
-                                              ucDeviceId, sizeof( ucDeviceId ) - 1,
-                                              &xHubClientOptions,
-                                              ucBuffer,
-                                              sizeof( ucBuffer ),
-                                              prvGetUnixTime,
-                                              &xTransportInterface ),
-                      eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
 
@@ -185,7 +168,7 @@ static void testAzureIoTHubClientProperties_BuilderComponent_Success( void ** pp
                                                                        &xJSONWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTSuccess );
 
-    assert_string_equal( azureiothubclientpropertiesTEST_JSON_COMPONENT, ucJSONWriterBuffer );
+    assert_string_equal( ucTestJSONComponent, ucJSONWriterBuffer );
 }
 
 static void testAzureIoTHubClientProperties_BuilderBeginResponseStatus_Failure( void ** ppvState )
@@ -279,7 +262,7 @@ static void testAzureIoTHubClientProperties_BuilderResponse_Success( void ** ppv
                                                                             &xJSONWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xJSONWriter ), eAzureIoTSuccess );
 
-    assert_string_equal( azureiothubclientpropertiesTEST_JSON_RESPONSE, ucJSONWriterBuffer );
+    assert_string_equal( ucTestJSONResponse, ucJSONWriterBuffer );
 }
 
 static void testAzureIoTHubClientProperties_GetPropertiesVersion_Failure( void ** ppvState )
@@ -324,8 +307,8 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersion_Success( void *
 
     assert_int_equal( AzureIoTJSONReader_Init(
                           &xJSONReader,
-                          azureiothubclientpropertiesTEST_JSON_VERSION,
-                          strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
+                          ucTestJSONVersion,
+                          strlen( ucTestJSONVersion ) ),
                       eAzureIoTSuccess );
     assert_int_equal( AzureIoTHubClientProperties_GetPropertiesVersion( &xTestIoTHubClient,
                                                                         &xJSONReader,
@@ -420,8 +403,8 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
 
     assert_int_equal( AzureIoTJSONReader_Init(
                           &xJSONReader,
-                          azureiothubclientpropertiesTEST_JSON_VERSION,
-                          strlen( azureiothubclientpropertiesTEST_JSON_VERSION ) ),
+                          ucTestJSONVersion,
+                          strlen( ucTestJSONVersion ) ),
                       eAzureIoTSuccess );
 
     /* First component | first property */
