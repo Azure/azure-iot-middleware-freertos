@@ -172,7 +172,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONW
 
 int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter )
 {
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_GetBytesUsed failed: invalid argument" ) );
         return -1;
@@ -274,7 +274,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendBool failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -299,7 +299,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendInt32 failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -325,7 +325,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWrite
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendDouble failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -349,7 +349,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendNull( AzureIoTJSONWriter_t * pxWriter 
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendNull failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -373,7 +373,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBeginObject( AzureIoTJSONWriter_t * px
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendBeginObject failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -397,7 +397,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBeginArray( AzureIoTJSONWriter_t * pxW
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendBeginArray failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -421,7 +421,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter_t * pxWr
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendEndObject failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -445,7 +445,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendEndArray( AzureIoTJSONWriter_t * pxWri
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxWriter == NULL ) )
+    if( pxWriter == NULL )
     {
         AZLogError( ( "AzureIoTJSONWriter_AppendEndArray failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;

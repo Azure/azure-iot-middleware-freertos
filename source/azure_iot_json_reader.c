@@ -49,7 +49,7 @@ AzureIoTResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * pxReader )
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxReader == NULL ) )
+    if( pxReader == NULL )
     {
         AZLogError( ( "AzureIoTJSONReader_NextToken failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -73,7 +73,7 @@ AzureIoTResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReade
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxReader == NULL ) )
+    if( pxReader == NULL )
     {
         AZLogError( ( "AzureIoTJSONReader_SkipChildren failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
@@ -229,7 +229,7 @@ AzureIoTResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
     }
     else
     {
-        *pxTokenType = pxReader->_internal.xCoreReader.token.kind;
+        *pxTokenType = ( AzureIoTJSONTokenType_t ) pxReader->_internal.xCoreReader.token.kind;
         xResult = eAzureIoTSuccess;
     }
 
