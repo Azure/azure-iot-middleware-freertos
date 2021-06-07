@@ -11,9 +11,11 @@
 #include <cmocka.h>
 
 #include "azure_iot_json_reader.h"
-#include "azure_iot_mqtt.h"
-#include "azure_iot_hub_client.h"
 /*-----------------------------------------------------------*/
+
+static uint8_t ucProperty[] = "property";
+static uint8_t ucPropertyTwo[] = "property_two";
+static uint8_t ucValueOne[] = "value_one";
 
 /*
  * {
@@ -21,16 +23,16 @@
  * "property_two": "value_two"
  * }
  */
-#define azureiotjsonreaderutTEST_JSON \
-    "{\"property_one\":\"value_one\",\"property_two\":\"value_two\"}"
+static uint8_t ucTestJSON[] =
+    "{\"property_one\":\"value_one\",\"property_two\":\"value_two\"}";
 
 /*
  * {
  * "property_one": "value_one"
  * }
  */
-#define azureiotjsonreaderutTEST_JSON_STRING \
-    "{\"property_one\":\"value_one\"}"
+static uint8_t ucTestJSONString[] =
+    "{\"property_one\":\"value_one\"}";
 
 /*
  * {
@@ -40,40 +42,40 @@
  * "property_two": "value_two"
  * }
  */
-#define azureiotjsonreaderutTEST_JSON_CHILDREN \
-    "{\"property_one\":{\"child_one\":\"value_one\"},\"property_two\":\"value_two\"}"
+static uint8_t ucTestJSONChildren[] =
+    "{\"property_one\":{\"child_one\":\"value_one\"},\"property_two\":\"value_two\"}";
 
 /*
  * {
  * "property_one": true
  * }
  */
-#define azureiotjsonreaderutTEST_JSON_BOOL \
-    "{\"property\":true}"
+static uint8_t ucTestJSONBool[] =
+    "{\"property\":true}";
 
 /*
  * {
  * "property_one": 42
  * }
  */
-#define azureiotjsonreaderutTEST_JSON_INT32 \
-    "{\"property\":42}"
+static uint8_t ucTestJSONInt32[] =
+    "{\"property\":42}";
 
 /*
  * {
  * "property_one": 42.42
  * }
  */
-#define azureiotjsonreaderutTEST_JSON_DOUBLE \
-    "{\"property\":42.42}"
+static uint8_t ucTestJSONDouble[] =
+    "{\"property\":42.42}";
 
 /*
  * {
  * "property_one": ["value_one", "value_two"],
  * }
  */
-#define azureiotjsonreaderutTEST_JSON_ARRAY \
-    "{\"property_one\":[\"value_one\",\"value_two\"]}"
+static uint8_t ucTestJSONArray[] =
+    "{\"property_one\":[\"value_one\",\"value_two\"]}";
 
 
 
@@ -82,23 +84,22 @@ uint32_t ulGetAllTests();
 static void testAzureIoTJSONReader_Init_Failure( void ** ppvState )
 {
     AzureIoTJSONReader_t xReader;
-    uint8_t * pucTestJSON = azureiotjsonreaderutTEST_JSON_STRING;
 
     /* Fail init if JSON reader is NULL */
     assert_int_equal( AzureIoTJSONReader_Init( NULL,
-                                               pucTestJSON,
-                                               strlen( pucTestJSON ) ),
+                                               ucTestJSONString,
+                                               strlen( ucTestJSONString ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail init if JSON text is NULL */
     assert_int_equal( AzureIoTJSONReader_Init( &xReader,
                                                NULL,
-                                               strlen( pucTestJSON ) ),
+                                               strlen( ucTestJSONString ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail init if JSON text length is 0 */
     assert_int_equal( AzureIoTJSONReader_Init( &xReader,
-                                               pucTestJSON,
+                                               ucTestJSONString,
                                                0 ),
                       eAzureIoTErrorInvalidArgument );
 }
@@ -106,11 +107,10 @@ static void testAzureIoTJSONReader_Init_Failure( void ** ppvState )
 static void testAzureIoTJSONReader_Init_Success( void ** ppvState )
 {
     AzureIoTJSONReader_t xReader;
-    uint8_t * pucTestJSON = azureiotjsonreaderutTEST_JSON;
 
     assert_int_equal( AzureIoTJSONReader_Init( &xReader,
-                                               pucTestJSON,
-                                               strlen( pucTestJSON ) ),
+                                               ucTestJSON,
+                                               strlen( ucTestJSON ) ),
                       eAzureIoTSuccess );
 }
 
@@ -126,7 +126,7 @@ static void testAzureIoTJSONReader_NextToken_Success( void ** ppvState )
     AzureIoTJSONReader_t xReader;
     AzureIoTJSONTokenType_t xTokenType;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON, strlen( azureiotjsonreaderutTEST_JSON ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSON, strlen( ucTestJSON ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -183,7 +183,7 @@ static void testAzureIoTJSONReader_SkipChildren_Success( void ** ppvState )
     AzureIoTJSONReader_t xReader;
     AzureIoTJSONTokenType_t xTokenType;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_CHILDREN, strlen( azureiotjsonreaderutTEST_JSON_CHILDREN ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONChildren, strlen( ucTestJSONChildren ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -219,7 +219,7 @@ static void testAzureIoTJSONReader_SkipChildren_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONReader_TokenType( &xReader, &xTokenType ), eAzureIoTSuccess );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
-    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xReader, "property_two", strlen( "property_two" ) ) );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xReader, ucPropertyTwo, strlen( ucPropertyTwo ) ) );
 }
 
 static void testAzureIoTJSONReader_GetTokenBool_Failure( void ** ppvState )
@@ -244,7 +244,7 @@ static void testAzureIoTJSONReader_GetTokenBool_Success( void ** ppvState )
     AzureIoTJSONTokenType_t xTokenType;
     bool xValue;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_BOOL, strlen( azureiotjsonreaderutTEST_JSON_BOOL ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONBool, strlen( ucTestJSONBool ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -291,7 +291,7 @@ static void testAzureIoTJSONReader_GetTokenInt32_Success( void ** ppvState )
     AzureIoTJSONTokenType_t xTokenType;
     int32_t lValue;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_INT32, strlen( azureiotjsonreaderutTEST_JSON_INT32 ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONInt32, strlen( ucTestJSONInt32 ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -338,7 +338,7 @@ static void testAzureIoTJSONReader_GetTokenDouble_Success( void ** ppvState )
     AzureIoTJSONTokenType_t xTokenType;
     double xValue;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_DOUBLE, strlen( azureiotjsonreaderutTEST_JSON_DOUBLE ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONDouble, strlen( ucTestJSONDouble ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -405,7 +405,7 @@ static void testAzureIoTJSONReader_GetTokenString_Success( void ** ppvState )
     uint8_t ucValue[ 16 ] = { 0 };
     uint32_t ulBytesCopied;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_STRING, strlen( azureiotjsonreaderutTEST_JSON_STRING ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONString, strlen( ucTestJSONString ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -428,28 +428,27 @@ static void testAzureIoTJSONReader_GetTokenString_Success( void ** ppvState )
     assert_int_equal( AzureIoTJSONReader_TokenType( &xReader, &xTokenType ), eAzureIoTSuccess );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenSTRING );
     assert_int_equal( AzureIoTJSONReader_GetTokenString( &xReader, ucValue, sizeof( ucValue ), &ulBytesCopied ), eAzureIoTSuccess );
-    assert_int_equal( ulBytesCopied, strlen( "value_one" ) );
-    assert_string_equal( "value_one", ucValue );
+    assert_int_equal( ulBytesCopied, strlen( ucValueOne ) );
+    assert_string_equal( ucValueOne, ucValue );
 }
 
 static void testAzureIoTJSONReader_TokenIsTextEqual_Failure( void ** ppvState )
 {
     AzureIoTJSONReader_t xReader;
-    char * pucValue = "value";
 
     /* Fail init if JSON reader is NULL */
     assert_false( AzureIoTJSONReader_TokenIsTextEqual( NULL,
-                                                       pucValue,
-                                                       strlen( pucValue ) ) );
+                                                       ucValueOne,
+                                                       strlen( ucValueOne ) ) );
 
     /* Fail init if char pointer is NULL */
     assert_false( AzureIoTJSONReader_TokenIsTextEqual( &xReader,
                                                        NULL,
-                                                       strlen( pucValue ) ) );
+                                                       strlen( ucValueOne ) ) );
 
     /* Fail init if char pointer length is 0 */
     assert_false( AzureIoTJSONReader_TokenIsTextEqual( &xReader,
-                                                       pucValue,
+                                                       ucValueOne,
                                                        0 ) );
 }
 
@@ -458,7 +457,7 @@ static void testAzureIoTJSONReader_TokenIsTextEqual_Success( void ** ppvState )
     AzureIoTJSONReader_t xReader;
     AzureIoTJSONTokenType_t xTokenType;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_STRING, strlen( azureiotjsonreaderutTEST_JSON_STRING ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONString, strlen( ucTestJSONString ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */
@@ -480,7 +479,7 @@ static void testAzureIoTJSONReader_TokenIsTextEqual_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONReader_TokenType( &xReader, &xTokenType ), eAzureIoTSuccess );
     assert_int_equal( xTokenType, eAzureIoTJSONTokenSTRING );
-    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xReader, "value_one", strlen( "value_one" ) ) );
+    assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xReader, ucValueOne, strlen( ucValueOne ) ) );
 }
 
 static void testAzureIoTJSONReader_TokenType_Failure( void ** ppvState )
@@ -502,7 +501,7 @@ static void testAzureIoTJSONReader_TokenType_Success( void ** ppvState )
     AzureIoTJSONReader_t xReader;
     AzureIoTJSONTokenType_t xTokenType;
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, azureiotjsonreaderutTEST_JSON_ARRAY, strlen( azureiotjsonreaderutTEST_JSON_ARRAY ) ),
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONArray, strlen( ucTestJSONArray ) ),
                       eAzureIoTSuccess );
 
     /*Begin object */

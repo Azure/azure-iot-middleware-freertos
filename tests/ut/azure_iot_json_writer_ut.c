@@ -11,65 +11,72 @@
 #include <cmocka.h>
 
 #include "azure_iot_json_writer.h"
-#include "azure_iot_mqtt.h"
-#include "azure_iot_hub_client.h"
 /*-----------------------------------------------------------*/
+
+int32_t lInt32Value = 42;
+double xDoubleValue = 42.42;
+bool xBoolValue = true;
+int16_t usFractionalDigits = 2;
+uint8_t ucProperty[] = "property";
+uint8_t ucPropertyName[] = "property_name";
+uint8_t ucValue[] = "value";
+uint8_t ucValueOne[] = "value_one";
 
 /*
  * {
  * "property_one": 42
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_INT32 \
-    "{\"property\":42}"
+static uint8_t ucTestJSONInt32[] =
+    "{\"property\":42}";
 
 /*
  * {
  * "property_one": 42.42
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_DOUBLE \
-    "{\"property\":42.42}"
+static uint8_t ucTestJSONDouble[] =
+    "{\"property\":42.42}";
 
 /*
  * {
  * "property_one": true
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_BOOL \
-    "{\"property\":true}"
+static uint8_t ucTestJSONBool[] =
+    "{\"property\":true}";
 
 /*
  * {
  * "property_one": "value"
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_STRING \
-    "{\"property\":\"value\"}"
+static uint8_t ucTestJSONString[] =
+    "{\"property\":\"value\"}";
 
 /*
  * {
  * "property_one": null
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_NULL \
-    "{\"property\":null}"
+static uint8_t ucTestJSONNull[] =
+    "{\"property\":null}";
 
 /*
  * {
  * "property_one": "value"
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_COMPOUND \
-    "{\"property\":{\"property\":42}}"
+static uint8_t ucTestJSONCompound[] =
+    "{\"property\":{\"property\":42}}";
 
 /*
  * {
  * "property": ["value_one", "value_two"],
  * }
  */
-#define azureiotjsonwriterutTEST_JSON_ARRAY \
-    "{\"property\":[\"value_one\",\"value_two\"]}"
+static uint8_t ucTestJSONArray[] =
+    "{\"property\":[\"value_one\",\"value_two\"]}";
 
 static uint8_t ucJSONWriterBuffer[ 128 ];
 
@@ -120,26 +127,23 @@ static void testAzureIoTJSONWriter_AppendPropertyWithInt32_Failure( void ** ppvS
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucPropertyName = "property_name";
-    int32_t lValue = 42;
-
     /* Fail append property with int32 if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithInt32Value( NULL,
-                                                                       pucPropertyName,
-                                                                       strlen( pucPropertyName ),
-                                                                       lValue ), eAzureIoTErrorInvalidArgument );
+                                                                       ucPropertyName,
+                                                                       strlen( ucPropertyName ),
+                                                                       lInt32Value ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with int32 if property name is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithInt32Value( &xWriter,
                                                                        NULL,
-                                                                       strlen( pucPropertyName ),
-                                                                       lValue ), eAzureIoTErrorInvalidArgument );
+                                                                       strlen( ucPropertyName ),
+                                                                       lInt32Value ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with int32 if property name length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithInt32Value( &xWriter,
-                                                                       pucPropertyName,
+                                                                       ucPropertyName,
                                                                        0,
-                                                                       lValue ), eAzureIoTErrorInvalidArgument );
+                                                                       lInt32Value ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTJSONWriter_AppendPropertyWithInt32_Success( void ** ppvState )
@@ -152,11 +156,11 @@ static void testAzureIoTJSONWriter_AppendPropertyWithInt32_Success( void ** ppvS
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithInt32Value( &xWriter,
                                                                        "property",
                                                                        strlen( "property" ),
-                                                                       42 ), eAzureIoTSuccess );
+                                                                       lInt32Value ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_INT32 ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONInt32 ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_INT32 );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONInt32 );
 }
 
 static void testAzureIoTJSONWriter_AppendPropertyWithDouble_Failure( void ** ppvState )
@@ -165,29 +169,25 @@ static void testAzureIoTJSONWriter_AppendPropertyWithDouble_Failure( void ** ppv
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucPropertyName = "property_name";
-    double xValue = 42.42;
-    int16_t usFractionalDigits = 2;
-
     /* Fail append property with double if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithDoubleValue( NULL,
-                                                                        pucPropertyName,
-                                                                        strlen( pucPropertyName ),
-                                                                        xValue,
+                                                                        ucPropertyName,
+                                                                        strlen( ucPropertyName ),
+                                                                        xDoubleValue,
                                                                         usFractionalDigits ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with double if property name is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithDoubleValue( &xWriter,
                                                                         NULL,
-                                                                        strlen( pucPropertyName ),
-                                                                        xValue,
+                                                                        strlen( ucPropertyName ),
+                                                                        xDoubleValue,
                                                                         usFractionalDigits ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with double if property name length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithDoubleValue( &xWriter,
-                                                                        pucPropertyName,
+                                                                        ucPropertyName,
                                                                         0,
-                                                                        xValue,
+                                                                        xDoubleValue,
                                                                         usFractionalDigits ), eAzureIoTErrorInvalidArgument );
 }
 
@@ -203,9 +203,9 @@ static void testAzureIoTJSONWriter_AppendPropertyWithDouble_Success( void ** ppv
                                                                         strlen( "property" ),
                                                                         42.42, 2 ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_DOUBLE ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONDouble ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_DOUBLE );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONDouble );
 }
 
 static void testAzureIoTJSONWriter_AppendPropertyWithBool_Failure( void ** ppvState )
@@ -214,26 +214,23 @@ static void testAzureIoTJSONWriter_AppendPropertyWithBool_Failure( void ** ppvSt
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucPropertyName = "property_name";
-    bool usValue = true;
-
     /* Fail append property with bool if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithBoolValue( NULL,
-                                                                      pucPropertyName,
-                                                                      strlen( pucPropertyName ),
-                                                                      usValue ), eAzureIoTErrorInvalidArgument );
+                                                                      ucPropertyName,
+                                                                      strlen( ucPropertyName ),
+                                                                      xBoolValue ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with bool if property name is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithBoolValue( &xWriter,
                                                                       NULL,
-                                                                      strlen( pucPropertyName ),
-                                                                      usValue ), eAzureIoTErrorInvalidArgument );
+                                                                      strlen( ucPropertyName ),
+                                                                      xBoolValue ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with bool if property name length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithBoolValue( &xWriter,
-                                                                      pucPropertyName,
+                                                                      ucPropertyName,
                                                                       0,
-                                                                      usValue ), eAzureIoTErrorInvalidArgument );
+                                                                      xBoolValue ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTJSONWriter_AppendPropertyWithBool_Success( void ** ppvState )
@@ -248,9 +245,9 @@ static void testAzureIoTJSONWriter_AppendPropertyWithBool_Success( void ** ppvSt
                                                                       strlen( "property" ),
                                                                       true ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_BOOL ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONBool ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_BOOL );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONBool );
 }
 
 static void testAzureIoTJSONWriter_AppendPropertyWithString_Failure( void ** ppvState )
@@ -259,42 +256,39 @@ static void testAzureIoTJSONWriter_AppendPropertyWithString_Failure( void ** ppv
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucPropertyName = "property_name";
-    uint8_t * pucValue = "value_one";
-
     /* Fail append property with string if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( NULL,
-                                                                        pucPropertyName,
-                                                                        strlen( pucPropertyName ),
-                                                                        pucValue,
-                                                                        strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                                        ucPropertyName,
+                                                                        strlen( ucPropertyName ),
+                                                                        ucValue,
+                                                                        strlen( ucValue ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with string if property name is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( &xWriter,
                                                                         NULL,
-                                                                        strlen( pucPropertyName ),
-                                                                        pucValue,
-                                                                        strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                                        strlen( ucPropertyName ),
+                                                                        ucValue,
+                                                                        strlen( ucValue ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with string if property name length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( &xWriter,
-                                                                        pucPropertyName,
+                                                                        ucPropertyName,
                                                                         0,
-                                                                        pucValue,
-                                                                        strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                                        ucValue,
+                                                                        strlen( ucValue ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with string if value name is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( &xWriter,
-                                                                        pucPropertyName,
+                                                                        ucPropertyName,
                                                                         0,
                                                                         NULL,
-                                                                        strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                                        strlen( ucValue ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property with string if value name length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( &xWriter,
-                                                                        pucPropertyName,
-                                                                        strlen( pucPropertyName ),
-                                                                        pucValue,
+                                                                        ucPropertyName,
+                                                                        strlen( ucPropertyName ),
+                                                                        ucValue,
                                                                         0 ), eAzureIoTErrorInvalidArgument );
 }
 
@@ -311,9 +305,9 @@ static void testAzureIoTJSONWriter_AppendPropertyWithString_Success( void ** ppv
                                                                         "value",
                                                                         strlen( "value" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_STRING ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONString ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_STRING );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONString );
 }
 
 static void testAzureIoTJSONWriter_GetBytesUsed_Failure( void ** ppvState )
@@ -334,7 +328,7 @@ static void testAzureIoTJSONWriter_GetBytesUsed_Success( void ** ppvState )
                                                                         "value",
                                                                         strlen( "value" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_STRING ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONString ) );
 }
 
 static void testAzureIoTJSONWriter_AppendString_Failure( void ** ppvState )
@@ -343,22 +337,19 @@ static void testAzureIoTJSONWriter_AppendString_Failure( void ** ppvState )
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucPropertyName = "property_name";
-    uint8_t * pucValue = "value_one";
-
     /* Fail append string if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendString( NULL,
-                                                       pucValue,
-                                                       strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                       ucValueOne,
+                                                       strlen( ucValueOne ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append string if value name is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter,
                                                        NULL,
-                                                       strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                       strlen( ucValueOne ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append string if value name length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter,
-                                                       pucValue,
+                                                       ucValueOne,
                                                        0 ), eAzureIoTErrorInvalidArgument );
 }
 
@@ -370,15 +361,15 @@ static void testAzureIoTJSONWriter_AppendString_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter,
                                                        "value",
                                                        strlen( "value" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_STRING ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONString ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_STRING );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONString );
 }
 
 
@@ -388,21 +379,19 @@ static void testAzureIoTJSONWriter_AppendJSON_Failure( void ** ppvState )
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucJSON = azureiotjsonwriterutTEST_JSON_INT32;
-
     /* Fail JSON text if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendJSONText( NULL,
-                                                         pucJSON,
-                                                         strlen( pucJSON ) ), eAzureIoTErrorInvalidArgument );
+                                                         ucTestJSONInt32,
+                                                         strlen( ucTestJSONInt32 ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail JSON text if JSON is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendJSONText( &xWriter,
                                                          NULL,
-                                                         strlen( pucJSON ) ), eAzureIoTErrorInvalidArgument );
+                                                         strlen( ucTestJSONInt32 ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail JSON text if JSON length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendJSONText( &xWriter,
-                                                         pucJSON,
+                                                         ucTestJSONInt32,
                                                          0 ), eAzureIoTErrorInvalidArgument );
 }
 
@@ -412,19 +401,17 @@ static void testAzureIoTJSONWriter_AppendJSON_Success( void ** ppvState )
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucJSON = azureiotjsonwriterutTEST_JSON_INT32;
-
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendJSONText( &xWriter,
-                                                         azureiotjsonwriterutTEST_JSON_INT32,
-                                                         strlen( azureiotjsonwriterutTEST_JSON_INT32 ) ), eAzureIoTSuccess );
+                                                         ucTestJSONInt32,
+                                                         strlen( ucTestJSONInt32 ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_COMPOUND ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONCompound ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_COMPOUND );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONCompound );
 }
 
 static void testAzureIoTJSONWriter_AppendPropertyName_Failure( void ** ppvState )
@@ -433,21 +420,19 @@ static void testAzureIoTJSONWriter_AppendPropertyName_Failure( void ** ppvState 
 
     prvInitJSONWriter( &xWriter );
 
-    uint8_t * pucValue = "property_name";
-
     /* Fail append property name if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( NULL,
-                                                             pucValue,
-                                                             strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                             ucPropertyName,
+                                                             strlen( ucPropertyName ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property name if JSON is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
                                                              NULL,
-                                                             strlen( pucValue ) ), eAzureIoTErrorInvalidArgument );
+                                                             strlen( ucPropertyName ) ), eAzureIoTErrorInvalidArgument );
 
     /* Fail append property name if JSON length is 0 */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             pucValue,
+                                                             ucPropertyName,
                                                              0 ), eAzureIoTErrorInvalidArgument );
 }
 
@@ -457,11 +442,9 @@ static void testAzureIoTJSONWriter_AppendBool_Failure( void ** ppvState )
 
     prvInitJSONWriter( &xWriter );
 
-    bool xValue = true;
-
     /* Fail append bool if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendBool( NULL,
-                                                     xValue ), eAzureIoTErrorInvalidArgument );
+                                                     xBoolValue ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTJSONWriter_AppendBool_Success( void ** ppvState )
@@ -472,14 +455,14 @@ static void testAzureIoTJSONWriter_AppendBool_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendBool( &xWriter,
                                                      true ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_BOOL ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONBool ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_BOOL );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONBool );
 }
 
 static void testAzureIoTJSONWriter_AppendInt32_Failure( void ** ppvState )
@@ -488,11 +471,9 @@ static void testAzureIoTJSONWriter_AppendInt32_Failure( void ** ppvState )
 
     prvInitJSONWriter( &xWriter );
 
-    int32_t lValue = 42;
-
     /* Fail append int32 if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendInt32( NULL,
-                                                      lValue ), eAzureIoTErrorInvalidArgument );
+                                                      lInt32Value ), eAzureIoTErrorInvalidArgument );
 }
 
 static void testAzureIoTJSONWriter_AppendInt32_Success( void ** ppvState )
@@ -503,14 +484,14 @@ static void testAzureIoTJSONWriter_AppendInt32_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendInt32( &xWriter,
                                                       42 ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_INT32 ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONInt32 ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_INT32 );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONInt32 );
 }
 
 static void testAzureIoTJSONWriter_AppendDouble_Failure( void ** ppvState )
@@ -519,12 +500,9 @@ static void testAzureIoTJSONWriter_AppendDouble_Failure( void ** ppvState )
 
     prvInitJSONWriter( &xWriter );
 
-    double xValue = 42.42;
-    int16_t usFractionalDigits = 2;
-
     /* Fail append int32 if JSON writer is NULL */
     assert_int_equal( AzureIoTJSONWriter_AppendDouble( NULL,
-                                                       xValue,
+                                                       xDoubleValue,
                                                        usFractionalDigits ), eAzureIoTErrorInvalidArgument );
 }
 
@@ -536,14 +514,14 @@ static void testAzureIoTJSONWriter_AppendDouble_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendDouble( &xWriter,
                                                        42.42, 2 ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_DOUBLE ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONDouble ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_DOUBLE );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONDouble );
 }
 
 static void testAzureIoTJSONWriter_AppendNull_Failure( void ** ppvState )
@@ -560,13 +538,13 @@ static void testAzureIoTJSONWriter_AppendNull_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendNull( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_NULL ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONNull ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_NULL );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONNull );
 }
 
 static void testAzureIoTJSONWriter_AppendBeginObject_Failure( void ** ppvState )
@@ -601,17 +579,17 @@ static void testAzureIoTJSONWriter_AppendArray_Success( void ** ppvState )
 
     assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
-                                                             "property",
-                                                             strlen( "property" ) ), eAzureIoTSuccess );
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendBeginArray( &xWriter ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter, "value_one", strlen( "value_one" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter, "value_two", strlen( "value_two" ) ), eAzureIoTSuccess );
     assert_int_equal( AzureIoTJSONWriter_AppendEndArray( &xWriter ), eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTJSONWriter_AppendEndObject( &xWriter ), eAzureIoTSuccess );
-    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( azureiotjsonwriterutTEST_JSON_ARRAY ) );
+    assert_int_equal( AzureIoTJSONWriter_GetBytesUsed( &xWriter ), strlen( ucTestJSONArray ) );
 
-    assert_string_equal( ucJSONWriterBuffer, azureiotjsonwriterutTEST_JSON_ARRAY );
+    assert_string_equal( ucJSONWriterBuffer, ucTestJSONArray );
 }
 
 uint32_t ulGetAllTests()
