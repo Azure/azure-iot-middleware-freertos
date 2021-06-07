@@ -295,8 +295,8 @@ static uint32_t prvAzureIoTHubClientCommandProcess( AzureIoTHubClientReceiveCont
  *
  * */
 static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveContext_t * pxContext,
-                                                             AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                             void * pvPublishInfo )
+                                                       AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                       void * pvPublishInfo )
 {
     AzureIoTResult_t xResult;
     AzureIoTHubClientPropertiesResponse_t xPropertiesResponse = { 0 };
@@ -1170,9 +1170,9 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SubscribeProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                              AzureIoTHubClientPropertiesCallback_t xCallback,
-                                                              void * prvCallbackContext,
-                                                              uint32_t ulTimeoutMilliseconds )
+                                                        AzureIoTHubClientPropertiesCallback_t xCallback,
+                                                        void * prvCallbackContext,
+                                                        uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t xMqttSubscription[ 2 ] = { { 0 }, { 0 } };
     AzureIoTMQTTResult_t xMQTTResult;
@@ -1274,9 +1274,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeProperties( AzureIoTHubClient_t * 
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                 const uint8_t * pucReportedPayload,
-                                                                 uint32_t ulReportedPayloadLength,
-                                                                 uint32_t * pulRequestId )
+                                                           const uint8_t * pucReportedPayload,
+                                                           uint32_t ulReportedPayloadLength,
+                                                           uint32_t * pulRequestId )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
