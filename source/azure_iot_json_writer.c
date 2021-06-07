@@ -192,7 +192,7 @@ int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter )
         return -1;
     }
 
-    return pxWriter->_internal.xCoreWriter._internal.total_bytes_written;
+    return az_span_size( az_json_writer_get_bytes_used_in_destination( &pxWriter->_internal.xCoreWriter ) );
 }
 
 AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWriter,
