@@ -150,7 +150,8 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
     az_result xCoreResult;
     az_iot_hub_client_properties_response_type xCoreResponseType;
 
-    if( ( pxAzureIoTHubClient == NULL ) || ( pxJSONReader == NULL ) ||
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( pxJSONReader == NULL ) ||
         ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWriteablePropertyMessage ) ) ||
         ( pulVersion == NULL ) )
     {
