@@ -5,6 +5,7 @@
  * @file azure_iot_json_writer.c
  * @brief Implementation of the Azure IoT JSON writer.
  */
+
 #include <stdbool.h>
 #include <stdint.h>
 
