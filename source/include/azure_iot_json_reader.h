@@ -19,10 +19,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "azure/core/az_json.h"
+#include "azure_iot_result.h"
 
-/* TODO: REMOVE ONCE NEW RESULTS */
-#include "azure_iot_hub_client.h"
+#include "azure/core/az_json.h"
 
 /**
  * Defines symbols for the various kinds of JSON tokens that make up any JSON text.
@@ -56,7 +55,7 @@ typedef struct AzureIoTJSONReader
  *
  * @param[out] pxReader A pointer to an #AzureIoTJSONReader_t instance to initialize.
  * @param[in] pucBuffer A pointer to a buffer containing the JSON text to read.
- * @param[in] usBufferLen Length of buffer.
+ * @param[in] ulBufferSize Length of buffer.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
  * @retval #eAzureIoTSuccess The #AzureIoTJSONReader_t is initialized successfully.
@@ -65,7 +64,7 @@ typedef struct AzureIoTJSONReader
  */
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                           const uint8_t * pucBuffer,
-                                          uint32_t usBufferLen );
+                                          uint32_t ulBufferSize );
 
 /**
  * @brief Reads the next token in the JSON text and updates the reader state.
@@ -134,7 +133,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
  *
  * @param[in] pxReader A pointer to an #AzureIoTJSONReader_t instance.
  * @param[out] pucBuffer A pointer to a buffer where the string should be copied into.
- * @param[in] usBufferSize The maximum available space within the buffer referred to by pucBuffer.
+ * @param[in] ulBufferSize The maximum available space within the buffer referred to by pucBuffer.
  * @param[out] pusBytesCopied Contains the number of bytes written to the \p
  * destination which denote the length of the unescaped string.
  *
@@ -143,7 +142,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
                                                     uint8_t * pucBuffer,
-                                                    uint32_t usBufferSize,
+                                                    uint32_t ulBufferSize,
                                                     uint32_t * pusBytesCopied );
 
 /**

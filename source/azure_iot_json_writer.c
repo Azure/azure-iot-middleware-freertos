@@ -10,23 +10,26 @@
 
 #include "azure_iot_json_writer.h"
 
-#include "azure_iot_result.h"
+#ifndef AZURE_IOT_NO_CUSTOM_CONFIG
+    /* Include custom config file before other headers. */
+    #include "azure_iot_config.h"
+#endif
 
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
                                           uint8_t * pucBuffer,
-                                          uint32_t usBufferLen )
+                                          uint32_t ulBufferSize )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
     az_span xJSONSpan;
 
-    if( ( pxWriter == NULL ) || ( pucBuffer == NULL ) || ( usBufferLen == 0 ) )
+    if( ( pxWriter == NULL ) || ( pucBuffer == NULL ) || ( ulBufferSize == 0 ) )
     {
         AZLogError( ( "AzureIoTJSONWriter_Init failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
     }
 
-    xJSONSpan = az_span_create( ( uint8_t * ) pucBuffer, ( int32_t ) usBufferLen );
+    xJSONSpan = az_span_create( ( uint8_t * ) pucBuffer, ( int32_t ) ulBufferSize );
 
     if( az_result_failed( xCoreResult = az_json_writer_init( &pxWriter->_internal.xCoreWriter, xJSONSpan, NULL ) ) )
     {
@@ -107,7 +110,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONW
 AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWriter_t * pxWriter,
                                                                  const uint8_t * pucPropertyName,
                                                                  uint32_t ulPropertyNameLength,
-                                                                 bool usValue )
+                                                                 bool xValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
@@ -122,7 +125,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWri
     xPropertyNameSpan = az_span_create( ( uint8_t * ) pucPropertyName, ( int32_t ) ulPropertyNameLength );
 
     if( az_result_failed( xCoreResult = az_json_writer_append_property_name( &pxWriter->_internal.xCoreWriter, xPropertyNameSpan ) ) ||
-        az_result_failed( xCoreResult = az_json_writer_append_bool( &pxWriter->_internal.xCoreWriter, usValue ) ) )
+        az_result_failed( xCoreResult = az_json_writer_append_bool( &pxWriter->_internal.xCoreWriter, xValue ) ) )
     {
         AZLogError( ( "Could not append property and bool: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTErrorFailed;

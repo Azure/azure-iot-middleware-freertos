@@ -11,24 +11,26 @@
 
 #include "azure_iot_json_reader.h"
 
-#include "azure_iot_result.h"
+#ifndef AZURE_IOT_NO_CUSTOM_CONFIG
+    /* Include custom config file before other headers. */
+    #include "azure_iot_config.h"
+#endif
 
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                           const uint8_t * pucBuffer,
-                                          uint32_t usBufferLen )
+                                          uint32_t ulBufferSize )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
     az_span xJSONSpan;
 
-
-    if( ( pxReader == NULL ) || ( pucBuffer == NULL ) || ( usBufferLen == 0 ) )
+    if( ( pxReader == NULL ) || ( pucBuffer == NULL ) || ( ulBufferSize == 0 ) )
     {
         AZLogError( ( "AzureIoTJSONReader_Init failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
     }
 
-    xJSONSpan = az_span_create( ( uint8_t * ) pucBuffer, ( int32_t ) usBufferLen );
+    xJSONSpan = az_span_create( ( uint8_t * ) pucBuffer, ( int32_t ) ulBufferSize );
 
     if( az_result_failed( xCoreResult = az_json_reader_init( &pxReader->_internal.xCoreReader, xJSONSpan, NULL ) ) )
     {
@@ -120,18 +122,18 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReade
 
 
 AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
-                                                   int32_t * pilValue )
+                                                   int32_t * plValue )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxReader == NULL ) || ( pilValue == NULL ) )
+    if( ( pxReader == NULL ) || ( plValue == NULL ) )
     {
         AZLogError( ( "AzureIoTJSONReader_GetTokenInt32 failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
     }
 
-    if( az_result_failed( xCoreResult = az_json_token_get_int32( &pxReader->_internal.xCoreReader.token, pilValue ) ) )
+    if( az_result_failed( xCoreResult = az_json_token_get_int32( &pxReader->_internal.xCoreReader.token, plValue ) ) )
     {
         AZLogError( ( "Could not get int32_t in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTErrorFailed;
@@ -173,20 +175,20 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
 
 AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
                                                     uint8_t * pucBuffer,
-                                                    uint32_t usBufferSize,
+                                                    uint32_t ulBufferSize,
                                                     uint32_t * pusBytesCopied )
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
 
-    if( ( pxReader == NULL ) || ( pucBuffer == NULL ) || ( usBufferSize == 0 ) || ( pusBytesCopied == NULL ) )
+    if( ( pxReader == NULL ) || ( pucBuffer == NULL ) || ( ulBufferSize == 0 ) || ( pusBytesCopied == NULL ) )
     {
         AZLogError( ( "AzureIoTJSONReader_TokenType failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
     }
 
     if( az_result_failed( xCoreResult = az_json_token_get_string( &pxReader->_internal.xCoreReader.token,
-                                                                  ( char * ) pucBuffer, ( int32_t ) usBufferSize, ( int32_t * ) pusBytesCopied ) ) )
+                                                                  ( char * ) pucBuffer, ( int32_t ) ulBufferSize, ( int32_t * ) pusBytesCopied ) ) )
     {
         AZLogError( ( "Could not get string in JSON: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTErrorFailed;
