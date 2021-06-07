@@ -208,8 +208,15 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
                                                                                     ( az_iot_hub_client_property_type ) xPropertyType,
                                                                                     &xComponentSpan ) ) )
     {
-        AZLogError( ( "Could not get next component property: core error=0x%08x", xCoreResult ) );
-        xResult = eAzureIoTErrorFailed;
+        if( xCoreResult == AZ_ERROR_IOT_END_OF_PROPERTIES )
+        {
+            xResult = eAzureIoTErrorEndOfProperties;
+        }
+        else
+        {
+            AZLogError( ( "Could not get next component property: core error=0x%08x", xCoreResult ) );
+            xResult = eAzureIoTErrorFailed;
+        }
     }
     else
     {

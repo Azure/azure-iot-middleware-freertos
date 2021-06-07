@@ -503,6 +503,14 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     assert_int_equal( AzureIoTJSONReader_GetTokenInt32( &xJSONReader, &lValue ), eAzureIoTSuccess );
     assert_int_equal( lValue, 42 );
     assert_int_equal( AzureIoTJSONReader_NextToken( &xJSONReader ), eAzureIoTSuccess );
+
+    /* End of properties */
+    assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( &xTestIoTHubClient,
+                                                                            &xJSONReader,
+                                                                            xResponseType,
+                                                                            xPropertyType,
+                                                                            &ucComponentName,
+                                                                            &ulComponentNameLength ), eAzureIoTErrorEndOfProperties );
 }
 
 uint32_t ulGetAllTests()
