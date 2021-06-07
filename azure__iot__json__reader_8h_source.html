@@ -78,75 +78,77 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;stdbool.h&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;azure_iot_result.h&quot;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &quot;azure/core/az_json.h&quot;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &quot;azure/core/az_json.h&quot;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno"><a class="line" href="azure__iot__json__reader_8h.html#a273fd0a37dea72f09352010c6c10fc13">   29</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="azure__iot__json__reader_8h.html#a273fd0a37dea72f09352010c6c10fc13">AzureIoTJSONTokenType</a></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;{</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    eAzureIoTJSONTokenNONE = AZ_JSON_TOKEN_NONE,</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    eAzureIoTJSONTokenBEGIN_OBJECT = AZ_JSON_TOKEN_BEGIN_OBJECT,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    eAzureIoTJSONTokenEND_OBJECT = AZ_JSON_TOKEN_END_OBJECT,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    eAzureIoTJSONTokenBEGIN_ARRAY = AZ_JSON_TOKEN_BEGIN_ARRAY,</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    eAzureIoTJSONTokenEND_ARRAY = AZ_JSON_TOKEN_END_ARRAY,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    eAzureIoTJSONTokenPROPERTY_NAME = AZ_JSON_TOKEN_PROPERTY_NAME,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    eAzureIoTJSONTokenSTRING = AZ_JSON_TOKEN_STRING,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    eAzureIoTJSONTokenNUMBER = AZ_JSON_TOKEN_NUMBER,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    eAzureIoTJSONTokenTRUE = AZ_JSON_TOKEN_TRUE,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    eAzureIoTJSONTokenFALSE = AZ_JSON_TOKEN_FALSE,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    eAzureIoTJSONTokenNULL = AZ_JSON_TOKEN_NULL</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;} AzureIoTJSONTokenType_t;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="struct_azure_io_t_j_s_o_n_reader.html">   44</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_azure_io_t_j_s_o_n_reader.html">AzureIoTJSONReader</a></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    <span class="keyword">struct</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;        az_json_reader xCoreReader;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    } _internal;</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;} AzureIoTJSONReader_t;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">AzureIoTJSONReader_Init</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                          <span class="keyword">const</span> uint8_t * pucBuffer,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                          uint32_t ulBufferSize );</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a>( AzureIoTJSONReader_t * pxReader );</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a>( AzureIoTJSONReader_t * pxReader );</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">AzureIoTJSONReader_GetTokenBool</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                                  <span class="keywordtype">bool</span> * pxValue );</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">AzureIoTJSONReader_GetTokenInt32</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                                                   int32_t * plValue );</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;                                                    <span class="keywordtype">double</span> * pxValue );</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">AzureIoTJSONReader_GetTokenString</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                                                    uint8_t * pucBuffer,</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                                    uint32_t ulBufferSize,</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                                                    uint32_t * pusBytesCopied );</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                                          <span class="keyword">const</span> uint8_t * pucExpectedText,</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                                          uint32_t ulExpectedTextLength );</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">AzureIoTJSONReader_TokenType</a>( AzureIoTJSONReader_t * pxReader,</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                                               AzureIoTJSONTokenType_t * pxTokenType );</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_JSON_READER_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">/* TODO: REMOVE ONCE NEW RESULTS */</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="azure__iot__hub__client_8h.html">azure_iot_hub_client.h</a>&quot;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="azure__iot__json__reader_8h.html#a273fd0a37dea72f09352010c6c10fc13">   30</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="azure__iot__json__reader_8h.html#a273fd0a37dea72f09352010c6c10fc13">AzureIoTJSONTokenType</a></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;{</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    eAzureIoTJSONTokenNONE = AZ_JSON_TOKEN_NONE,</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    eAzureIoTJSONTokenBEGIN_OBJECT = AZ_JSON_TOKEN_BEGIN_OBJECT,</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    eAzureIoTJSONTokenEND_OBJECT = AZ_JSON_TOKEN_END_OBJECT,</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    eAzureIoTJSONTokenBEGIN_ARRAY = AZ_JSON_TOKEN_BEGIN_ARRAY,</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    eAzureIoTJSONTokenEND_ARRAY = AZ_JSON_TOKEN_END_ARRAY,</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    eAzureIoTJSONTokenPROPERTY_NAME = AZ_JSON_TOKEN_PROPERTY_NAME,</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    eAzureIoTJSONTokenSTRING = AZ_JSON_TOKEN_STRING,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    eAzureIoTJSONTokenNUMBER = AZ_JSON_TOKEN_NUMBER,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    eAzureIoTJSONTokenTRUE = AZ_JSON_TOKEN_TRUE,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    eAzureIoTJSONTokenFALSE = AZ_JSON_TOKEN_FALSE,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    eAzureIoTJSONTokenNULL = AZ_JSON_TOKEN_NULL</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} AzureIoTJSONTokenType_t;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="struct_azure_io_t_j_s_o_n_reader.html">   45</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_azure_io_t_j_s_o_n_reader.html">AzureIoTJSONReader</a></div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;{</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="keyword">struct</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        az_json_reader xCoreReader;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    } _internal;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;} AzureIoTJSONReader_t;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a95f8e7a6778cee5ef9314354c1b1f0f4">AzureIoTJSONReader_Init</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                          <span class="keyword">const</span> uint8_t * pucBuffer,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                          uint32_t usBufferLen );</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a>( AzureIoTJSONReader_t * pxReader );</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a>( AzureIoTJSONReader_t * pxReader );</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">AzureIoTJSONReader_GetTokenBool</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                                                  <span class="keywordtype">bool</span> * pxValue );</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">AzureIoTJSONReader_GetTokenInt32</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                                                   int32_t * plValue );</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;                                                    <span class="keywordtype">double</span> * pxValue );</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a5c0140518f99b399096117fb7394b295">AzureIoTJSONReader_GetTokenString</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                                    uint8_t * pucBuffer,</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;                                                    uint32_t usBufferSize,</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;                                                    uint32_t * pusBytesCopied );</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="keywordtype">bool</span> <a class="code" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                                          <span class="keyword">const</span> uint8_t * pucExpectedText,</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                                          uint32_t ulExpectedTextLength );</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">AzureIoTJSONReader_TokenType</a>( AzureIoTJSONReader_t * pxReader,</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                                               AzureIoTJSONTokenType_t * pxTokenType );</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_JSON_READER_H */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
+<div class="ttc" id="aazure__iot__json__reader_8h_html_a95f8e7a6778cee5ef9314354c1b1f0f4"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a95f8e7a6778cee5ef9314354c1b1f0f4">AzureIoTJSONReader_Init</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_Init(AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t usBufferLen)</div><div class="ttdoc">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.</div></div>
+<div class="ttc" id="aazure__iot__hub__client_8h_html"><div class="ttname"><a href="azure__iot__hub__client_8h.html">azure_iot_hub_client.h</a></div><div class="ttdoc">The middleware IoT Hub Client used to connect a device to Azure IoT Hub.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_a9610a3717afd11e0f65b7d7da202c545"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble(AzureIoTJSONReader_t *pxReader, double *pxValue)</div><div class="ttdoc">Gets the JSON token's number as a double.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_ace9bfb2526b7c9eea608e36bf177ba1f"><div class="ttname"><a href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">AzureIoTJSONReader_GetTokenInt32</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32(AzureIoTJSONReader_t *pxReader, int32_t *plValue)</div><div class="ttdoc">Gets the JSON token's number as a 32-bit signed integer.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_a5425081ad5dd69ca00537a37761fcd75"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_NextToken(AzureIoTJSONReader_t *pxReader)</div><div class="ttdoc">Reads the next token in the JSON text and updates the reader state.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_aded393d5f09978d32a7976bb666c3a46"><div class="ttname"><a href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">AzureIoTJSONReader_GetTokenBool</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_GetTokenBool(AzureIoTJSONReader_t *pxReader, bool *pxValue)</div><div class="ttdoc">Gets the JSON token's boolean value.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_a7ff8b6f96104b9c52735bc6dc41a814f"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">AzureIoTJSONReader_TokenType</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_TokenType(AzureIoTJSONReader_t *pxReader, AzureIoTJSONTokenType_t *pxTokenType)</div><div class="ttdoc">Determines type of token currently #AzureIoTJSONReader_t points to.</div></div>
-<div class="ttc" id="astruct_azure_io_t_j_s_o_n_reader_html"><div class="ttname"><a href="struct_azure_io_t_j_s_o_n_reader.html">AzureIoTJSONReader</a></div><div class="ttdef"><b>Definition:</b> azure_iot_json_reader.h:44</div></div>
-<div class="ttc" id="aazure__iot__json__reader_8h_html_af0fde64f6ae608e735f4ae72a5e7f55e"><div class="ttname"><a href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">AzureIoTJSONReader_GetTokenString</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_GetTokenString(AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t ulBufferSize, uint32_t *pusBytesCopied)</div><div class="ttdoc">Gets the JSON token's string after unescaping it, if required.</div></div>
-<div class="ttc" id="aazure__iot__json__reader_8h_html_a273fd0a37dea72f09352010c6c10fc13"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a273fd0a37dea72f09352010c6c10fc13">AzureIoTJSONTokenType</a></div><div class="ttdeci">AzureIoTJSONTokenType</div><div class="ttdef"><b>Definition:</b> azure_iot_json_reader.h:29</div></div>
+<div class="ttc" id="astruct_azure_io_t_j_s_o_n_reader_html"><div class="ttname"><a href="struct_azure_io_t_j_s_o_n_reader.html">AzureIoTJSONReader</a></div><div class="ttdef"><b>Definition:</b> azure_iot_json_reader.h:45</div></div>
+<div class="ttc" id="aazure__iot__json__reader_8h_html_a273fd0a37dea72f09352010c6c10fc13"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a273fd0a37dea72f09352010c6c10fc13">AzureIoTJSONTokenType</a></div><div class="ttdeci">AzureIoTJSONTokenType</div><div class="ttdef"><b>Definition:</b> azure_iot_json_reader.h:30</div></div>
+<div class="ttc" id="aazure__iot__json__reader_8h_html_a5c0140518f99b399096117fb7394b295"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a5c0140518f99b399096117fb7394b295">AzureIoTJSONReader_GetTokenString</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_GetTokenString(AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t usBufferSize, uint32_t *pusBytesCopied)</div><div class="ttdoc">Gets the JSON token's string after unescaping it, if required.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_a40860e6cf94d171a454b85dcfd9b6341"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_SkipChildren(AzureIoTJSONReader_t *pxReader)</div><div class="ttdoc">Reads and skips over any nested JSON elements.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_ad215e5c3541d1fa55b63dc8866ccb9a9"><div class="ttname"><a href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a></div><div class="ttdeci">bool AzureIoTJSONReader_TokenIsTextEqual(AzureIoTJSONReader_t *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</div><div class="ttdoc">Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal t...</div></div>
-<div class="ttc" id="aazure__iot__json__reader_8h_html_a966b57f160871eed2fd9774309c243eb"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">AzureIoTJSONReader_Init</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_Init(AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t ulBufferSize)</div><div class="ttdoc">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
