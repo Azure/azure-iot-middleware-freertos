@@ -443,9 +443,9 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SubscribeProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                              AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
-                                                              void * prvCallbackContext,
-                                                              uint32_t ulTimeoutMilliseconds );
+                                                        AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
+                                                        void * prvCallbackContext,
+                                                        uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Unsubscribe from device properties.
@@ -467,9 +467,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeProperties( AzureIoTHubClient_t * 
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                 const uint8_t * pucReportedPayload,
-                                                                 uint32_t ulReportedPayloadLength,
-                                                                 uint32_t * pulRequestID );
+                                                           const uint8_t * pucReportedPayload,
+                                                           uint32_t ulReportedPayloadLength,
+                                                           uint32_t * pulRequestID );
 
 /**
  * @brief Request to get the device property document.

@@ -105,9 +105,9 @@ static void vTestEntry( void ** ppvState )
                       eAzureIoTSuccess );
 
     assert_int_equal( AzureIoTHubClient_SubscribeProperties( &xAzureIoTHubClient,
-                                                                   vHandlePropertiesMessage,
-                                                                   &xAzureIoTHubClient,
-                                                                   ULONG_MAX ),
+                                                             vHandlePropertiesMessage,
+                                                             &xAzureIoTHubClient,
+                                                             ULONG_MAX ),
                       eAzureIoTSuccess );
 
     assert_int_equal( ulE2EDeviceProcessCommands( &xAzureIoTHubClient ),
