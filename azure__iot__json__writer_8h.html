@@ -77,8 +77,8 @@ $(function() {
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &quot;azure_iot_result.h&quot;</code><br />
 <code>#include &quot;azure/core/az_json.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="azure__iot__hub__client_8h_source.html">azure_iot_hub_client.h</a>&quot;</code><br />
 </div>
 <p><a href="azure__iot__json__writer_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -89,9 +89,9 @@ Data Structures</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a382641cd69019040beac67799c45bb1d"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a382641cd69019040beac67799c45bb1d">AzureIoTJSONWriter_Init</a> (AzureIoTJSONWriter_t *pxWriter, uint8_t *pucBuffer, uint32_t usBufferLen)</td></tr>
-<tr class="memdesc:a382641cd69019040beac67799c45bb1d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONWriter_t which writes JSON text into a buffer passed.  <a href="azure__iot__json__writer_8h.html#a382641cd69019040beac67799c45bb1d">More...</a><br /></td></tr>
-<tr class="separator:a382641cd69019040beac67799c45bb1d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0ce98fec6844eff581530c35a8fcf593"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a0ce98fec6844eff581530c35a8fcf593">AzureIoTJSONWriter_Init</a> (AzureIoTJSONWriter_t *pxWriter, uint8_t *pucBuffer, uint32_t ulBufferSize)</td></tr>
+<tr class="memdesc:a0ce98fec6844eff581530c35a8fcf593"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONWriter_t which writes JSON text into a buffer passed.  <a href="azure__iot__json__writer_8h.html#a0ce98fec6844eff581530c35a8fcf593">More...</a><br /></td></tr>
+<tr class="separator:a0ce98fec6844eff581530c35a8fcf593"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5ec44cdbca30ceb8ff250d278610b9fb"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__writer_8h.html#a5ec44cdbca30ceb8ff250d278610b9fb">AzureIoTJSONWriter_AppendPropertyWithInt32Value</a> (AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint32_t ulPropertyNameLength, int32_t lValue)</td></tr>
 <tr class="memdesc:a5ec44cdbca30ceb8ff250d278610b9fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Appends the UTF-8 property name and value where value is int32.  <a href="azure__iot__json__writer_8h.html#a5ec44cdbca30ceb8ff250d278610b9fb">More...</a><br /></td></tr>
 <tr class="separator:a5ec44cdbca30ceb8ff250d278610b9fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -883,8 +883,8 @@ The function validates that the provided JSON to be appended is valid and proper
 
 </div>
 </div>
-<a id="a382641cd69019040beac67799c45bb1d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a382641cd69019040beac67799c45bb1d">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_Init()</h2>
+<a id="a0ce98fec6844eff581530c35a8fcf593"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ce98fec6844eff581530c35a8fcf593">&#9670;&nbsp;</a></span>AzureIoTJSONWriter_Init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -905,7 +905,7 @@ The function validates that the provided JSON to be appended is valid and proper
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>usBufferLen</em>&#160;</td>
+          <td class="paramname"><em>ulBufferSize</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -920,7 +920,7 @@ The function validates that the provided JSON to be appended is valid and proper
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">pxWriter</td><td>A pointer to an #AzureIoTJSONWriter_t the instance to initialize. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucBuffer</td><td>A buffer pointer to which JSON text will be written. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">usBufferLen</td><td>Length of buffer.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferSize</td><td>Length of buffer.</td></tr>
   </table>
   </dd>
 </dl>
