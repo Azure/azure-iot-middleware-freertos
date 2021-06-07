@@ -617,7 +617,7 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     uint32_t ulRequestId;
     uint16_t usTelemetryPacketID;
 
-    if( AzureIoTHubClient_SendDevicePropertiesReported( pxAzureIoTHubClient,
+    if( AzureIoTHubClient_SendPropertiesReported( pxAzureIoTHubClient,
                                                         xCMD->pulReceivedData,
                                                         xCMD->ulReceivedDataLength,
                                                         &ulRequestId ) != eAzureIoTSuccess )
@@ -677,7 +677,7 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     uint32_t ulStatus;
     uint16_t usTelemetryPacketID;
 
-    if( AzureIoTHubClient_GetDeviceProperties( pxAzureIoTHubClient ) != eAzureIoTSuccess )
+    if( AzureIoTHubClient_GetProperties( pxAzureIoTHubClient ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to request twin properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -989,7 +989,7 @@ void vHandleCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
  * Device twin message callback
  *
  * */
-void vHandleDevicePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
+void vHandlePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                      void * pvContext )
 {
     if( pxTwinMessage == NULL )

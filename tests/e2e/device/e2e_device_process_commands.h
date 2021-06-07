@@ -62,7 +62,7 @@ void vHandleCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
  * Callback use for Twin messages
  *
  **/
-void vHandleDevicePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
+void vHandlePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                void * pvContext );
 
 /**
