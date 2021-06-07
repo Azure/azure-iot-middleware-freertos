@@ -19,10 +19,9 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "azure/core/az_json.h"
+#include "azure_iot_result.h"
 
-/* TODO: remove this dep */
-#include "azure_iot_hub_client.h"
+#include "azure/core/az_json.h"
 
 typedef struct AzureIoTJSONWriter
 {
@@ -37,14 +36,14 @@ typedef struct AzureIoTJSONWriter
  *
  * @param[out] pxWriter A pointer to an #AzureIoTJSONWriter_t the instance to initialize.
  * @param[in] pucBuffer A buffer pointer to which JSON text will be written.
- * @param[in] usBufferLen Length of buffer.
+ * @param[in] ulBufferSize Length of buffer.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
  * @retval #eAzureIoTSuccess Successfully initialized JSON writer.
  */
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
                                           uint8_t * pucBuffer,
-                                          uint32_t usBufferLen );
+                                          uint32_t ulBufferSize );
 
 /**
  * @brief Appends the UTF-8 property name and value where value is int32
