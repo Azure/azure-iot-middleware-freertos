@@ -9,12 +9,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "azure_iot.h"
 #include "azure_iot_json_writer.h"
-
-#ifndef AZURE_IOT_NO_CUSTOM_CONFIG
-    /* Include custom config file before other headers. */
-    #include "azure_iot_config.h"
-#endif
 
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
                                           uint8_t * pucBuffer,
