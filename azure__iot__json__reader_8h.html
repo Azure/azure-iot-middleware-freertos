@@ -78,8 +78,8 @@ $(function() {
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
+<code>#include &quot;azure_iot_result.h&quot;</code><br />
 <code>#include &quot;azure/core/az_json.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="azure__iot__hub__client_8h_source.html">azure_iot_hub_client.h</a>&quot;</code><br />
 </div>
 <p><a href="azure__iot__json__reader_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
@@ -110,9 +110,9 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a95f8e7a6778cee5ef9314354c1b1f0f4"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a95f8e7a6778cee5ef9314354c1b1f0f4">AzureIoTJSONReader_Init</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t usBufferLen)</td></tr>
-<tr class="memdesc:a95f8e7a6778cee5ef9314354c1b1f0f4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#a95f8e7a6778cee5ef9314354c1b1f0f4">More...</a><br /></td></tr>
-<tr class="separator:a95f8e7a6778cee5ef9314354c1b1f0f4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a966b57f160871eed2fd9774309c243eb"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">AzureIoTJSONReader_Init</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t ulBufferSize)</td></tr>
+<tr class="memdesc:a966b57f160871eed2fd9774309c243eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">More...</a><br /></td></tr>
+<tr class="separator:a966b57f160871eed2fd9774309c243eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5425081ad5dd69ca00537a37761fcd75"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
 <tr class="memdesc:a5425081ad5dd69ca00537a37761fcd75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the next token in the JSON text and updates the reader state.  <a href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">More...</a><br /></td></tr>
 <tr class="separator:a5425081ad5dd69ca00537a37761fcd75"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -128,9 +128,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a9610a3717afd11e0f65b7d7da202c545"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a> (AzureIoTJSONReader_t *pxReader, double *pxValue)</td></tr>
 <tr class="memdesc:a9610a3717afd11e0f65b7d7da202c545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a <code>double</code>.  <a href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">More...</a><br /></td></tr>
 <tr class="separator:a9610a3717afd11e0f65b7d7da202c545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c0140518f99b399096117fb7394b295"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a5c0140518f99b399096117fb7394b295">AzureIoTJSONReader_GetTokenString</a> (AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t usBufferSize, uint32_t *pusBytesCopied)</td></tr>
-<tr class="memdesc:a5c0140518f99b399096117fb7394b295"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's string after unescaping it, if required.  <a href="azure__iot__json__reader_8h.html#a5c0140518f99b399096117fb7394b295">More...</a><br /></td></tr>
-<tr class="separator:a5c0140518f99b399096117fb7394b295"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">AzureIoTJSONReader_GetTokenString</a> (AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t ulBufferSize, uint32_t *pusBytesCopied)</td></tr>
+<tr class="memdesc:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's string after unescaping it, if required.  <a href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">More...</a><br /></td></tr>
+<tr class="separator:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</td></tr>
 <tr class="memdesc:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison.  <a href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">More...</a><br /></td></tr>
 <tr class="separator:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -290,8 +290,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5c0140518f99b399096117fb7394b295"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5c0140518f99b399096117fb7394b295">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenString()</h2>
+<a id="af0fde64f6ae608e735f4ae72a5e7f55e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0fde64f6ae608e735f4ae72a5e7f55e">&#9670;&nbsp;</a></span>AzureIoTJSONReader_GetTokenString()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -312,7 +312,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>usBufferSize</em>, </td>
+          <td class="paramname"><em>ulBufferSize</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -333,7 +333,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pucBuffer</td><td>A pointer to a buffer where the string should be copied into. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">usBufferSize</td><td>The maximum available space within the buffer referred to by pucBuffer. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferSize</td><td>The maximum available space within the buffer referred to by pucBuffer. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pusBytesCopied</td><td>Contains the number of bytes written to the <code>destination</code> which denote the length of the unescaped string.</td></tr>
   </table>
   </dd>
@@ -348,8 +348,8 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a95f8e7a6778cee5ef9314354c1b1f0f4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a95f8e7a6778cee5ef9314354c1b1f0f4">&#9670;&nbsp;</a></span>AzureIoTJSONReader_Init()</h2>
+<a id="a966b57f160871eed2fd9774309c243eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a966b57f160871eed2fd9774309c243eb">&#9670;&nbsp;</a></span>AzureIoTJSONReader_Init()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -370,7 +370,7 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>usBufferLen</em>&#160;</td>
+          <td class="paramname"><em>ulBufferSize</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -385,7 +385,7 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[out]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance to initialize. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucBuffer</td><td>A pointer to a buffer containing the JSON text to read. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">usBufferLen</td><td>Length of buffer.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferSize</td><td>Length of buffer.</td></tr>
   </table>
   </dd>
 </dl>
