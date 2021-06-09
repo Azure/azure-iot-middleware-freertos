@@ -98,14 +98,14 @@ static void vTestEntry( void ** ppvState )
                                                                        ULONG_MAX ),
                       eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTHubClient_SubscribeDirectMethod( &xAzureIoTHubClient,
-                                                               vHandleDirectMethod,
-                                                               &xAzureIoTHubClient,
-                                                               ULONG_MAX ),
+    assert_int_equal( AzureIoTHubClient_SubscribeCommand( &xAzureIoTHubClient,
+                                                          vHandleCommand,
+                                                          &xAzureIoTHubClient,
+                                                          ULONG_MAX ),
                       eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTHubClient_SubscribeDeviceTwin( &xAzureIoTHubClient,
-                                                             vHandleDeviceTwinMessage,
+    assert_int_equal( AzureIoTHubClient_SubscribeProperties( &xAzureIoTHubClient,
+                                                             vHandlePropertiesMessage,
                                                              &xAzureIoTHubClient,
                                                              ULONG_MAX ),
                       eAzureIoTSuccess );

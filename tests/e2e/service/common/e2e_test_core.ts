@@ -527,7 +527,7 @@ function deleteProvisioningEnrollment(provisioningConnectionString:string, reg_i
     provisioningServiceClient.deleteIndividualEnrollment(reg_id, resultCallback)
 }
 
-function setDirectMethodToExecuteCommand() {
+function setCommandToExecuteCommand() {
     use_direct_method_to_execute = true;
 }
 
@@ -616,7 +616,7 @@ module.exports = {
     getEventHubClient : getEventHubClient,
     closeServiceEventHubClients : closeServiceEventHubClients,
     runTestCommand : runTestCommand,
-    setDirectMethodToExecuteCommand : setDirectMethodToExecuteCommand,
+    setCommandToExecuteCommand : setCommandToExecuteCommand,
     verifyTelemetryMessage : verifyTelemetryMessage,
     createTestDeviceAndTestProcess : createTestDeviceAndTestProcess,
     deleteDeviceAndEndProcess : deleteDeviceAndEndProcess,

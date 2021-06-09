@@ -17,8 +17,8 @@ let testDeviceInfo:any = null;
 // testSetup creates a device for test scenario and creates the test process that hosts the C SDK
 //
 function testSetup(done) {
-    if (argv.useDirectMethods) {
-        iothubTestCore.setDirectMethodToExecuteCommand();
+    if (argv.useCommands) {
+        iothubTestCore.setCommandToExecuteCommand();
     }
     
     iothubTestCore.createTestDeviceAndTestProcess(testHubConnectionString, argv.testexe, (err, newDeviceInfo) => {
@@ -75,7 +75,7 @@ let argv = require('yargs')
         type: 'string',
         demandOption: false
     })
-    .option('useDirectMethods', {
+    .option('useCommands', {
         alias: 'dm',
         describe: 'Use direct method to execute command',
         type: 'boolean',
@@ -103,8 +103,8 @@ else {
         deviceId: argv.deviceId
     }
 
-    if (argv.useDirectMethods) {
-        iothubTestCore.setDirectMethodToExecuteCommand();
+    if (argv.useCommands) {
+        iothubTestCore.setCommandToExecuteCommand();
     }
 }
 

@@ -9,12 +9,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "azure_iot.h"
 #include "azure_iot_json_reader.h"
-
-#ifndef AZURE_IOT_NO_CUSTOM_CONFIG
-    /* Include custom config file before other headers. */
-    #include "azure_iot_config.h"
-#endif
 
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
                                           const uint8_t * pucBuffer,
