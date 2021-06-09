@@ -442,10 +442,10 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
  * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for Subscribe operation to complete.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                              AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
-                                                              void * prvCallbackContext,
-                                                              uint32_t ulTimeoutMilliseconds );
+AzureIoTResult_t AzureIoTHubClient_SubscribeProperties( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                        AzureIoTHubClientPropertiesCallback_t xPropertiesCallback,
+                                                        void * prvCallbackContext,
+                                                        uint32_t ulTimeoutMilliseconds );
 
 /**
  * @brief Unsubscribe from device properties.
@@ -453,12 +453,12 @@ AzureIoTResult_t AzureIoTHubClient_SubscribeDeviceProperties( AzureIoTHubClient_
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_UnsubscribeProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 /**
  * @brief Send reported device properties to Azure IoT Hub.
  *
- * @note AzureIoTHubClient_SubscribeDeviceProperties() must be called before calling this function.
+ * @note AzureIoTHubClient_SubscribeProperties() must be called before calling this function.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] pucReportedPayload The payload of properly formatted, reported properties.
@@ -466,24 +466,24 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeDeviceProperties( AzureIoTHubClien
  * @param[out] pulRequestID Pointer to request ID used to send the reported property.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTResult_t AzureIoTHubClient_SendDevicePropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                 const uint8_t * pucReportedPayload,
-                                                                 uint32_t ulReportedPayloadLength,
-                                                                 uint32_t * pulRequestID );
+AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                           const uint8_t * pucReportedPayload,
+                                                           uint32_t ulReportedPayloadLength,
+                                                           uint32_t * pulRequestID );
 
 /**
  * @brief Request to get the device property document.
  *
- * @note AzureIoTHubClient_SubscribeDeviceProperties() must be called before calling this function.
+ * @note AzureIoTHubClient_SubscribeProperties() must be called before calling this function.
  *
  * The response to the request will be returned via the #AzureIoTHubClientPropertiesCallback_t which was passed
- * in the AzureIoTHubClient_SubscribeDeviceProperties() call. The type of message will be #eAzureIoTHubPropertiesGetMessage
+ * in the AzureIoTHubClient_SubscribeProperties() call. The type of message will be #eAzureIoTHubPropertiesGetMessage
  * and the payload (on success) will be the property document.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTResult_t AzureIoTHubClient_GetDeviceProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_GetProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 #include <azure/core/_az_cfg_suffix.h>
 
