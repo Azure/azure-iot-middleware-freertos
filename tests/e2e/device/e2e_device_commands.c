@@ -61,8 +61,8 @@ typedef E2E_TEST_COMMAND * E2E_TEST_COMMAND_HANDLE;
 static const uint64_t ulGlobalEntryTime = 1639093301;
 static uint8_t * ucC2DCommandData = NULL;
 static uint32_t ulC2DCommandDataLength = 0;
-static AzureIoTHubClientMethodRequest_t * pxMethodCommandData = NULL;
-static AzureIoTHubClientTwinResponse_t * pxTwinMessage = NULL;
+static AzureIoTHubClientCommandRequest_t * pxMethodCommandData = NULL;
+static AzureIoTHubClientPropertiesResponse_t * pxTwinMessage = NULL;
 static uint8_t ucMethodNameBuffer[ e2etestMESSAGE_BUFFER_SIZE ];
 static uint8_t ucScratchBuffer[ e2etestMESSAGE_BUFFER_SIZE ];
 static uint8_t ucScratchBuffer2[ e2etestMESSAGE_BUFFER_SIZE ];
@@ -116,7 +116,7 @@ static uint32_t prvWaitForPuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
  * Free Twin data
  *
  **/
-static void prvFreeTwinData( AzureIoTHubClientTwinResponse_t * pxTwinData )
+static void prvFreeTwinData( AzureIoTHubClientPropertiesResponse_t * pxTwinData )
 {
     if( pxTwinData )
     {
@@ -130,12 +130,12 @@ static void prvFreeTwinData( AzureIoTHubClientTwinResponse_t * pxTwinData )
  * Free Method data
  *
  **/
-static void prvFreeMethodData( AzureIoTHubClientMethodRequest_t * pxMethodData )
+static void prvFreeMethodData( AzureIoTHubClientCommandRequest_t * pxMethodData )
 {
     if( pxMethodData )
     {
         vPortFree( ( void * ) pxMethodData->pvMessagePayload );
-        vPortFree( ( void * ) pxMethodData->pucMethodName );
+        vPortFree( ( void * ) pxMethodData->pucCommandName );
         vPortFree( ( void * ) pxMethodData->pucRequestID );
         vPortFree( ( void * ) pxMethodData );
     }
@@ -617,7 +617,7 @@ static uint32_t prvE2ETestReportedPropertiesCommandExecute( E2E_TEST_COMMAND_HAN
     uint32_t ulRequestId;
     uint16_t usTelemetryPacketID;
 
-    if( AzureIoTHubClient_SendDeviceTwinReported( pxAzureIoTHubClient,
+    if( AzureIoTHubClient_SendPropertiesReported( pxAzureIoTHubClient,
                                                   xCMD->pulReceivedData,
                                                   xCMD->ulReceivedDataLength,
                                                   &ulRequestId ) != eAzureIoTSuccess )
@@ -677,7 +677,7 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     uint32_t ulStatus;
     uint16_t usTelemetryPacketID;
 
-    if( AzureIoTHubClient_GetDeviceTwin( pxAzureIoTHubClient ) != eAzureIoTSuccess )
+    if( AzureIoTHubClient_GetProperties( pxAzureIoTHubClient ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to request twin properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;
@@ -933,12 +933,12 @@ void vHandleCloudMessage( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMes
  * Direct method message callback
  *
  * */
-void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
-                          void * pvContext )
+void vHandleCommand( AzureIoTHubClientCommandRequest_t * pxMessage,
+                     void * pvContext )
 {
     if( pxMethodCommandData == NULL )
     {
-        pxMethodCommandData = pvPortMalloc( sizeof( AzureIoTHubClientMethodRequest_t ) );
+        pxMethodCommandData = pvPortMalloc( sizeof( AzureIoTHubClientCommandRequest_t ) );
 
         if( pxMethodCommandData == NULL )
         {
@@ -947,7 +947,7 @@ void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
             return;
         }
 
-        memcpy( pxMethodCommandData, pxMessage, sizeof( AzureIoTHubClientMethodRequest_t ) );
+        memcpy( pxMethodCommandData, pxMessage, sizeof( AzureIoTHubClientCommandRequest_t ) );
 
         if( pxMessage->pucRequestID )
         {
@@ -960,14 +960,14 @@ void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
             }
         }
 
-        if( pxMessage->pucMethodName )
+        if( pxMessage->pucCommandName )
         {
-            pxMethodCommandData->pucMethodName = pvPortMalloc( pxMessage->usMethodNameLength );
+            pxMethodCommandData->pucCommandName = pvPortMalloc( pxMessage->usCommandNameLength );
 
-            if( pxMethodCommandData->pucMethodName != NULL )
+            if( pxMethodCommandData->pucCommandName != NULL )
             {
-                memcpy( ( void * ) pxMethodCommandData->pucMethodName,
-                        pxMessage->pucMethodName, pxMessage->usMethodNameLength );
+                memcpy( ( void * ) pxMethodCommandData->pucCommandName,
+                        pxMessage->pucCommandName, pxMessage->usCommandNameLength );
             }
         }
 
@@ -989,12 +989,12 @@ void vHandleDirectMethod( AzureIoTHubClientMethodRequest_t * pxMessage,
  * Device twin message callback
  *
  * */
-void vHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
+void vHandlePropertiesMessage( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                void * pvContext )
 {
     if( pxTwinMessage == NULL )
     {
-        pxTwinMessage = pvPortMalloc( sizeof( AzureIoTHubClientTwinResponse_t ) );
+        pxTwinMessage = pvPortMalloc( sizeof( AzureIoTHubClientPropertiesResponse_t ) );
 
         if( pxTwinMessage == NULL )
         {
@@ -1003,7 +1003,7 @@ void vHandleDeviceTwinMessage( AzureIoTHubClientTwinResponse_t * pxMessage,
             return;
         }
 
-        memcpy( pxTwinMessage, pxMessage, sizeof( AzureIoTHubClientTwinResponse_t ) );
+        memcpy( pxTwinMessage, pxMessage, sizeof( AzureIoTHubClientPropertiesResponse_t ) );
 
         if( pxMessage->ulPayloadLength != 0 )
         {
@@ -1029,7 +1029,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
     E2E_TEST_COMMAND xCMD = { 0 };
     uint32_t ulStatus = e2etestE2E_TEST_SUCCESS;
     uint8_t * pucData = NULL;
-    AzureIoTHubClientMethodRequest_t * pucMethodData = NULL;
+    AzureIoTHubClientCommandRequest_t * pucMethodData = NULL;
     uint32_t ulDataLength;
     uint8_t * ucErrorReport = NULL;
     uint16_t usTelemetryPacketID;
@@ -1083,7 +1083,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
             pucMethodData = pxMethodCommandData;
             pxMethodCommandData = NULL;
 
-            if( ( ulStatus = prvE2ETestInitializeCMD( pucMethodData->pucMethodName,
+            if( ( ulStatus = prvE2ETestInitializeCMD( pucMethodData->pucCommandName,
                                                       pucMethodData->pvMessagePayload,
                                                       pucMethodData->ulPayloadLength, &xCMD ) ) )
             {
@@ -1107,9 +1107,9 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
                 prvE2EDeviceCommandDeinit( &xCMD );
             }
 
-            AzureIoTHubClient_SendMethodResponse( pxAzureIoTHubClient,
-                                                  pucMethodData, ulStatus,
-                                                  ucErrorReport, strlen( ucErrorReport ) );
+            AzureIoTHubClient_SendCommandResponse( pxAzureIoTHubClient,
+                                                   pucMethodData, ulStatus,
+                                                   ucErrorReport, strlen( ucErrorReport ) );
             prvFreeMethodData( pucMethodData );
         }
     } while( ( ulStatus == e2etestE2E_TEST_SUCCESS ) &&
