@@ -20,8 +20,8 @@ let testEnrollmentInfo:any = null;
 // testSetup creates a device for test scenario and creates the test process that hosts the C SDK
 //
 function testSetup(done) {
-    if (argv.useDirectMethods) {
-        e2eTestCore.setDirectMethodToExecuteCommand();
+    if (argv.useCommands) {
+        e2eTestCore.setCommandToExecuteCommand();
     }
 
     if (argv.deviceId == null) {
@@ -161,7 +161,7 @@ let argv = require('yargs')
         type: 'string',
         demandOption: false
     })
-    .option('useDirectMethods', {
+    .option('useCommands', {
         alias: 'dm',
         describe: 'Use direct method to execute command',
         type: 'boolean',
