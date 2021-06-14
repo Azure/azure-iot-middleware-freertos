@@ -87,7 +87,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:a73b25e31c9ecaa3be7d6782d54a192e9"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client__properties_8h.html#a73b25e31c9ecaa3be7d6782d54a192e9">AzureIoTHubClientPropertyType_t</a> { <a class="el" href="azure__iot__hub__client__properties_8h.html#a73b25e31c9ecaa3be7d6782d54a192e9a068c51fdfeccc9a0238f745db45fcaa9">eAzureIoTHubClientReportedFromDevice</a> = AZ_IOT_HUB_CLIENT_PROPERTY_REPORTED_FROM_DEVICE, 
-<a class="el" href="azure__iot__hub__client__properties_8h.html#a73b25e31c9ecaa3be7d6782d54a192e9afde16ee9fbad5e6842649f6bba1de5d4">eAzureIoTHubClientPropertyWriteable</a> = AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE
+<a class="el" href="azure__iot__hub__client__properties_8h.html#a73b25e31c9ecaa3be7d6782d54a192e9af985d586436e0aa6ce22829b912815d9">eAzureIoTHubClientPropertyWritable</a> = AZ_IOT_HUB_CLIENT_PROPERTY_WRITABLE
  }</td></tr>
 <tr class="memdesc:a73b25e31c9ecaa3be7d6782d54a192e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Property type.  <a href="azure__iot__hub__client__properties_8h.html#a73b25e31c9ecaa3be7d6782d54a192e9">More...</a><br /></td></tr>
 <tr class="separator:a73b25e31c9ecaa3be7d6782d54a192e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -101,7 +101,7 @@ Functions</h2></td></tr>
 <tr class="memdesc:ab5cc4dd9f018aebfdf50dc5d272d9ace"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append the necessary characters to end a reported properties JSON payload belonging to a component.  <a href="azure__iot__hub__client__properties_8h.html#ab5cc4dd9f018aebfdf50dc5d272d9ace">More...</a><br /></td></tr>
 <tr class="separator:ab5cc4dd9f018aebfdf50dc5d272d9ace"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e81455bb0f786488dc22011fd8f1101"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101">AzureIoTHubClientProperties_BuilderBeginResponseStatus</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, AzureIoTJSONWriter_t *pxJSONWriter, const uint8_t *pucPropertyName, uint16_t usPropertyNameLength, int32_t lAckCode, int32_t lAckVersion, const uint8_t *pucAckDescription, uint16_t usAckDescriptionLength)</td></tr>
-<tr class="memdesc:a7e81455bb0f786488dc22011fd8f1101"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin a property response to a writeable property request from the service.  <a href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101">More...</a><br /></td></tr>
+<tr class="memdesc:a7e81455bb0f786488dc22011fd8f1101"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin a property response to a writable property request from the service.  <a href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101">More...</a><br /></td></tr>
 <tr class="separator:a7e81455bb0f786488dc22011fd8f1101"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34782373a0461578c8990fb106dab8f5"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client__properties_8h.html#a34782373a0461578c8990fb106dab8f5">AzureIoTHubClientProperties_BuilderEndResponseStatus</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, AzureIoTJSONWriter_t *pxJSONWriter)</td></tr>
 <tr class="memdesc:a34782373a0461578c8990fb106dab8f5"><td class="mdescLeft">&#160;</td><td class="mdescRight">End a properties response payload with confirmation status.  <a href="azure__iot__hub__client__properties_8h.html#a34782373a0461578c8990fb106dab8f5">More...</a><br /></td></tr>
@@ -133,7 +133,7 @@ Functions</h2></td></tr>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a73b25e31c9ecaa3be7d6782d54a192e9a068c51fdfeccc9a0238f745db45fcaa9"></a>eAzureIoTHubClientReportedFromDevice&#160;</td><td class="fielddoc"><p>Property was originally reported from the device. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a73b25e31c9ecaa3be7d6782d54a192e9afde16ee9fbad5e6842649f6bba1de5d4"></a>eAzureIoTHubClientPropertyWriteable&#160;</td><td class="fielddoc"><p>Property was received from the service. </p>
+<tr><td class="fieldname"><a id="a73b25e31c9ecaa3be7d6782d54a192e9af985d586436e0aa6ce22829b912815d9"></a>eAzureIoTHubClientPropertyWritable&#160;</td><td class="fielddoc"><p>Property was received from the service. </p>
 </td></tr>
 </table>
 
@@ -273,8 +273,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Begin a property response to a writeable property request from the service. </p>
-<p>This API should be used in response to an incoming writeable properties. More details can be found here:</p>
+<p>Begin a property response to a writable property request from the service. </p>
+<p>This API should be used in response to an incoming writable properties. More details can be found here:</p>
 <p><a href="https://docs.microsoft.com/en-us/azure/iot-pnp/concepts-convention#writable-properties">https://docs.microsoft.com/en-us/azure/iot-pnp/concepts-convention#writable-properties</a></p>
 <p>The payload will be of the form:</p>
 <p><b>Without component</b> </p><div class="fragment"><div class="line">{</div>
@@ -406,7 +406,7 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>End a properties response payload with confirmation status. </p>
-<dl class="section note"><dt>Note</dt><dd>This API should be used in conjunction with <a class="el" href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101" title="Begin a property response to a writeable property request from the service.">AzureIoTHubClientProperties_BuilderBeginResponseStatus()</a>.</dd></dl>
+<dl class="section note"><dt>Note</dt><dd>This API should be used in conjunction with <a class="el" href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101" title="Begin a property response to a writable property request from the service.">AzureIoTHubClientProperties_BuilderBeginResponseStatus()</a>.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.">AzureIoTHubClient_t</a> to use for this call. </td></tr>
@@ -482,7 +482,7 @@ Functions</h2></td></tr>
 <p>On success, the <code>pxJSONReader</code> will be set on a valid property name. After checking the property name, the reader can be advanced to the property value by calling <a class="el" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75" title="Reads the next token in the JSON text and updates the reader state.">AzureIoTJSONReader_NextToken()</a>. Note that on the subsequent call to this API, it is expected that the json reader will be placed AFTER the read property name and value. That means that after reading the property value (including single values or complex objects), the user must call <a class="el" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75" title="Reads the next token in the JSON text and updates the reader state.">AzureIoTJSONReader_NextToken()</a>.</p>
 <p>Below is a code snippet which you can use as a starting point:</p>
 <div class="fragment"><div class="line"><span class="keywordflow">while</span> (az_result_succeeded(<a class="code" href="azure__iot__hub__client__properties_8h.html#ac13c831a29557663476af8b5364754f8">AzureIoTHubClientProperties_GetNextComponentProperty</a>(</div>
-<div class="line">      &amp;xHubClient, &amp;jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE, &amp;pucComponentName, &amp;pusComponentNameLength)))</div>
+<div class="line">      &amp;xHubClient, &amp;jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITABLE, &amp;pucComponentName, &amp;pusComponentNameLength)))</div>
 <div class="line">{</div>
 <div class="line">  <span class="comment">// Check if property is of interest (substitute user_property for your own property name)</span></div>
 <div class="line">  <span class="keywordflow">if</span> (<a class="code" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a>(&amp;jr, user_property, user_property_length))</div>
@@ -522,7 +522,7 @@ Functions</h2></td></tr>
 <dd>
 <code>pxJSONReader</code> must not be <code>NULL</code>. </dd>
 <dd>
-<code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> or <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a9f0fbe75d92c918242ee37e333f5627c">eAzureIoTHubPropertiesWriteablePropertyMessage</a>. If <code>eAzureIoTHubClientReportedFromDevice</code> is specified in <code>xPropertyType</code>, then <code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a>. </dd>
+<code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> or <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a061fa37279447f021295dcb1b260501a">eAzureIoTHubPropertiesWritablePropertyMessage</a>. If <code>eAzureIoTHubClientReportedFromDevice</code> is specified in <code>xPropertyType</code>, then <code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a>. </dd>
 <dd>
 <code>ppucComponentName</code> must not be <code>NULL</code>.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
@@ -590,7 +590,7 @@ Functions</h2></td></tr>
 <dd>
 <code>pxJSONReader</code> must not be <code>NULL</code>. </dd>
 <dd>
-<code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> or <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a9f0fbe75d92c918242ee37e333f5627c">eAzureIoTHubPropertiesWriteablePropertyMessage</a>. </dd>
+<code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> or <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a061fa37279447f021295dcb1b260501a">eAzureIoTHubPropertiesWritablePropertyMessage</a>. </dd>
 <dd>
 <code>pulVersion</code> must not be <code>NULL</code>.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
@@ -609,7 +609,7 @@ Functions</h2></td></tr>
 <div class="ttc" id="aazure__iot__hub__client__properties_8h_html_a9772ab853b6a35f757c44e13cd2f00bc"><div class="ttname"><a href="azure__iot__hub__client__properties_8h.html#a9772ab853b6a35f757c44e13cd2f00bc">AzureIoTHubClientProperties_BuilderBeginComponent</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent(AzureIoTHubClient_t *pxAzureIoTHubClient, AzureIoTJSONWriter_t *pxJSONWriter, const uint8_t *pucComponentName, uint16_t usComponentNameLength)</div><div class="ttdoc">Append the necessary characters to a reported properties JSON payload belonging to a component.</div></div>
 <div class="ttc" id="aazure__iot__hub__client__properties_8h_html_ab5cc4dd9f018aebfdf50dc5d272d9ace"><div class="ttname"><a href="azure__iot__hub__client__properties_8h.html#ab5cc4dd9f018aebfdf50dc5d272d9ace">AzureIoTHubClientProperties_BuilderEndComponent</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent(AzureIoTHubClient_t *pxAzureIoTHubClient, AzureIoTJSONWriter_t *pxJSONWriter)</div><div class="ttdoc">Append the necessary characters to end a reported properties JSON payload belonging to a component.</div></div>
 <div class="ttc" id="aazure__iot__hub__client__properties_8h_html_ac13c831a29557663476af8b5364754f8"><div class="ttname"><a href="azure__iot__hub__client__properties_8h.html#ac13c831a29557663476af8b5364754f8">AzureIoTHubClientProperties_GetNextComponentProperty</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty(AzureIoTHubClient_t *pxAzureIoTHubClient, AzureIoTJSONReader_t *pxJSONReader, AzureIoTHubMessageType_t xResponseType, AzureIoTHubClientPropertyType_t xPropertyType, const uint8_t **ppucComponentName, uint32_t *pulComponentNameLength)</div><div class="ttdoc">Iteratively read the Azure IoT Plug and Play component properties.</div></div>
-<div class="ttc" id="aazure__iot__hub__client__properties_8h_html_a7e81455bb0f786488dc22011fd8f1101"><div class="ttname"><a href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101">AzureIoTHubClientProperties_BuilderBeginResponseStatus</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus(AzureIoTHubClient_t *pxAzureIoTHubClient, AzureIoTJSONWriter_t *pxJSONWriter, const uint8_t *pucPropertyName, uint16_t usPropertyNameLength, int32_t lAckCode, int32_t lAckVersion, const uint8_t *pucAckDescription, uint16_t usAckDescriptionLength)</div><div class="ttdoc">Begin a property response to a writeable property request from the service.</div></div>
+<div class="ttc" id="aazure__iot__hub__client__properties_8h_html_a7e81455bb0f786488dc22011fd8f1101"><div class="ttname"><a href="azure__iot__hub__client__properties_8h.html#a7e81455bb0f786488dc22011fd8f1101">AzureIoTHubClientProperties_BuilderBeginResponseStatus</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus(AzureIoTHubClient_t *pxAzureIoTHubClient, AzureIoTJSONWriter_t *pxJSONWriter, const uint8_t *pucPropertyName, uint16_t usPropertyNameLength, int32_t lAckCode, int32_t lAckVersion, const uint8_t *pucAckDescription, uint16_t usAckDescriptionLength)</div><div class="ttdoc">Begin a property response to a writable property request from the service.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_a40860e6cf94d171a454b85dcfd9b6341"><div class="ttname"><a href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONReader_SkipChildren(AzureIoTJSONReader_t *pxReader)</div><div class="ttdoc">Reads and skips over any nested JSON elements.</div></div>
 <div class="ttc" id="aazure__iot__json__reader_8h_html_ad215e5c3541d1fa55b63dc8866ccb9a9"><div class="ttname"><a href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a></div><div class="ttdeci">bool AzureIoTJSONReader_TokenIsTextEqual(AzureIoTJSONReader_t *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</div><div class="ttdoc">Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal t...</div></div>
 <!-- start footer part -->
