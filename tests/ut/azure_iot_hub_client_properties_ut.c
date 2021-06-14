@@ -329,7 +329,7 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersion_Success( void *
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTJSONTokenType_t xTokenType;
-    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     uint32_t ulVersion;
 
     assert_int_equal( AzureIoTJSONReader_Init(
@@ -369,7 +369,7 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersionWriteableUpdate_
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTJSONTokenType_t xTokenType;
-    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     uint32_t ulVersion;
 
     assert_int_equal( AzureIoTJSONReader_Init(
@@ -440,7 +440,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTJSONTokenType_t xTokenType;
-    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWritable;
     uint32_t ulVersion;
     const uint8_t * ucComponentName = NULL;
@@ -648,7 +648,7 @@ static void testAzureIoTHubClientProperties_GetNextComponentPropertyWriteableUpd
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTJSONTokenType_t xTokenType;
-    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+    AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWritable;
     uint32_t ulVersion;
     const uint8_t * ucComponentName;
