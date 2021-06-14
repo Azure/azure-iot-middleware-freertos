@@ -302,13 +302,13 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
     AzureIoTHubClientPropertiesResponse_t xPropertiesResponse = { 0 };
     AzureIoTMQTTPublishInfo_t * xMQTTPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pvPublishInfo;
     az_result xCoreResult;
-    az_iot_hub_client_properties_message xOutRequest;
+    az_iot_hub_client_properties_message xOutMessage;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
     uint32_t ulRequestID = 0;
 
     /* Failed means no topic match. This means the message is not for properties messaging. */
     xCoreResult = az_iot_hub_client_properties_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                     xTopicSpan, &xOutRequest );
+                                                                     xTopicSpan, &xOutMessage );
 
     if( az_result_failed( xCoreResult ) )
     {
@@ -326,13 +326,13 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
 
         if( pxContext->_internal.callbacks.xPropertiesCallback )
         {
-            if( az_span_size( xOutRequest.request_id ) == 0 )
+            if( az_span_size( xOutMessage.request_id ) == 0 )
             {
                 xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesWritablePropertyMessage;
             }
             else
             {
-                if( az_result_succeeded( xCoreResult = az_span_atou32( xOutRequest.request_id, &ulRequestID ) ) )
+                if( az_result_succeeded( xCoreResult = az_span_atou32( xOutMessage.request_id, &ulRequestID ) ) )
                 {
                     if( ulRequestID & 0x01 )
                     {
@@ -355,7 +355,7 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
             {
                 xPropertiesResponse.pvMessagePayload = xMQTTPublishInfo->pvPayload;
                 xPropertiesResponse.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
-                xPropertiesResponse.xMessageStatus = ( AzureIoTHubMessageStatus_t ) xOutRequest.status;
+                xPropertiesResponse.xMessageStatus = ( AzureIoTHubMessageStatus_t ) xOutMessage.status;
                 xPropertiesResponse.ulRequestID = ulRequestID;
 
                 AZLogDebug( ( "Invoking property callback" ) );
