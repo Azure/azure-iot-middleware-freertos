@@ -84,9 +84,9 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubCli
                                                                   AzureIoTJSONWriter_t * pxJSONWriter );
 
 /**
- * @brief Begin a property response to a writeable property request from the service.
+ * @brief Begin a property response to a writable property request from the service.
  *
- * This API should be used in response to an incoming writeable properties. More details can be
+ * This API should be used in response to an incoming writable properties. More details can be
  * found here:
  *
  * https://docs.microsoft.com/en-us/azure/iot-pnp/concepts-convention#writable-properties
@@ -203,7 +203,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTH
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWriteablePropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
  * @pre \p pulVersion must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
@@ -223,7 +223,7 @@ typedef enum AzureIoTHubClientPropertyType_t
     /** @brief Property was originally reported from the device. */
     eAzureIoTHubClientReportedFromDevice = AZ_IOT_HUB_CLIENT_PROPERTY_REPORTED_FROM_DEVICE,
     /** @brief Property was received from the service. */
-    eAzureIoTHubClientPropertyWriteable = AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE
+    eAzureIoTHubClientPropertyWritable = AZ_IOT_HUB_CLIENT_PROPERTY_WRITABLE
 } AzureIoTHubClientPropertyType_t;
 
 /**
@@ -245,7 +245,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  * @code
  *
  * while (az_result_succeeded(AzureIoTHubClientProperties_GetNextComponentProperty(
- *       &xHubClient, &jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITEABLE, &pucComponentName, &pusComponentNameLength)))
+ *       &xHubClient, &jr, xResponseType, AZ_IOT_HUB_CLIENT_PROPERTY_WRITABLE, &pucComponentName, &pusComponentNameLength)))
  * {
  *   // Check if property is of interest (substitute user_property for your own property name)
  *   if (AzureIoTJSONReader_TokenIsTextEqual(&jr, user_property, user_property_length))
@@ -289,7 +289,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWriteablePropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
  * If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
  * then \p xResponseType must be #eAzureIoTHubPropertiesGetMessage.
  * @pre \p ppucComponentName must not be `NULL`.

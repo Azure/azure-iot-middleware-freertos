@@ -211,7 +211,7 @@ static void prvTestProperties( AzureIoTHubClientPropertiesResponse_t * pxMessage
         assert_int_equal( pxMessage->ulPayloadLength, sizeof( testPROPERTY_MESSAGE ) - 1 );
         assert_memory_equal( pxMessage->pvMessagePayload, testPROPERTY_MESSAGE, sizeof( testPROPERTY_MESSAGE ) - 1 );
     }
-    else if( pxMessage->xMessageType == eAzureIoTHubPropertiesWriteablePropertyMessage )
+    else if( pxMessage->xMessageType == eAzureIoTHubPropertiesWritablePropertyMessage )
     {
         assert_int_equal( pxMessage->ulPayloadLength, sizeof( testPROPERTY_DESIRED_MESSAGE ) - 1 );
         assert_memory_equal( pxMessage->pvMessagePayload, testPROPERTY_DESIRED_MESSAGE, sizeof( testPROPERTY_DESIRED_MESSAGE ) - 1 );

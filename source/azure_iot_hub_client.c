@@ -302,13 +302,13 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
     AzureIoTHubClientPropertiesResponse_t xPropertiesResponse = { 0 };
     AzureIoTMQTTPublishInfo_t * xMQTTPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pvPublishInfo;
     az_result xCoreResult;
-    az_iot_hub_client_properties_response xOutRequest;
+    az_iot_hub_client_properties_message xOutMessage;
     az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
     uint32_t ulRequestID = 0;
 
     /* Failed means no topic match. This means the message is not for properties messaging. */
     xCoreResult = az_iot_hub_client_properties_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                     xTopicSpan, &xOutRequest );
+                                                                     xTopicSpan, &xOutMessage );
 
     if( az_result_failed( xCoreResult ) )
     {
@@ -326,13 +326,13 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
 
         if( pxContext->_internal.callbacks.xPropertiesCallback )
         {
-            if( az_span_size( xOutRequest.request_id ) == 0 )
+            if( az_span_size( xOutMessage.request_id ) == 0 )
             {
-                xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesWriteablePropertyMessage;
+                xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesWritablePropertyMessage;
             }
             else
             {
-                if( az_result_succeeded( xCoreResult = az_span_atou32( xOutRequest.request_id, &ulRequestID ) ) )
+                if( az_result_succeeded( xCoreResult = az_span_atou32( xOutMessage.request_id, &ulRequestID ) ) )
                 {
                     if( ulRequestID & 0x01 )
                     {
@@ -355,7 +355,7 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
             {
                 xPropertiesResponse.pvMessagePayload = xMQTTPublishInfo->pvPayload;
                 xPropertiesResponse.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
-                xPropertiesResponse.xMessageStatus = ( AzureIoTHubMessageStatus_t ) xOutRequest.status;
+                xPropertiesResponse.xMessageStatus = ( AzureIoTHubMessageStatus_t ) xOutMessage.status;
                 xPropertiesResponse.ulRequestID = ulRequestID;
 
                 AZLogDebug( ( "Invoking property callback" ) );
@@ -1190,15 +1190,15 @@ AzureIoTResult_t AzureIoTHubClient_SubscribeProperties( AzureIoTHubClient_t * px
     {
         pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_PROPERTIES ];
         xMqttSubscription[ 0 ].xQoS = eAzureIoTMQTTQoS0;
-        xMqttSubscription[ 0 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_SUBSCRIBE_TOPIC;
-        xMqttSubscription[ 0 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+        xMqttSubscription[ 0 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 0 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_SUBSCRIBE_TOPIC ) - 1;
         xMqttSubscription[ 1 ].xQoS = eAzureIoTMQTTQoS0;
-        xMqttSubscription[ 1 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_PATCH_SUBSCRIBE_TOPIC;
-        xMqttSubscription[ 1 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_PATCH_SUBSCRIBE_TOPIC ) - 1;
+        xMqttSubscription[ 1 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_WRITABLE_UPDATES_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 1 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_WRITABLE_UPDATES_SUBSCRIBE_TOPIC ) - 1;
         usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
 
         AZLogDebug( ( "Attempting to subscribe to the MQTT topics: %s and %s",
-                      AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_PROPERTIES_PATCH_SUBSCRIBE_TOPIC ) );
+                      AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_PROPERTIES_WRITABLE_UPDATES_SUBSCRIBE_TOPIC ) );
 
         if( ( xMQTTResult = AzureIoTMQTT_Subscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
                                                     xMqttSubscription, 2,
@@ -1245,15 +1245,15 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeProperties( AzureIoTHubClient_t * 
     {
         pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_PROPERTIES ];
         xMqttSubscription[ 0 ].xQoS = eAzureIoTMQTTQoS0;
-        xMqttSubscription[ 0 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_SUBSCRIBE_TOPIC;
-        xMqttSubscription[ 0 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+        xMqttSubscription[ 0 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 0 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_SUBSCRIBE_TOPIC ) - 1;
         xMqttSubscription[ 1 ].xQoS = eAzureIoTMQTTQoS0;
-        xMqttSubscription[ 1 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_PATCH_SUBSCRIBE_TOPIC;
-        xMqttSubscription[ 1 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_PATCH_SUBSCRIBE_TOPIC ) - 1;
+        xMqttSubscription[ 1 ].pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_PROPERTIES_WRITABLE_UPDATES_SUBSCRIBE_TOPIC;
+        xMqttSubscription[ 1 ].usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_PROPERTIES_WRITABLE_UPDATES_SUBSCRIBE_TOPIC ) - 1;
         usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
 
         AZLogDebug( ( "Attempting to unsubscribe from MQTT topics: %s and %s",
-                      AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_PROPERTIES_PATCH_SUBSCRIBE_TOPIC ) );
+                      AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_SUBSCRIBE_TOPIC, AZ_IOT_HUB_CLIENT_PROPERTIES_WRITABLE_UPDATES_SUBSCRIBE_TOPIC ) );
 
         if( ( xMQTTResult = AzureIoTMQTT_Unsubscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
                                                       xMqttSubscription, 2,
@@ -1306,11 +1306,11 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
             AZLogError( ( "Failed to get request id: error=0x%08x", xResult ) );
         }
         else if( az_result_failed( xCoreResult =
-                                       az_iot_hub_client_properties_patch_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                             xRequestID,
-                                                                                             ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
-                                                                                             pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
-                                                                                             &xTopicLength ) ) )
+                                       az_iot_hub_client_properties_update_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                              xRequestID,
+                                                                                              ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                              pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                              &xTopicLength ) ) )
         {
             AZLogError( ( "Failed to get property patch topic: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
