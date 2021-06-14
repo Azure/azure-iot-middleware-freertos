@@ -156,11 +156,11 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
 {
     AzureIoTResult_t xResult;
     az_result xCoreResult;
-    az_iot_hub_client_properties_response_type xCoreResponseType;
+    az_iot_hub_client_properties_message_type xCoreMessageType;
 
     if( ( pxAzureIoTHubClient == NULL ) ||
         ( pxJSONReader == NULL ) ||
-        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWriteablePropertyMessage ) ) ||
+        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
         ( pulVersion == NULL ) )
     {
         AZLogError( ( "AzureIoTHubClientProperties_GetPropertiesVersion failed: invalid argument" ) );
@@ -168,12 +168,12 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
     }
     else
     {
-        xCoreResponseType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
-                            AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_GET : AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_DESIRED_PROPERTIES;
+        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
+                           AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_GET_RESPONSE : AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_WRITABLE_UPDATED;
 
         if( az_result_failed(
                 xCoreResult = az_iot_hub_client_properties_get_properties_version( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                   &pxJSONReader->_internal.xCoreReader, xCoreResponseType, ( int32_t * ) pulVersion ) ) )
+                                                                                   &pxJSONReader->_internal.xCoreReader, xCoreMessageType, ( int32_t * ) pulVersion ) ) )
         {
             AZLogError( ( "Could not get property version: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
@@ -197,10 +197,10 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
     AzureIoTResult_t xResult;
     az_result xCoreResult;
     az_span xComponentSpan;
-    az_iot_hub_client_properties_response_type xCoreResponseType;
+    az_iot_hub_client_properties_message_type xCoreMessageType;
 
     if( ( pxAzureIoTHubClient == NULL ) || ( pxJSONReader == NULL ) ||
-        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWriteablePropertyMessage ) ) ||
+        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
         ( ppucComponentName == NULL ) || ( pulComponentNameLength == NULL ) )
     {
         AZLogError( ( "AzureIoTHubClientProperties_GetNextComponentProperty failed: invalid argument" ) );
@@ -208,14 +208,14 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
     }
     else
     {
-        xComponentSpan = ppucComponentName == NULL ? AZ_SPAN_EMPTY : az_span_create( ( uint8_t * ) *ppucComponentName, ( int32_t ) *pulComponentNameLength );
-        xCoreResponseType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
-                            AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_GET : AZ_IOT_HUB_CLIENT_PROPERTIES_RESPONSE_TYPE_DESIRED_PROPERTIES;
+        xComponentSpan = az_span_create( ( uint8_t * ) *ppucComponentName, ( int32_t ) *pulComponentNameLength );
+        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
+                           AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_GET_RESPONSE : AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_WRITABLE_UPDATED;
 
         if( az_result_failed(
                 xCoreResult = az_iot_hub_client_properties_get_next_component_property( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                         &pxJSONReader->_internal.xCoreReader,
-                                                                                        xCoreResponseType,
+                                                                                        xCoreMessageType,
                                                                                         ( az_iot_hub_client_property_type ) xPropertyType,
                                                                                         &xComponentSpan ) ) )
         {
