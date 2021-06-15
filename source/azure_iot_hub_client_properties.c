@@ -160,7 +160,8 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
 
     if( ( pxAzureIoTHubClient == NULL ) ||
         ( pxJSONReader == NULL ) ||
-        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
+        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) &&
+          ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
         ( pulVersion == NULL ) )
     {
         AZLogError( ( "AzureIoTHubClientProperties_GetPropertiesVersion failed: invalid argument" ) );
@@ -200,7 +201,8 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
     az_iot_hub_client_properties_message_type xCoreMessageType;
 
     if( ( pxAzureIoTHubClient == NULL ) || ( pxJSONReader == NULL ) ||
-        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) && ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
+        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) &&
+          ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
         ( ppucComponentName == NULL ) || ( pulComponentNameLength == NULL ) )
     {
         AZLogError( ( "AzureIoTHubClientProperties_GetNextComponentProperty failed: invalid argument" ) );
