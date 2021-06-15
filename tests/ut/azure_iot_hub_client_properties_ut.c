@@ -328,7 +328,6 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersion_Success( void *
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
-    AzureIoTJSONTokenType_t xTokenType;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     uint32_t ulVersion;
 
@@ -348,7 +347,6 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersionGetDocument_Succ
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
-    AzureIoTJSONTokenType_t xTokenType;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesGetMessage;
     uint32_t ulVersion;
 
@@ -368,7 +366,6 @@ static void testAzureIoTHubClientProperties_GetPropertiesVersionWriteableUpdate_
 {
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
-    AzureIoTJSONTokenType_t xTokenType;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     uint32_t ulVersion;
 
@@ -592,7 +589,6 @@ static void testAzureIoTHubClientProperties_GetNextComponentPropertyGetDocument_
     const uint8_t * ucComponentName;
     uint32_t ulComponentNameLength;
     int32_t lValue = 0;
-
     AzureIoTHubClientOptions_t xOptions;
 
     will_return( AzureIoTMQTT_Init, eAzureIoTMQTTSuccess );
