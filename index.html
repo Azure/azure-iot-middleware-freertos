@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Azure IoT Middleware for FreeRTOS: Azure FreeRTOS Middleware</title>
+<title>Azure IoT Middleware for FreeRTOS: Azure IoT Middleware for FreeRTOS</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,16 +62,16 @@ $(function() {
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">Azure FreeRTOS Middleware </div>  </div>
+<div class="title">Azure IoT Middleware for FreeRTOS </div>  </div>
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a href="https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml"><object type="image/svg+xml" data="https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml/badge.svg" style="pointer-events: none;">Linux CI Tests</object></a></p>
 <p><b>THIS REPO IS IN ACTIVE DEVELOPMENT AND NOT GA READY. APIS ARE SUBJECT TO CHANGE WITHOUT NOTICE UNTIL AN OFFICIAL RELEASE HAS BEEN PUBLISHED.</b></p>
-<p>The Azure FreeRTOS Middleware simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the <a href="https://github.com/Azure/azure-sdk-for-c">Azure SDK for Embedded C</a> and adds MQTT client support. Below are key points of this project:</p>
+<p>The Azure IoT Middleware for FreeRTOS simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the <a href="https://github.com/Azure/azure-sdk-for-c">Azure SDK for Embedded C</a> and adds MQTT client support. Below are key points of this project:</p>
 <ul>
-<li>The Azure FreeRTOS Middleware operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are issued by the customer and handled by the SDK.</li>
+<li>The Azure IoT Middleware for FreeRTOS operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are issued by the customer and handled by the SDK.</li>
 <li>Customers control the TLS/TCP connection to the endpoint. This allows for flexibility between software or hardware implementations of either. For porting, please see the <a href="#porting">porting</a> section below.</li>
-<li>No background threads are created by the Azure FreeRTOS Middleware. Messages are sent and received synchronously.</li>
+<li>No background threads are created by the Azure IoT Middleware for FreeRTOS. Messages are sent and received synchronously.</li>
 <li>Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md1"></a>

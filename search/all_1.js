@@ -146,5 +146,5 @@ var searchData=
   ['azureiotversion_5fpatch_146',['azureiotVERSION_PATCH',['../azure__iot__version_8h.html#a32014f04a04386beeb0dde34af2cab56',1,'azure_iot_version.h']]],
   ['azureiotversion_5fprerelease_147',['azureiotVERSION_PRERELEASE',['../azure__iot__version_8h.html#a71d850b1db8b06d73fdeb3390815d61d',1,'azure_iot_version.h']]],
   ['azureiotversion_5fstring_148',['azureiotVERSION_STRING',['../azure__iot__version_8h.html#a9fa652477e08d50684486c4693c76795',1,'azure_iot_version.h']]],
-  ['azure_20freertos_20middleware_149',['Azure FreeRTOS Middleware',['../index.html',1,'']]]
+  ['azure_20iot_20middleware_20for_20freertos_149',['Azure IoT Middleware for FreeRTOS',['../index.html',1,'']]]
 ];
