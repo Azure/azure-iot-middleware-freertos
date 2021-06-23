@@ -291,6 +291,8 @@ AzureIoTResult_t AzureIoT_Init()
 {
     #if ( LIBRARY_LOG_LEVEL >= LOG_INFO )
         az_log_set_message_callback( prvAzureIoTLogListener );
+    #else
+        ( void ) prvAzureIoTLogListener;
     #endif
 
     return eAzureIoTSuccess;
