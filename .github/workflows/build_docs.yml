@@ -14,7 +14,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-          ref: ${{ github.event.inputs.commitRef }}
+          with:
+            ref: ${{ github.event.inputs.commitRef }}
 
       - name: Install and Build Doxygen
         run: .github/scripts/doxygen.sh
