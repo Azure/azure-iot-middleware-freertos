@@ -1,10 +1,11 @@
 name: Build and Deploy Docs
 
-on: workflow_dispatch
-  inputs:
-      commitRef:
-        description: 'Git SHA commit to use to build docs'
-        required: true
+on:
+  workflow_dispatch:
+    inputs:
+        commitRef:
+          description: 'Git SHA commit to use to build docs'
+          required: true
 
 jobs:
   push-docs:
