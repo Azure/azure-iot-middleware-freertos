@@ -1,4 +1,4 @@
-name: Build Docs
+name: Build and Deploy Docs
 
 on: workflow_dispatch
   inputs:
