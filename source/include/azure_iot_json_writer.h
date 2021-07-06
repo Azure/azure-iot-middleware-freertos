@@ -1,5 +1,5 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
-/* SPDX-License-Identifier: MIT */
+/* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT License. */
 
 /**
  * @file azure_iot_json_writer.h

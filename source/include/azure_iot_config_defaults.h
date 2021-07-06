@@ -1,5 +1,5 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
-/* SPDX-License-Identifier: MIT */
+/* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT License. */
 
 #ifndef AZURE_IOT_CONFIG_DEFAULTS_H
 #define AZURE_IOT_CONFIG_DEFAULTS_H
