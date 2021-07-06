@@ -55,6 +55,7 @@ The following files are for core library functionality:
 
 - All source files under `source`
 - All header files under `source/include`
+- All header files under `source/interface`
 
 The following includes must be available to the library for compilation.
 
