@@ -1,5 +1,5 @@
 /* Copyright (c) Microsoft Corporation.
-   Licensed under the MIT License. */
+ * Licensed under the MIT License. */
 
 #ifndef FREERTOS_CONFIG_H
 #define FREERTOS_CONFIG_H
