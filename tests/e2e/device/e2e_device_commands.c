@@ -1,5 +1,5 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
-/* SPDX-License-Identifier: MIT */
+/* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT License. */
 
 #include "e2e_device_process_commands.h"
 

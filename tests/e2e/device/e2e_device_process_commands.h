@@ -1,5 +1,5 @@
-/* Copyright (c) Microsoft Corporation. All rights reserved. */
-/* SPDX-License-Identifier: MIT */
+/* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT License. */
 
 /* Uncrustify wants to indent because of the cpp wrapper so turn off */
 /* *INDENT-OFF* */
