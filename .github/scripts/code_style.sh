@@ -36,6 +36,7 @@ if [[ "$FIX" == "check" ]]; then
     ./source/interface/*.h                                    \
     ./ports/coreMQTT/*.c                                      \
     ./ports/coreMQTT/*.h                                      \
+    ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
     ./tests/e2e/device/*.c                                    \
     ./tests/e2e/device/*.h                                    \
