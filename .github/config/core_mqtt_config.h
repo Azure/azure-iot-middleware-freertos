@@ -1,5 +1,5 @@
 /* Copyright (c) Microsoft Corporation.
-   Licensed under the MIT License. */
+ * Licensed under the MIT License. */
 
 #ifndef CORE_MQTT_CONFIG_H
 #define CORE_MQTT_CONFIG_H
