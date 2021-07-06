@@ -35,6 +35,8 @@ Note that different versions of `uncrustify` can produce differently rendered fi
 
 ## Building
 
+### Using CMake
+
 This repository uses `CMake` to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a `-D` or add them as cache variables in your CMake.
 
 - `FREERTOS_DIRECTORY`: Full path to a directory which contains FreeRTOS ([as set up on GitHub](https://github.com/FreeRTOS/FreeRTOS)).
@@ -44,6 +46,30 @@ This repository uses `CMake` to build. To integrate into your project, it requir
 With those options added, the following CMake target will be available to integrate into your project:
 
 - `az::iot_middleware::freertos`
+
+### Using Source Files
+
+Similar to the process of building using CMake, the library requires a few components in order to build by using only the source files (maybe in make files or some proprietary build system).
+
+The following files are for core library functionality:
+
+- All source files under `source`
+- All header files under `source/include`
+
+The following includes must be available to the library for compilation.
+
+- FreeRTOS kernel includes
+- A FreeRTOS port directory
+- A path or paths to the following files: `FreeRTOSConfig.h`, `azure_iot_config.h`.
+
+If using the coreMQTT port for the MQTT, the following needs to be included and built:
+
+- `core_mqtt_config.h`
+- The `source/interface` directory
+- The port files in `ports/coreMQTT`
+- Proper compilation and linking of the coreMQTT library
+
+Other than these, your choice of libraries for TLS and TCP/IP are up to you to choose and properly configure/compile.
 
 ## Contributing
 
