@@ -13,7 +13,7 @@ The Azure IoT Middleware for FreeRTOS simplifies the connection of devices runni
 
 ## Repo Structure
 
-Main branch contains API's and tests. For the most cutting edge developments, please see the `sdk_spike` branch [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/sdk_spike). There we have samples for several devices including:
+This repo contains the Azure IoT Middleware for FreeRTOS libraries and carries dependencies only to coreMQTT. For working samples please visit the [samples repo](https://github.com/Azure-Samples/iot-middleware-freertos-samples). There we have samples for several devices including:
 
 - STM32L475
 - STM32L4+
