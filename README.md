@@ -72,6 +72,10 @@ If using the coreMQTT port for the MQTT, the following needs to be included and 
 
 Other than these, your choice of libraries for TLS and TCP/IP are up to you to choose and properly configure/compile.
 
+## Porting
+
+The middleware for FreeRTOS operates at the MQTT level. This requires customers to supply the TLS and TCP/IP stacks for their devices. The binding between the MQTT layer and the TLS/TCP/IP is defined in the [azure_iot_transport_interface.h](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_transport_interface.h). For an example to see how that is passed to the SDK, [please see the code block linked here in our samples](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/ddb3c6970a2b837b73e60e0d3704ba7346d10c3f/demos/sample_azure_iot/sample_azure_iot.c#L353-L370).
+
 ## Contributing
 
 This project welcomes contributions and suggestions.  Most contributions require you to agree to a
