@@ -1,5 +1,7 @@
 # Release History
 
+## 1.0.0-preview.2 (Unreleased)
+
 ## 1.0.0-preview.1 (2021-07-13)
 
 This release marks the public preview availability for the Azure IoT middleware for FreeRTOS.
