@@ -56,7 +56,7 @@ typedef struct AzureIoTMessageProperties
 /**
  * @brief The platform get time function to be used by the SDK for MQTT connections.
  *
- * @return The time since Unix epoch.
+ * @return The time (in seconds) since Unix epoch.
  */
 typedef uint64_t ( * AzureIoTGetCurrentTimeFunc_t )( void );
 
@@ -68,7 +68,7 @@ typedef uint64_t ( * AzureIoTGetCurrentTimeFunc_t )( void );
  * @param[in] pucData The data on which the operation will take place. In this context, the data
  * will be a certain concatenation of the iot hub name, sas key, and expiration time.
  * @param[in] ulDataLength The length of \p pucData.
- * @param[in] pucOutput The buffer into which the processed data will be placed.
+ * @param[in,out] pucOutput The buffer into which the processed data will be placed.
  * @param[in] ulOutputLength The size of \p pucOutput.
  * @param[out] pulBytesCopied The number of bytes copied into \p pucOutput.
  */
