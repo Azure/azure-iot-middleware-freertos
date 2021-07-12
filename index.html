@@ -76,7 +76,7 @@ $(function() {
 </ul>
 <h1><a class="anchor" id="autotoc_md1"></a>
 Repo Structure</h1>
-<p>Main branch contains API's and tests. For the most cutting edge developments, please see the <code>sdk_spike</code> branch <a href="https://github.com/Azure/azure-iot-middleware-freertos/tree/sdk_spike">here</a>. There we have samples for several devices including:</p>
+<p>This repo contains the Azure IoT Middleware for FreeRTOS libraries and has dependencies only on coreMQTT. For working samples please visit the <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples">samples repo</a>. There we have samples for several devices including:</p>
 <ul>
 <li>STM32L475</li>
 <li>STM32L4+</li>
@@ -93,6 +93,8 @@ Code Style</h1>
 <div class="line">./.github/scripts/code_style.sh fix</div>
 </div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
 Building</h1>
+<h2><a class="anchor" id="autotoc_md4"></a>
+Using CMake</h2>
 <p>This repository uses <code>CMake</code> to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a <code>-D</code> or add them as cache variables in your CMake.</p>
 <ul>
 <li><code>FREERTOS_DIRECTORY</code>: Full path to a directory which contains FreeRTOS (<a href="https://github.com/FreeRTOS/FreeRTOS">as set up on GitHub</a>).</li>
@@ -103,12 +105,35 @@ Building</h1>
 <ul>
 <li><code>az::iot_middleware::freertos</code></li>
 </ul>
-<h1><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
+Using Source Files</h2>
+<p>Similar to the process of building using CMake, the library requires a few components in order to build by using only the source files (maybe in make files or some proprietary build system).</p>
+<p>The following files are for core library functionality:</p>
+<ul>
+<li>All source files under <code>source</code></li>
+<li>All header files under <code>source/include</code></li>
+<li>All header files under <code>source/interface</code></li>
+</ul>
+<p>The following includes must be available to the library for compilation.</p>
+<ul>
+<li>FreeRTOS kernel includes</li>
+<li>A FreeRTOS port directory</li>
+<li>A path or paths to the following files: <code>FreeRTOSConfig.h</code>, <code>azure_iot_config.h</code>.</li>
+</ul>
+<p>If using the coreMQTT port for the MQTT, the following needs to be included and built:</p>
+<ul>
+<li><code>core_mqtt_config.h</code></li>
+<li>The <code>source/interface</code> directory</li>
+<li>The port files in <code>ports/coreMQTT</code></li>
+<li>Proper compilation and linking of the coreMQTT library</li>
+</ul>
+<p>Other than these, your choice of libraries for TLS and TCP/IP are up to you to choose and properly configure/compile.</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
 Contributing</h1>
 <p>This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit <a href="https://cla.opensource.microsoft.com">https://cla.opensource.microsoft.com</a>.</p>
 <p>When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.</p>
 <p>This project has adopted the <a href="https://opensource.microsoft.com/codeofconduct/">Microsoft Open Source Code of Conduct</a>. For more information see the <a href="https://opensource.microsoft.com/codeofconduct/faq/">Code of Conduct FAQ</a> or contact <a href="#" onclick="location.href='mai'+'lto:'+'ope'+'nc'+'ode'+'@m'+'icr'+'os'+'oft'+'.c'+'om'; return false;">opencode@microsoft.com</a> with any additional questions or comments.</p>
-<h1><a class="anchor" id="autotoc_md5"></a>
+<h1><a class="anchor" id="autotoc_md7"></a>
 Trademarks</h1>
 <p>This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow <a href="https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general">Microsoft's Trademark &amp; Brand Guidelines</a>. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies. </p>
 </div></div><!-- PageDoc -->
