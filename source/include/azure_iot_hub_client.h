@@ -145,12 +145,17 @@ typedef struct AzureIoTHubClientPropertiesResponse
 /**
  * @brief Cloud message callback to be invoked when a cloud message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
+ * @param[in] pxMessage The #AzureIoTHubClientCloudToDeviceMessageRequest_t associated with the message.
+ * @param[in] pvContext The context passed back to the caller.
  */
 typedef void ( * AzureIoTHubClientCloudToDeviceMessageCallback_t ) ( AzureIoTHubClientCloudToDeviceMessageRequest_t * pxMessage,
                                                                      void * pvContext );
 
 /**
  * @brief Command callback to be invoked when a command request is received in the call to AzureIoTHubClient_ProcessLoop().
+ *
+ * @param[in] pxMessage The #AzureIoTHubClientCommandRequest_t associated with the message.
+ * @param[in] pvContext The context passed back to the caller.
  *
  */
 typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommandRequest_t * pxMessage,
@@ -159,6 +164,8 @@ typedef void ( * AzureIoTHubClientCommandCallback_t ) ( AzureIoTHubClientCommand
 /**
  * @brief Properties callback to be invoked when a property message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
+ * @param[in] pxMessage The #AzureIoTHubClientPropertiesResponse_t associated with the message.
+ * @param[in] pvContext The context passed back to the caller.
  */
 typedef void ( * AzureIoTHubClientPropertiesCallback_t ) ( AzureIoTHubClientPropertiesResponse_t * pxMessage,
                                                            void * pvContext );
@@ -190,6 +197,9 @@ typedef struct AzureIoTHubClientReceiveContext
 
 /**
  * @brief Callback to send notification that puback was received for specific packet ID.
+ *
+ * @param[in] ulTelemetryPacketID The packet id for the telemetry message which was received. You may use this to match
+ * messages with the optional packet id parameter in AzureIoTHubClient_SendTelemetry().
  */
 typedef void (* AzureIoTTelemetryAckCallback_t)( uint16_t ulTelemetryPacketID );
 

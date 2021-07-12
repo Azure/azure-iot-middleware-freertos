@@ -2,7 +2,7 @@
  * Licensed under the MIT License. */
 
 /**
- * @file azure_iot_results.h
+ * @file azure_iot_result.h
  *
  * @brief Provides version information for the Azure IoT FreeRTOS middleware.
  *
