@@ -56,12 +56,21 @@ typedef struct AzureIoTMessageProperties
 /**
  * @brief The platform get time function to be used by the SDK for MQTT connections.
  *
- * @note Must return the time since Unix epoch.
+ * @return The time since Unix epoch.
  */
 typedef uint64_t ( * AzureIoTGetCurrentTimeFunc_t )( void );
 
 /**
  * @brief The HMAC256 function used by the SDK to generate SAS keys.
+ *
+ * @param[in] pucKey The key to use for the HMAC operation.
+ * @param[in] ulKeyLength The length of \p pucKey.
+ * @param[in] pucData The data on which the operation will take place. In this context, the data
+ * will be a certain concatenation of the iot hub name, sas key, and expiration time.
+ * @param[in] ulDataLength The length of \p pucData.
+ * @param[in] pucOutput The buffer into which the processed data will be placed.
+ * @param[in] ulOutputLength The size of \p pucOutput.
+ * @param[out] pulBytesCopied The number of bytes copied into \p pucOutput.
  */
 typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
                                               uint32_t ulKeyLength,
