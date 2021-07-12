@@ -56,7 +56,7 @@
  * @pre \p pucComponentName must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The JSON payload was prefixed successfully.
+ * @retval eAzureIoTSuccess The JSON payload was prefixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                     AzureIoTJSONWriter_t * pxJSONWriter,
@@ -78,7 +78,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubC
  * @pre \p pxJSONWriter must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The JSON payload was suffixed successfully.
+ * @retval eAzureIoTSuccess The JSON payload was suffixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                   AzureIoTJSONWriter_t * pxJSONWriter );
@@ -156,7 +156,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubCli
  * @pre \p pucPropertyName must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The JSON payload was prefixed successfully.
+ * @retval eAzureIoTSuccess The JSON payload was prefixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                          AzureIoTJSONWriter_t * pxJSONWriter,
@@ -180,7 +180,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIo
  * @pre \p pxJSONWriter must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The JSON payload was suffixed successfully.
+ * @retval eAzureIoTSuccess The JSON payload was suffixed successfully.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                        AzureIoTJSONWriter_t * pxJSONWriter );
@@ -207,7 +207,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTH
  * @pre \p pulVersion must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess If the function returned a valid version.
+ * @retval eAzureIoTSuccess If the function returned a valid version.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                    AzureIoTJSONReader_t * pxJSONReader,
@@ -274,7 +274,7 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @warning If you need to retrieve more than one \p xPropertyType, you should first complete the
  * scan of all components for the first property type (until the API returns
- * #AZ_ERROR_IOT_END_OF_PROPERTIES). Then you must call AzureIoTJSONReader_Init() again after this call
+ * eAzureIoTErrorEndOfProperties). Then you must call AzureIoTJSONReader_Init() again after this call
  * and before the next call to `AzureIoTHubClientProperties_GetNextComponentProperty` with the
  * different \p xPropertyType.
  *
@@ -290,15 +290,15 @@ typedef enum AzureIoTHubClientPropertyType_t
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
  * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
- * If `eAzureIoTHubClientReportedFromDevice` is specified in \p xPropertyType,
+ * If eAzureIoTHubClientReportedFromDevice is specified in \p xPropertyType,
  * then \p xResponseType must be #eAzureIoTHubPropertiesGetMessage.
  * @pre \p ppucComponentName must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and
+ * @retval eAzureIoTSuccess If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and
  * the component name.
- * @retval #AZ_ERROR_JSON_INVALID_STATE If the json reader is passed in at an unexpected location.
- * @retval #AZ_ERROR_IOT_END_OF_PROPERTIES If there are no more properties left for the component.
+ * @retval eAzureIoTErrorFailed If the json reader is passed in at an unexpected location.
+ * @retval eAzureIoTErrorEndOfProperties If there are no more properties left for the component.
  */
 AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                                        AzureIoTJSONReader_t * pxJSONReader,
