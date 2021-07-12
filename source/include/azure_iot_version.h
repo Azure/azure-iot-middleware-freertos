@@ -21,7 +21,7 @@
 /**
  * @brief Major numeric identifier.
  */
-#define azureiotVERSION_MAJOR         0
+#define azureiotVERSION_MAJOR         1
 
 /**
  * @brief Minor numeric identifier.
@@ -31,12 +31,12 @@
 /**
  * @brief Patch numeric identifier.
  */
-#define azureiotVERSION_PATCH         1
+#define azureiotVERSION_PATCH         0
 
 /**
  * @brief Optional pre-release identifier. SDK is in a pre-release state when present.
  */
-#define azureiotVERSION_PRERELEASE    "alpha"
+#define azureiotVERSION_PRERELEASE    "preview.1"
 
 /**
  * @brief The version in string format used for telemetry following the `semver.org` standard
