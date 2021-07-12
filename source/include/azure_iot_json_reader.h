@@ -46,7 +46,7 @@ typedef struct AzureIoTJSONReader
     struct
     {
         az_json_reader xCoreReader;
-    } _internal;
+    } _internal; /**< @brief Internal to the SDK */
 } AzureIoTJSONReader_t;
 
 /**
@@ -58,7 +58,7 @@ typedef struct AzureIoTJSONReader
  * @param[in] ulBufferSize Length of buffer.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The #AzureIoTJSONReader_t is initialized successfully.
+ * @retval eAzureIoTSuccess The #AzureIoTJSONReader_t is initialized successfully.
  * @retval other Initialization failed.
  *
  */
@@ -73,7 +73,7 @@ AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
  * read.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The token was read successfully.
+ * @retval eAzureIoTSuccess The token was read successfully.
  */
 AzureIoTResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * pxReader );
 
@@ -84,11 +84,11 @@ AzureIoTResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * pxReader )
  * read.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The children of the current JSON token are skipped successfully.
+ * @retval eAzureIoTSuccess The children of the current JSON token are skipped successfully.
  *
  * @remarks If the current token kind is a property name, the reader first moves to the property
  * value. Then, if the token kind is start of an object or array, the reader moves to the matching
- * end object or array. For all other token kinds, the reader doesn't move and returns #eAzureIoTSuccess.
+ * end object or array. For all other token kinds, the reader doesn't move and returns eAzureIoTSuccess.
  */
 AzureIoTResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReader );
 
@@ -99,7 +99,7 @@ AzureIoTResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReade
  * @param[out] pxValue A pointer to a boolean to receive the value.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The boolean value is returned.
+ * @retval eAzureIoTSuccess The boolean value is returned.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReader,
                                                   bool * pxValue );
@@ -111,7 +111,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReade
  * @param[out] plValue A pointer to a variable to receive the value.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The number is returned.
+ * @retval eAzureIoTSuccess The number is returned.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxReader,
                                                    int32_t * plValue );
@@ -123,7 +123,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxRead
  * @param[out] pxValue A pointer to a variable to receive the value.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The number is returned.
+ * @retval eAzureIoTSuccess The number is returned.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxReader,
                                                     double * pxValue );
@@ -138,7 +138,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
  * destination which denote the length of the unescaped string.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval #eAzureIoTSuccess The property name was appended successfully.
+ * @retval eAzureIoTSuccess The property name was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxReader,
                                                     uint8_t * pucBuffer,
