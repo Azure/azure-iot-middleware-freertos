@@ -242,7 +242,7 @@ typedef void ( * AzureIoTMQTTEventCallback_t )( AzureIoTMQTTHandle_t pContext,
 /**
  * @brief Initialize an AzureIoTMQTT context.
  *
- * @note This function is for integration of the Azure IoT Middleware and
+ * @note This function is for integration of the Azure IoT middleware and
  *       the underlying MQTT stack and should in general not be invoked by
  *       applications directly.
  *

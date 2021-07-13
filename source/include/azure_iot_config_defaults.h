@@ -65,68 +65,68 @@
 #endif
 
 /**
- * @brief Macro that is called in the Azure IoT Middleware library for logging "Error" level
+ * @brief Macro that is called in the Azure IoT middleware library for logging "Error" level
  * messages.
  *
- * To enable error level logging in the AzureIoT Middleware library:
+ * To enable error level logging in the AzureIoT middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
  *
- * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
+ * @note This logging macro is called in the Azure IoT middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
  *
  * <b>Default value</b>: Error logging is turned off, and no code is generated for calls
- * to the macro in the Azure IoT Middleware library on compilation.
+ * to the macro in the Azure IoT middleware library on compilation.
  */
 #ifndef AZLogError
     #define AZLogError( message )
 #endif
 
 /**
- * @brief Macro that is called in the Azure IoT Middleware library for logging "Warning" level
+ * @brief Macro that is called in the Azure IoT middleware library for logging "Warning" level
  * messages.
  *
- * To enable warning level logging in the AzureIoT Middleware library:
+ * To enable warning level logging in the AzureIoT middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
  *
- * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
+ * @note This logging macro is called in the Azure IoT middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
  *
  * <b>Default value</b>: Warning logs are turned off, and no code is generated for calls
- * to the macro in the Azure IoT Middleware library on compilation.
+ * to the macro in the Azure IoT middleware library on compilation.
  */
 #ifndef AZLogWarn
     #define AZLogWarn( message )
 #endif
 
 /**
- * @brief Macro that is called in the Azure IoT Middleware library for logging "Info" level
+ * @brief Macro that is called in the Azure IoT middleware library for logging "Info" level
  * messages.
  *
- * To enable info level logging in the AzureIoT Middleware library:
+ * To enable info level logging in the AzureIoT middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
  *
- * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
+ * @note This logging macro is called in the Azure IoT middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
  *
  * <b>Default value</b>: Info logging is turned off, and no code is generated for calls
- * to the macro in the Azure IoT Middleware library on compilation.
+ * to the macro in the Azure IoT middleware library on compilation.
  */
 #ifndef AZLogInfo
     #define AZLogInfo( message )
 #endif
 
 /**
- * @brief Macro that is called in the Azure IoT Middleware library for logging "Debug" level
+ * @brief Macro that is called in the Azure IoT middleware library for logging "Debug" level
  * messages.
  *
- * To enable info level logging in the AzureIoT Middleware library:
+ * To enable info level logging in the AzureIoT middleware library:
  *  - Map the macro to the application-specific logging implementation that supports error logging.
  *
- * @note This logging macro is called in the Azure IoT Middleware library with parameters wrapped in
+ * @note This logging macro is called in the Azure IoT middleware library with parameters wrapped in
  * double parentheses to be ISO C89/C90 standard compliant.
  *
  * <b>Default value</b>: Debug logging is turned off, and no code is generated for calls
- * to the macro in the Azure IoT Middleware library on compilation.
+ * to the macro in the Azure IoT middleware library on compilation.
  */
 #ifndef AZLogDebug
     #define AZLogDebug( message )
