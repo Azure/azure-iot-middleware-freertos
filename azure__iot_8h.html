@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Azure IoT Middleware for FreeRTOS: azure_iot.h File Reference</title>
+<title>Azure IoT middleware for FreeRTOS: azure_iot.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Azure IoT Middleware for FreeRTOS
+   <div id="projectname">Azure IoT middleware for FreeRTOS
    </div>
   </td>
  </tr>
@@ -78,7 +78,7 @@ $(function() {
 <p>Azure IoT FreeRTOS middleware common APIs and structs.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;azure_iot_config.h&quot;</code><br />
-<code>#include &quot;azure_iot_result.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="azure__iot__result_8h_source.html">azure_iot_result.h</a>&quot;</code><br />
 <code>#include &quot;azure_iot_config_defaults.h&quot;</code><br />
 <code>#include &quot;FreeRTOS.h&quot;</code><br />
 <code>#include &quot;azure/az_iot.h&quot;</code><br />
@@ -105,9 +105,8 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="memItemLeft" align="right" valign="top">typedef uint64_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a>) (void)</td></tr>
 <tr class="memdesc:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The platform get time function to be used by the SDK for MQTT connections.  <a href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">More...</a><br /></td></tr>
 <tr class="separator:ad72c3a80ab66f18762dfca4ff4bd918c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5824b14bbf563402fa8d15279fdb74cc"><td class="memItemLeft" align="right" valign="top"><a id="a5824b14bbf563402fa8d15279fdb74cc"></a>
-typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>) (const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</td></tr>
-<tr class="memdesc:a5824b14bbf563402fa8d15279fdb74cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The HMAC256 function used by the SDK to generate SAS keys. <br /></td></tr>
+<tr class="memitem:a5824b14bbf563402fa8d15279fdb74cc"><td class="memItemLeft" align="right" valign="top">typedef uint32_t(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a>) (const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</td></tr>
+<tr class="memdesc:a5824b14bbf563402fa8d15279fdb74cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">The HMAC256 function used by the SDK to generate SAS keys.  <a href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">More...</a><br /></td></tr>
 <tr class="separator:a5824b14bbf563402fa8d15279fdb74cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -148,7 +147,35 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>The platform get time function to be used by the SDK for MQTT connections. </p>
-<dl class="section note"><dt>Note</dt><dd>Must return the time since Unix epoch. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The time (in seconds) since Unix epoch. </dd></dl>
+
+</div>
+</div>
+<a id="a5824b14bbf563402fa8d15279fdb74cc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5824b14bbf563402fa8d15279fdb74cc">&#9670;&nbsp;</a></span>AzureIoTGetHMACFunc_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef uint32_t( * AzureIoTGetHMACFunc_t) (const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The HMAC256 function used by the SDK to generate SAS keys. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucKey</td><td>The key to use for the HMAC operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulKeyLength</td><td>The length of <code>pucKey</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucData</td><td>The data on which the operation will take place. In this context, the data will be a certain concatenation of the iot hub name, sas key, and expiration time. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulDataLength</td><td>The length of <code>pucData</code>. </td></tr>
+    <tr><td class="paramdir">[in,out]</td><td class="paramname">pucOutput</td><td>The buffer into which the processed data will be placed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulOutputLength</td><td>The size of <code>pucOutput</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pulBytesCopied</td><td>The number of bytes copied into <code>pucOutput</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

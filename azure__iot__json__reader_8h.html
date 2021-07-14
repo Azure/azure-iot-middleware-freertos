@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Azure IoT Middleware for FreeRTOS: azure_iot_json_reader.h File Reference</title>
+<title>Azure IoT middleware for FreeRTOS: azure_iot_json_reader.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Azure IoT Middleware for FreeRTOS
+   <div id="projectname">Azure IoT middleware for FreeRTOS
    </div>
   </td>
  </tr>
@@ -78,7 +78,7 @@ $(function() {
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdbool.h&gt;</code><br />
 <code>#include &lt;stdint.h&gt;</code><br />
-<code>#include &quot;azure_iot_result.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="azure__iot__result_8h_source.html">azure_iot_result.h</a>&quot;</code><br />
 <code>#include &quot;azure/core/az_json.h&quot;</code><br />
 </div>
 <p><a href="azure__iot__json__reader_8h_source.html">Go to the source code of this file.</a></p>
@@ -195,7 +195,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The boolean value is returned. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The boolean value is returned. </td></tr>
   </table>
   </dd>
 </dl>
@@ -239,7 +239,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The number is returned. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The number is returned. </td></tr>
   </table>
   </dd>
 </dl>
@@ -283,7 +283,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The number is returned. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The number is returned. </td></tr>
   </table>
   </dd>
 </dl>
@@ -341,7 +341,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The property name was appended successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The property name was appended successfully. </td></tr>
   </table>
   </dd>
 </dl>
@@ -392,7 +392,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The #AzureIoTJSONReader_t is initialized successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The #AzureIoTJSONReader_t is initialized successfully. </td></tr>
     <tr><td class="paramname">other</td><td>Initialization failed. </td></tr>
   </table>
   </dd>
@@ -426,7 +426,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The token was read successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The token was read successfully. </td></tr>
   </table>
   </dd>
 </dl>
@@ -459,11 +459,11 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The children of the current JSON token are skipped successfully.</td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The children of the current JSON token are skipped successfully.</td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section remark"><dt>Remarks</dt><dd>If the current token kind is a property name, the reader first moves to the property value. Then, if the token kind is start of an object or array, the reader moves to the matching end object or array. For all other token kinds, the reader doesn't move and returns #eAzureIoTSuccess. </dd></dl>
+<dl class="section remark"><dt>Remarks</dt><dd>If the current token kind is a property name, the reader first moves to the property value. Then, if the token kind is start of an object or array, the reader moves to the matching end object or array. For all other token kinds, the reader doesn't move and returns eAzureIoTSuccess. </dd></dl>
 
 </div>
 </div>

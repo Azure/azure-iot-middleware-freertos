@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Azure IoT Middleware for FreeRTOS: azure_iot_hub_client.h File Reference</title>
+<title>Azure IoT middleware for FreeRTOS: azure_iot_hub_client.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Azure IoT Middleware for FreeRTOS
+   <div id="projectname">Azure IoT middleware for FreeRTOS
    </div>
   </td>
  </tr>
@@ -79,7 +79,7 @@ $(function() {
 <p>The middleware IoT Hub Client used to connect a device to Azure IoT Hub.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="azure__iot_8h_source.html">azure_iot.h</a>&quot;</code><br />
-<code>#include &quot;azure_iot_result.h&quot;</code><br />
+<code>#include &quot;<a class="el" href="azure__iot__result_8h_source.html">azure_iot_result.h</a>&quot;</code><br />
 <code>#include &quot;azure_iot_mqtt_port.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="azure__iot__transport__interface_8h_source.html">azure_iot_transport_interface.h</a>&quot;</code><br />
 <code>#include &quot;azure/az_core.h&quot;</code><br />
@@ -135,9 +135,8 @@ typedef az_span&#160;</td><td class="memItemRight" valign="bottom"><a class="el"
 <tr class="memitem:a6c774bbfd8711079885c9f6879f2cfeb"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a6c774bbfd8711079885c9f6879f2cfeb">AzureIoTHubClientPropertiesCallback_t</a>) (AzureIoTHubClientPropertiesResponse_t *pxMessage, void *pvContext)</td></tr>
 <tr class="memdesc:a6c774bbfd8711079885c9f6879f2cfeb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Properties callback to be invoked when a property message is received in the call to <a class="el" href="azure__iot__hub__client_8h.html#a8f54363b94ebcba36d2dc7a57def845d" title="Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.">AzureIoTHubClient_ProcessLoop()</a>.  <a href="azure__iot__hub__client_8h.html#a6c774bbfd8711079885c9f6879f2cfeb">More...</a><br /></td></tr>
 <tr class="separator:a6c774bbfd8711079885c9f6879f2cfeb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="memItemLeft" align="right" valign="top"><a id="af6adbb2afc1cfdb598bb2f9a6528907a"></a>
-typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af6adbb2afc1cfdb598bb2f9a6528907a">AzureIoTTelemetryAckCallback_t</a>) (uint16_t ulTelemetryPacketID)</td></tr>
-<tr class="memdesc:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to send notification that puback was received for specific packet ID. <br /></td></tr>
+<tr class="memitem:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af6adbb2afc1cfdb598bb2f9a6528907a">AzureIoTTelemetryAckCallback_t</a>) (uint16_t ulTelemetryPacketID)</td></tr>
+<tr class="memdesc:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Callback to send notification that puback was received for specific packet ID.  <a href="azure__iot__hub__client_8h.html#af6adbb2afc1cfdb598bb2f9a6528907a">More...</a><br /></td></tr>
 <tr class="separator:af6adbb2afc1cfdb598bb2f9a6528907a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -258,6 +257,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Cloud message callback to be invoked when a cloud message is received in the call to <a class="el" href="azure__iot__hub__client_8h.html#a8f54363b94ebcba36d2dc7a57def845d" title="Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.">AzureIoTHubClient_ProcessLoop()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessage</td><td>The #AzureIoTHubClientCloudToDeviceMessageRequest_t associated with the message. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pvContext</td><td>The context passed back to the caller. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -274,6 +280,13 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Command callback to be invoked when a command request is received in the call to <a class="el" href="azure__iot__hub__client_8h.html#a8f54363b94ebcba36d2dc7a57def845d" title="Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.">AzureIoTHubClient_ProcessLoop()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessage</td><td>The #AzureIoTHubClientCommandRequest_t associated with the message. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pvContext</td><td>The context passed back to the caller. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
@@ -290,6 +303,35 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Properties callback to be invoked when a property message is received in the call to <a class="el" href="azure__iot__hub__client_8h.html#a8f54363b94ebcba36d2dc7a57def845d" title="Receive any incoming MQTT messages from and manage the MQTT connection to IoT Hub.">AzureIoTHubClient_ProcessLoop()</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessage</td><td>The #AzureIoTHubClientPropertiesResponse_t associated with the message. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pvContext</td><td>The context passed back to the caller. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="af6adbb2afc1cfdb598bb2f9a6528907a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6adbb2afc1cfdb598bb2f9a6528907a">&#9670;&nbsp;</a></span>AzureIoTTelemetryAckCallback_t</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef void(* AzureIoTTelemetryAckCallback_t) (uint16_t ulTelemetryPacketID)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Callback to send notification that puback was received for specific packet ID. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulTelemetryPacketID</td><td>The packet id for the telemetry message which was received. You may use this to match messages with the optional packet id parameter in <a class="el" href="azure__iot__hub__client_8h.html#ac7cbe4d46699d5ef7d4d600d54d9dd15" title="Send telemetry data to IoT Hub.">AzureIoTHubClient_SendTelemetry()</a>. </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

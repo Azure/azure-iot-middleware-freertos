@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.17"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Azure IoT Middleware for FreeRTOS: azure_iot_hub_client_properties.h File Reference</title>
+<title>Azure IoT middleware for FreeRTOS: azure_iot_hub_client_properties.h File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -21,7 +21,7 @@
  <tbody>
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
-   <div id="projectname">Azure IoT Middleware for FreeRTOS
+   <div id="projectname">Azure IoT middleware for FreeRTOS
    </div>
   </td>
  </tr>
@@ -204,7 +204,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The JSON payload was prefixed successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The JSON payload was prefixed successfully. </td></tr>
   </table>
   </dd>
 </dl>
@@ -324,7 +324,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The JSON payload was prefixed successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The JSON payload was prefixed successfully. </td></tr>
   </table>
   </dd>
 </dl>
@@ -372,7 +372,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The JSON payload was suffixed successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The JSON payload was suffixed successfully. </td></tr>
   </table>
   </dd>
 </dl>
@@ -420,7 +420,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>The JSON payload was suffixed successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The JSON payload was suffixed successfully. </td></tr>
   </table>
   </dd>
 </dl>
@@ -506,7 +506,7 @@ Functions</h2></td></tr>
 <div class="line">    <a class="code" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a>(&amp;jr);</div>
 <div class="line">  }</div>
 <div class="line">}</div>
-</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>If you need to retrieve more than one <code>xPropertyType</code>, you should first complete the scan of all components for the first property type (until the API returns #AZ_ERROR_IOT_END_OF_PROPERTIES). Then you must call <a class="el" href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb" title="Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.">AzureIoTJSONReader_Init()</a> again after this call and before the next call to <code>AzureIoTHubClientProperties_GetNextComponentProperty</code> with the different <code>xPropertyType</code>.</dd></dl>
+</div><!-- fragment --><dl class="section warning"><dt>Warning</dt><dd>If you need to retrieve more than one <code>xPropertyType</code>, you should first complete the scan of all components for the first property type (until the API returns eAzureIoTErrorEndOfProperties). Then you must call <a class="el" href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb" title="Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.">AzureIoTJSONReader_Init()</a> again after this call and before the next call to <code>AzureIoTHubClientProperties_GetNextComponentProperty</code> with the different <code>xPropertyType</code>.</dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.">AzureIoTHubClient_t</a> to use for this call. </td></tr>
@@ -522,15 +522,15 @@ Functions</h2></td></tr>
 <dd>
 <code>pxJSONReader</code> must not be <code>NULL</code>. </dd>
 <dd>
-<code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> or <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a061fa37279447f021295dcb1b260501a">eAzureIoTHubPropertiesWritablePropertyMessage</a>. If <code>eAzureIoTHubClientReportedFromDevice</code> is specified in <code>xPropertyType</code>, then <code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a>. </dd>
+<code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> or <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a061fa37279447f021295dcb1b260501a">eAzureIoTHubPropertiesWritablePropertyMessage</a>. If eAzureIoTHubClientReportedFromDevice is specified in <code>xPropertyType</code>, then <code>xResponseType</code> must be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a>. </dd>
 <dd>
 <code>ppucComponentName</code> must not be <code>NULL</code>.</dd></dl>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and the component name. </td></tr>
-    <tr><td class="paramname">#AZ_ERROR_JSON_INVALID_STATE</td><td>If the json reader is passed in at an unexpected location. </td></tr>
-    <tr><td class="paramname">#AZ_ERROR_IOT_END_OF_PROPERTIES</td><td>If there are no more properties left for the component. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>If the function returned a valid #AzureIoTJSONReader_t pointing to the property name and the component name. </td></tr>
+    <tr><td class="paramname">eAzureIoTErrorFailed</td><td>If the json reader is passed in at an unexpected location. </td></tr>
+    <tr><td class="paramname">eAzureIoTErrorEndOfProperties</td><td>If there are no more properties left for the component. </td></tr>
   </table>
   </dd>
 </dl>
@@ -596,7 +596,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">#eAzureIoTSuccess</td><td>If the function returned a valid version. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>If the function returned a valid version. </td></tr>
   </table>
   </dd>
 </dl>
