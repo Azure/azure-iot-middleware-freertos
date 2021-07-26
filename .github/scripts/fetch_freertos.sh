@@ -12,7 +12,7 @@ echo -e "::group::FreeRTOS Source"
 if [ ! -d "libraries/FreeRTOS" ]; then
     git clone https://github.com/FreeRTOS/FreeRTOS.git libraries/FreeRTOS
     pushd libraries/FreeRTOS
-    git checkout -b c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
+    git checkout c8fa483b68c6c1149c2a7a8bc1e901b38860ec9b
     git submodule sync
     git submodule update --init --recursive --depth=1
     popd
