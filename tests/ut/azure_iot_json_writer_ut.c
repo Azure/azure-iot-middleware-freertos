@@ -592,6 +592,60 @@ static void testAzureIoTJSONWriter_AppendArray_Success( void ** ppvState )
     assert_string_equal( ucJSONWriterBuffer, ucTestJSONArray );
 }
 
+static void testAzureIoTJSONWriter_InvalidWrite_Failure( void ** ppvState )
+{
+    AzureIoTJSONWriter_t xWriter;
+    uint8_t ucBuffer[ 5 ];
+
+    assert_int_equal( AzureIoTJSONWriter_Init( &xWriter, ucBuffer, sizeof( ucBuffer ) ), eAzureIoTSuccess );
+
+    /*Begin Object */
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTSuccess );
+
+    /*Fail PropertyName value api's (not enough space in buffer) */
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
+                                                             ucProperty,
+                                                             strlen( ucProperty ) ), eAzureIoTErrorFailed );
+
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithInt32Value( &xWriter,
+                                                                       "property",
+                                                                       strlen( "property" ),
+                                                                       lInt32Value ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithDoubleValue( &xWriter,
+                                                                        "property",
+                                                                        strlen( "property" ),
+                                                                        42.42, 2 ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithBoolValue( &xWriter,
+                                                                      "property",
+                                                                      strlen( "property" ),
+                                                                      true ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( &xWriter,
+                                                                        "property",
+                                                                        strlen( "property" ),
+                                                                        "value",
+                                                                        strlen( "value" ) ), eAzureIoTErrorFailed );
+    /*Add PropertyName */
+    assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
+                                                             "f",
+                                                             strlen( "f" ) ), eAzureIoTSuccess );
+
+    /* Fail value api's (not enough space in buffer) */
+    assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter, "value_two", strlen( "value_two" ) ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendJSONText( &xWriter,
+                                                         ucTestJSONInt32,
+                                                         strlen( ucTestJSONInt32 ) ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendBool( &xWriter,
+                                                     true ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendInt32( &xWriter,
+                                                      42 ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendDouble( &xWriter,
+                                                       42.42, 2 ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendNull( &xWriter ), eAzureIoTErrorFailed );
+
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginArray( &xWriter ), eAzureIoTErrorFailed );
+}
+
 uint32_t ulGetAllTests()
 {
     const struct CMUnitTest tests[] =
@@ -626,6 +680,7 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTJSONWriter_AppendBeginArray_Failure ),
         cmocka_unit_test( testAzureIoTJSONWriter_AppendEndArray_Failure ),
         cmocka_unit_test( testAzureIoTJSONWriter_AppendArray_Success ),
+        cmocka_unit_test( testAzureIoTJSONWriter_InvalidWrite_Failure )
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_json_writer_ut", tests, NULL, NULL );
