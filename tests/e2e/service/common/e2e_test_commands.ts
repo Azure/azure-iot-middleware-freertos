@@ -169,6 +169,30 @@ class CommandTestData_GetTwinPropertiesCommands extends CommandTestData {
     }
 }
 
+//
+// CommandTestData_WritablePropertiesResponseCommands is used for testing Device writable property response
+//
+class CommandTestData_WritablePropertiesResponseCommands extends CommandTestData {
+    constructor(desired_property_key:string, desired_property_value:string) {
+        super("get_writable_properties_response")
+        this.payload["desired_property_key"] = desired_property_key;
+        this.payload["desired_property_value"] = desired_property_value;
+    }
+}
+
+//
+// CommandTestData_ReportComponentPropertiesCommands is used for testing reported properties for component
+//
+class CommandTestData_ReportComponentPropertiesCommands extends CommandTestData {
+
+    constructor(component:string, desired_property_key:string, desired_property_value:string) {
+        super("report_component_properties")
+        this.payload["desired_property_key"] = desired_property_key;
+        this.payload["desired_property_value"] = desired_property_value;
+        this.payload["component"] = component;
+    }
+}
+
 export {
     CommandTestData,
     CommandTestData_EchoCommands,
@@ -177,5 +201,7 @@ export {
     CommandTestData_DeviceProvisioningCommands,
     CommandTestData_ReportedPropertiesCommands,
     CommandTestData_VerifyDesiredPropertiesCommands,
-    CommandTestData_GetTwinPropertiesCommands
+    CommandTestData_GetTwinPropertiesCommands,
+    CommandTestData_WritablePropertiesResponseCommands,
+    CommandTestData_ReportComponentPropertiesCommands
 };
