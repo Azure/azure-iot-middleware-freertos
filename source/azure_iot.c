@@ -210,7 +210,6 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
                                                uint32_t ulOutputSize,
                                                uint32_t * pulOutputLength )
 {
-    /* AzureIoTResult_t xStatus; */
     az_result xCoreResult;
     uint8_t * pucHashBuf;
     uint8_t * pucDecodedKeyBuf = pucBuffer;
