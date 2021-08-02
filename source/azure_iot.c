@@ -16,6 +16,8 @@
 #include "azure_iot_result.h"
 #include "azure/az_iot.h"
 
+#include "azure/core/az_base64.h"
+
 /* Using SHA256 hash - needs 32 bytes */
 #define azureiotBASE64_HASH_BUFFER_SIZE    ( 33 )
 
@@ -461,11 +463,17 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
                                                uint32_t * pulOutputLength )
 {
     AzureIoTResult_t xStatus;
+    az_result xCoreResult;
     uint8_t * pucHashBuf;
     uint8_t * pucDecodedKeyBuf = pucBuffer;
     uint32_t ulHashBufSize = azureiotBASE64_HASH_BUFFER_SIZE;
     uint32_t ulBinaryKeyBufSize;
     uint32_t ulBase64OutputLength;
+    int32_t lDecodedKeyLength;
+    az_span xKeySpan;
+    az_span xOutputSpan;
+    az_span xHashSpan;
+    az_span xOutputEncodedSpan;
 
     if( ( xAzureIoTHMACFunction == NULL ) ||
         ( pucKey == NULL ) || ( ulKeySize == 0 ) ||
@@ -477,41 +485,60 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return eAzureIoTErrorInvalidArgument;
     }
 
-    xStatus = prvAzureIoTBase64Decode( ( char * ) pucKey, ulKeySize,
-                                       pucDecodedKeyBuf, ulBufferLength, &ulBinaryKeyBufSize );
+    az_span xKeySpan = az_span_create( pucKey, ulKeySize );
+    az_span xOutputSpan = az_span_create( pucDecodedKeyBuf, ulBufferLength );
 
-    if( xStatus )
+    if( az_result_failed( xCoreResult = az_base64_decode( xOutputSpan, xKeySpan, &lDecodedKeyLength ) ) )
     {
-        return xStatus;
+        AZLogError( ( "az_base64_decode failed: core error=0x%08x", xCoreResult ) );
+        return eAzureIoTFailed;
     }
 
+    /* xStatus = prvAzureIoTBase64Decode( ( char * ) pucKey, ulKeySize, */
+    /*                                    pucDecodedKeyBuf, ulBufferLength, &ulBinaryKeyBufSize ); */
+
+    /* if( xStatus ) */
+    /* { */
+    /*     return xStatus; */
+    /* } */
+
     /* Decoded key is less than total decoded buffer size */
-    ulBufferLength -= ulBinaryKeyBufSize;
+    ulBufferLength -= lDecodedKeyLength;
 
     if( ulHashBufSize > ulBufferLength )
     {
         return eAzureIoTErrorOutOfMemory;
     }
 
-    pucHashBuf = pucDecodedKeyBuf + ulBinaryKeyBufSize;
+    pucHashBuf = pucDecodedKeyBuf + lDecodedKeyLength;
     memset( pucHashBuf, 0, ulHashBufSize );
 
-    if( xAzureIoTHMACFunction( pucDecodedKeyBuf, ulBinaryKeyBufSize,
+    if( xAzureIoTHMACFunction( pucDecodedKeyBuf, lDecodedKeyLength,
                                pucMessage, ( uint32_t ) ulMessageSize,
                                pucHashBuf, ulHashBufSize, &ulHashBufSize ) )
     {
         return eAzureIoTErrorFailed;
     }
 
-    xStatus = prvAzureIoTBase64Encode( pucHashBuf, ulHashBufSize,
-                                       ( char * ) pucOutput, ulOutputSize, &ulBase64OutputLength );
+    az_span xHashSpan = az_span_create( pucHashBuf, ulHashBufSize );
+    az_span xOutputEncodedSpan = az_span_create( pucOutput, ulOutputSize );
+    int32_t lEncodedLength;
 
-    if( xStatus )
+    if( az_result_failed( xCoreResult = az_base64_encode( xOutputEncodedSpan, xHashSpan, &lEncodedLength ) ) )
     {
-        return xStatus;
+        AZLogError( ( "az_base64_decode failed: core error=0x%08x", xCoreResult ) );
+        return eAzureIoTFailed;
     }
 
-    *pulOutputLength = ( uint32_t ) ulBase64OutputLength;
+    /* xStatus = prvAzureIoTBase64Encode( pucHashBuf, ulHashBufSize, */
+    /*                                    ( char * ) pucOutput, ulOutputSize, &ulBase64OutputLength ); */
+
+    /* if( xStatus ) */
+    /* { */
+    /*     return xStatus; */
+    /* } */
+
+    *pulOutputLength = ( uint32_t ) lEncodedLength;
 
     return eAzureIoTSuccess;
 }
