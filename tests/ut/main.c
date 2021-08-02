@@ -9,6 +9,7 @@
 #include <cmocka.h>
 /*-----------------------------------------------------------*/
 
+uint64_t ullLogLineCount = 0;
 extern uint32_t ulGetAllTests();
 void vLoggingPrintf( const char * pcFormatString,
                      ... );
@@ -38,6 +39,7 @@ void vLoggingPrintf( const char * pcFormatString,
 {
     va_list arg;
 
+    ullLogLineCount++;
     va_start( arg, pcFormatString );
     vprintf( pcFormatString, arg );
     va_end( arg );
