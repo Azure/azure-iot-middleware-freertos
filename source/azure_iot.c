@@ -289,7 +289,7 @@ static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
 
 AzureIoTResult_t AzureIoT_Init()
 {
-    #if ( LIBRARY_LOG_LEVEL >= LOG_INFO )
+    #ifdef AZLogInfo
         az_log_set_message_callback( prvAzureIoTLogListener );
     #else
         ( void ) prvAzureIoTLogListener;
