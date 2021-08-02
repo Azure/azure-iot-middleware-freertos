@@ -31,7 +31,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubC
 
         if( az_result_failed(
                 xCoreResult = az_iot_hub_client_properties_writer_begin_component( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                    &pxJSONWriter->_internal.xCoreWriter, xComponentSpan ) ) )
+                                                                                   &pxJSONWriter->_internal.xCoreWriter, xComponentSpan ) ) )
         {
             AZLogError( ( "Could not begin component: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
@@ -60,7 +60,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubCli
     {
         if( az_result_failed(
                 xCoreResult = az_iot_hub_client_properties_writer_end_component( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                  &pxJSONWriter->_internal.xCoreWriter ) ) )
+                                                                                 &pxJSONWriter->_internal.xCoreWriter ) ) )
         {
             AZLogError( ( "Could not end component: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
@@ -103,10 +103,10 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIo
 
         if( az_result_failed(
                 xCoreResult = az_iot_hub_client_properties_writer_begin_response_status( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                          &pxJSONWriter->_internal.xCoreWriter,
-                                                                                          xPropertyName,
-                                                                                          lAckCode, lAckVersion,
-                                                                                          xAckDescription ) ) )
+                                                                                         &pxJSONWriter->_internal.xCoreWriter,
+                                                                                         xPropertyName,
+                                                                                         lAckCode, lAckVersion,
+                                                                                         xAckDescription ) ) )
         {
             AZLogError( ( "Could not begin response: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
@@ -135,7 +135,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTH
     {
         if( az_result_failed(
                 xCoreResult = az_iot_hub_client_properties_writer_end_response_status( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                        &pxJSONWriter->_internal.xCoreWriter ) ) )
+                                                                                       &pxJSONWriter->_internal.xCoreWriter ) ) )
         {
             AZLogError( ( "Could not end response: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
