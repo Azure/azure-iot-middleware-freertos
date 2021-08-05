@@ -19,6 +19,7 @@
 #include "azure/az_iot.h"
 #include "azure/core/az_json.h"
 #include "azure/core/az_version.h"
+#include "internal/azure_iot_internal.h"
 
 #ifndef azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC
     #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC
@@ -166,7 +167,7 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
                                                                     azureiotconfigUSERNAME_MAX, &xMQTTUsernameLength ) ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to get username: core error=0x%08x", xCoreResult ) );
-        xResult = eAzureIoTErrorFailed;
+        xResult = _AzureIoT_TranslateCoreError(xCoreResult);
     }
     /* Check if token refresh is set, then generate password */
     else if( ( pxAzureProvClient->_internal.pxTokenRefresh ) &&
@@ -670,7 +671,7 @@ static uint32_t prvProvClientGetToken( AzureIoTProvisioningClient_t * pxAzurePro
     if( az_result_failed( xCoreResult ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to get signature: core error=0x%08x", xCoreResult ) );
-        return eAzureIoTErrorFailed;
+        return _AzureIoT_TranslateCoreError(xCoreResult);
     }
 
     ulBytesUsed = ( uint32_t ) az_span_size( xSpan );
@@ -710,7 +711,7 @@ static uint32_t prvProvClientGetToken( AzureIoTProvisioningClient_t * pxAzurePro
     if( az_result_failed( xCoreResult ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to generate token: core error=0x%08x", xCoreResult ) );
-        return eAzureIoTErrorFailed;
+        return _AzureIoT_TranslateCoreError(xCoreResult);
     }
 
     *pulSaSLength = ( uint32_t ) xLength;
@@ -833,7 +834,7 @@ AzureIoTResult_t AzureIoTProvisioningClient_Init( AzureIoTProvisioningClient_t *
         if( az_result_failed( xCoreResult ) )
         {
             AZLogError( ( "AzureIoTProvisioning initialization failed: core error=0x%08x", xCoreResult ) );
-            xResult = eAzureIoTErrorFailed;
+            xResult = _AzureIoT_TranslateCoreError(xCoreResult);
         }
         else if( ( xMQTTResult = AzureIoTMQTT_Init( &( pxAzureProvClient->_internal.xMQTTContext ),
                                                     pxTransportInterface, prvProvClientGetTimeMillseconds,
