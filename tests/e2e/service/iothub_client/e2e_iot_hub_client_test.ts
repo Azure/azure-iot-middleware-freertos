@@ -6,6 +6,8 @@
 // See ../../readme.md for a full architectural review of how it works.
 'use strict'
 
+import assert from 'assert';
+
 const iothubTestCore = require ('../common/e2e_test_core');
 const e2eTestCommands = require ('../common/e2e_test_commands');
 
@@ -189,7 +191,6 @@ describe("mainTest", () => {
         });
     }) */
 
-    
     it("Device twin SendReported properties", async function() {
         const payload = { "temp" : (Math.floor(Math.random() * 10000000000).toString())}
         const reported_properties_cmd = new e2eTestCommands.CommandTestData_ReportedPropertiesCommands(JSON.stringify(payload));
@@ -214,5 +215,35 @@ describe("mainTest", () => {
         const get_twin_cmd = new e2eTestCommands.CommandTestData_GetTwinPropertiesCommands(twin);
         let expectedMessage = await iothubTestCore.runTestCommand(testHubConnectionString, testDeviceInfo.deviceId, get_twin_cmd);
         let rc = await iothubTestCore.verifyTelemetryMessage(testHubConnectionString, testDeviceInfo.deviceId, expectedMessage);
+    })
+
+    it("Device Writable Properties Response", async function() {
+        const payload = { "temperature" : (Math.floor(Math.random() * 10000000000).toString())};
+        const writable_properties_cmd = new e2eTestCommands.CommandTestData_WritablePropertiesResponseCommands("temperature", payload["temperature"]);
+        let expectedMessage = await iothubTestCore.runTestCommand(testHubConnectionString, testDeviceInfo.deviceId, writable_properties_cmd);
+        let rc = await iothubTestCore.verifyTelemetryMessage(testHubConnectionString, testDeviceInfo.deviceId, expectedMessage);
+        let twin = await iothubTestCore.getTwinProperties(testHubConnectionString, testDeviceInfo.deviceId);
+        console.log(twin)
+        var twinObject = JSON.parse(twin);
+        assert.ok(twinObject.reported.temperature);
+        assert.ok(twinObject.reported.temperature.ac);
+        assert.strictEqual(twinObject.reported.temperature.ac, 200);
+        assert.ok(twinObject.reported.temperature.av);
+        assert.ok(twinObject.reported.temperature.value);
+        assert.strictEqual(twinObject.reported.temperature.value, payload["temperature"]);
+    })
+
+    it("Device reported property with component", async function() {
+        const payload = { "temperature" : (Math.floor(Math.random() * 10000000000).toString())}
+        const reported_properties_cmd = new e2eTestCommands.CommandTestData_ReportComponentPropertiesCommands("thermostate", "temperature", payload["temperature"]);
+        let expectedMessage = await iothubTestCore.runTestCommand(testHubConnectionString, testDeviceInfo.deviceId, reported_properties_cmd);
+        let rc = await iothubTestCore.verifyTelemetryMessage(testHubConnectionString, testDeviceInfo.deviceId, expectedMessage);
+        let twin = await iothubTestCore.getTwinProperties(testHubConnectionString, testDeviceInfo.deviceId);
+        console.log(twin)
+        var twinObject = JSON.parse(twin);
+        assert.ok(twinObject.reported.thermostate);
+        assert.ok(twinObject.reported.thermostate.__t);
+        assert.ok(twinObject.reported.thermostate.temperature);
+        assert.strictEqual(twinObject.reported.thermostate.temperature, payload["temperature"]);
     })
 })
