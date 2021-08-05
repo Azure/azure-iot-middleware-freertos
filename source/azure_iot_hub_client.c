@@ -1306,7 +1306,7 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
             AZLogError( ( "Failed to get request id: error=0x%08x", xResult ) );
         }
         else if( az_result_failed( xCoreResult =
-                                       az_iot_hub_client_properties_document_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                       az_iot_hub_client_properties_get_reported_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                                 xRequestID,
                                                                                                 ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
                                                                                                 pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
