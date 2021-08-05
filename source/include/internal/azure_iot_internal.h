@@ -25,11 +25,11 @@
 
 /**
  * @brief Translate embedded errors to middleware errors
- * 
+ *
  * @param[in] xCoreError The `az_result` to translate to a middleware error
  */
-AzureIoTResult_t _AzureIoT_TranslateCoreError(az_result xCoreError);
+AzureIoTResult_t _AzureIoT_TranslateCoreError( az_result xCoreError );
 
 #include <azure/core/_az_cfg_suffix.h>
 
-#endif // AZURE_IOT_INTERNAL_H
+#endif /* AZURE_IOT_INTERNAL_H */
