@@ -27,6 +27,8 @@
  * @brief Translate embedded errors to middleware errors
  *
  * @param[in] xCoreError The `az_result` to translate to a middleware error
+ *
+ * @result The #AzureIoTResult_t translated from \p xCoreError.
  */
 AzureIoTResult_t _AzureIoT_TranslateCoreError( az_result xCoreError );
 
