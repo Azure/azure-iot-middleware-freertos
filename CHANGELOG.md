@@ -2,6 +2,10 @@
 
 ## 1.0.0-preview.2 (Unreleased)
 
+### Bug Fixes
+
+- [[#166]](https://github.com/Azure/azure-iot-middleware-freertos/pull/166) Fix reported property publish topic creation with correct embedded API.
+
 ## 1.0.0-preview.1 (2021-07-13)
 
 This release marks the public preview availability for the Azure IoT middleware for FreeRTOS.
