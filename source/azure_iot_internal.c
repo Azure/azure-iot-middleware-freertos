@@ -12,6 +12,7 @@ AzureIoTResult_t _AzureIoT_TranslateCoreError( az_result xCoreError )
 
     switch( xCoreError )
     {
+        /* Core errors */
         case AZ_OK:
             xResult = eAzureIoTSuccess;
             break;
@@ -36,6 +37,7 @@ AzureIoTResult_t _AzureIoT_TranslateCoreError( az_result xCoreError )
             xResult = eAzureIoTErrorUnexpectedChar;
             break;
 
+        /* JSON errors */
         case AZ_ERROR_JSON_INVALID_STATE:
             xResult = eAzureIoTErrorJSONInvalidState;
             break;
@@ -48,6 +50,7 @@ AzureIoTResult_t _AzureIoT_TranslateCoreError( az_result xCoreError )
             xResult = eAzureIoTErrorJSONReaderDone;
             break;
 
+        /* Default */
         default:
             xResult = eAzureIoTErrorFailed;
     }
