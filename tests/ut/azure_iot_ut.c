@@ -11,6 +11,7 @@
 #include <cmocka.h>
 
 #include "azure_iot.h"
+#include "azure_iot_private.h"
 #include <azure/core/internal/az_log_internal.h>
 
 /*-----------------------------------------------------------*/
@@ -247,6 +248,35 @@ static void testAzureIoT_Base64HMACCalculateSuccess()
 }
 /*-----------------------------------------------------------*/
 
+/*
+ * Private test functions
+ */
+
+static void testprvAzureIoT_TranslateCoreError( void ** state )
+{
+    /* Translated results */
+    assert_int_equal( eAzureIoTSuccess, prvAzureIoT_TranslateCoreError( AZ_OK ) );
+
+    assert_int_equal( eAzureIoTErrorTopicNoMatch, prvAzureIoT_TranslateCoreError( AZ_ERROR_IOT_TOPIC_NO_MATCH ) );
+
+    assert_int_equal( eAzureIoTErrorEndOfProperties, prvAzureIoT_TranslateCoreError( AZ_ERROR_IOT_END_OF_PROPERTIES ) );
+
+    assert_int_equal( eAzureIoTErrorInvalidArgument, prvAzureIoT_TranslateCoreError( AZ_ERROR_ARG ) );
+
+    assert_int_equal( eAzureIoTErrorItemNotFound, prvAzureIoT_TranslateCoreError( AZ_ERROR_ITEM_NOT_FOUND ) );
+
+    assert_int_equal( eAzureIoTErrorUnexpectedChar, prvAzureIoT_TranslateCoreError( AZ_ERROR_UNEXPECTED_CHAR ) );
+
+    assert_int_equal( eAzureIoTErrorJSONInvalidState, prvAzureIoT_TranslateCoreError( AZ_ERROR_JSON_INVALID_STATE ) );
+
+    assert_int_equal( eAzureIoTErrorJSONNestingOverflow, prvAzureIoT_TranslateCoreError( AZ_ERROR_JSON_NESTING_OVERFLOW ) );
+
+    assert_int_equal( eAzureIoTErrorJSONReaderDone, prvAzureIoT_TranslateCoreError( AZ_ERROR_JSON_READER_DONE ) );
+
+    /* Test non-translated result */
+    assert_int_equal( eAzureIoTErrorFailed, prvAzureIoT_TranslateCoreError( AZ_ERROR_HTTP_INVALID_STATE ) );
+}
+
 uint32_t ulGetAllTests()
 {
     const struct CMUnitTest tests[] =
@@ -259,7 +289,8 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTMessagePropertiesFind_Success ),
         cmocka_unit_test( testAzureIoTInit_Success ),
         cmocka_unit_test( testAzureIoTInit_LogSuccess ),
-        cmocka_unit_test( testAzureIoT_Base64HMACCalculateSuccess )
+        cmocka_unit_test( testAzureIoT_Base64HMACCalculateSuccess ),
+        cmocka_unit_test( testprvAzureIoT_TranslateCoreError )
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_ut", tests, NULL, NULL );
