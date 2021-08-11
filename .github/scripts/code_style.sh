@@ -33,7 +33,6 @@ if [[ "$FIX" == "check" ]]; then
     RESULT=$(uncrustify -c ./uncrustify.cfg --check           \
     ./source/*.c                                              \
     ./source/include/*.h                                      \
-    ./source/include/internal/*.h                             \
     ./source/interface/*.h                                    \
     ./ports/coreMQTT/*.c                                      \
     ./ports/coreMQTT/*.h                                      \
@@ -52,7 +51,6 @@ elif [[ "$FIX" == "fix" ]]; then
     uncrustify -c ./uncrustify.cfg --no-backup --replace      \
     ./source/*.c                                              \
     ./source/include/*.h                                      \
-    ./source/include/internal/*.h                             \
     ./source/interface/*.h                                    \
     ./ports/coreMQTT/*.c                                      \
     ./ports/coreMQTT/*.h                                      \
