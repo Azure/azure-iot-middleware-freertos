@@ -7,7 +7,6 @@
  */
 
 #include "azure_iot_hub_client_properties.h"
-
 #include "azure_iot_private.h"
 
 AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubClient_t * pxAzureIoTHubClient,

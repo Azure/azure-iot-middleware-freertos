@@ -1,20 +1,8 @@
 /* Copyright (c) Microsoft Corporation.
  * Licensed under the MIT License. */
 
-/**
- * @file azure_iot_internal.h
- *
- * @brief Azure IoT FreeRTOS middleware internal APIs and structs
- *
- * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
- * prefixed with an underscore ('_') directly in your application code. These symbols
- * are part of Azure SDK's internal implementation; we do not document these symbols
- * and they are subject to change in future versions of the SDK which would break your code.
- *
- */
-
-#ifndef AZURE_IOT_INTERNAL_H
-#define AZURE_IOT_INTERNAL_H
+#ifndef AZURE_IOT_PRIVATE_H
+#define AZURE_IOT_PRIVATE_H
 
 #include "azure_iot_result.h"
 
@@ -34,4 +22,4 @@ AzureIoTResult_t prvAzureIoT_TranslateCoreError( az_result xCoreError );
 
 #include <azure/core/_az_cfg_suffix.h>
 
-#endif /* AZURE_IOT_INTERNAL_H */
+#endif /* AZURE_IOT_PRIVATE_H */
