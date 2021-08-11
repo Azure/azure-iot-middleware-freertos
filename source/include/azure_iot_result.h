@@ -45,8 +45,10 @@ typedef enum AzureIoTResult
     eAzureIoTErrorEndOfProperties,       /**< End of properties when iterating with AzureIoTHubClientProperties_GetNextComponentProperty(). */
     eAzureIoTErrorInvalidResponse        /**< Invalid response from server. */
     eAzureIoTErrorUnexpectedChar,         /**< Input can't be successfully parsed. */
-    eAzureIoTErrorJSONInvalidState,       /**< The kind of the token being read is not compatible with the expected type of the value. */
-    eAzureIoTErrorJSONNestingOverflow,    /**< The JSON depth is too large. */
+
+    /* === JSON: Error results === */
+    eAzureIoTErrorJSONInvalidState,      /**< The kind of the token being read is not compatible with the expected type of the value. */
+    eAzureIoTErrorJSONNestingOverflow,   /**< The JSON depth is too large. */
     eAzureIoTErrorJSONReaderDone         /**< No more JSON text left to process. */
 } AzureIoTResult_t;
 
