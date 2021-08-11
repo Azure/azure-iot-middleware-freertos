@@ -42,7 +42,8 @@ typedef enum AzureIoTResult
     eAzureIoTErrorItemNotFound,          /**< The item was not found. */
     eAzureIoTErrorTopicNoMatch,          /**< The received message was not for the currently processed feature. */
     eAzureIoTErrorTokenGenerationFailed, /**< There was a failure. */
-    eAzureIoTErrorEndOfProperties        /**< End of properties when iterating with AzureIoTHubClientProperties_GetNextComponentProperty(). */
+    eAzureIoTErrorEndOfProperties,       /**< End of properties when iterating with AzureIoTHubClientProperties_GetNextComponentProperty(). */
+    eAzureIoTErrorInvalidResponse        /**< Invalid response from server. */
 } AzureIoTResult_t;
 
 #endif /* AZURE_IOT_RESULT_H */

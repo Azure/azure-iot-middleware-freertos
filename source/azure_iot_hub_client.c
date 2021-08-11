@@ -67,6 +67,13 @@ static void prvMQTTProcessIncomingPublish( AzureIoTHubClient_t * pxAzureIoTHubCl
 
     configASSERT( pxPublishInfo != NULL );
 
+    if( ( pxPublishInfo->pcTopicName == NULL ) ||
+        ( pxPublishInfo->usTopicNameLength == 0 ) )
+    {
+        AZLogWarn( ( "Ignoring processing of empty topic" ) );
+        return;
+    }
+
     for( ulIndex = 0; ulIndex < azureiothubSUBSCRIBE_FEATURE_COUNT; ulIndex++ )
     {
         pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ ulIndex ];
@@ -537,12 +544,19 @@ static uint32_t prvIoTHubClientGetToken( AzureIoTHubClient_t * pxAzureIoTHubClie
     pucHMACBuffer = pucSASBuffer + ulSasBufferLen - azureiothubHMACBufferLength;
 
     if( AzureIoT_Base64HMACCalculate( pxAzureIoTHubClient->_internal.xHMACFunction,
-                                      ucKey, ulKeyLen, pucSASBuffer, ulBytesUsed, pucSASBuffer + ulBytesUsed, ulBufferLeft,
+                                      ucKey, ulKeyLen, pucSASBuffer, ulBytesUsed,
+                                      pucSASBuffer + ulBytesUsed, ulBufferLeft,
                                       pucHMACBuffer, azureiothubHMACBufferLength,
                                       &ulSignatureLength ) != eAzureIoTSuccess )
     {
         AZLogError( ( "AzureIoTHubClient failed to encode HMAC hash" ) );
         return eAzureIoTErrorFailed;
+    }
+
+    if( ( ulSasBufferLen <= azureiothubHMACBufferLength ) )
+    {
+        AZLogError( ( "AzureIoTHubClient failed with insufficient buffer size" ) );
+        return eAzureIoTErrorOutOfMemory;
     }
 
     xSpan = az_span_create( pucHMACBuffer, ( int32_t ) ulSignatureLength );
@@ -627,7 +641,8 @@ AzureIoTResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureIoTHubClie
 
         /* Setup working buffer to be used by middleware */
         pxAzureIoTHubClient->_internal.ulWorkingBufferLength =
-            ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) > azureiotconfigTOPIC_MAX ? ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) : azureiotconfigTOPIC_MAX;
+            ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) > azureiotconfigTOPIC_MAX ?
+            ( azureiotconfigUSERNAME_MAX + azureiotconfigPASSWORD_MAX ) : azureiotconfigTOPIC_MAX;
         pxAzureIoTHubClient->_internal.pucWorkingBuffer = pucBuffer;
         pucNetworkBuffer = pucBuffer + pxAzureIoTHubClient->_internal.ulWorkingBufferLength;
         ulNetworkBufferLength = ulBufferLength - pxAzureIoTHubClient->_internal.ulWorkingBufferLength;
@@ -838,11 +853,12 @@ AzureIoTResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureI
         AZLogError( ( "AzureIoTHubClient_SendTelemetry failed: invalid argument" ) );
         xResult = eAzureIoTErrorInvalidArgument;
     }
-    else if( az_result_failed( xCoreResult = az_iot_hub_client_telemetry_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                            ( pxProperties != NULL ) ? &pxProperties->_internal.xProperties : NULL,
-                                                                                            ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
-                                                                                            pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
-                                                                                            &xTelemetryTopicLength ) ) )
+    else if( az_result_failed(
+                 xCoreResult = az_iot_hub_client_telemetry_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                              ( pxProperties != NULL ) ? &pxProperties->_internal.xProperties : NULL,
+                                                                              ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                              pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                              &xTelemetryTopicLength ) ) )
     {
         AZLogError( ( "Failed to get telemetry topic: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTErrorFailed;
@@ -1121,16 +1137,22 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
         AZLogError( ( "AzureIoTHubClient_SendCommandResponse failed: invalid argument" ) );
         xResult = eAzureIoTErrorInvalidArgument;
     }
+    else if( ( pxMessage->pucRequestID == NULL ) || ( pxMessage->usRequestIDLength == 0 ) )
+    {
+        AZLogError( ( "AzureIoTHubClient_SendCommandResponse failed: invalid request id " ) );
+        xResult = eAzureIoTErrorFailed;
+    }
     else
     {
         xRequestID = az_span_create( ( uint8_t * ) pxMessage->pucRequestID, ( int32_t ) pxMessage->usRequestIDLength );
 
-        if( az_result_failed( xCoreResult =
-                                  az_iot_hub_client_commands_response_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                         xRequestID, ( uint16_t ) ulStatus,
-                                                                                         ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
-                                                                                         pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
-                                                                                         &xTopicLength ) ) )
+        if( az_result_failed(
+                xCoreResult =
+                    az_iot_hub_client_commands_response_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                           xRequestID, ( uint16_t ) ulStatus,
+                                                                           ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                           pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                           &xTopicLength ) ) )
         {
             AZLogError( ( "Failed to get command response topic: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
@@ -1305,12 +1327,13 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
         {
             AZLogError( ( "Failed to get request id: error=0x%08x", xResult ) );
         }
-        else if( az_result_failed( xCoreResult =
-                                       az_iot_hub_client_properties_get_reported_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                                xRequestID,
-                                                                                                ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
-                                                                                                pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
-                                                                                                &xTopicLength ) ) )
+        else if( az_result_failed(
+                     xCoreResult =
+                         az_iot_hub_client_properties_get_reported_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                  xRequestID,
+                                                                                  ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                  pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                  &xTopicLength ) ) )
         {
             AZLogError( ( "Failed to get property patch topic: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;
@@ -1368,12 +1391,13 @@ AzureIoTResult_t AzureIoTHubClient_GetProperties( AzureIoTHubClient_t * pxAzureI
         {
             AZLogError( ( "Failed to get request id: error=0x%08x", xResult ) );
         }
-        else if( az_result_failed( xCoreResult =
-                                       az_iot_hub_client_properties_document_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
-                                                                                                xRequestID,
-                                                                                                ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
-                                                                                                pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
-                                                                                                &xTopicLength ) ) )
+        else if( az_result_failed(
+                     xCoreResult =
+                         az_iot_hub_client_properties_document_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                  xRequestID,
+                                                                                  ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                  pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                  &xTopicLength ) ) )
         {
             AZLogError( ( "Failed to get property document topic: core error=0x%08x", xCoreResult ) );
             xResult = eAzureIoTErrorFailed;

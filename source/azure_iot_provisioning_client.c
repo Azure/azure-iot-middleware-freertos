@@ -160,9 +160,10 @@ static void prvProvClientConnect( AzureIoTProvisioningClient_t * pxAzureProvClie
     xConnectInfo.pcUserName = pxAzureProvClient->_internal.pucScratchBuffer;
     xConnectInfo.pcPassword = xConnectInfo.pcUserName + azureiotconfigUSERNAME_MAX;
 
-    if( az_result_failed( xCoreResult = az_iot_provisioning_client_get_user_name( &pxAzureProvClient->_internal.xProvisioningClientCore,
-                                                                                  ( char * ) xConnectInfo.pcUserName,
-                                                                                  azureiotconfigUSERNAME_MAX, &xMQTTUsernameLength ) ) )
+    if( az_result_failed(
+            xCoreResult = az_iot_provisioning_client_get_user_name( &pxAzureProvClient->_internal.xProvisioningClientCore,
+                                                                    ( char * ) xConnectInfo.pcUserName,
+                                                                    azureiotconfigUSERNAME_MAX, &xMQTTUsernameLength ) ) )
     {
         AZLogError( ( "AzureIoTProvisioning failed to get username: core error=0x%08x", xCoreResult ) );
         xResult = eAzureIoTErrorFailed;
@@ -398,6 +399,14 @@ static void prvProvClientParseResponse( AzureIoTProvisioningClient_t * pxAzurePr
     }
     else
     {
+        if( ( pxAzureProvClient->_internal.usLastResponseTopicLength == 0 ) ||
+            ( pxAzureProvClient->_internal.xLastResponsePayloadLength == 0 ) )
+        {
+            AZLogError( ( "AzureIoTProvisioning client failed with invalid server response" ) );
+            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorInvalidResponse );
+            return;
+        }
+
         xCoreResult =
             az_iot_provisioning_client_parse_received_topic_and_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
                                                                          xTopic, xPayload, &pxAzureProvClient->_internal.xRegisterResponse );
@@ -684,6 +693,12 @@ static uint32_t prvProvClientGetToken( AzureIoTProvisioningClient_t * pxAzurePro
     {
         AZLogError( ( "AzureIoTProvisioning failed to encoded HMAC hash" ) );
         return eAzureIoTErrorFailed;
+    }
+
+    if( ( ulSasBufferLen <= azureiotprovisioningHMACBufferLength ) )
+    {
+        AZLogError( ( "AzureIoTProvisioning failed with insufficient buffer size" ) );
+        return eAzureIoTErrorOutOfMemory;
     }
 
     xSpan = az_span_create( pucHMACBuffer, ( int32_t ) ulSignatureLength );
