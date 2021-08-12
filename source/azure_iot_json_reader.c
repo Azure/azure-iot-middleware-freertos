@@ -34,7 +34,7 @@ AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,
         if( az_result_failed( xCoreResult = az_json_reader_init( &pxReader->_internal.xCoreReader, xJSONSpan, NULL ) ) )
         {
             AZLogError( ( "Could not initialize the JSON reader: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {
@@ -61,7 +61,7 @@ AzureIoTResult_t AzureIoTJSONReader_NextToken( AzureIoTJSONReader_t * pxReader )
         if( az_result_failed( xCoreResult = az_json_reader_next_token( &pxReader->_internal.xCoreReader ) ) )
         {
             AZLogError( ( "Could not get next JSON token: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {
@@ -87,7 +87,7 @@ AzureIoTResult_t AzureIoTJSONReader_SkipChildren( AzureIoTJSONReader_t * pxReade
         if( az_result_failed( xCoreResult = az_json_reader_skip_children( &pxReader->_internal.xCoreReader ) ) )
         {
             AZLogError( ( "Could not skip children in JSON: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {
@@ -115,7 +115,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenBool( AzureIoTJSONReader_t * pxReade
         if( az_result_failed( xCoreResult = az_json_token_get_boolean( &pxReader->_internal.xCoreReader.token, pxValue ) ) )
         {
             AZLogError( ( "Could not get boolean in JSON: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {
@@ -143,7 +143,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32( AzureIoTJSONReader_t * pxRead
         if( az_result_failed( xCoreResult = az_json_token_get_int32( &pxReader->_internal.xCoreReader.token, plValue ) ) )
         {
             AZLogError( ( "Could not get int32_t in JSON: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {
@@ -171,7 +171,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble( AzureIoTJSONReader_t * pxRea
         if( az_result_failed( xCoreResult = az_json_token_get_double( &pxReader->_internal.xCoreReader.token, pxValue ) ) )
         {
             AZLogError( ( "Could not get double in JSON: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {
@@ -202,7 +202,7 @@ AzureIoTResult_t AzureIoTJSONReader_GetTokenString( AzureIoTJSONReader_t * pxRea
                                                                       ( char * ) pucBuffer, ( int32_t ) ulBufferSize, ( int32_t * ) pusBytesCopied ) ) )
         {
             AZLogError( ( "Could not get string in JSON: core error=0x%08x", xCoreResult ) );
-            xResult = prvAzureIoT_TranslateCoreError( xCoreResult );
+            xResult = xAzureIoT_TranslateCoreError( xCoreResult );
         }
         else
         {

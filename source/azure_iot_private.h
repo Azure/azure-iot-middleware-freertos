@@ -17,7 +17,7 @@
  *
  * @result The #AzureIoTResult_t translated from \p xCoreError.
  */
-AzureIoTResult_t prvAzureIoT_TranslateCoreError( az_result xCoreError );
+AzureIoTResult_t xAzureIoT_TranslateCoreError( az_result xCoreError );
 
 #include <azure/core/_az_cfg_suffix.h>
 

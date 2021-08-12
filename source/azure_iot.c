@@ -39,7 +39,7 @@ static void prvAzureIoTLogListener( az_log_classification xClassification,
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTResult_t prvAzureIoT_TranslateCoreError( az_result xCoreError )
+AzureIoTResult_t xAzureIoT_TranslateCoreError( az_result xCoreError )
 {
     AzureIoTResult_t xResult;
 
