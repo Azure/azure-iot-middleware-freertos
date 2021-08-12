@@ -347,7 +347,7 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
                     }
                     else
                     {
-                        xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesGetMessage;
+                        xPropertiesResponse.xMessageType = eAzureIoTHubPropertiesRequestedMessage;
                     }
                 }
                 else
@@ -1363,7 +1363,7 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTResult_t AzureIoTHubClient_GetProperties( AzureIoTHubClient_t * pxAzureIoTHubClient )
+AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t * pxAzureIoTHubClient )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
@@ -1375,13 +1375,13 @@ AzureIoTResult_t AzureIoTHubClient_GetProperties( AzureIoTHubClient_t * pxAzureI
 
     if( pxAzureIoTHubClient == NULL )
     {
-        AZLogError( ( "AzureIoTHubClient_GetProperties failed: invalid argument" ) );
+        AZLogError( ( "AzureIoTHubClient_RequestPropertiesAsync failed: invalid argument" ) );
         xResult = eAzureIoTErrorInvalidArgument;
     }
     else if( pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_PROPERTIES ]._internal.usState !=
              azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
     {
-        AZLogError( ( "AzureIoTHubClient_GetProperties failed: properties topic not subscribed" ) );
+        AZLogError( ( "AzureIoTHubClient_RequestPropertiesAsync failed: properties topic not subscribed" ) );
         xResult = eAzureIoTErrorTopicNotSubscribed;
     }
     else

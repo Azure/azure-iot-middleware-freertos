@@ -206,7 +206,7 @@ static void prvTestProperties( AzureIoTHubClientPropertiesResponse_t * pxMessage
     assert_true( pxMessage != NULL );
     assert_true( pvContext == NULL );
 
-    if( pxMessage->xMessageType == eAzureIoTHubPropertiesGetMessage )
+    if( pxMessage->xMessageType == eAzureIoTHubPropertiesRequestedMessage )
     {
         assert_int_equal( pxMessage->ulPayloadLength, sizeof( testPROPERTY_MESSAGE ) - 1 );
         assert_memory_equal( pxMessage->pvMessagePayload, testPROPERTY_MESSAGE, sizeof( testPROPERTY_MESSAGE ) - 1 );
@@ -1356,17 +1356,17 @@ static void testAzureIoTHubClient_SendPropertiesReported_Success( void ** ppvSta
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTHubClient_GetProperties_InvalidArgFailure( void ** ppvState )
+static void testAzureIoTHubClient_RequestPropertiesAsync_InvalidArgFailure( void ** ppvState )
 {
     ( void ) ppvState;
 
     /* Fail GetProperties when client is NULL */
-    assert_int_equal( AzureIoTHubClient_GetProperties( NULL ),
+    assert_int_equal( AzureIoTHubClient_RequestPropertiesAsync( NULL ),
                       eAzureIoTErrorInvalidArgument );
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTHubClient_GetProperties_NotSubscribeFailure( void ** ppvState )
+static void testAzureIoTHubClient_RequestPropertiesAsync_NotSubscribeFailure( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -1374,12 +1374,12 @@ static void testAzureIoTHubClient_GetProperties_NotSubscribeFailure( void ** ppv
 
     prvSetupTestIoTHubClient( &xTestIoTHubClient );
 
-    assert_int_equal( AzureIoTHubClient_GetProperties( &xTestIoTHubClient ),
+    assert_int_equal( AzureIoTHubClient_RequestPropertiesAsync( &xTestIoTHubClient ),
                       eAzureIoTErrorTopicNotSubscribed );
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTHubClient_GetProperties_SendFailure( void ** ppvState )
+static void testAzureIoTHubClient_RequestPropertiesAsync_SendFailure( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -1399,12 +1399,12 @@ static void testAzureIoTHubClient_GetProperties_SendFailure( void ** ppvState )
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
     pucPublishPayload = NULL;
-    assert_int_equal( AzureIoTHubClient_GetProperties( &xTestIoTHubClient ),
+    assert_int_equal( AzureIoTHubClient_RequestPropertiesAsync( &xTestIoTHubClient ),
                       eAzureIoTErrorPublishFailed );
 }
 /*-----------------------------------------------------------*/
 
-static void testAzureIoTHubClient_GetProperties_Success( void ** ppvState )
+static void testAzureIoTHubClient_RequestPropertiesAsync_Success( void ** ppvState )
 {
     AzureIoTHubClient_t xTestIoTHubClient;
 
@@ -1424,7 +1424,7 @@ static void testAzureIoTHubClient_GetProperties_Success( void ** ppvState )
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
     pucPublishPayload = NULL;
-    assert_int_equal( AzureIoTHubClient_GetProperties( &xTestIoTHubClient ),
+    assert_int_equal( AzureIoTHubClient_RequestPropertiesAsync( &xTestIoTHubClient ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -1642,10 +1642,10 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTHubClient_SendPropertiesReported_NotSubscribeFailure ),
         cmocka_unit_test( testAzureIoTHubClient_SendPropertiesReported_SendFailure ),
         cmocka_unit_test( testAzureIoTHubClient_SendPropertiesReported_Success ),
-        cmocka_unit_test( testAzureIoTHubClient_GetProperties_InvalidArgFailure ),
-        cmocka_unit_test( testAzureIoTHubClient_GetProperties_NotSubscribeFailure ),
-        cmocka_unit_test( testAzureIoTHubClient_GetProperties_SendFailure ),
-        cmocka_unit_test( testAzureIoTHubClient_GetProperties_Success ),
+        cmocka_unit_test( testAzureIoTHubClient_RequestPropertiesAsync_InvalidArgFailure ),
+        cmocka_unit_test( testAzureIoTHubClient_RequestPropertiesAsync_NotSubscribeFailure ),
+        cmocka_unit_test( testAzureIoTHubClient_RequestPropertiesAsync_SendFailure ),
+        cmocka_unit_test( testAzureIoTHubClient_RequestPropertiesAsync_Success ),
         cmocka_unit_test( testAzureIoTHubClient_ReceiveMessages_Success ),
         cmocka_unit_test( testAzureIoTHubClient_ReceiveRandomMessages_Success ),
         cmocka_unit_test( testAzureIoTHubClient_SetSymmetricKey_InvalidArgFailure ),

@@ -62,7 +62,7 @@ typedef enum AzureIoTHubMessageType
 {
     eAzureIoTHubCloudToDeviceMessage = 1,          /**< The message is a cloud message. */
     eAzureIoTHubCommandMessage,                    /**< The message is a command message. */
-    eAzureIoTHubPropertiesGetMessage,              /**< The message is a property get response (payload contains the property document). */
+    eAzureIoTHubPropertiesRequestedMessage,        /**< The message is a response from a property request (payload contains the property document). */
     eAzureIoTHubPropertiesReportedResponseMessage, /**< The message is a reported property status response. */
     eAzureIoTHubPropertiesWritablePropertyMessage, /**< The message is a writable property message (incoming from the service). */
 } AzureIoTHubMessageType_t;
@@ -487,13 +487,13 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
  * @note AzureIoTHubClient_SubscribeProperties() must be called before calling this function.
  *
  * The response to the request will be returned via the #AzureIoTHubClientPropertiesCallback_t which was passed
- * in the AzureIoTHubClient_SubscribeProperties() call. The type of message will be #eAzureIoTHubPropertiesGetMessage
+ * in the AzureIoTHubClient_SubscribeProperties() call. The type of message will be #eAzureIoTHubPropertiesRequestedMessage
  * and the payload (on success) will be the property document.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
-AzureIoTResult_t AzureIoTHubClient_GetProperties( AzureIoTHubClient_t * pxAzureIoTHubClient );
+AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
 #include <azure/core/_az_cfg_suffix.h>
 
