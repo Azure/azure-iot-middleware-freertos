@@ -6,11 +6,12 @@
  * @brief Implementation of the Azure IoT JSON writer.
  */
 
+#include "azure_iot_json_writer.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "azure_iot.h"
-#include "azure_iot_json_writer.h"
 #include "azure_iot_private.h"
 
 AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,

@@ -6,11 +6,12 @@
  * @brief Implementation of the Azure IoT JSON reader.
  */
 
+#include "azure_iot_json_reader.h"
+
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "azure_iot.h"
-#include "azure_iot_json_reader.h"
 #include "azure_iot_private.h"
 
 AzureIoTResult_t AzureIoTJSONReader_Init( AzureIoTJSONReader_t * pxReader,

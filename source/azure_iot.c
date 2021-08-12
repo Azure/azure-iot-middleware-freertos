@@ -11,9 +11,10 @@
 #include <string.h>
 
 #include "azure_iot.h"
+#include "azure_iot_private.h"
 
 #include "azure_iot_result.h"
-#include "azure_iot_private.h"
+#include "azure/az_iot.h"
 
 /* Using SHA256 hash - needs 32 bytes */
 #define azureiotBASE64_HASH_BUFFER_SIZE    ( 33 )

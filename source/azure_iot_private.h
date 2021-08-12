@@ -7,7 +7,6 @@
 #include "azure_iot_result.h"
 
 #include "azure/az_core.h"
-#include "azure/az_iot.h"
 
 #include <azure/core/_az_cfg_prefix.h>
 

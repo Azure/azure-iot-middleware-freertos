@@ -43,13 +43,13 @@ typedef enum AzureIoTResult
     eAzureIoTErrorTopicNoMatch,          /**< The received message was not for the currently processed feature. */
     eAzureIoTErrorTokenGenerationFailed, /**< There was a failure. */
     eAzureIoTErrorEndOfProperties,       /**< End of properties when iterating with AzureIoTHubClientProperties_GetNextComponentProperty(). */
-    eAzureIoTErrorInvalidResponse        /**< Invalid response from server. */
-    eAzureIoTErrorUnexpectedChar,         /**< Input can't be successfully parsed. */
+    eAzureIoTErrorInvalidResponse,       /**< Invalid response from server. */
+    eAzureIoTErrorUnexpectedChar,        /**< Input can't be successfully parsed. */
 
     /* === JSON: Error results === */
-    eAzureIoTErrorJSONInvalidState,      /**< The kind of the token being read is not compatible with the expected type of the value. */
-    eAzureIoTErrorJSONNestingOverflow,   /**< The JSON depth is too large. */
-    eAzureIoTErrorJSONReaderDone         /**< No more JSON text left to process. */
+    eAzureIoTErrorJSONInvalidState,    /**< The kind of the token being read is not compatible with the expected type of the value. */
+    eAzureIoTErrorJSONNestingOverflow, /**< The JSON depth is too large. */
+    eAzureIoTErrorJSONReaderDone       /**< No more JSON text left to process. */
 } AzureIoTResult_t;
 
 #endif /* AZURE_IOT_RESULT_H */
