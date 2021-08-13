@@ -486,7 +486,6 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
 
         if( ucComponentName == NULL )
         {
-            assert_null( ucComponentName );
             assert_int_equal( ulComponentNameLength, 0 );
             assert_true( AzureIoTJSONReader_TokenIsTextEqual( &xJSONReader, "not_component", strlen( "not_component" ) ) );
             /*Advance to property value */
