@@ -4,8 +4,9 @@
 
 ### Breaking Changes
 
-- Updated name of `AzureIoTHubClient_GetProperties` API to `AzureIoTHubClient_RequestPropertiesAsync`.
+- Updated name of `AzureIoTHubClient_GetProperties()` API to `AzureIoTHubClient_RequestPropertiesAsync()`.
 - Updated `AzureIoTHubMessageType_t` enum value name from `eAzureIoTHubPropertiesGetMessage` to `eAzureIoTHubPropertiesRequestedMessage`.
+- Moved `AzureIoT_Base64HMACCalculate()` from `azure_iot.h` to `azure_iot_private.h`
 
 ### Bug Fixes
 
