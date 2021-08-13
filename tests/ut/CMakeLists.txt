@@ -52,6 +52,7 @@ add_cmocka_test(azure_iot_ut
   INCLUDE_DIRECTORIES
     ${CMOCKA_INCLUDE_DIR}
     ${CMAKE_CURRENT_LIST_DIR}
+    ../../source # To test private functions
 )
 
 add_cmocka_test(azure_iot_hub_client_ut

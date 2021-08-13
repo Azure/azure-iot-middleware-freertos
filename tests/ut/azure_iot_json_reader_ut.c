@@ -47,6 +47,14 @@ static uint8_t ucTestJSONString[] =
 
 /*
  * {
+ * "property_one": "value_one"
+ * }
+ */
+static uint8_t ucTestJSONMalformed[] =
+    "{\"property_one\":}";
+
+/*
+ * {
  * "property_one": {
  *     "child_one":"value_one"
  * },
@@ -135,6 +143,30 @@ static void testAzureIoTJSONReader_NextToken_Failure( void ** ppvState )
     /* Fail init if JSON reader is NULL */
     assert_int_equal( AzureIoTJSONReader_NextToken( NULL ),
                       eAzureIoTErrorInvalidArgument );
+}
+
+static void testAzureIoTJSONReader_NextTokenBadJSON_Failure( void ** ppvState )
+{
+    AzureIoTJSONReader_t xReader;
+    AzureIoTJSONTokenType_t xTokenType;
+
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucTestJSONMalformed, strlen( ucTestJSONMalformed ) ),
+                      eAzureIoTSuccess );
+
+    /* Begin object */
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ),
+                      eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenBEGIN_OBJECT );
+
+    /* Property Name */
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ),
+                      eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_TokenType( &xReader, &xTokenType ), eAzureIoTSuccess );
+    assert_int_equal( xTokenType, eAzureIoTJSONTokenPROPERTY_NAME );
+
+    assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ),
+                      eAzureIoTErrorUnexpectedChar );
 }
 
 static void testAzureIoTJSONReader_NextToken_Success( void ** ppvState )
@@ -663,16 +695,16 @@ static void testAzureIoTJSONReader_InvalidRead_Failure( void ** ppvState )
 
     /* Access invalid token api */
     assert_int_equal( AzureIoTJSONReader_GetTokenString( &xReader, ucValue, sizeof( ucValue ), &ulBytesCopied ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorJSONInvalidState );
 
     assert_int_equal( AzureIoTJSONReader_GetTokenBool( &xReader, &xValue ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorJSONInvalidState );
 
     assert_int_equal( AzureIoTJSONReader_GetTokenInt32( &xReader, &lValue ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorJSONInvalidState );
 
     assert_int_equal( AzureIoTJSONReader_GetTokenDouble( &xReader, &xDoubleValue ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorJSONInvalidState );
 
     /*End object */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ),
@@ -682,7 +714,7 @@ static void testAzureIoTJSONReader_InvalidRead_Failure( void ** ppvState )
 
     /*Invalid next token */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorJSONReaderDone );
 }
 
 uint32_t ulGetAllTests()
@@ -692,6 +724,7 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTJSONReader_Init_Failure ),
         cmocka_unit_test( testAzureIoTJSONReader_Init_Success ),
         cmocka_unit_test( testAzureIoTJSONReader_NextToken_Failure ),
+        cmocka_unit_test( testAzureIoTJSONReader_NextTokenBadJSON_Failure ),
         cmocka_unit_test( testAzureIoTJSONReader_NextToken_Success ),
         cmocka_unit_test( testAzureIoTJSONReader_SkipChildren_Failure ),
         cmocka_unit_test( testAzureIoTJSONReader_SkipChildren_Success ),
