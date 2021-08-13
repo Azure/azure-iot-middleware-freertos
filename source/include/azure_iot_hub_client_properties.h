@@ -203,7 +203,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTH
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesRequestedMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
  * @pre \p pulVersion must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
@@ -289,9 +289,9 @@ typedef enum AzureIoTHubClientPropertyType_t
  *
  * @pre \p pxAzureIoTHubClient must not be `NULL`.
  * @pre \p pxJSONReader must not be `NULL`.
- * @pre \p xResponseType must be #eAzureIoTHubPropertiesGetMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
+ * @pre \p xResponseType must be #eAzureIoTHubPropertiesRequestedMessage or #eAzureIoTHubPropertiesWritablePropertyMessage.
  * If eAzureIoTHubClientReportedFromDevice is specified in \p xPropertyType,
- * then \p xResponseType must be #eAzureIoTHubPropertiesGetMessage.
+ * then \p xResponseType must be #eAzureIoTHubPropertiesRequestedMessage.
  * @pre \p ppucComponentName must not be `NULL`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.

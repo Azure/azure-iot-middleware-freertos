@@ -682,7 +682,7 @@ static uint32_t prvE2ETestGetTwinPropertiesCommandExecute( E2E_TEST_COMMAND_HAND
     uint32_t ulStatus;
     uint16_t usTelemetryPacketID;
 
-    if( AzureIoTHubClient_GetProperties( pxAzureIoTHubClient ) != eAzureIoTSuccess )
+    if( AzureIoTHubClient_RequestPropertiesAsync( pxAzureIoTHubClient ) != eAzureIoTSuccess )
     {
         LogError( ( "Failed to request twin properties" ) );
         ulStatus = e2etestE2E_TEST_FAILED;

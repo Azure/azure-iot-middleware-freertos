@@ -161,7 +161,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
 
     if( ( pxAzureIoTHubClient == NULL ) ||
         ( pxJSONReader == NULL ) ||
-        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) &&
+        ( ( xResponseType != eAzureIoTHubPropertiesRequestedMessage ) &&
           ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
         ( pulVersion == NULL ) )
     {
@@ -170,7 +170,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
     }
     else
     {
-        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
+        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesRequestedMessage ?
                            AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_GET_RESPONSE : AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_WRITABLE_UPDATED;
 
         if( az_result_failed(
@@ -202,7 +202,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
     az_iot_hub_client_properties_message_type xCoreMessageType;
 
     if( ( pxAzureIoTHubClient == NULL ) || ( pxJSONReader == NULL ) ||
-        ( ( xResponseType != eAzureIoTHubPropertiesGetMessage ) &&
+        ( ( xResponseType != eAzureIoTHubPropertiesRequestedMessage ) &&
           ( xResponseType != eAzureIoTHubPropertiesWritablePropertyMessage ) ) ||
         ( ppucComponentName == NULL ) || ( pulComponentNameLength == NULL ) )
     {
@@ -212,7 +212,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
     else
     {
         xComponentSpan = az_span_create( ( uint8_t * ) *ppucComponentName, ( int32_t ) *pulComponentNameLength );
-        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesGetMessage ?
+        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesRequestedMessage ?
                            AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_GET_RESPONSE : AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_WRITABLE_UPDATED;
 
         if( az_result_failed(

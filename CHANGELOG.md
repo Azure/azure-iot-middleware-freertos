@@ -2,6 +2,11 @@
 
 ## 1.0.0-preview.2 (Unreleased)
 
+### Breaking Changes
+
+- Updated name of `AzureIoTHubClient_GetProperties` API to `AzureIoTHubClient_RequestPropertiesAsync`.
+- Updated `AzureIoTHubMessageType_t` enum value name from `eAzureIoTHubPropertiesGetMessage` to `eAzureIoTHubPropertiesRequestedMessage`.
+
 ### Bug Fixes
 
 - [[#166]](https://github.com/Azure/azure-iot-middleware-freertos/pull/166) Fix reported property publish topic creation with correct embedded API.
