@@ -16,10 +16,10 @@
 #include "azure_iot_result.h"
 #include "azure/az_iot.h"
 
+#include "azure/core/az_base64.h"
+
 /* Using SHA256 hash - needs 32 bytes */
 #define azureiotBASE64_HASH_BUFFER_SIZE    ( 33 )
-
-static const char _cAzureIoTBase64Array[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 
 /*-----------------------------------------------------------*/
 
@@ -89,256 +89,6 @@ AzureIoTResult_t AzureIoT_TranslateCoreError( az_result xCoreError )
     }
 
     return xResult;
-}
-/*-----------------------------------------------------------*/
-
-/**
- *
- * Decode Base64 bytes.
- *
- * Note: pucDecodedBytes buffer needs enough space for a NULL terminator.
- *
- * TODO: Remove in favor of embedded SDK implementation.
- *
- * */
-static AzureIoTResult_t prvAzureIoTBase64Decode( const char * pcEncodedBytes,
-                                                 uint32_t ulEncodedBytesLength,
-                                                 uint8_t * pucDecodedBytes,
-                                                 uint32_t ulDecodedBytesLength,
-                                                 uint32_t * pulOutDecodedBytesLength )
-{
-    uint32_t i, j;
-    uint32_t ulValue1, ulValue2;
-    uint32_t ulStep;
-    uint32_t ulSourceLength = ulEncodedBytesLength;
-
-    /* Adjust the ulEncodedBytesLength to represent the ASCII name.  */
-    ulEncodedBytesLength = ( ( ulEncodedBytesLength * 6 ) / 8 );
-
-    if( pcEncodedBytes[ ulSourceLength - 1 ] == '=' )
-    {
-        if( pcEncodedBytes[ ulSourceLength - 2 ] == '=' )
-        {
-            ulEncodedBytesLength--;
-        }
-
-        ulEncodedBytesLength--;
-    }
-
-    if( ulDecodedBytesLength < ulEncodedBytesLength )
-    {
-        return eAzureIoTErrorOutOfMemory;
-    }
-
-    /* Setup index into the ASCII name.  */
-    j = 0;
-
-    /* Compute the ASCII name.  */
-    ulStep = 0;
-    i = 0;
-
-    while( ( j < ulEncodedBytesLength ) && ( pcEncodedBytes[ i ] ) && ( pcEncodedBytes[ i ] != '=' ) )
-    {
-        /* Derive values of the Base64 name.  */
-        if( ( pcEncodedBytes[ i ] >= 'A' ) && ( pcEncodedBytes[ i ] <= 'Z' ) )
-        {
-            ulValue1 = ( uint32_t ) ( pcEncodedBytes[ i ] - 'A' );
-        }
-        else if( ( pcEncodedBytes[ i ] >= 'a' ) && ( pcEncodedBytes[ i ] <= 'z' ) )
-        {
-            ulValue1 = ( uint32_t ) ( pcEncodedBytes[ i ] - 'a' ) + 26;
-        }
-        else if( ( pcEncodedBytes[ i ] >= '0' ) && ( pcEncodedBytes[ i ] <= '9' ) )
-        {
-            ulValue1 = ( uint32_t ) ( pcEncodedBytes[ i ] - '0' ) + 52;
-        }
-        else if( pcEncodedBytes[ i ] == '+' )
-        {
-            ulValue1 = 62;
-        }
-        else if( pcEncodedBytes[ i ] == '/' )
-        {
-            ulValue1 = 63;
-        }
-        else
-        {
-            ulValue1 = 0;
-        }
-
-        /* Derive value for the next character.  */
-        if( ( pcEncodedBytes[ i + 1 ] >= 'A' ) && ( pcEncodedBytes[ i + 1 ] <= 'Z' ) )
-        {
-            ulValue2 = ( uint32_t ) ( pcEncodedBytes[ i + 1 ] - 'A' );
-        }
-        else if( ( pcEncodedBytes[ i + 1 ] >= 'a' ) && ( pcEncodedBytes[ i + 1 ] <= 'z' ) )
-        {
-            ulValue2 = ( uint32_t ) ( pcEncodedBytes[ i + 1 ] - 'a' ) + 26;
-        }
-        else if( ( pcEncodedBytes[ i + 1 ] >= '0' ) && ( pcEncodedBytes[ i + 1 ] <= '9' ) )
-        {
-            ulValue2 = ( uint32_t ) ( pcEncodedBytes[ i + 1 ] - '0' ) + 52;
-        }
-        else if( pcEncodedBytes[ i + 1 ] == '+' )
-        {
-            ulValue2 = 62;
-        }
-        else if( pcEncodedBytes[ i + 1 ] == '/' )
-        {
-            ulValue2 = 63;
-        }
-        else
-        {
-            ulValue2 = 0;
-        }
-
-        /* Determine which step we are in.  */
-        if( ulStep == 0 )
-        {
-            /* Use first value and first 2 bits of second value.  */
-            pucDecodedBytes[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 0x3f ) << 2 ) | ( ( ulValue2 >> 4 ) & 3 ) );
-            i++;
-            ulStep++;
-        }
-        else if( ulStep == 1 )
-        {
-            /* Use last 4 bits of first value and first 4 bits of next value.  */
-            pucDecodedBytes[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 0xF ) << 4 ) | ( ulValue2 >> 2 ) );
-            i++;
-            ulStep++;
-        }
-        else if( ulStep == 2 )
-        {
-            /* Use first 2 bits and following 6 bits of next value.  */
-            pucDecodedBytes[ j++ ] = ( uint8_t ) ( ( ( ulValue1 & 3 ) << 6 ) | ( ulValue2 & 0x3f ) );
-            i++;
-            i++;
-            ulStep = 0;
-        }
-    }
-
-    /* Need space for a NULL terminator */
-    if( j >= ulDecodedBytesLength )
-    {
-        return eAzureIoTErrorOutOfMemory;
-    }
-
-    /* Put a NULL character in.  */
-    pucDecodedBytes[ j ] = 0;
-    *pulOutDecodedBytesLength = j;
-
-    return eAzureIoTSuccess;
-}
-/*-----------------------------------------------------------*/
-
-/**
- *
- * Encode Base64 bytes.
- *
- * Note: pcEncodedBytes buffer needs enough space for a NULL terminator.
- *
- * TODO: Remove in favor of embedded SDK implementation.
- *
- * */
-static AzureIoTResult_t prvAzureIoTBase64Encode( uint8_t * pucBytes,
-                                                 uint32_t ulBytesLength,
-                                                 char * pcEncodedBytes,
-                                                 uint32_t ulEncodedBytesLength,
-                                                 uint32_t * pulOutEncodedBytesLength )
-{
-    uint32_t ulPad;
-    uint32_t i, j;
-    uint32_t ulStep;
-
-    /* Adjust the length to represent the base64 name.  */
-    ulBytesLength = ( ( ulBytesLength * 8 ) / 6 );
-
-    /* Default padding to none.  */
-    ulPad = 0;
-
-    /* Determine if an extra conversion is needed.  */
-    if( ( ulBytesLength * 6 ) % 24 )
-    {
-        /* Some padding is needed.  */
-
-        /* Calculate the number of pad characters.  */
-        ulPad = ( ulBytesLength * 6 ) % 24;
-        ulPad = ( 24 - ulPad ) / 6;
-        ulPad = ulPad - 1;
-
-        /* Adjust the ulBytesLength to pickup the character fraction.  */
-        ulBytesLength++;
-    }
-
-    if( ulEncodedBytesLength <= ulBytesLength )
-    {
-        return eAzureIoTErrorOutOfMemory;
-    }
-
-    /* Setup index into the pcEncodedBytes.  */
-    j = 0;
-
-    /* Compute the pcEncodedBytes.  */
-    ulStep = 0;
-    i = 0;
-
-    while( j < ulBytesLength )
-    {
-        /* Determine which step we are in.  */
-        if( ulStep == 0 )
-        {
-            /* Use first 6 bits of encoded bytes character for index.  */
-            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( uint8_t ) pucBytes[ i ] ) >> 2 ];
-            ulStep++;
-        }
-        else if( ulStep == 1 )
-        {
-            /* Use last 2 bits of encoded bytes character and first 4 bits of next encoded bytes character for index.  */
-            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3 ) << 4 ) |
-                                                                    ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 4 ) ];
-            i++;
-            ulStep++;
-        }
-        else if( ulStep == 2 )
-        {
-            /* Use last 4 bits of encoded bytes character and first 2 bits of next encoded bytes character for index.  */
-            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( ( uint8_t ) pucBytes[ i ] ) & 0xF ) << 2 ) |
-                                                                    ( ( ( uint8_t ) pucBytes[ i + 1 ] ) >> 6 ) ];
-            i++;
-            ulStep++;
-        }
-        else /* Step 3 */
-        {
-            /* Use last 6 bits of encoded bytes character for index.  */
-            pcEncodedBytes[ j++ ] = ( char ) _cAzureIoTBase64Array[ ( ( ( uint8_t ) pucBytes[ i ] ) & 0x3F ) ];
-            i++;
-            ulStep = 0;
-        }
-    }
-
-    /* Determine if the index needs to be advanced.  */
-    if( ulStep != 3 )
-    {
-        i++;
-    }
-
-    /* Now add the PAD characters.  */
-    while( ( ulPad-- ) && ( j < ulEncodedBytesLength ) )
-    {
-        /* Pad pcEncodedBytes with '=' characters.  */
-        pcEncodedBytes[ j++ ] = '=';
-    }
-
-    /* Need space for a NULL terminator */
-    if( j >= ulEncodedBytesLength )
-    {
-        return eAzureIoTErrorOutOfMemory;
-    }
-
-    /* Put a NULL character in.  */
-    pcEncodedBytes[ j ] = 0;
-    *pulOutEncodedBytesLength = j;
-
-    return eAzureIoTSuccess;
 }
 /*-----------------------------------------------------------*/
 
@@ -460,12 +210,16 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
                                                uint32_t ulOutputSize,
                                                uint32_t * pulOutputLength )
 {
-    AzureIoTResult_t xStatus;
+    az_result xCoreResult;
     uint8_t * pucHashBuf;
     uint8_t * pucDecodedKeyBuf = pucBuffer;
     uint32_t ulHashBufSize = azureiotBASE64_HASH_BUFFER_SIZE;
-    uint32_t ulBinaryKeyBufSize;
-    uint32_t ulBase64OutputLength;
+    int32_t lDecodedKeyLength;
+    int32_t lEncodedLength;
+    az_span xEncodedKeySpan;
+    az_span xOutputDecodedKeySpan;
+    az_span xHashSpan;
+    az_span xOutputEncodedHashSpan;
 
     if( ( xAzureIoTHMACFunction == NULL ) ||
         ( pucKey == NULL ) || ( ulKeySize == 0 ) ||
@@ -477,41 +231,43 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
         return eAzureIoTErrorInvalidArgument;
     }
 
-    xStatus = prvAzureIoTBase64Decode( ( char * ) pucKey, ulKeySize,
-                                       pucDecodedKeyBuf, ulBufferLength, &ulBinaryKeyBufSize );
+    xEncodedKeySpan = az_span_create( ( uint8_t * ) pucKey, ( int32_t ) ulKeySize );
+    xOutputDecodedKeySpan = az_span_create( ( uint8_t * ) pucDecodedKeyBuf, ( int32_t ) ulBufferLength );
 
-    if( xStatus )
+    if( az_result_failed( xCoreResult = az_base64_decode( xOutputDecodedKeySpan, xEncodedKeySpan, &lDecodedKeyLength ) ) )
     {
-        return xStatus;
+        AZLogError( ( "az_base64_decode failed: core error=0x%08x", xCoreResult ) );
+        return eAzureIoTErrorFailed;
     }
 
     /* Decoded key is less than total decoded buffer size */
-    ulBufferLength -= ulBinaryKeyBufSize;
+    ulBufferLength -= ( uint32_t ) lDecodedKeyLength;
 
     if( ulHashBufSize > ulBufferLength )
     {
         return eAzureIoTErrorOutOfMemory;
     }
 
-    pucHashBuf = pucDecodedKeyBuf + ulBinaryKeyBufSize;
+    pucHashBuf = pucDecodedKeyBuf + lDecodedKeyLength;
     memset( pucHashBuf, 0, ulHashBufSize );
 
-    if( xAzureIoTHMACFunction( pucDecodedKeyBuf, ulBinaryKeyBufSize,
+    if( xAzureIoTHMACFunction( pucDecodedKeyBuf, ( uint32_t ) lDecodedKeyLength,
                                pucMessage, ( uint32_t ) ulMessageSize,
                                pucHashBuf, ulHashBufSize, &ulHashBufSize ) )
     {
         return eAzureIoTErrorFailed;
     }
 
-    xStatus = prvAzureIoTBase64Encode( pucHashBuf, ulHashBufSize,
-                                       ( char * ) pucOutput, ulOutputSize, &ulBase64OutputLength );
+    xHashSpan = az_span_create( pucHashBuf, ( int32_t ) ulHashBufSize );
+    xOutputEncodedHashSpan = az_span_create( pucOutput, ( int32_t ) ulOutputSize );
 
-    if( xStatus )
+    if( az_result_failed( xCoreResult = az_base64_encode( xOutputEncodedHashSpan, xHashSpan, &lEncodedLength ) ) )
     {
-        return xStatus;
+        AZLogError( ( "az_base64_decode failed: core error=0x%08x", xCoreResult ) );
+        return eAzureIoTErrorFailed;
     }
 
-    *pulOutputLength = ( uint32_t ) ulBase64OutputLength;
+    *pulOutputLength = ( uint32_t ) lEncodedLength;
 
     return eAzureIoTSuccess;
 }
