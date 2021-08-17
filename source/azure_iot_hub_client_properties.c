@@ -212,7 +212,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
     else
     {
         xComponentSpan = az_span_create( ( uint8_t * ) *ppucComponentName, ( int32_t ) *pulComponentNameLength );
-        xCoreMessageType = xResponseType == eAzureIoTHubPropertiesRequestedMessage ?
+        xCoreMessageType =xResponseType == eAzureIoTHubPropertiesRequestedMessage ?
                            AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_GET_RESPONSE : AZ_IOT_HUB_CLIENT_PROPERTIES_MESSAGE_TYPE_WRITABLE_UPDATED;
 
         if( az_result_failed(
