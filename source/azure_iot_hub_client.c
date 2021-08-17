@@ -221,7 +221,7 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
                       xMQTTPublishInfo->usTopicNameLength,
                       xMQTTPublishInfo->pcTopicName,
                       xMQTTPublishInfo->xPayloadLength,
-                      xMQTTPublishInfo->pvPayload ) );
+                      ( const char * ) xMQTTPublishInfo->pvPayload ) );
 
         if( pxContext->_internal.callbacks.xCloudToDeviceMessageCallback )
         {
@@ -272,7 +272,7 @@ static uint32_t prvAzureIoTHubClientCommandProcess( AzureIoTHubClientReceiveCont
                       xMQTTPublishInfo->usTopicNameLength,
                       xMQTTPublishInfo->pcTopicName,
                       xMQTTPublishInfo->xPayloadLength,
-                      xMQTTPublishInfo->pvPayload ) );
+                      ( const char * ) xMQTTPublishInfo->pvPayload ) );
 
         if( pxContext->_internal.callbacks.xCommandCallback )
         {
@@ -328,7 +328,7 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
                       xMQTTPublishInfo->usTopicNameLength,
                       xMQTTPublishInfo->pcTopicName,
                       xMQTTPublishInfo->xPayloadLength,
-                      xMQTTPublishInfo->pvPayload ) );
+                      ( const char * ) xMQTTPublishInfo->pvPayload ) );
 
         xResult = eAzureIoTSuccess;
 
