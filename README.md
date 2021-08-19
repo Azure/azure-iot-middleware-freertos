@@ -19,6 +19,7 @@ This repo contains the Azure IoT middleware for FreeRTOS libraries and has depen
 - STM32L4+
 - STM32H745
 - NXP RT1060
+- ESPRESSIF ESP32
 - Linux
 - Windows
 
