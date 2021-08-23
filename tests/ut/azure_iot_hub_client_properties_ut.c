@@ -440,7 +440,6 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Success( vo
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTJSONTokenType_t xTokenType;
-    bool xTokenBool;
     double xTokenDouble;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWritable;
