@@ -1,16 +1,21 @@
 # Release History
 
-## 1.0.0-preview.2 (Unreleased)
+## 1.0.0-preview.2 (2021-08-27)
 
 ### Breaking Changes
 
-- Updated name of `AzureIoTHubClient_GetProperties()` API to `AzureIoTHubClient_RequestPropertiesAsync()`.
-- Updated `AzureIoTHubMessageType_t` enum value name from `eAzureIoTHubPropertiesGetMessage` to `eAzureIoTHubPropertiesRequestedMessage`.
-- Moved `AzureIoT_Base64HMACCalculate()` from `azure_iot.h` to `azure_iot_private.h`
+- [[#170]](https://github.com/Azure/azure-iot-middleware-freertos/pull/170) Updated name of `AzureIoTHubClient_GetProperties()` API to `AzureIoTHubClient_RequestPropertiesAsync()`.
+- [[#170]](https://github.com/Azure/azure-iot-middleware-freertos/pull/170) Updated `AzureIoTHubMessageType_t` enum value name from `eAzureIoTHubPropertiesGetMessage` to `eAzureIoTHubPropertiesRequestedMessage`.
+- [[#171]](https://github.com/Azure/azure-iot-middleware-freertos/pull/171) Moved `AzureIoT_Base64HMACCalculate()` from `azure_iot.h` to `azure_iot_private.h`.
 
 ### Bug Fixes
 
 - [[#166]](https://github.com/Azure/azure-iot-middleware-freertos/pull/166) Fix reported property publish topic creation with correct embedded API.
+
+### Other Changes and Improvements
+
+- [[#163]](https://github.com/Azure/azure-iot-middleware-freertos/pull/163) Bumped embedded submodule version to `1.2.0-beta.1`.
+- [[#167]](https://github.com/Azure/azure-iot-middleware-freertos/pull/167) Embedded return values are now translated to middleware return values to improve debugability.
 
 ## 1.0.0-preview.1 (2021-07-13)
 
