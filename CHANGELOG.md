@@ -8,6 +8,10 @@
 - Updated `AzureIoTHubMessageType_t` enum value name from `eAzureIoTHubPropertiesGetMessage` to `eAzureIoTHubPropertiesRequestedMessage`.
 - Moved `AzureIoT_Base64HMACCalculate()` from `azure_iot.h` to `azure_iot_private.h`
 
+### Other Changes and Improvements
+
+- Embedded return values are now translated to the middleware errors to improve debugability.
+
 ### Bug Fixes
 
 - [[#166]](https://github.com/Azure/azure-iot-middleware-freertos/pull/166) Fix reported property publish topic creation with correct embedded API.
