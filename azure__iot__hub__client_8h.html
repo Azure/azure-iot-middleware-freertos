@@ -149,7 +149,7 @@ Enumerations</h2></td></tr>
 <tr class="memitem:a92be11689791a8435db76d1146c55666"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666">AzureIoTHubMessageType</a> { <br />
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab35cdb9dc9b1820d38f70f85d9892fcf">eAzureIoTHubCloudToDeviceMessage</a> = 1, 
 <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a924a6746284a1fc624ae348d1670def1">eAzureIoTHubCommandMessage</a>, 
-<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a>, 
+<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666afe785ba09355944813c1977e1fefcdb6">eAzureIoTHubPropertiesRequestedMessage</a>, 
 <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ae883c70cabb5c8094d1132d070a11a3d">eAzureIoTHubPropertiesReportedResponseMessage</a>, 
 <br />
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a061fa37279447f021295dcb1b260501a">eAzureIoTHubPropertiesWritablePropertyMessage</a>
@@ -236,9 +236,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a572a8a766ed226133e05a40da1c5a5ee"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a572a8a766ed226133e05a40da1c5a5ee">AzureIoTHubClient_SendPropertiesReported</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucReportedPayload, uint32_t ulReportedPayloadLength, uint32_t *pulRequestID)</td></tr>
 <tr class="memdesc:a572a8a766ed226133e05a40da1c5a5ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send reported device properties to Azure IoT Hub.  <a href="azure__iot__hub__client_8h.html#a572a8a766ed226133e05a40da1c5a5ee">More...</a><br /></td></tr>
 <tr class="separator:a572a8a766ed226133e05a40da1c5a5ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45d508af580d72898b5bc777e78fca43"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a45d508af580d72898b5bc777e78fca43">AzureIoTHubClient_GetProperties</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
-<tr class="memdesc:a45d508af580d72898b5bc777e78fca43"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request to get the device property document.  <a href="azure__iot__hub__client_8h.html#a45d508af580d72898b5bc777e78fca43">More...</a><br /></td></tr>
-<tr class="separator:a45d508af580d72898b5bc777e78fca43"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af622fee3bc159eda4ae5aa21074e2d5f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af622fee3bc159eda4ae5aa21074e2d5f">AzureIoTHubClient_RequestPropertiesAsync</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
+<tr class="memdesc:af622fee3bc159eda4ae5aa21074e2d5f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Request to get the device property document.  <a href="azure__iot__hub__client_8h.html#af622fee3bc159eda4ae5aa21074e2d5f">More...</a><br /></td></tr>
+<tr class="separator:af622fee3bc159eda4ae5aa21074e2d5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The middleware IoT Hub Client used to connect a device to Azure IoT Hub. </p>
@@ -374,7 +374,7 @@ Functions</h2></td></tr>
 </td></tr>
 <tr><td class="fieldname"><a id="a92be11689791a8435db76d1146c55666a924a6746284a1fc624ae348d1670def1"></a>eAzureIoTHubCommandMessage&#160;</td><td class="fielddoc"><p>The message is a command message. </p>
 </td></tr>
-<tr><td class="fieldname"><a id="a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11"></a>eAzureIoTHubPropertiesGetMessage&#160;</td><td class="fielddoc"><p>The message is a property get response (payload contains the property document). </p>
+<tr><td class="fieldname"><a id="a92be11689791a8435db76d1146c55666afe785ba09355944813c1977e1fefcdb6"></a>eAzureIoTHubPropertiesRequestedMessage&#160;</td><td class="fielddoc"><p>The message is a response from a property request (payload contains the property document). </p>
 </td></tr>
 <tr><td class="fieldname"><a id="a92be11689791a8435db76d1146c55666ae883c70cabb5c8094d1132d070a11a3d"></a>eAzureIoTHubPropertiesReportedResponseMessage&#160;</td><td class="fielddoc"><p>The message is a reported property status response. </p>
 </td></tr>
@@ -480,35 +480,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Disconnect from the IoT Hub endpoint. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t with the result of the operation. </dd></dl>
-
-</div>
-</div>
-<a id="a45d508af580d72898b5bc777e78fca43"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45d508af580d72898b5bc777e78fca43">&#9670;&nbsp;</a></span>AzureIoTHubClient_GetProperties()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">AzureIoTResult_t AzureIoTHubClient_GetProperties </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
-          <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Request to get the device property document. </p>
-<dl class="section note"><dt>Note</dt><dd><a class="el" href="azure__iot__hub__client_8h.html#a6bceceb1034307cb720f98fb8293b5a8" title="Subscribe to device properties.">AzureIoTHubClient_SubscribeProperties()</a> must be called before calling this function.</dd></dl>
-<p>The response to the request will be returned via the <a class="el" href="azure__iot__hub__client_8h.html#a6c774bbfd8711079885c9f6879f2cfeb" title="Properties callback to be invoked when a property message is received in the call to AzureIoTHubClien...">AzureIoTHubClientPropertiesCallback_t</a> which was passed in the <a class="el" href="azure__iot__hub__client_8h.html#a6bceceb1034307cb720f98fb8293b5a8" title="Subscribe to device properties.">AzureIoTHubClient_SubscribeProperties()</a> call. The type of message will be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab655d05721ea05cb2001187731655c11">eAzureIoTHubPropertiesGetMessage</a> and the payload (on success) will be the property document.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
@@ -678,6 +649,35 @@ Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulTimeoutMilliseconds</td><td>Minimum time (in milliseconds) for the loop to run. If <code>0</code> is passed, it will only run once. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t with the result of the operation. </dd></dl>
+
+</div>
+</div>
+<a id="af622fee3bc159eda4ae5aa21074e2d5f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af622fee3bc159eda4ae5aa21074e2d5f">&#9670;&nbsp;</a></span>AzureIoTHubClient_RequestPropertiesAsync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *&#160;</td>
+          <td class="paramname"><em>pxAzureIoTHubClient</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Request to get the device property document. </p>
+<dl class="section note"><dt>Note</dt><dd><a class="el" href="azure__iot__hub__client_8h.html#a6bceceb1034307cb720f98fb8293b5a8" title="Subscribe to device properties.">AzureIoTHubClient_SubscribeProperties()</a> must be called before calling this function.</dd></dl>
+<p>The response to the request will be returned via the <a class="el" href="azure__iot__hub__client_8h.html#a6c774bbfd8711079885c9f6879f2cfeb" title="Properties callback to be invoked when a property message is received in the call to AzureIoTHubClien...">AzureIoTHubClientPropertiesCallback_t</a> which was passed in the <a class="el" href="azure__iot__hub__client_8h.html#a6bceceb1034307cb720f98fb8293b5a8" title="Subscribe to device properties.">AzureIoTHubClient_SubscribeProperties()</a> call. The type of message will be <a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666afe785ba09355944813c1977e1fefcdb6">eAzureIoTHubPropertiesRequestedMessage</a> and the payload (on success) will be the property document.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxAzureIoTHubClient</td><td>The <a class="el" href="struct_azure_io_t_hub_client__t.html" title="Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.">AzureIoTHubClient_t</a> * to use for this call. </td></tr>
   </table>
   </dd>
 </dl>
