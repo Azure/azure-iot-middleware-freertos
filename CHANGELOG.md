@@ -6,7 +6,7 @@
 
 - [[#170]](https://github.com/Azure/azure-iot-middleware-freertos/pull/170) Updated name of `AzureIoTHubClient_GetProperties()` API to `AzureIoTHubClient_RequestPropertiesAsync()`.
 - [[#170]](https://github.com/Azure/azure-iot-middleware-freertos/pull/170) Updated `AzureIoTHubMessageType_t` enum value name from `eAzureIoTHubPropertiesGetMessage` to `eAzureIoTHubPropertiesRequestedMessage`.
-- [[#171]](https://github.com/Azure/azure-iot-middleware-freertos/pull/171)Moved `AzureIoT_Base64HMACCalculate()` from `azure_iot.h` to `azure_iot_private.h`.
+- [[#171]](https://github.com/Azure/azure-iot-middleware-freertos/pull/171) Moved `AzureIoT_Base64HMACCalculate()` from `azure_iot.h` to `azure_iot_private.h`.
 
 ### Bug Fixes
 
