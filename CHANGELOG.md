@@ -10,7 +10,7 @@
 
 ### Other Changes and Improvements
 
-- Embedded return values are now translated to the middleware errors to improve debugability.
+- Embedded return values are now translated to middleware return values to improve debugability.
 
 ### Bug Fixes
 
