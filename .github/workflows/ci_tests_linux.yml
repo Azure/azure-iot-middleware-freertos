@@ -1,25 +1,97 @@
 name: Linux CI Tests
 
-on: [pull_request]
-
+on: 
+  pull_request:
+  pull_request_target:
+    types: [labeled]
 jobs:
   build:
-
     runs-on: ubuntu-latest
+    # Only allow build to start when label 'Run CI' added for forked
+    # based PR
+    if: ( github.event.pull_request.head.repo.fork == false ) ||
+        ( contains(github.event.pull_request.labels.*.name, 'Run CI') )
     steps:
-    - uses: actions/checkout@v2
-    - name: Style Check
-      run: .github/scripts/code_style.sh check
-    - name: Submodules Init
-      uses: snickerbockers/submodules-init@v4
-    - name: Configure
-      run: .github/scripts/install_software.sh; sudo .github/scripts/init_vm_network.sh
-    - name: Fetch FreeRTOS
-      run: .github/scripts/fetch_freertos.sh
-    - name: Build with Clang
-      run: .github/scripts/clang_build.sh
-    - name: Check-in Tests
-      run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
-                         export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
-                         export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
-                         .github/scripts/ci_tests.sh"
+      # Same repo
+      - uses: actions/checkout@v2
+        if: >-
+          ( github.event_name == 'pull_request' ) &&
+          ( github.event.pull_request.head.repo.fork == false )
+      
+      # Forked repo
+      - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+        if: >-
+          ( github.event_name == 'pull_request_target' ) &&
+          ( github.event.pull_request.head.repo.fork == true )
+
+      - name: Style Check
+        run: .github/scripts/code_style.sh check
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
+
+      - name: Submodules Init
+        uses: snickerbockers/submodules-init@v4
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
+
+      - name: Configure
+        run: .github/scripts/install_software.sh; sudo .github/scripts/init_vm_network.sh
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
+
+      - name: Fetch FreeRTOS
+        run: .github/scripts/fetch_freertos.sh
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
+
+      - name: Build with Clang
+        run: .github/scripts/clang_build.sh
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
+
+      - name: Check-in Tests
+        run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
+                           export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
+                           export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
+                           .github/scripts/ci_tests.sh"
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
