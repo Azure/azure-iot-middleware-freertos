@@ -12,12 +12,6 @@ usage() {
     exit 1
 }
 
-# prompt() {
-#     echo -e "::error There are files which do not adhere to the coding style. Please see directions to fix this here: https://github.com/Azure/azure-iot-middleware-freertos#code-style"
-# }
-
-# trap prompt EXIT
-
 FIX=${1:-""}
 
 # Version 0.67 is the source of truth
