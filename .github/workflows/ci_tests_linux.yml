@@ -28,6 +28,7 @@ jobs:
           ( github.event.pull_request.head.repo.fork == true )
 
       - name: Style Check
+        # The solo " in below bash call is an escape character for :
         run: |
           .github/scripts/code_style.sh check || ( |
           echo -e '::error There are files which do not adhere to the coding style. |
