@@ -60,7 +60,7 @@ typedef enum AzureIoTHubMessageQoS
  */
 typedef enum AzureIoTHubMessageType
 {
-    eAzureIoTHubCloudToDeviceMessage = 1,          /**< The message is a cloud message. */
+    eAzureIoTHubCloudToDeviceMessage = 1,         /**< The message is a cloud message. */
     eAzureIoTHubCommandMessage,                    /**< The message is a command message. */
     eAzureIoTHubPropertiesRequestedMessage,        /**< The message is a response from a property request (payload contains the property document). */
     eAzureIoTHubPropertiesReportedResponseMessage, /**< The message is a reported property status response. */
