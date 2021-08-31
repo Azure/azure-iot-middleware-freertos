@@ -35,6 +35,8 @@ Standard MQTT telemetry capability. Send messages with a payload to a service-de
 
 ### Commands
 
-Otherwise known as direct methods, commands/functions which one can invoke from the cloud and run on the device. These are composed of an intended function to run (name) and a possible payload to pass to the function. Any response payload and return value are  [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-direct-methods).
+Otherwise known as direct methods, commands/functions which one can invoke from the cloud and run on the device. These are composed of an intended function to run (name) and a possible payload to pass to the function. Any response payload and return value are then sent back to the service. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-direct-methods).
 
 ### Device Twin
+
+JSON documents that store device state information including metadata, configurations, and conditions. Azure IoT Hub maintains a device twin for each device that you connect to IoT Hub. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-device-twins).
