@@ -1,3 +1,5 @@
+IGNORE
+
 # Azure IoT middleware for FreeRTOS 
 
 [![Linux CI Tests](https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml/badge.svg)](https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml)
