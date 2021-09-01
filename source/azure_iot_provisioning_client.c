@@ -260,44 +260,6 @@ static void prvProvClientSubscribe( AzureIoTProvisioningClient_t * pxAzureProvCl
 }
 /*-----------------------------------------------------------*/
 
-static AzureIoTResult_t prvProvClientCreateRequestPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                           uint8_t * pucPayload,
-                                                           uint32_t ulPayloadLength,
-                                                           uint32_t * pulBytesUsed )
-{
-    AzureIoTResult_t xResult;
-    az_result xCoreResult;
-    az_json_writer xJsonWriter;
-    az_span xBuffer = az_span_create( pucPayload, ( int32_t ) ulPayloadLength );
-    az_span xRegistrationIdLabel = AZ_SPAN_LITERAL_FROM_STR( azureiotprovisioningREQUEST_REGISTRATION_ID_LABEL );
-    az_span xRegistrationId = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucRegistrationID,
-                                              ( int32_t ) pxAzureProvClient->_internal.ulRegistrationIDLength );
-    az_span xPayloadLabel = AZ_SPAN_LITERAL_FROM_STR( azureiotprovisioningREQUEST_PAYLOAD_LABEL );
-    az_span xPayload = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucRegistrationPayload,
-                                       ( int32_t ) pxAzureProvClient->_internal.ulRegistrationPayloadLength );
-
-    if( az_result_failed( xCoreResult = az_json_writer_init( &xJsonWriter, xBuffer, NULL ) ) ||
-        az_result_failed( xCoreResult = az_json_writer_append_begin_object( &xJsonWriter ) ) ||
-        az_result_failed( xCoreResult = az_json_writer_append_property_name( &xJsonWriter, xRegistrationIdLabel ) ) ||
-        az_result_failed( az_json_writer_append_string( &xJsonWriter, xRegistrationId ) ) ||
-        ( ( pxAzureProvClient->_internal.pucRegistrationPayload != NULL ) &&
-          ( az_result_failed( xCoreResult = az_json_writer_append_property_name( &xJsonWriter, xPayloadLabel ) ) ||
-            az_result_failed( xCoreResult = az_json_writer_append_json_text( &xJsonWriter, xPayload ) ) ) ) ||
-        az_result_failed( xCoreResult = az_json_writer_append_end_object( &xJsonWriter ) ) )
-    {
-        AZLogError( ( "AzureIoTProvisioning failed to create Request JSON payload: core result=0x%08x", xCoreResult ) );
-        xResult = eAzureIoTErrorFailed;
-    }
-    else
-    {
-        xResult = eAzureIoTSuccess;
-        *pulBytesUsed = ( uint32_t ) az_span_size( az_json_writer_get_bytes_used_in_destination( &xJsonWriter ) );
-    }
-
-    return xResult;
-}
-/*-----------------------------------------------------------*/
-
 /**
  *
  * Implementation of request action. This action is only allowed in azureiotprovisioningWF_STATE_REQUEST
@@ -312,6 +274,8 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
     uint32_t xMQTTPayloadLength = 0;
     uint16_t usPublishPacketIdentifier;
     az_result xCoreResult;
+    az_span xCustomPayloadProperty = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucRegistrationPayload,
+                                                     ( int32_t ) pxAzureProvClient->_internal.ulRegistrationPayloadLength );
 
     /* Check the state.  */
     if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_REQUEST )
@@ -344,15 +308,17 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
             return;
         }
 
-        if( ( xResult =
-                  prvProvClientCreateRequestPayload( pxAzureProvClient,
-                                                     pxAzureProvClient->_internal.pucScratchBuffer +
-                                                     xMQTTTopicLength,
-                                                     pxAzureProvClient->_internal.ulScratchBufferLength -
-                                                     ( uint32_t ) xMQTTTopicLength,
-                                                     &xMQTTPayloadLength ) ) != eAzureIoTSuccess )
+        xMQTTPayloadLength = pxAzureProvClient->_internal.ulScratchBufferLength - ( uint32_t ) xMQTTTopicLength;
+        xCoreResult =
+            az_iot_provisioning_client_get_request_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
+                                                            xCustomPayloadProperty, NULL,
+                                                            ( uint8_t * ) ( pxAzureProvClient->_internal.pucScratchBuffer +
+                                                                            xMQTTTopicLength ),
+                                                            ( size_t ) xMQTTPayloadLength, ( size_t * ) &xMQTTPayloadLength );
+
+        if( az_result_failed( xCoreResult ) )
         {
-            prvProvClientUpdateState( pxAzureProvClient, xResult );
+            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorFailed );
             return;
         }
 
