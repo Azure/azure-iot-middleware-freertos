@@ -18,7 +18,6 @@
 #include "azure_iot_private.h"
 #include "azure_iot_result.h"
 #include "azure/az_iot.h"
-#include "azure/core/az_json.h"
 #include "azure/core/az_version.h"
 
 
