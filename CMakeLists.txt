@@ -29,7 +29,7 @@ endif()
 
 include_directories(${CONFIG_DIRECTORY})
 include_directories(${FREERTOS_PORT_DIRECTORY})
-include_directories(${FREERTOS_DIRECTORY}/FreeRTOS/Source/include)
+include_directories(${FREERTOS_DIRECTORY}/include)
 
 # Add the middleware library
 add_subdirectory(source/)
