@@ -11,7 +11,7 @@ set(CMAKE_C_STANDARD 99)
 set(FREERTOS_DIRECTORY CACHE STRING "The directory which has the source code for FreeRTOS (as structured on their Github repo).")
 set(FREERTOS_PORT_DIRECTORY CACHE STRING "The directory which has the port layer for FreeRTOS.")
 set(CONFIG_DIRECTORY CACHE STRING "The directory which has the FreeRTOSConfig.h and azure_iot_config.h.")
-set(FREERTOS_LOGGING_LEVELS_DIRECTORY CACHE STRING "The directory pointing to the logging_levels.h")
+set(FREERTOS_LOGGING_LEVELS_DIRECTORY CACHE STRING "The directory to logging_levels.h")
 
 # The user needs to provide a FreeRTOS directory
 if("${FREERTOS_DIRECTORY}" STREQUAL "")
