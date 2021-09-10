@@ -25,7 +25,7 @@ This repo contains the Azure IoT middleware for FreeRTOS libraries and has depen
 
 For a video deep dive into this repo and the samples, please see the Microsoft Developers video below.
 
-[![Watch the video](./docs/resources/deep-dive-video.jpg)](https://youtu.be/PNykfuJ3VDs)
+[<img src="./docs/resources/deep-dive-video.jpg" width="50%">](https://youtu.be/PNykfuJ3VDs)
 
 ## Code Style
 
