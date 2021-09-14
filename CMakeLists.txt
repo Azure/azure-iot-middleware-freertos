@@ -7,6 +7,8 @@ project(az_iot_middleware_freertos LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 
+set(CMAKE_C_FLAGS "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 ${CMAKE_C_FLAGS}")
+
 # Options for building the lib
 set(FREERTOS_DIRECTORY CACHE STRING "The directory which has the source code for FreeRTOS (as structured on their Github repo).")
 set(FREERTOS_PORT_DIRECTORY CACHE STRING "The directory which has the port layer for FreeRTOS.")
