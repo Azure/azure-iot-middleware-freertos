@@ -45,6 +45,10 @@ Below is a high level explanation of functional features
 
 Standard MQTT telemetry capability. Send messages with a payload to a service-determined topic. Custom topics are not available at this time. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-messages-d2c).
 
+### Cloud to Device Messages
+
+Essentially telemetry in the reverse direction. The cloud can send messages on a pre-set MQTT topic for the device to process. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-messages-c2d).
+
 ### Commands
 
 Otherwise known as direct methods, commands/functions which one can invoke from the cloud and run on the device. These are composed of an intended function to run (name) and a possible payload to pass to the function. Any response payload and return value are then sent back to the service. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-direct-methods).
