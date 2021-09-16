@@ -8,9 +8,15 @@ Porting from AWS FreeRTOS applications can be done using the following sections.
 
 Like the AWS FreeRTOS library, we use CMake to build middleware. You may use the directions [here](https://github.com/Azure/azure-iot-middleware-freertos#using-cmake) to correctly set up the build environment for your project to generate and compile.
 
+To see the detailed diff showing the changes in the CMake to get the sample building with the Azure IoT middleware for FreeRTOS, please see [here](https://github.com/aws/amazon-freertos/commit/cc30c2493f13b441d3f4029aacac420756cc09f9).
+
 ## Porting
 
 If starting from a basic CoreMQTT implementation, such as [here](https://github.com/aws/amazon-freertos/blob/main/demos/coreMQTT/mqtt_demo_mutual_auth.c), the porting process is pretty straight forward. The network context of the Azure IoT middleware for FreeRTOS maps similarly to the usage of the CoreMQTT library as shown [here](https://github.com/aws/amazon-freertos/blob/3af6570347e4777d43653701bcea6ea8723a63af/demos/coreMQTT/mqtt_demo_mutual_auth.c#L795-L797).
+
+For a detailed diff showing how to get telemetry data sending to Azure IoT Hub using the `mqtt_demo_mutual_auth.c` sample, please see [here](https://github.com/aws/amazon-freertos/commit/ea766b48f0d3773c7a1e4ff30b2e2769b4fb1650).
+
+To see the combination diff of building and porting, please see [here](https://github.com/aws/amazon-freertos/compare/main...danewalton:aws-azure-port?expand=1).
 
 ## Authentication
 
