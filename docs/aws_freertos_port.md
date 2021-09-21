@@ -43,11 +43,11 @@ Below is a high level explanation of functional features
 
 ### Telemetry
 
-Standard MQTT telemetry capability. Send messages with a payload to a service-determined topic. Custom topics are not available at this time. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-messages-d2c).
+Standard MQTT telemetry capability. Send messages with a payload to a pre-determined topic. Custom topics are not available at this time. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-messages-d2c).
 
 ### Cloud to Device Messages
 
-Essentially telemetry in the reverse direction. The cloud can send messages on a pre-set MQTT topic for the device to process. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-messages-c2d).
+Essentially telemetry in the reverse direction. The cloud can send messages on a pre-determined MQTT topic for the device to process. [Details for this feature can be found here](https://docs.microsoft.com/azure/iot-hub/iot-hub-devguide-messages-c2d).
 
 ### Commands
 
