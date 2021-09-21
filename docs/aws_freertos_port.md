@@ -6,7 +6,7 @@ Porting from AWS FreeRTOS applications can be done using the following sections.
 
 ## Building
 
-Like the AWS FreeRTOS library, we use CMake to build middleware. You may use the directions [here](https://github.com/Azure/azure-iot-middleware-freertos#using-cmake) to correctly set up the build environment for your project to generate and compile.
+Like the AWS FreeRTOS library, we use CMake to build the middleware. You may use the directions [here](https://github.com/Azure/azure-iot-middleware-freertos#using-cmake) to correctly set up the build environment for your project to generate and compile.
 
 To see the detailed diff showing the changes in the CMake to get the sample building with the Azure IoT middleware for FreeRTOS, please see [here](https://github.com/aws/amazon-freertos/commit/cc30c2493f13b441d3f4029aacac420756cc09f9).
 
@@ -20,7 +20,7 @@ To see the combination diff of building and porting, please see [here](https://g
 
 ## Authentication
 
-There are a few options when it comes to authentication with Azure IoT. In addition to the x509 certificates offered on AWS Freertos, you may additionally use SAS keys to authenticate with IoT Hub and the Device Provisioning service. For details on which to use, you can refer to [this document here going over the pros and cons of each](https://azure.microsoft.com/blog/iot-device-authentication-options/).
+There are a few options when it comes to authentication with Azure IoT. In addition to the x509 certificates offered on AWS Freertos, you may additionally use SAS keys to authenticate with Azure IoT Hub and the Azure Device Provisioning service. For details on which to use, you can refer to [this document going over the pros and cons of each](https://azure.microsoft.com/blog/iot-device-authentication-options/).
 
 ### x509 Certificates
 
