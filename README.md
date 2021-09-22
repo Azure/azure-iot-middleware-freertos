@@ -12,6 +12,7 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
+- [Library Architecture](#library-architecture)
 - [Repo Structure](#repo-structure)
 - [Code Style](#code-style)
 - [Building](#building)
@@ -22,6 +23,12 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
   - [MQTT](#mqtt)
 - [Contributing](#contributing)
 - [Trademarks](#trademarks)
+
+## Library Architecture
+
+Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
+
+[<img src="./docs/resources/middleware-arch.png" width="75%">](img)
 
 ## Repo Structure
 
@@ -54,7 +61,7 @@ Note that different versions of `uncrustify` can produce differently rendered fi
 
 ### Using CMake
 
-This repository uses `CMake` to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a `-D` or add them as cache variables in your CMake.
+This repository uses `CMake` to build. To integrate into your project, use the `add_subdirectory()` CMake function in your `CMakeLists.txt` and pass three paths as CMake options. You can set these either in the configuration step of CMake with a `-D` or add them as cache variables in your CMake. [Please see here for an example from our samples](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/be17acac1ef5d0c3d8d3f0539b0409dbcc69d0e7/CMakeLists.txt#L36-L42).
 
 - `FREERTOS_DIRECTORY`: Full path to a directory which contains FreeRTOS ([as set up on GitHub](https://github.com/FreeRTOS/FreeRTOS)).
 - `FREERTOS_PORT_DIRECTORY`: The full path to the freertos port that you would like to use. On GitHub you can find [the list here](https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/main/portable). Locally, if you initialize the FreeRTOS submodules, you can find the options in `<FREERTOS_DIRECTORY>/FreeRTOS/Source/portable`
