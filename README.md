@@ -77,7 +77,7 @@ Other than these, your choice of libraries for TLS and TCP/IP are up to you to c
 
 ### Using Amazon FreeRTOS
 
-We have a guide [here](./docs/aws_freertos_port.md) which will help you port and build your Amazon FreeRTOS project with the Azure IoT middleware for FreeRTOS.
+We have a guide [here](./docs/amazon_freertos_port.md) which will help you port and build your Amazon FreeRTOS project with the Azure IoT middleware for FreeRTOS.
 
 ## Porting
 
