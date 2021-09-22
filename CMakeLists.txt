@@ -14,17 +14,17 @@ set(CONFIG_DIRECTORY CACHE STRING "The directory which has the FreeRTOSConfig.h 
 
 # The user needs to provide a FreeRTOS directory
 if("${FREERTOS_DIRECTORY}" STREQUAL "")
-  message(FATAL_ERROR "The library needs a FreeRTOS directory.")
+  message(FATAL_ERROR "The library needs a FreeRTOS directory. Please clone FreeRTOS separately and pass the path in this variable.")
 endif()
 
 # The user needs to provide a FreeRTOS port directory
 if("${FREERTOS_PORT_DIRECTORY}" STREQUAL "")
-  message(FATAL_ERROR "The library needs a FreeRTOS port directory.")
+  message(FATAL_ERROR "The library needs a FreeRTOS port directory. Please pass the path to your selected port in the cloned FreeRTOS repo.")
 endif()
 
 # The user needs to provide a directory which has the necessary configs.
 if("${CONFIG_DIRECTORY}" STREQUAL "")
-  message(FATAL_ERROR "The library needs a FreeRTOSConfig.h and azure_iot_config.h directory. Please set the path to the directory with those files.")
+  message(FATAL_ERROR "The library needs a FreeRTOSConfig.h and azure_iot_config.h directory. Please create a directory with those files and pass it in this variable.")
 endif()
 
 include_directories(${CONFIG_DIRECTORY})
