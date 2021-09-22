@@ -9,17 +9,19 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 - No background threads are created by the Azure IoT middleware for FreeRTOS. Messages are sent and received synchronously.
 - Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).
 
-- [Azure IoT middleware for FreeRTOS](#azure-iot-middleware-for-freertos)
-  - [Repo Structure](#repo-structure)
-  - [Code Style](#code-style)
-  - [Building](#building)
-    - [Using CMake](#using-cmake)
-    - [Using Source Files](#using-source-files)
-  - [Porting](#porting)
-    - [TCP/IP and TLS](#tcpip-and-tls)
-    - [MQTT](#mqtt)
-  - [Contributing](#contributing)
-  - [Trademarks](#trademarks)
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Repo Structure](#repo-structure)
+- [Code Style](#code-style)
+- [Building](#building)
+  - [Using CMake](#using-cmake)
+  - [Using Source Files](#using-source-files)
+- [Porting](#porting)
+  - [TCP/IP and TLS](#tcpip-and-tls)
+  - [MQTT](#mqtt)
+- [Contributing](#contributing)
+- [Trademarks](#trademarks)
 
 ## Repo Structure
 
