@@ -2,8 +2,6 @@
 
 [![Linux CI Tests](https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml/badge.svg?branch=main)](https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml)
 
-**THIS REPO IS IN ACTIVE DEVELOPMENT AND NOT GA READY. APIS ARE SUBJECT TO CHANGE WITHOUT NOTICE UNTIL AN OFFICIAL RELEASE HAS BEEN PUBLISHED.**
-
 The Azure IoT middleware for FreeRTOS simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and adds MQTT client support. Below are key points of this project:
 
 - The Azure IoT middleware for FreeRTOS operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are handled by the customer via middleware APIs.
