@@ -75,9 +75,9 @@ If using the coreMQTT port for the MQTT, the following needs to be included and 
 
 Other than these, your choice of libraries for TLS and TCP/IP are up to you to choose and properly configure/compile.
 
-### Using AWS FreeRTOS
+### Using Amazon FreeRTOS
 
-We have a guide [here](./docs/aws_freertos_port.md) which will help you port and build your AWS FreeRTOS project with the Azure IoT middleware for FreeRTOS.
+We have a guide [here](./docs/aws_freertos_port.md) which will help you port and build your Amazon FreeRTOS project with the Azure IoT middleware for FreeRTOS.
 
 ## Porting
 
