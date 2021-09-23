@@ -6,6 +6,7 @@
 
 #include "azure_iot_result.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/az_core.h"
 
 #include <azure/core/_az_cfg_prefix.h>

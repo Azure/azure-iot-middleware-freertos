@@ -22,6 +22,7 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/az_core.h"
 #include "azure/iot/az_iot_hub_client.h"
 

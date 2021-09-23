@@ -12,10 +12,10 @@
 
 #include "azure_iot.h"
 #include "azure_iot_private.h"
-
 #include "azure_iot_result.h"
-#include "azure/az_iot.h"
 
+/* Azure SDK for Embedded C includes */
+#include "azure/az_iot.h"
 #include "azure/core/az_base64.h"
 
 /* Using SHA256 hash - needs 32 bytes */

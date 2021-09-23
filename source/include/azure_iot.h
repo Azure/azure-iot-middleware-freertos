@@ -32,6 +32,7 @@
 
 #include "FreeRTOS.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/az_iot.h"
 
 #include <azure/core/_az_cfg_prefix.h>

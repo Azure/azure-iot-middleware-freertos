@@ -18,11 +18,11 @@
 #include "FreeRTOS.h"
 
 #include "azure_iot.h"
-
 #include "azure_iot_result.h"
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+/* Azure SDK for Embedded C includes */
 #include <azure/core/_az_cfg_prefix.h>
 
 /**

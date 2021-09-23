@@ -23,6 +23,7 @@
 #include "azure_iot_json_reader.h"
 #include "azure_iot_json_writer.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/iot/az_iot_hub_client_properties.h"
 
 /**

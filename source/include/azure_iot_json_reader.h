@@ -21,6 +21,7 @@
 
 #include "azure_iot_result.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/core/az_json.h"
 
 /**
