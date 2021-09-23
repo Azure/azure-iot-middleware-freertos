@@ -12,9 +12,10 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 ## Table of Contents
 
 - [Table of Contents](#table-of-contents)
-- [Library Architecture](#library-architecture)
+- [Samples](#samples)
 - [Repo Structure](#repo-structure)
-- [Code Style](#code-style)
+  - [Dependencies](#dependencies)
+- [Library Architecture](#library-architecture)
 - [Building](#building)
   - [Using CMake](#using-cmake)
   - [Using Source Files](#using-source-files)
@@ -22,17 +23,12 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
   - [TCP/IP and TLS](#tcpip-and-tls)
   - [MQTT](#mqtt)
 - [Contributing](#contributing)
+  - [Code Style](#code-style)
 - [Trademarks](#trademarks)
 
-## Library Architecture
+## Samples
 
-Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
-
-[<img src="./docs/resources/middleware-arch.png" width="75%">](img)
-
-## Repo Structure
-
-This repo contains the Azure IoT middleware for FreeRTOS libraries and has dependencies only on coreMQTT. For working samples please visit the [samples repo](https://github.com/Azure-Samples/iot-middleware-freertos-samples). There we have samples for several devices including:
+To keep this repo simple without board specific dependencies, we have a separate repo with all of the samples ([please see the link here for working samples](https://github.com/Azure-Samples/iot-middleware-freertos-samples)). There we have samples for several devices including:
 
 - STM32L475
 - STM32L4+
@@ -45,6 +41,32 @@ This repo contains the Azure IoT middleware for FreeRTOS libraries and has depen
 For a video deep dive into this repo and the samples, please see the Microsoft Developers video below.
 
 [<img src="./docs/resources/deep-dive-video.jpg" width="50%">](https://youtu.be/PNykfuJ3VDs)
+
+## Repo Structure
+
+This repo is built for integration into your project. As mentioned above, if you would like to try out our samples, please clone that repo to get started. Otherwise, this repo will allow you to integrate the Azure IoT middleware for FreeRTOS into your embedded project. To see how that integration works, please see our below sections for [building](#building).
+
+The most relevant sections of the repo are the following:
+
+- `/config_templates`: Template config files to use for the library. Provided to easily bootstrap your project with the middleware.
+- `/libraries`: Submodule dependencies for the middleware. To initialize these after cloning, you can run:
+  
+      ```bash
+      git submodule update --init
+      ```
+- `/ports`: The source code for the MQTT abstraction (currently coreMQTT). If you would like to create your own MQTT abstraction implementation, please see the [azure_iot_mqtt.h](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h) header file for functions which need to be implemented.
+- `/source`: All source files and headers for the middleware. To see how to build the project by using source files only, please see our below section for [source file building](#using-source-files).
+- `/tests`: All unit and end-to-end tests used for validation.
+
+### Dependencies
+
+We have dependencies on two libraries under the `/libraries` directory: [Azure IoT SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and [coreMQTT](https://github.com/FreeRTOS/coreMQTT).
+
+## Library Architecture
+
+Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
+
+[<img src="./docs/resources/middleware-arch.png" width="75%">](img)
 
 ## Building
 
