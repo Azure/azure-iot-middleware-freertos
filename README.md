@@ -51,9 +51,10 @@ The most relevant sections of the repo are the following:
 - `/config_templates`: Template config files to use for the library. Provided to easily bootstrap your project with the middleware.
 - `/libraries`: Submodule dependencies for the middleware. To initialize these after cloning, you can run:
   
-      ```bash
-      git submodule update --init
-      ```
+    ```bash
+    git submodule update --init
+    ```
+
 - `/ports`: The source code for the MQTT abstraction (currently coreMQTT). If you would like to create your own MQTT abstraction implementation, please see the [azure_iot_mqtt.h](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h) header file for functions which need to be implemented.
 - `/source`: All source files and headers for the middleware. To see how to build the project by using source files only, please see our below section for [source file building](#using-source-files).
 - `/tests`: All unit and end-to-end tests used for validation.
