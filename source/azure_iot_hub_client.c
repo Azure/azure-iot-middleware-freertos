@@ -12,10 +12,10 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-#include "azure_iot_result.h"
-#include "azure_iot_version.h"
 #include "azure_iot_mqtt.h"
 #include "azure_iot_private.h"
+#include "azure_iot_result.h"
+#include "azure_iot_version.h"
 
 /* Azure SDK for Embedded C includes */
 #include "azure/az_iot.h"
