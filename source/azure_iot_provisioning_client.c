@@ -17,9 +17,10 @@
 #include "azure_iot_mqtt.h"
 #include "azure_iot_private.h"
 #include "azure_iot_result.h"
+
+/* Azure SDK for Embedded C includes */
 #include "azure/az_iot.h"
 #include "azure/core/az_version.h"
-
 
 #ifndef azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC
     #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC

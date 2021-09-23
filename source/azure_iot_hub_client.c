@@ -12,12 +12,14 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "azure_iot_mqtt.h"
+#include "azure_iot_private.h"
 #include "azure_iot_result.h"
 #include "azure_iot_version.h"
-#include "azure_iot_mqtt.h"
+
+/* Azure SDK for Embedded C includes */
 #include "azure/az_iot.h"
 #include "azure/core/az_version.h"
-#include "azure_iot_private.h"
 
 #ifndef azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC
     #define azureiothubDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC

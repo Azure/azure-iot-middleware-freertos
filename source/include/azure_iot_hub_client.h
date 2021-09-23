@@ -17,15 +17,17 @@
 #define AZURE_IOT_HUB_CLIENT_H
 
 #include "azure_iot.h"
+#include "azure_iot_message.h"
 #include "azure_iot_result.h"
 
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/az_core.h"
+#include "azure/iot/az_iot_common.h"
 #include "azure/iot/az_iot_hub_client.h"
-
-#include <azure/core/_az_cfg_prefix.h>
+#include "azure/core/_az_cfg_prefix.h"
 
 /**
  * @brief Total number of features which could be subscribed to.
@@ -495,6 +497,6 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
  */
 AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t * pxAzureIoTHubClient );
 
-#include <azure/core/_az_cfg_suffix.h>
+#include "azure/core/_az_cfg_suffix.h"
 
 #endif /* AZURE_IOT_HUB_CLIENT_H */
