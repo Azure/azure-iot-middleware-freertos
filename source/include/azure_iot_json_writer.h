@@ -21,7 +21,9 @@
 
 #include "azure_iot_result.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/core/az_json.h"
+#include "azure/core/_az_cfg_prefix.h"
 
 typedef struct AzureIoTJSONWriter
 {
@@ -279,5 +281,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter_t * pxWr
  * @retval eAzureIoTSuccess Array end was appended successfully.
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendEndArray( AzureIoTJSONWriter_t * pxWriter );
+
+#include "azure/core/_az_cfg_suffix.h"
 
 #endif /* AZURE_IOT_JSON_WRITER_H */
