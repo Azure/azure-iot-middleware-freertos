@@ -23,7 +23,10 @@
 #include "azure_iot_mqtt_port.h"
 #include "azure_iot_transport_interface.h"
 
-#include <azure/core/_az_cfg_prefix.h>
+/* Azure SDK for Embedded C includes */
+#include "azure/iot/az_iot_common.h"
+#include "azure/iot/az_iot_provisioning_client.h"
+#include "azure/core/_az_cfg_prefix.h"
 
 /**
  * @brief The maximum size of the response buffer.
@@ -210,6 +213,6 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProv
                                                                     const uint8_t * pucPayload,
                                                                     uint32_t ulPayloadLength );
 
-#include <azure/core/_az_cfg_suffix.h>
+#include "azure/core/_az_cfg_suffix.h"
 
 #endif /* AZURE_IOT_PROVISIONING_CLIENT_H */

@@ -23,7 +23,9 @@
 #include "azure_iot_json_reader.h"
 #include "azure_iot_json_writer.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/iot/az_iot_hub_client_properties.h"
+#include "azure/core/_az_cfg_prefix.h"
 
 /**
  * @brief Append the necessary characters to a reported properties JSON payload belonging to a
@@ -306,5 +308,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
                                                                        AzureIoTHubClientPropertyType_t xPropertyType,
                                                                        const uint8_t ** ppucComponentName,
                                                                        uint32_t * pulComponentNameLength );
+
+#include "azure/core/_az_cfg_suffix.h"
 
 #endif /*AZURE_IOT_HUB_CLIENT_PROPERTIES_H */

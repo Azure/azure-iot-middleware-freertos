@@ -21,7 +21,9 @@
 
 #include "azure_iot_result.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/core/az_json.h"
+#include "azure/core/_az_cfg_prefix.h"
 
 /**
  * Defines symbols for the various kinds of JSON tokens that make up any JSON text.
@@ -173,5 +175,7 @@ bool AzureIoTJSONReader_TokenIsTextEqual( AzureIoTJSONReader_t * pxReader,
  */
 AzureIoTResult_t AzureIoTJSONReader_TokenType( AzureIoTJSONReader_t * pxReader,
                                                AzureIoTJSONTokenType_t * pxTokenType );
+
+#include "azure/core/_az_cfg_suffix.h"
 
 #endif /* AZURE_IOT_JSON_READER_H */
