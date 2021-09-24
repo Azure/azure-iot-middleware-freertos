@@ -16,6 +16,7 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 - [Repo Structure](#repo-structure)
   - [Dependencies](#dependencies)
 - [Library Architecture](#library-architecture)
+- [Code Size](#code-size)
 - [Building](#building)
   - [Using CMake](#using-cmake)
   - [Using Source Files](#using-source-files)
@@ -70,6 +71,18 @@ Below is a diagram showing the architecture for the middleware. All green boxes 
 
 [<img src="./docs/resources/middleware-arch.png" width="75%">](img)
 
+## Code Size
+
+Total library size can depend on feature usage. Rough approximations and averages from our samples give us the following numbers:
+
+
+|**Sample** | **Flash (text,rodata,data)** | **RAM1,RAM2(dss,data)** |
+|---------|----------|---------|
+| IoT Hub + DPS | 22 KB | 12 bytes
+| IoT Hub only | 10.5 KB | 12 bytes
+
+For total binary sizes for each of our samples, please see the "Size Chart" section in each of our [board specific readmes](https://github.com/Azure-Samples/iot-middleware-freertos-samples/#iot-hub-samples) on our samples repo.
+
 ## Building
 
 **Please note that this repository does not clone FreeRTOS.** If using CMake, we require the user to pass build variables to point to FreeRTOS artifacts. If using other methods to build, we still require those artifacts to be available at compile time. Details are provided below for both scenarios.
@@ -113,7 +126,7 @@ Other than these, your choice of libraries for TLS and TCP/IP are up to you to c
 
 ## Porting
 
-This library, by depending on FreeRTOS, will support any board with a FreeRTOS port. Networking stacks do not have the same breadth of support that the OS does and therefore will either need to be created or adapted to work with our library. Please see the below sections for help with networking.
+This library, by depending on FreeRTOS, will support any board with a FreeRTOS port. FreeRTOS networking stack support is not as extensive as the OS and therefore may need to be created or adapted to work with our library. You may use available resources at the [FreeRTOS Plus repo](https://github.com/FreeRTOS/FreeRTOS-Plus-TCP) and the [FreeRTOS Third Party section](https://github.com/FreeRTOS/FreeRTOS/tree/main/FreeRTOS-Plus/Source/Application-Protocols/network_transport/freertos_plus_tcp) for integration. Please see the below sections for help with networking.
 
 ### TCP/IP and TLS
 
