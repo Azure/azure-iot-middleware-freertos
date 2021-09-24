@@ -11,6 +11,7 @@
 #include <cmocka.h>
 
 #include "azure_iot.h"
+#include "azure_iot_message.h"
 #include "azure_iot_private.h"
 #include <azure/core/internal/az_log_internal.h>
 
@@ -59,11 +60,11 @@ static void testAzureIoTMessagePropertiesInit_Failure( void ** ppvState )
     ( void ) ppvState;
 
     /* Fail init when null Message control block */
-    assert_int_equal( AzureIoT_MessagePropertiesInit( NULL, ucBuffer, 0, sizeof( ucBuffer ) ),
+    assert_int_equal( AzureIoTMessage_PropertiesInit( NULL, ucBuffer, 0, sizeof( ucBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail init when null Buffer */
-    assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesInit( &xTestMessageProperties,
                                                       NULL, 0, 0 ),
                       eAzureIoTErrorInvalidArgument );
 }
@@ -75,7 +76,7 @@ static void testAzureIoTMessagePropertiesInit_Success( void ** ppvState )
 
     ( void ) ppvState;
 
-    assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesInit( &xTestMessageProperties,
                                                       ucBuffer, 0, sizeof( ucBuffer ) ),
                       eAzureIoTSuccess );
 }
@@ -88,24 +89,24 @@ static void testAzureIoTMessagePropertiesAppend_Failure( void ** ppvState )
     ( void ) ppvState;
 
     /* Setup property bag */
-    assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesInit( &xTestMessageProperties,
                                                       ucBuffer, 0, sizeof( ucTestKey ) ),
                       eAzureIoTSuccess );
 
     /* Failed for NULL key passed */
-    assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesAppend( &xTestMessageProperties,
                                                         NULL, 0, ucTestValue,
                                                         sizeof( ucTestValue ) - 1 ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Failed for NULL value passed */
-    assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesAppend( &xTestMessageProperties,
                                                         NULL, 0, ucTestValue,
                                                         sizeof( ucTestValue ) - 1 ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Failed for bigger data append - buffer was initialized to be size sizeof( ucTestKey ) and isn't big enough for request */
-    assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesAppend( &xTestMessageProperties,
                                                         ucTestKey, sizeof( ucTestKey ) - 1,
                                                         ucTestValue, sizeof( ucTestValue ) - 1 ),
                       eAzureIoTErrorFailed );
@@ -118,11 +119,11 @@ static void testAzureIoTMessagePropertiesAppend_Success( void ** ppvState )
 
     ( void ) ppvState;
 
-    assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesInit( &xTestMessageProperties,
                                                       ucBuffer, 0, sizeof( ucBuffer ) ),
                       eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesAppend( &xTestMessageProperties,
                                                         ucTestKey, sizeof( ucTestKey ) - 1,
                                                         ucTestValue, sizeof( ucTestValue ) - 1 ),
                       eAzureIoTSuccess );
@@ -138,28 +139,28 @@ static void testAzureIoTMessagePropertiesFind_Failure( void ** ppvState )
     ( void ) ppvState;
 
     /* Setup property bag and add test data */
-    assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesInit( &xTestMessageProperties,
                                                       ucBuffer, 0, sizeof( ucBuffer ) ),
                       eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesAppend( &xTestMessageProperties,
                                                         ucTestKey, sizeof( ucTestKey ) - 1,
                                                         ucTestValue, sizeof( ucTestValue ) - 1 ),
                       eAzureIoTSuccess );
 
     /* Failed for NULL key */
-    assert_int_equal( AzureIoT_MessagePropertiesFind( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesFind( &xTestMessageProperties,
                                                       NULL, 0, &pucOutValue, &ulOutValueLength ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Failed for NULL outvalue */
-    assert_int_equal( AzureIoT_MessagePropertiesFind( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesFind( &xTestMessageProperties,
                                                       ucTestKey, sizeof( ucTestKey ) - 1,
                                                       NULL, 0 ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Failed for not found key */
-    assert_int_equal( AzureIoT_MessagePropertiesFind( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesFind( &xTestMessageProperties,
                                                       ucTestUnknownKey, sizeof( ucTestUnknownKey ) - 1,
                                                       &pucOutValue, &ulOutValueLength ),
                       eAzureIoTErrorItemNotFound );
@@ -175,13 +176,13 @@ static void testAzureIoTMessagePropertiesFind_Success( void ** ppvState )
     ( void ) ppvState;
 
     /* Setup property bag and add key-value to it */
-    assert_int_equal( AzureIoT_MessagePropertiesInit( &xTestMessageProperties,
+    assert_int_equal( AzureIoTMessage_PropertiesInit( &xTestMessageProperties,
                                                       ucBuffer, 0, sizeof( ucBuffer ) ),
                       eAzureIoTSuccess );
 
     for( uint32_t ulIndex = 0; ulIndex < sizeof( ucTestKey ) - 1; ulIndex++ )
     {
-        assert_int_equal( AzureIoT_MessagePropertiesAppend( &xTestMessageProperties,
+        assert_int_equal( AzureIoTMessage_PropertiesAppend( &xTestMessageProperties,
                                                             &( ucTestKey[ ulIndex ] ), ( uint32_t ) ( sizeof( ucTestKey ) - 1 - ulIndex ),
                                                             ucTestValue, sizeof( ucTestValue ) - 1 ),
                           eAzureIoTSuccess );
@@ -190,7 +191,7 @@ static void testAzureIoTMessagePropertiesFind_Success( void ** ppvState )
     /* Find all keys in reverse order */
     for( uint32_t ulPos = sizeof( ucTestKey ) - 1; ulPos > 0; ulPos-- )
     {
-        assert_int_equal( AzureIoT_MessagePropertiesFind( &xTestMessageProperties,
+        assert_int_equal( AzureIoTMessage_PropertiesFind( &xTestMessageProperties,
                                                           &( ucTestKey[ ulPos - 1 ] ), ( uint32_t ) ( sizeof( ucTestKey ) - ulPos ),
                                                           &pucOutValue, &ulOutValueLength ),
                           eAzureIoTSuccess );

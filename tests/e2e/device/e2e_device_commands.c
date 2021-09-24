@@ -381,7 +381,7 @@ static uint32_t prvAddAllProperties( az_json_reader * pxState,
                 RETURN_IF_FAILED( ulStatus, "Failed to get property value" );
             }
 
-            if( AzureIoT_MessagePropertiesAppend( pxProperties,
+            if( AzureIoTMessage_PropertiesAppend( pxProperties,
                                                   ucScratchBuffer,
                                                   ulPropertyNameLength,
                                                   ucScratchBuffer + ulPropertyNameLength,
@@ -424,7 +424,7 @@ static uint32_t prvE2ETestSendTelemetryCommandExecute( E2E_TEST_COMMAND_HANDLE x
     uint16_t usTelemetryPacketID;
 
 
-    if( AzureIoT_MessagePropertiesInit( &xProperties,
+    if( AzureIoTMessage_PropertiesInit( &xProperties,
                                         ucScratchBuffer2,
                                         0,
                                         sizeof( ucScratchBuffer2 ) ) != eAzureIoTSuccess )

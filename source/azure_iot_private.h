@@ -6,9 +6,9 @@
 
 #include "azure_iot_result.h"
 
+/* Azure SDK for Embedded C includes */
 #include "azure/az_core.h"
-
-#include <azure/core/_az_cfg_prefix.h>
+#include "azure/core/_az_cfg_prefix.h"
 
 /**
  * @brief Translate embedded errors to middleware errors
@@ -48,6 +48,6 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
                                                uint32_t ulOutputSize,
                                                uint32_t * pulOutputLength );
 
-#include <azure/core/_az_cfg_suffix.h>
+#include "azure/core/_az_cfg_suffix.h"
 
 #endif /* AZURE_IOT_PRIVATE_H */

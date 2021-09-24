@@ -9,6 +9,27 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 - No background threads are created by the Azure IoT middleware for FreeRTOS. Messages are sent and received synchronously.
 - Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).
 
+## Table of Contents
+
+- [Table of Contents](#table-of-contents)
+- [Library Architecture](#library-architecture)
+- [Repo Structure](#repo-structure)
+- [Code Style](#code-style)
+- [Building](#building)
+  - [Using CMake](#using-cmake)
+  - [Using Source Files](#using-source-files)
+- [Porting](#porting)
+  - [TCP/IP and TLS](#tcpip-and-tls)
+  - [MQTT](#mqtt)
+- [Contributing](#contributing)
+- [Trademarks](#trademarks)
+
+## Library Architecture
+
+Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
+
+[<img src="./docs/resources/middleware-arch.png" width="75%">](img)
+
 ## Repo Structure
 
 This repo contains the Azure IoT middleware for FreeRTOS libraries and has dependencies only on coreMQTT. For working samples please visit the [samples repo](https://github.com/Azure-Samples/iot-middleware-freertos-samples). There we have samples for several devices including:
@@ -25,22 +46,11 @@ For a video deep dive into this repo and the samples, please see the Microsoft D
 
 [<img src="./docs/resources/deep-dive-video.jpg" width="50%">](https://youtu.be/PNykfuJ3VDs)
 
-## Code Style
-
-This repository uses `uncrustify` to enforce coding style. The config in the root (`uncrustify.cfg`) is the same as in the FreeRTOS repo.
-
-Note that different versions of `uncrustify` can produce differently rendered files. For that reason, just as the FreeRTOS repo has declared, we use version 0.67 of `uncrustify`. For installation instructions for `uncrustify`, please see their repo [here](https://github.com/uncrustify/uncrustify). Once you have that installed, you can make sure your contributions are rendered correctly by running our uncrustify script:
-
-```bash
-# From the repo root
-./.github/scripts/code_style.sh fix
-```
-
 ## Building
 
 ### Using CMake
 
-This repository uses `CMake` to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a `-D` or add them as cache variables in your CMake.
+This repository uses `CMake` to build. To integrate into your project, use the `add_subdirectory()` CMake function in your `CMakeLists.txt` and pass three paths as CMake options. You can set these either in the configuration step of CMake with a `-D` or add them as cache variables in your CMake. [Please see here for an example from our samples](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/be17acac1ef5d0c3d8d3f0539b0409dbcc69d0e7/CMakeLists.txt#L36-L42).
 
 - `FREERTOS_DIRECTORY`: Full path to a directory which contains FreeRTOS ([as set up on GitHub](https://github.com/FreeRTOS/FreeRTOS)).
 - `FREERTOS_PORT_DIRECTORY`: The full path to the freertos port that you would like to use. On GitHub you can find [the list here](https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/main/portable). Locally, if you initialize the FreeRTOS submodules, you can find the options in `<FREERTOS_DIRECTORY>/FreeRTOS/Source/portable`
@@ -102,6 +112,17 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+### Code Style
+
+This repository uses `uncrustify` to enforce coding style. The config in the root (`uncrustify.cfg`) is the same as in the FreeRTOS repo.
+
+Note that different versions of `uncrustify` can produce differently rendered files. For that reason, just as the FreeRTOS repo has declared, we use version 0.67 of `uncrustify`. For installation instructions for `uncrustify`, please see their repo [here](https://github.com/uncrustify/uncrustify). Once you have that installed, you can make sure your contributions are rendered correctly by running our uncrustify script:
+
+```bash
+# From the repo root
+./.github/scripts/code_style.sh fix
+```
 
 ## Trademarks
 
