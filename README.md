@@ -69,7 +69,7 @@ We have dependencies on two libraries under the `/libraries` directory: [Azure I
 
 ## Library Architecture
 
-Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
+Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware and are supported by Microsoft, while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
 
 [<img src="./docs/resources/middleware-arch.png" width="75%">](img)
 
