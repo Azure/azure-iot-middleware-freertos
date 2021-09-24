@@ -27,6 +27,7 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
   - [MQTT](#mqtt)
 - [Contributing](#contributing)
   - [Code Style](#code-style)
+  - [License](#license)
 - [Trademarks](#trademarks)
 
 ## Samples
@@ -164,6 +165,10 @@ Note that different versions of `uncrustify` can produce differently rendered fi
 # From the repo root
 ./.github/scripts/code_style.sh fix
 ```
+
+### License
+
+Azure SDK for Embedded C is licensed under the [MIT](https://github.com/Azure/azure-sdk-for-c/blob/main/LICENSE) license.
 
 ## Trademarks
 
