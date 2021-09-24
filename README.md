@@ -21,6 +21,7 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
   - [Using Source Files](#using-source-files)
 - [Porting](#porting)
   - [TCP/IP and TLS](#tcpip-and-tls)
+    - [Authentication](#authentication)
   - [MQTT](#mqtt)
 - [Contributing](#contributing)
   - [Code Style](#code-style)
@@ -55,13 +56,13 @@ The most relevant sections of the repo are the following:
     git submodule update --init
     ```
 
-- `/ports`: The source code for the MQTT abstraction (currently coreMQTT). If you would like to create your own MQTT abstraction implementation, please see the [azure_iot_mqtt.h](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h) header file for functions which need to be implemented.
+- `/ports`: The source code for the MQTT abstraction (currently coreMQTT). If you would like to create your own MQTT abstraction implementation, please see the [porting guide below](#mqtt).
 - `/source`: All source files and headers for the middleware. To see how to build the project by using source files only, please see our below section for [source file building](#using-source-files).
 - `/tests`: All unit and end-to-end tests used for validation.
 
 ### Dependencies
 
-We have dependencies on two libraries under the `/libraries` directory: [Azure IoT SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and [coreMQTT](https://github.com/FreeRTOS/coreMQTT).
+We have dependencies on two libraries under the `/libraries` directory: [Azure IoT SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and [coreMQTT](https://github.com/FreeRTOS/coreMQTT). coreMQTT is used as a default MQTT implementation but may be swapped out by following [our porting guide below](#mqtt).
 
 ## Library Architecture
 
@@ -70,6 +71,8 @@ Below is a diagram showing the architecture for the middleware. All green boxes 
 [<img src="./docs/resources/middleware-arch.png" width="75%">](img)
 
 ## Building
+
+**Please note that this repository does not clone FreeRTOS.** If using CMake, we require the user to pass build variables to point to FreeRTOS artifacts. If using other methods to build, we still require those artifacts to be available at compile time. Details are provided below for both scenarios.
 
 ### Using CMake
 
@@ -110,9 +113,15 @@ Other than these, your choice of libraries for TLS and TCP/IP are up to you to c
 
 ## Porting
 
+This library, by depending on FreeRTOS, will support any board with a FreeRTOS port. Networking stacks do not have the same breadth of support that the OS does and therefore will either need to be created or adapted to work with our library. Please see the below sections for help with networking.
+
 ### TCP/IP and TLS
 
 The middleware for FreeRTOS operates at the MQTT level. This requires customers to supply the TLS and TCP/IP stacks for their devices. The binding between the MQTT layer and the TLS/TCP/IP is defined in the [azure_iot_transport_interface.h](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_transport_interface.h). For an example to see how that is passed to the middleware, [please see the code block linked here in our samples](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/ddb3c6970a2b837b73e60e0d3704ba7346d10c3f/demos/sample_azure_iot/sample_azure_iot.c#L353-L370).
+
+#### Authentication
+
+Azure IoT supports x509 certificate and SAS key authentication. For details on which to use, you can refer to [this document going over the pros and cons of each](https://azure.microsoft.com/blog/iot-device-authentication-options/). For more details on the TLS requirements of Azure IoT (TLS versions, certificate requirements, supported crypto algorithms, etc), [please see this document here](https://docs.microsoft.com/azure/iot-hub/iot-hub-tls-support). Application integration hints for both authentication mechanisms can be found in our samples: for [x509 please see here](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/e88539df5e628caa44640dc5ce97079ab87d1327/demos/sample_azure_iot/sample_azure_iot.c#L271-L285) and for [SAS keys please see here](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/e88539df5e628caa44640dc5ce97079ab87d1327/demos/sample_azure_iot/sample_azure_iot.c#L374-L380).
 
 ### MQTT
 
