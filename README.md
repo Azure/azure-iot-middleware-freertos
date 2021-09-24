@@ -69,7 +69,7 @@ We have dependencies on two libraries under the `/libraries` directory: [Azure I
 
 ## Library Architecture
 
-Below is a diagram showing the architecture for the middleware. All green boxes are taken care of by the middleware and are supported by Microsoft, while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
+Below is a diagram showing the architecture for the middleware. Fundamentally, this middleware is build on top of the [Azure SDK for Embedded C](https://github.com/Azure/azure-sdk-for-c) and adds MQTT functionality to abstract one layer away for simplified application building. All green boxes are taken care of by the middleware and are supported by Microsoft, while blue boxes are up to the user. Please see the [porting section](#porting) for details on the blue boxes.
 
 [<img src="./docs/resources/middleware-arch.png" width="75%">](img)
 
