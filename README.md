@@ -73,10 +73,9 @@ Below is a diagram showing the architecture for the middleware. All green boxes 
 
 ## Code Size
 
-Total library size can depend on feature usage. Rough approximations and averages from our samples give us the following numbers:
+Total library size can depend on feature usage. Rough approximations and averages from our samples are the following:
 
-
-|**Sample** | **Flash (text,rodata,data)** | **RAM1,RAM2(dss,data)** |
+|**Features** | **Flash (text,rodata,data)** | **RAM1,RAM2(dss,data)** |
 |---------|----------|---------|
 | IoT Hub + DPS | 22 KB | 12 bytes
 | IoT Hub only | 10.5 KB | 12 bytes
