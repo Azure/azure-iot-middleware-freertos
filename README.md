@@ -168,7 +168,7 @@ Note that different versions of `uncrustify` can produce differently rendered fi
 
 ### License
 
-Azure SDK for Embedded C is licensed under the [MIT](https://github.com/Azure/azure-sdk-for-c/blob/main/LICENSE) license.
+Azure IoT middleware for FreeRTOS is licensed under the [MIT](https://github.com/Azure/azure-sdk-for-c/blob/main/LICENSE) license.
 
 ## Trademarks
 
