@@ -10,4 +10,4 @@ Need Support with Azure services? Every customer with an active Azure subscripti
 
 ## Microsoft Support Policy  
 
-Support for this **PROJECT or PRODUCT** is limited to the resources listed above.
+Support for this project is limited to the resources listed above.
