@@ -21,6 +21,7 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 - [Building](#building)
   - [Using CMake](#using-cmake)
   - [Using Source Files](#using-source-files)
+  - [Using Amazon FreeRTOS](#using-amazon-freertos)
 - [Porting](#porting)
   - [TCP/IP and TLS](#tcpip-and-tls)
     - [Authentication](#authentication)
@@ -148,8 +149,7 @@ The middleware uses an MQTT abstraction to allow the substitution of the MQTT li
 
 ## Support
 
-- Found a bug or need help with the library? Feel free to search through old issues to see if others have had similar problems. Otherwise, please open a new issue on [our GitHub issues][https://github.com/Azure/azure-iot-middleware-freertos/issues].
-- Need Support with Azure services? Every customer with an active Azure subscription has access to [support](https://docs.microsoft.com/azure/azure-supportability/how-to-create-azure-support-request) with guaranteed response times. Consider submitting a ticket and get assistance from the Microsoft support team.
+If you need support, please see our [SUPPORT.md](./SUPPORT.md) file.
 
 ## Contributing
 
