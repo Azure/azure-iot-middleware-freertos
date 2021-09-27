@@ -1,6 +1,14 @@
 # Release History
 
-## 1.0.0-preview.3 (Unreleased)
+## 1.0.0 (Unreleased)
+
+### Breaking Changes
+
+- [[#201]](https://github.com/Azure/azure-iot-middleware-freertos/pull/201) Move message APIs from `azure_iot.h` to new `azure_iot_message.h`. Rename API prefix from `AzureIoT_Message` to `AzureIoTMessage_`.
+
+### Other Changes and Improvements
+
+- [[#203]](https://github.com/Azure/azure-iot-middleware-freertos/pull/203) Bumped embedded submodule version to `1.2.0`.
 
 ## 1.0.0-preview.2 (2021-08-27)
 
