@@ -36,7 +36,7 @@
 /**
  * @brief Optional pre-release identifier. SDK is in a pre-release state when present.
  */
-#define azureiotVERSION_PRERELEASE    "preview.3"
+#define azureiotVERSION_PRERELEASE    ""
 
 /**
  * @brief The version in string format used for telemetry following the `semver.org` standard
@@ -45,7 +45,7 @@
 #define azureiotVERSION_STRING                      \
     _azureiotSTRINGIFY( azureiotVERSION_MAJOR ) "." \
     _azureiotSTRINGIFY( azureiotVERSION_MINOR ) "." \
-    _azureiotSTRINGIFY( azureiotVERSION_PATCH ) "-" \
+    _azureiotSTRINGIFY( azureiotVERSION_PATCH ) \
     azureiotVERSION_PRERELEASE
 
 #endif /* AZURE_IOT_VERSION_H */
