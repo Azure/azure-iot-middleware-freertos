@@ -65,18 +65,51 @@ $(function() {
 <div class="title">Azure IoT middleware for FreeRTOS </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml"><object type="image/svg+xml" data="https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml/badge.svg" style="pointer-events: none;">Linux CI Tests</object></a></p>
-<p><b>THIS REPO IS IN ACTIVE DEVELOPMENT AND NOT GA READY. APIS ARE SUBJECT TO CHANGE WITHOUT NOTICE UNTIL AN OFFICIAL RELEASE HAS BEEN PUBLISHED.</b></p>
+<div class="textblock"><p><a href="https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml"><object type="image/svg+xml" data="https://github.com/Azure/azure-iot-middleware-freertos/actions/workflows/ci_tests_linux.yml/badge.svg?branch=main" style="pointer-events: none;">Linux CI Tests</object></a></p>
 <p>The Azure IoT middleware for FreeRTOS simplifies the connection of devices running FreeRTOS to Azure IoT services. It builds on top of the <a href="https://github.com/Azure/azure-sdk-for-c">Azure SDK for Embedded C</a> and adds MQTT client support. Below are key points of this project:</p>
 <ul>
+<li>The Azure IoT middleware for FreeRTOS is non allocating. That is, customers must allocate our data structures where they desire (global memory, heap, stack, etc.) and then pass the address of the allocated structure into our functions to initialize them and in order to perform various operations.</li>
 <li>The Azure IoT middleware for FreeRTOS operates at the MQTT level. Establishing the MQTT connection, subscribing and unsubscribing from topics, sending and receiving of messages, and disconnections are handled by the customer via middleware APIs.</li>
 <li>Customers control the TLS/TCP connection to the endpoint. This allows for flexibility between software or hardware implementations of either. For porting, please see the <a href="#porting">porting</a> section below.</li>
 <li>No background threads are created by the Azure IoT middleware for FreeRTOS. Messages are sent and received synchronously.</li>
 <li>Retries with backoff are handled by the customer. FreeRTOS makes use of their own backoff and retry logic which customers are free to use (we demo this in our samples).</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md1"></a>
-Repo Structure</h1>
-<p>This repo contains the Azure IoT middleware for FreeRTOS libraries and has dependencies only on coreMQTT. For working samples please visit the <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples">samples repo</a>. There we have samples for several devices including:</p>
+Table of Contents</h1>
+<ul>
+<li><a href="#table-of-contents">Table of Contents</a></li>
+<li><a href="#samples">Samples</a></li>
+<li><a href="#repo-structure">Repo Structure</a><ul>
+<li><a href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li><a href="#library-architecture">Library Architecture</a></li>
+<li><a href="#code-size">Code Size</a></li>
+<li><a href="#building">Building</a><ul>
+<li><a href="#using-cmake">Using CMake</a></li>
+<li><a href="#using-source-files">Using Source Files</a></li>
+<li><a href="#using-amazon-freertos">Using Amazon FreeRTOS</a></li>
+</ul>
+</li>
+<li><a href="#porting">Porting</a><ul>
+<li><a href="#tcpip-and-tls">TCP/IP and TLS</a><ul>
+<li><a href="#authentication">Authentication</a></li>
+</ul>
+</li>
+<li><a href="#mqtt">MQTT</a></li>
+</ul>
+</li>
+<li><a href="#support">Support</a></li>
+<li><a href="#contributing">Contributing</a><ul>
+<li><a href="#code-style">Code Style</a></li>
+<li><a href="#license">License</a></li>
+</ul>
+</li>
+<li><a href="#trademarks">Trademarks</a></li>
+</ul>
+<h1><a class="anchor" id="autotoc_md2"></a>
+Samples</h1>
+<p>To keep this repo simple without board specific dependencies, we have a separate repo with all of the samples (<a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples">please see the link here for working samples</a>). There we have samples for several devices including:</p>
 <ul>
 <li>STM32L475</li>
 <li>STM32L4+</li>
@@ -86,17 +119,46 @@ Repo Structure</h1>
 <li>Linux</li>
 <li>Windows</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Code Style</h1>
-<p>This repository uses <code>uncrustify</code> to enforce coding style. The config in the root (<code>uncrustify.cfg</code>) is the same as in the FreeRTOS repo.</p>
-<p>Note that different versions of <code>uncrustify</code> can produce differently rendered files. For that reason, just as the FreeRTOS repo has declared, we use version 0.67 of <code>uncrustify</code>. For installation instructions for <code>uncrustify</code>, please see their repo <a href="https://github.com/uncrustify/uncrustify">here</a>. Once you have that installed, you can make sure your contributions are rendered correctly by running our uncrustify script:</p>
-<div class="fragment"><div class="line"># From the repo root</div>
-<div class="line">./.github/scripts/code_style.sh fix</div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md3"></a>
-Building</h1>
+<p>For a video deep dive into this repo and the samples, please see the Microsoft Developers video below.</p>
+<p><a href="https://youtu.be/PNykfuJ3VDs"><img src="./docs/resources/deep-dive-video.jpg" alt="" width="50%" class="inline"/></a></p>
+<h1><a class="anchor" id="autotoc_md3"></a>
+Repo Structure</h1>
+<p>This repo is built for integration into your project. As mentioned above, if you would like to try out our samples, please clone that repo to get started. Otherwise, this repo will allow you to integrate the Azure IoT middleware for FreeRTOS into your embedded project. To see how that integration works, please see our below sections for <a href="#building">building</a>.</p>
+<p>The most relevant sections of the repo are the following:</p>
+<ul>
+<li><code>/config_templates</code>: Template config files to use for the library. Provided to easily bootstrap your project with the middleware.</li>
+<li><p class="startli"><code>/libraries</code>: Submodule dependencies for the middleware. To initialize these after cloning, you can run:</p>
+<p class="startli">```bash git submodule update &ndash;init ```</p>
+</li>
+<li><code>/ports</code>: The source code for the MQTT abstraction (currently coreMQTT). If you would like to create your own MQTT abstraction implementation, please see the <a href="#mqtt">porting guide below</a>.</li>
+<li><code>/source</code>: All source files and headers for the middleware. To see how to build the project by using source files only, please see our below section for <a href="#using-source-files">source file building</a>.</li>
+<li><code>/tests</code>: All unit and end-to-end tests used for validation.</li>
+</ul>
 <h2><a class="anchor" id="autotoc_md4"></a>
+Dependencies</h2>
+<p>We have dependencies on two libraries under the <code>/libraries</code> directory: <a href="https://github.com/Azure/azure-sdk-for-c">Azure IoT SDK for Embedded C</a> and <a href="https://github.com/FreeRTOS/coreMQTT">coreMQTT</a>. coreMQTT is used as a default MQTT implementation but may be swapped out by following <a href="#mqtt">our porting guide below</a>.</p>
+<h1><a class="anchor" id="autotoc_md5"></a>
+Library Architecture</h1>
+<p>Below is a diagram showing the architecture for the middleware. Fundamentally, this middleware is build on top of the <a href="https://github.com/Azure/azure-sdk-for-c">Azure SDK for Embedded C</a> and adds MQTT functionality to abstract one layer away for simplified application building. All green boxes are taken care of by the middleware and are supported by Microsoft, while blue boxes are up to the user. Please see the <a href="#porting">porting section</a> for details on the blue boxes.</p>
+<p>[<img src="./docs/resources/middleware-arch.png" alt="" width="75%" class="inline"/>](img)</p>
+<h1><a class="anchor" id="autotoc_md6"></a>
+Code Size</h1>
+<p>Total library size can depend on feature usage. Rough approximations and averages from our samples are the following with <code>-Os</code> and no logging:</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone"><b>Features</b> </th><th class="markdownTableHeadNone"><b>Flash (text,rodata,data)</b> </th><th class="markdownTableHeadNone"><b>RAM1,RAM2(dss,data)</b>  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone">IoT Hub + DPS </td><td class="markdownTableBodyNone">24 KB </td><td class="markdownTableBodyNone">12 bytes  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">IoT Hub only </td><td class="markdownTableBodyNone">11.5 KB </td><td class="markdownTableBodyNone">12 bytes  </td></tr>
+</table>
+<p>For total binary sizes for each of our samples, please see the "Size Chart" section in each of our <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples/#iot-hub-samples">board specific readmes</a> on our samples repo.</p>
+<h1><a class="anchor" id="autotoc_md7"></a>
+Building</h1>
+<p><b>Please note that this repository does not clone FreeRTOS.</b> If using CMake, we require the user to pass build variables to point to FreeRTOS artifacts. If using other methods to build, we still require those artifacts to be available at compile time. Details are provided below for both scenarios.</p>
+<h2><a class="anchor" id="autotoc_md8"></a>
 Using CMake</h2>
-<p>This repository uses <code>CMake</code> to build. To integrate into your project, it requires three paths. You can set these either in the configuration step of CMake with a <code>-D</code> or add them as cache variables in your CMake.</p>
+<p>This repository uses <code>CMake</code> to build. To integrate into your project, use the <code>add_subdirectory()</code> CMake function in your <code>CMakeLists.txt</code> and pass three paths as CMake options. You can set these either in the configuration step of CMake with a <code>-D</code> or add them as cache variables in your CMake. <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/be17acac1ef5d0c3d8d3f0539b0409dbcc69d0e7/CMakeLists.txt#L36-L42">Please see here for an example from our samples</a>.</p>
 <ul>
 <li><code>FREERTOS_DIRECTORY</code>: Full path to a directory which contains FreeRTOS (<a href="https://github.com/FreeRTOS/FreeRTOS">as set up on GitHub</a>).</li>
 <li><code>FREERTOS_PORT_DIRECTORY</code>: The full path to the freertos port that you would like to use. On GitHub you can find <a href="https://github.com/FreeRTOS/FreeRTOS-Kernel/tree/main/portable">the list here</a>. Locally, if you initialize the FreeRTOS submodules, you can find the options in <code>&lt;FREERTOS_DIRECTORY&gt;/FreeRTOS/Source/portable</code></li>
@@ -106,7 +168,7 @@ Using CMake</h2>
 <ul>
 <li><code>az::iot_middleware::freertos</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Using Source Files</h2>
 <p>Similar to the process of building using CMake, the library requires a few components in order to build by using only the source files (maybe in make files or some proprietary build system).</p>
 <p>The following files are for core library functionality:</p>
@@ -129,20 +191,39 @@ Using Source Files</h2>
 <li>Proper compilation and linking of the coreMQTT library</li>
 </ul>
 <p>Other than these, your choice of libraries for TLS and TCP/IP are up to you to choose and properly configure/compile.</p>
-<h1><a class="anchor" id="autotoc_md6"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
+Using Amazon FreeRTOS</h2>
+<p>We have a guide here which will help you port and build your Amazon FreeRTOS project with the Azure IoT middleware for FreeRTOS.</p>
+<h1><a class="anchor" id="autotoc_md11"></a>
 Porting</h1>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<p>This library, by depending on FreeRTOS, will support any board with a FreeRTOS port. FreeRTOS networking stack support is not as extensive as the OS and therefore may need to be created or adapted to work with our library. You may use available resources at the <a href="https://github.com/FreeRTOS/FreeRTOS-Plus-TCP">FreeRTOS Plus repo</a> and the <a href="https://github.com/FreeRTOS/FreeRTOS/tree/main/FreeRTOS-Plus/Source/Application-Protocols/network_transport/freertos_plus_tcp">FreeRTOS Third Party section</a> for integration. Please see the below sections for help with networking.</p>
+<h2><a class="anchor" id="autotoc_md12"></a>
 TCP/IP and TLS</h2>
 <p>The middleware for FreeRTOS operates at the MQTT level. This requires customers to supply the TLS and TCP/IP stacks for their devices. The binding between the MQTT layer and the TLS/TCP/IP is defined in the <a href="https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_transport_interface.h">azure_iot_transport_interface.h</a>. For an example to see how that is passed to the middleware, <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/ddb3c6970a2b837b73e60e0d3704ba7346d10c3f/demos/sample_azure_iot/sample_azure_iot.c#L353-L370">please see the code block linked here in our samples</a>.</p>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h3><a class="anchor" id="autotoc_md13"></a>
+Authentication</h3>
+<p>Azure IoT supports x509 certificate and SAS key authentication. For details on which to use, you can refer to <a href="https://azure.microsoft.com/blog/iot-device-authentication-options/">this document going over the pros and cons of each</a>. For more details on the TLS requirements of Azure IoT (TLS versions, certificate requirements, supported crypto algorithms, etc), <a href="https://docs.microsoft.com/azure/iot-hub/iot-hub-tls-support">please see this document here</a>. Application integration hints for both authentication mechanisms can be found in our samples: for <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/e88539df5e628caa44640dc5ce97079ab87d1327/demos/sample_azure_iot/sample_azure_iot.c#L271-L285">x509 please see here</a> and for <a href="https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/e88539df5e628caa44640dc5ce97079ab87d1327/demos/sample_azure_iot/sample_azure_iot.c#L374-L380">SAS keys please see here</a>.</p>
+<h2><a class="anchor" id="autotoc_md14"></a>
 MQTT</h2>
 <p>The middleware uses an MQTT abstraction to allow the substitution of the MQTT library. The default implementation is the FreeRTOS built <a href="https://github.com/FreeRTOS/coreMQTT">coreMQTT</a> (see the port implementation <a href="https://github.com/Azure/azure-iot-middleware-freertos/tree/main/ports/coreMQTT">here</a>). If you would like to create a new MQTT abstraction implementation for an MQTT library of your choosing, please complete the interface described <a href="https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h">in this header file</a>.</p>
-<h1><a class="anchor" id="autotoc_md9"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
+Support</h1>
+<p>If you need support, please see our SUPPORT.md file.</p>
+<h1><a class="anchor" id="autotoc_md16"></a>
 Contributing</h1>
 <p>This project welcomes contributions and suggestions. Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit <a href="https://cla.opensource.microsoft.com">https://cla.opensource.microsoft.com</a>.</p>
 <p>When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.</p>
 <p>This project has adopted the <a href="https://opensource.microsoft.com/codeofconduct/">Microsoft Open Source Code of Conduct</a>. For more information see the <a href="https://opensource.microsoft.com/codeofconduct/faq/">Code of Conduct FAQ</a> or contact <a href="#" onclick="location.href='mai'+'lto:'+'ope'+'nc'+'ode'+'@m'+'icr'+'os'+'oft'+'.c'+'om'; return false;">opencode@microsoft.com</a> with any additional questions or comments.</p>
-<h1><a class="anchor" id="autotoc_md10"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
+Code Style</h2>
+<p>This repository uses <code>uncrustify</code> to enforce coding style. The config in the root (<code>uncrustify.cfg</code>) is the same as in the FreeRTOS repo.</p>
+<p>Note that different versions of <code>uncrustify</code> can produce differently rendered files. For that reason, just as the FreeRTOS repo has declared, we use version 0.67 of <code>uncrustify</code>. For installation instructions for <code>uncrustify</code>, please see their repo <a href="https://github.com/uncrustify/uncrustify">here</a>. Once you have that installed, you can make sure your contributions are rendered correctly by running our uncrustify script:</p>
+<div class="fragment"><div class="line"># From the repo root</div>
+<div class="line">./.github/scripts/code_style.sh fix</div>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md18"></a>
+License</h2>
+<p>Azure IoT middleware for FreeRTOS is licensed under the <a href="https://github.com/Azure/azure-sdk-for-c/blob/main/LICENSE">MIT</a> license.</p>
+<h1><a class="anchor" id="autotoc_md19"></a>
 Trademarks</h1>
 <p>This project may contain trademarks or logos for projects, products, or services. Authorized use of Microsoft trademarks or logos is subject to and must follow <a href="https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks/usage/general">Microsoft's Trademark &amp; Brand Guidelines</a>. Use of Microsoft trademarks or logos in modified versions of this project must not cause confusion or imply Microsoft sponsorship. Any use of third-party trademarks or logos are subject to those third-party's policies. </p>
 </div></div><!-- PageDoc -->

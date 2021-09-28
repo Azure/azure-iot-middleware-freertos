@@ -66,7 +66,6 @@ $(function() {
 </div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#nested-classes">Data Structures</a> &#124;
 <a href="#define-members">Macros</a> &#124;
 <a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
@@ -78,21 +77,14 @@ $(function() {
 <p>Azure IoT FreeRTOS middleware common APIs and structs.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;azure_iot_config.h&quot;</code><br />
-<code>#include &quot;<a class="el" href="azure__iot__result_8h_source.html">azure_iot_result.h</a>&quot;</code><br />
 <code>#include &quot;azure_iot_config_defaults.h&quot;</code><br />
 <code>#include &quot;FreeRTOS.h&quot;</code><br />
-<code>#include &quot;azure/az_iot.h&quot;</code><br />
-<code>#include &lt;azure/core/_az_cfg_prefix.h&gt;</code><br />
-<code>#include &lt;azure/core/_az_cfg_suffix.h&gt;</code><br />
+<code>#include &quot;<a class="el" href="azure__iot__result_8h_source.html">azure_iot_result.h</a>&quot;</code><br />
+<code>#include &quot;azure/core/_az_cfg_prefix.h&quot;</code><br />
+<code>#include &quot;azure/core/_az_cfg_suffix.h&quot;</code><br />
 </div>
 <p><a href="azure__iot_8h_source.html">Go to the source code of this file.</a></p>
 <table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
-Data Structures</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_message_properties.html">AzureIoTMessageProperties</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bag of properties associated with a message.  <a href="struct_azure_io_t_message_properties.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a2a035483bc0e5dc3bbc005a8c9181d60"><td class="memItemLeft" align="right" valign="top"><a id="a2a035483bc0e5dc3bbc005a8c9181d60"></a>
@@ -117,15 +109,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a722a6703d0f9bf4df8e9720711e14a98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a722a6703d0f9bf4df8e9720711e14a98">AzureIoT_Deinit</a> ()</td></tr>
 <tr class="memdesc:a722a6703d0f9bf4df8e9720711e14a98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitialize Azure IoT middleware.  <a href="azure__iot_8h.html#a722a6703d0f9bf4df8e9720711e14a98">More...</a><br /></td></tr>
 <tr class="separator:a722a6703d0f9bf4df8e9720711e14a98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33ab72cd412fc8100ce2615e8468fe2b"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a33ab72cd412fc8100ce2615e8468fe2b">AzureIoT_MessagePropertiesInit</a> (AzureIoTMessageProperties_t *pxMessageProperties, uint8_t *pucBuffer, uint32_t ulAlreadyWrittenLength, uint32_t ulBufferLength)</td></tr>
-<tr class="memdesc:a33ab72cd412fc8100ce2615e8468fe2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the message properties.  <a href="azure__iot_8h.html#a33ab72cd412fc8100ce2615e8468fe2b">More...</a><br /></td></tr>
-<tr class="separator:a33ab72cd412fc8100ce2615e8468fe2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a514599fef50be932a41ce3eb5c9575ab"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a514599fef50be932a41ce3eb5c9575ab">AzureIoT_MessagePropertiesAppend</a> (AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t *pucValue, uint32_t ulValueLength)</td></tr>
-<tr class="memdesc:a514599fef50be932a41ce3eb5c9575ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a property name and value to a message.  <a href="azure__iot_8h.html#a514599fef50be932a41ce3eb5c9575ab">More...</a><br /></td></tr>
-<tr class="separator:a514599fef50be932a41ce3eb5c9575ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8744a24f126cb03a64da501d8f239f6d"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot_8h.html#a8744a24f126cb03a64da501d8f239f6d">AzureIoT_MessagePropertiesFind</a> (AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t **ppucOutValue, uint32_t *pulOutValueLength)</td></tr>
-<tr class="memdesc:a8744a24f126cb03a64da501d8f239f6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a property in the message property bag.  <a href="azure__iot_8h.html#a8744a24f126cb03a64da501d8f239f6d">More...</a><br /></td></tr>
-<tr class="separator:a8744a24f126cb03a64da501d8f239f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Azure IoT FreeRTOS middleware common APIs and structs. </p>
@@ -214,190 +197,6 @@ Functions</h2></td></tr>
 
 <p>Initialize Azure IoT middleware. </p>
 <dl class="section note"><dt>Note</dt><dd>This should be called once per process. </dd></dl>
-
-</div>
-</div>
-<a id="a514599fef50be932a41ce3eb5c9575ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a514599fef50be932a41ce3eb5c9575ab">&#9670;&nbsp;</a></span>AzureIoT_MessagePropertiesAppend()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">AzureIoTResult_t AzureIoT_MessagePropertiesAppend </td>
-          <td>(</td>
-          <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
-          <td class="paramname"><em>pxMessageProperties</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>pucName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>ulNameLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>pucValue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>ulValueLength</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Append a property name and value to a message. </p>
-<dl class="section note"><dt>Note</dt><dd>The properties init API will not encode properties. In order to support the following characters, they must be percent-encoded (RFC3986) as follows:<ul>
-<li><code>/</code> : <code>%2F</code></li>
-<li><code>%</code> : <code>%25</code></li>
-<li><code>#</code> : <code>%23</code></li>
-<li><code>&amp;</code> : <code>%26</code> Only these characters would have to be encoded. If you would like to avoid the need to encode the names/values, avoid using these characters in names and values.</li>
-</ul>
-</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pucName</td><td>The name of the property to append. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ulNameLength</td><td>The length of <code>pucName</code>. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pucValue</td><td>The value of the property to append. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ulValueLength</td><td>The length of <code>pucValue</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t with the result of the operation. </dd></dl>
-
-</div>
-</div>
-<a id="a8744a24f126cb03a64da501d8f239f6d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8744a24f126cb03a64da501d8f239f6d">&#9670;&nbsp;</a></span>AzureIoT_MessagePropertiesFind()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">AzureIoTResult_t AzureIoT_MessagePropertiesFind </td>
-          <td>(</td>
-          <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
-          <td class="paramname"><em>pxMessageProperties</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t *&#160;</td>
-          <td class="paramname"><em>pucName</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>ulNameLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const uint8_t **&#160;</td>
-          <td class="paramname"><em>ppucOutValue</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t *&#160;</td>
-          <td class="paramname"><em>pulOutValueLength</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Find a property in the message property bag. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pucName</td><td>The name of the property to find. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ulNameLength</td><td>Length of the property name. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">ppucOutValue</td><td>The output pointer to the property value. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">pulOutValueLength</td><td>The length of <code>ppucOutValue</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t with the result of the operation. </dd></dl>
-
-</div>
-</div>
-<a id="a33ab72cd412fc8100ce2615e8468fe2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33ab72cd412fc8100ce2615e8468fe2b">&#9670;&nbsp;</a></span>AzureIoT_MessagePropertiesInit()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">AzureIoTResult_t AzureIoT_MessagePropertiesInit </td>
-          <td>(</td>
-          <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
-          <td class="paramname"><em>pxMessageProperties</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint8_t *&#160;</td>
-          <td class="paramname"><em>pucBuffer</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>ulAlreadyWrittenLength</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">uint32_t&#160;</td>
-          <td class="paramname"><em>ulBufferLength</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Initialize the message properties. </p>
-<dl class="section note"><dt>Note</dt><dd>The properties init API will not encode properties. In order to support the following characters, they must be percent-encoded (RFC3986) as follows:<ul>
-<li><code>/</code> : <code>%2F</code></li>
-<li><code>%</code> : <code>%25</code></li>
-<li><code>#</code> : <code>%23</code></li>
-<li><code>&amp;</code> : <code>%26</code> Only these characters would have to be encoded. If you would like to avoid the need to encode the names/values, avoid using these characters in names and values.</li>
-</ul>
-</dd></dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
-    <tr><td class="paramdir">[out]</td><td class="paramname">pucBuffer</td><td>The pointer to the buffer. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ulAlreadyWrittenLength</td><td>The length of the properties already written (if applicable). </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferLength</td><td>The length of <code>pucBuffer</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t with the result of the operation. </dd></dl>
 
 </div>
 </div>

@@ -83,72 +83,41 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">    #include &quot;azure_iot_config.h&quot;</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="azure__iot__result_8h.html">azure_iot_result.h</a>&quot;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="comment">/* Include config defaults header to get default values of configs not</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="comment"> * defined in azure_iot_mqtt_config.h file. */</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;azure_iot_config_defaults.h&quot;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">/* Include config defaults header to get default values of configs not</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment"> * defined in azure_iot_mqtt_config.h file. */</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &quot;azure_iot_config_defaults.h&quot;</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &quot;FreeRTOS.h&quot;</span></div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;FreeRTOS.h&quot;</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="azure__iot__result_8h.html">azure_iot_result.h</a>&quot;</span></div>
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#include &quot;azure/az_iot.h&quot;</span></div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="preprocessor">#include &lt;azure/core/_az_cfg_prefix.h&gt;</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno"><a class="line" href="azure__iot_8h.html#a2a035483bc0e5dc3bbc005a8c9181d60">   42</a></span>&#160;<span class="preprocessor">#define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )</span></div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="struct_azure_io_t_message_properties.html">   48</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_azure_io_t_message_properties.html">AzureIoTMessageProperties</a></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;{</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">struct</span></div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        az_iot_message_properties xProperties;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    } <a class="code" href="struct_azure_io_t_message_properties.html#a6c0ddbd34068ca2e3b424d9ea3233c8f">_internal</a>; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;} AzureIoTMessageProperties_t;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">   61</a></span>&#160;<span class="keyword">typedef</span> uint64_t ( * <a class="code" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a> )( void );</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno"><a class="line" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">   75</a></span>&#160;<span class="keyword">typedef</span> uint32_t ( * <a class="code" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a> )( <span class="keyword">const</span> uint8_t * pucKey,</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                                              uint32_t ulKeyLength,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                              <span class="keyword">const</span> uint8_t * pucData,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                                              uint32_t ulDataLength,</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;                                              uint8_t * pucOutput,</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                                              uint32_t ulOutputLength,</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                                              uint32_t * pulBytesCopied );</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot_8h.html#a9a5c211fdc787fb84f880aac15529e7e">AzureIoT_Init</a>();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azure__iot_8h.html#a722a6703d0f9bf4df8e9720711e14a98">AzureIoT_Deinit</a>();</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot_8h.html#a33ab72cd412fc8100ce2615e8468fe2b">AzureIoT_MessagePropertiesInit</a>( AzureIoTMessageProperties_t * pxMessageProperties,</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                                                 uint8_t * pucBuffer,</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                                                 uint32_t ulAlreadyWrittenLength,</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                                                 uint32_t ulBufferLength );</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot_8h.html#a514599fef50be932a41ce3eb5c9575ab">AzureIoT_MessagePropertiesAppend</a>( AzureIoTMessageProperties_t * pxMessageProperties,</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;                                                   <span class="keyword">const</span> uint8_t * pucName,</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;                                                   uint32_t ulNameLength,</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                                                   <span class="keyword">const</span> uint8_t * pucValue,</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                                   uint32_t ulValueLength );</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot_8h.html#a8744a24f126cb03a64da501d8f239f6d">AzureIoT_MessagePropertiesFind</a>( AzureIoTMessageProperties_t * pxMessageProperties,</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                                                 <span class="keyword">const</span> uint8_t * pucName,</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                                                 uint32_t ulNameLength,</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                                                 <span class="keyword">const</span> uint8_t ** ppucOutValue,</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                                                 uint32_t * pulOutValueLength );</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;<span class="preprocessor">#include &lt;azure/core/_az_cfg_suffix.h&gt;</span></div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">/* Azure SDK for Embedded C includes */</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#include &quot;azure/core/_az_cfg_prefix.h&quot;</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno"><a class="line" href="azure__iot_8h.html#a2a035483bc0e5dc3bbc005a8c9181d60">   41</a></span>&#160;<span class="preprocessor">#define azureiotMILLISECONDS_PER_TICK    ( 1000 / configTICK_RATE_HZ )</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">   48</a></span>&#160;<span class="keyword">typedef</span> uint64_t ( * <a class="code" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a> )( void );</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">   62</a></span>&#160;<span class="keyword">typedef</span> uint32_t ( * <a class="code" href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a> )( <span class="keyword">const</span> uint8_t * pucKey,</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                              uint32_t ulKeyLength,</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                                              <span class="keyword">const</span> uint8_t * pucData,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                              uint32_t ulDataLength,</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                              uint8_t * pucOutput,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                              uint32_t ulOutputLength,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                              uint32_t * pulBytesCopied );</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot_8h.html#a9a5c211fdc787fb84f880aac15529e7e">AzureIoT_Init</a>();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keywordtype">void</span> <a class="code" href="azure__iot_8h.html#a722a6703d0f9bf4df8e9720711e14a98">AzureIoT_Deinit</a>();</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#include &quot;azure/core/_az_cfg_suffix.h&quot;</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_H */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
-<div class="ttc" id="aazure__iot_8h_html_a8744a24f126cb03a64da501d8f239f6d"><div class="ttname"><a href="azure__iot_8h.html#a8744a24f126cb03a64da501d8f239f6d">AzureIoT_MessagePropertiesFind</a></div><div class="ttdeci">AzureIoTResult_t AzureIoT_MessagePropertiesFind(AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t **ppucOutValue, uint32_t *pulOutValueLength)</div><div class="ttdoc">Find a property in the message property bag.</div></div>
 <div class="ttc" id="aazure__iot_8h_html_a9a5c211fdc787fb84f880aac15529e7e"><div class="ttname"><a href="azure__iot_8h.html#a9a5c211fdc787fb84f880aac15529e7e">AzureIoT_Init</a></div><div class="ttdeci">AzureIoTResult_t AzureIoT_Init()</div><div class="ttdoc">Initialize Azure IoT middleware.</div></div>
-<div class="ttc" id="aazure__iot_8h_html_a514599fef50be932a41ce3eb5c9575ab"><div class="ttname"><a href="azure__iot_8h.html#a514599fef50be932a41ce3eb5c9575ab">AzureIoT_MessagePropertiesAppend</a></div><div class="ttdeci">AzureIoTResult_t AzureIoT_MessagePropertiesAppend(AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t *pucValue, uint32_t ulValueLength)</div><div class="ttdoc">Append a property name and value to a message.</div></div>
 <div class="ttc" id="aazure__iot_8h_html_a722a6703d0f9bf4df8e9720711e14a98"><div class="ttname"><a href="azure__iot_8h.html#a722a6703d0f9bf4df8e9720711e14a98">AzureIoT_Deinit</a></div><div class="ttdeci">void AzureIoT_Deinit()</div><div class="ttdoc">Deinitialize Azure IoT middleware.</div></div>
-<div class="ttc" id="astruct_azure_io_t_message_properties_html"><div class="ttname"><a href="struct_azure_io_t_message_properties.html">AzureIoTMessageProperties</a></div><div class="ttdoc">The bag of properties associated with a message.</div><div class="ttdef"><b>Definition:</b> azure_iot.h:48</div></div>
-<div class="ttc" id="aazure__iot_8h_html_a33ab72cd412fc8100ce2615e8468fe2b"><div class="ttname"><a href="azure__iot_8h.html#a33ab72cd412fc8100ce2615e8468fe2b">AzureIoT_MessagePropertiesInit</a></div><div class="ttdeci">AzureIoTResult_t AzureIoT_MessagePropertiesInit(AzureIoTMessageProperties_t *pxMessageProperties, uint8_t *pucBuffer, uint32_t ulAlreadyWrittenLength, uint32_t ulBufferLength)</div><div class="ttdoc">Initialize the message properties.</div></div>
-<div class="ttc" id="aazure__iot_8h_html_ad72c3a80ab66f18762dfca4ff4bd918c"><div class="ttname"><a href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a></div><div class="ttdeci">uint64_t(* AzureIoTGetCurrentTimeFunc_t)(void)</div><div class="ttdoc">The platform get time function to be used by the SDK for MQTT connections.</div><div class="ttdef"><b>Definition:</b> azure_iot.h:61</div></div>
-<div class="ttc" id="aazure__iot_8h_html_a5824b14bbf563402fa8d15279fdb74cc"><div class="ttname"><a href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a></div><div class="ttdeci">uint32_t(* AzureIoTGetHMACFunc_t)(const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</div><div class="ttdoc">The HMAC256 function used by the SDK to generate SAS keys.</div><div class="ttdef"><b>Definition:</b> azure_iot.h:75</div></div>
-<div class="ttc" id="astruct_azure_io_t_message_properties_html_a6c0ddbd34068ca2e3b424d9ea3233c8f"><div class="ttname"><a href="struct_azure_io_t_message_properties.html#a6c0ddbd34068ca2e3b424d9ea3233c8f">AzureIoTMessageProperties::_internal</a></div><div class="ttdeci">struct AzureIoTMessageProperties::@0 _internal</div><div class="ttdoc">Internal to the SDK.</div></div>
+<div class="ttc" id="aazure__iot_8h_html_ad72c3a80ab66f18762dfca4ff4bd918c"><div class="ttname"><a href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a></div><div class="ttdeci">uint64_t(* AzureIoTGetCurrentTimeFunc_t)(void)</div><div class="ttdoc">The platform get time function to be used by the SDK for MQTT connections.</div><div class="ttdef"><b>Definition:</b> azure_iot.h:48</div></div>
+<div class="ttc" id="aazure__iot_8h_html_a5824b14bbf563402fa8d15279fdb74cc"><div class="ttname"><a href="azure__iot_8h.html#a5824b14bbf563402fa8d15279fdb74cc">AzureIoTGetHMACFunc_t</a></div><div class="ttdeci">uint32_t(* AzureIoTGetHMACFunc_t)(const uint8_t *pucKey, uint32_t ulKeyLength, const uint8_t *pucData, uint32_t ulDataLength, uint8_t *pucOutput, uint32_t ulOutputLength, uint32_t *pulBytesCopied)</div><div class="ttdoc">The HMAC256 function used by the SDK to generate SAS keys.</div><div class="ttdef"><b>Definition:</b> azure_iot.h:62</div></div>
 <div class="ttc" id="aazure__iot__result_8h_html"><div class="ttname"><a href="azure__iot__result_8h.html">azure_iot_result.h</a></div><div class="ttdoc">Provides version information for the Azure IoT FreeRTOS middleware.</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
