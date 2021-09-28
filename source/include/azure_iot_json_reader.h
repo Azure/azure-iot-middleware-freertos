@@ -26,7 +26,7 @@
 #include "azure/core/_az_cfg_prefix.h"
 
 /**
- * Defines symbols for the various kinds of JSON tokens that make up any JSON text.
+ * @brief Defines symbols for the various kinds of JSON tokens that make up any JSON text.
  */
 typedef enum AzureIoTJSONTokenType
 {
@@ -43,6 +43,9 @@ typedef enum AzureIoTJSONTokenType
     eAzureIoTJSONTokenNULL = AZ_JSON_TOKEN_NULL
 } AzureIoTJSONTokenType_t;
 
+/**
+ * @brief The struct to use for Azure IoT JSON reader functionality.
+ */
 typedef struct AzureIoTJSONReader
 {
     struct
