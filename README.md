@@ -81,8 +81,8 @@ Total library size can depend on feature usage. Rough approximations and average
 
 |**Features** | **Flash (text,rodata,data)** | **RAM1,RAM2(dss,data)** |
 |---------|----------|---------|
-| IoT Hub + DPS | 22 KB | 12 bytes
-| IoT Hub only | 10.5 KB | 12 bytes
+| IoT Hub + DPS | 24 KB | 12 bytes
+| IoT Hub only | 11.5 KB | 12 bytes
 
 For total binary sizes for each of our samples, please see the "Size Chart" section in each of our [board specific readmes](https://github.com/Azure-Samples/iot-middleware-freertos-samples/#iot-hub-samples) on our samples repo.
 
