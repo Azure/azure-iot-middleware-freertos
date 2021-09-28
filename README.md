@@ -77,7 +77,7 @@ Below is a diagram showing the architecture for the middleware. Fundamentally, t
 
 ## Code Size
 
-Total library size can depend on feature usage. Rough approximations and averages from our samples are the following:
+Total library size can depend on feature usage. Rough approximations and averages from our samples are the following with `-Os` and no logging:
 
 |**Features** | **Flash (text,rodata,data)** | **RAM1,RAM2(dss,data)** |
 |---------|----------|---------|
