@@ -84,77 +84,77 @@ $(function() {
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &quot;azure/core/az_json.h&quot;</span></div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &quot;azure/core/_az_cfg_prefix.h&quot;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="struct_azure_io_t_j_s_o_n_writer.html">   28</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_azure_io_t_j_s_o_n_writer.html">AzureIoTJSONWriter</a></div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;{</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">struct</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    {</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        az_json_writer xCoreWriter;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    } <a class="code" href="struct_azure_io_t_j_s_o_n_writer.html#ae52f0703bede0526d8b9e160de344d02">_internal</a>; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;} AzureIoTJSONWriter_t;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a0ce98fec6844eff581530c35a8fcf593">AzureIoTJSONWriter_Init</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                                          uint8_t * pucBuffer,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                          uint32_t ulBufferSize );</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a5ec44cdbca30ceb8ff250d278610b9fb">AzureIoTJSONWriter_AppendPropertyWithInt32Value</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                                                  <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                                                                  uint32_t ulPropertyNameLength,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                                                  int32_t lValue );</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a5c6fa3933290334a302f4c424da51da0">AzureIoTJSONWriter_AppendPropertyWithDoubleValue</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;                                                                   <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                                                                   uint32_t ulPropertyNameLength,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                                                                   <span class="keywordtype">double</span> xValue,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;                                                                   uint16_t usFractionalDigits );</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#aa88d476ee9d0b8cff4cd394487b84c34">AzureIoTJSONWriter_AppendPropertyWithBoolValue</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                                                                 <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                                                                 uint32_t ulPropertyNameLength,</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                                                                 <span class="keywordtype">bool</span> usValue );</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a83dac4964d9999bffd16651b4bc80945">AzureIoTJSONWriter_AppendPropertyWithStringValue</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                                                                   <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                                                                   uint32_t ulPropertyNameLength,</div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;                                                                   <span class="keyword">const</span> uint8_t * pucValue,</div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                                                                   uint32_t ulValueLen );</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;int32_t <a class="code" href="azure__iot__json__writer_8h.html#a7e956e2c4609d3843e5ea7d524e8f9d7">AzureIoTJSONWriter_GetBytesUsed</a>( AzureIoTJSONWriter_t * pxWriter );</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a9bf00487c1b71b8844d1941a40326be1">AzureIoTJSONWriter_AppendString</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;                                                  <span class="keyword">const</span> uint8_t * pucValue,</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;                                                  uint32_t ulValueLen );</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#aff901b0fcdb5f268c84782b1685f93ed">AzureIoTJSONWriter_AppendJSONText</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                                                    <span class="keyword">const</span> uint8_t * pucJSON,</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;                                                    uint32_t ulJSONLen );</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a1b5cdd003969a0d6bd01de79938d9798">AzureIoTJSONWriter_AppendPropertyName</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                                                        <span class="keyword">const</span> uint8_t * pusValue,</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;                                                        uint32_t ulValueLen );</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#ad6e7b72eea9d716e46f9f167237812ed">AzureIoTJSONWriter_AppendBool</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;                                                <span class="keywordtype">bool</span> xValue );</div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a1f62b6c9dda2d0bb118f91b03e638411">AzureIoTJSONWriter_AppendInt32</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;                                                 int32_t lValue );</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a5d29b0e793ab862ecb7edc843f2ff91d">AzureIoTJSONWriter_AppendDouble</a>( AzureIoTJSONWriter_t * pxWriter,</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;                                                  <span class="keywordtype">double</span> xValue,</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;                                                  uint16_t usFractionalDigits );</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#ace4fab62364aca827e0369938c252da0">AzureIoTJSONWriter_AppendNull</a>( AzureIoTJSONWriter_t * pxWriter );</div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#ab353acb6ede7806908532e1b6c104862">AzureIoTJSONWriter_AppendBeginObject</a>( AzureIoTJSONWriter_t * pxWriter );</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#af68eb317493fb62227950b93ce935f77">AzureIoTJSONWriter_AppendBeginArray</a>( AzureIoTJSONWriter_t * pxWriter );</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a4306de45b9aeed176f2f4204c705fca2">AzureIoTJSONWriter_AppendEndObject</a>( AzureIoTJSONWriter_t * pxWriter );</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a97a5c2afd683bb86ac6666c9d32c1df6">AzureIoTJSONWriter_AppendEndArray</a>( AzureIoTJSONWriter_t * pxWriter );</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">#include &quot;azure/core/_az_cfg_suffix.h&quot;</span></div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_JSON_WRITER_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="struct_azure_io_t_j_s_o_n_writer.html">   32</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct_azure_io_t_j_s_o_n_writer.html">AzureIoTJSONWriter</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">struct</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        az_json_writer xCoreWriter;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    } <a class="code" href="struct_azure_io_t_j_s_o_n_writer.html#ae52f0703bede0526d8b9e160de344d02">_internal</a>; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;} AzureIoTJSONWriter_t;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a0ce98fec6844eff581530c35a8fcf593">AzureIoTJSONWriter_Init</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                                          uint8_t * pucBuffer,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                                          uint32_t ulBufferSize );</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a5ec44cdbca30ceb8ff250d278610b9fb">AzureIoTJSONWriter_AppendPropertyWithInt32Value</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                                                  <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                                                  uint32_t ulPropertyNameLength,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                                                  int32_t lValue );</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a5c6fa3933290334a302f4c424da51da0">AzureIoTJSONWriter_AppendPropertyWithDoubleValue</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                                                   <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                                                                   uint32_t ulPropertyNameLength,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                                                   <span class="keywordtype">double</span> xValue,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                                                   uint16_t usFractionalDigits );</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#aa88d476ee9d0b8cff4cd394487b84c34">AzureIoTJSONWriter_AppendPropertyWithBoolValue</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                                                                 <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;                                                                 uint32_t ulPropertyNameLength,</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                                                                 <span class="keywordtype">bool</span> usValue );</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a83dac4964d9999bffd16651b4bc80945">AzureIoTJSONWriter_AppendPropertyWithStringValue</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                                                                   <span class="keyword">const</span> uint8_t * pucPropertyName,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                                                                   uint32_t ulPropertyNameLength,</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                                                                   <span class="keyword">const</span> uint8_t * pucValue,</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;                                                                   uint32_t ulValueLen );</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;int32_t <a class="code" href="azure__iot__json__writer_8h.html#a7e956e2c4609d3843e5ea7d524e8f9d7">AzureIoTJSONWriter_GetBytesUsed</a>( AzureIoTJSONWriter_t * pxWriter );</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a9bf00487c1b71b8844d1941a40326be1">AzureIoTJSONWriter_AppendString</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;                                                  <span class="keyword">const</span> uint8_t * pucValue,</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;                                                  uint32_t ulValueLen );</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#aff901b0fcdb5f268c84782b1685f93ed">AzureIoTJSONWriter_AppendJSONText</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                                                    <span class="keyword">const</span> uint8_t * pucJSON,</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                                                    uint32_t ulJSONLen );</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a1b5cdd003969a0d6bd01de79938d9798">AzureIoTJSONWriter_AppendPropertyName</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;                                                        <span class="keyword">const</span> uint8_t * pusValue,</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;                                                        uint32_t ulValueLen );</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#ad6e7b72eea9d716e46f9f167237812ed">AzureIoTJSONWriter_AppendBool</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;                                                <span class="keywordtype">bool</span> xValue );</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a1f62b6c9dda2d0bb118f91b03e638411">AzureIoTJSONWriter_AppendInt32</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;                                                 int32_t lValue );</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a5d29b0e793ab862ecb7edc843f2ff91d">AzureIoTJSONWriter_AppendDouble</a>( AzureIoTJSONWriter_t * pxWriter,</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;                                                  <span class="keywordtype">double</span> xValue,</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;                                                  uint16_t usFractionalDigits );</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#ace4fab62364aca827e0369938c252da0">AzureIoTJSONWriter_AppendNull</a>( AzureIoTJSONWriter_t * pxWriter );</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#ab353acb6ede7806908532e1b6c104862">AzureIoTJSONWriter_AppendBeginObject</a>( AzureIoTJSONWriter_t * pxWriter );</div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#af68eb317493fb62227950b93ce935f77">AzureIoTJSONWriter_AppendBeginArray</a>( AzureIoTJSONWriter_t * pxWriter );</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a4306de45b9aeed176f2f4204c705fca2">AzureIoTJSONWriter_AppendEndObject</a>( AzureIoTJSONWriter_t * pxWriter );</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;AzureIoTResult_t <a class="code" href="azure__iot__json__writer_8h.html#a97a5c2afd683bb86ac6666c9d32c1df6">AzureIoTJSONWriter_AppendEndArray</a>( AzureIoTJSONWriter_t * pxWriter );</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;<span class="preprocessor">#include &quot;azure/core/_az_cfg_suffix.h&quot;</span></div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_JSON_WRITER_H */</span><span class="preprocessor"></span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aazure__iot__json__writer_8h_html_ace4fab62364aca827e0369938c252da0"><div class="ttname"><a href="azure__iot__json__writer_8h.html#ace4fab62364aca827e0369938c252da0">AzureIoTJSONWriter_AppendNull</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendNull(AzureIoTJSONWriter_t *pxWriter)</div><div class="ttdoc">Appends the JSON literal null.</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_a9bf00487c1b71b8844d1941a40326be1"><div class="ttname"><a href="azure__iot__json__writer_8h.html#a9bf00487c1b71b8844d1941a40326be1">AzureIoTJSONWriter_AppendString</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendString(AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucValue, uint32_t ulValueLen)</div><div class="ttdoc">Appends the UTF-8 text value (as a JSON string) into the buffer.</div></div>
@@ -165,7 +165,7 @@ $(function() {
 <div class="ttc" id="aazure__iot__json__writer_8h_html_a5ec44cdbca30ceb8ff250d278610b9fb"><div class="ttname"><a href="azure__iot__json__writer_8h.html#a5ec44cdbca30ceb8ff250d278610b9fb">AzureIoTJSONWriter_AppendPropertyWithInt32Value</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value(AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint32_t ulPropertyNameLength, int32_t lValue)</div><div class="ttdoc">Appends the UTF-8 property name and value where value is int32.</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_a97a5c2afd683bb86ac6666c9d32c1df6"><div class="ttname"><a href="azure__iot__json__writer_8h.html#a97a5c2afd683bb86ac6666c9d32c1df6">AzureIoTJSONWriter_AppendEndArray</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendEndArray(AzureIoTJSONWriter_t *pxWriter)</div><div class="ttdoc">Appends the end of the current JSON array (i.e. ]).</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_ab353acb6ede7806908532e1b6c104862"><div class="ttname"><a href="azure__iot__json__writer_8h.html#ab353acb6ede7806908532e1b6c104862">AzureIoTJSONWriter_AppendBeginObject</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendBeginObject(AzureIoTJSONWriter_t *pxWriter)</div><div class="ttdoc">Appends the beginning of a JSON object (i.e. {).</div></div>
-<div class="ttc" id="astruct_azure_io_t_j_s_o_n_writer_html"><div class="ttname"><a href="struct_azure_io_t_j_s_o_n_writer.html">AzureIoTJSONWriter</a></div><div class="ttdef"><b>Definition:</b> azure_iot_json_writer.h:28</div></div>
+<div class="ttc" id="astruct_azure_io_t_j_s_o_n_writer_html"><div class="ttname"><a href="struct_azure_io_t_j_s_o_n_writer.html">AzureIoTJSONWriter</a></div><div class="ttdoc">The struct to use for Azure IoT JSON writer functionality.</div><div class="ttdef"><b>Definition:</b> azure_iot_json_writer.h:32</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_af68eb317493fb62227950b93ce935f77"><div class="ttname"><a href="azure__iot__json__writer_8h.html#af68eb317493fb62227950b93ce935f77">AzureIoTJSONWriter_AppendBeginArray</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendBeginArray(AzureIoTJSONWriter_t *pxWriter)</div><div class="ttdoc">Appends the beginning of a JSON array (i.e. [).</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_a4306de45b9aeed176f2f4204c705fca2"><div class="ttname"><a href="azure__iot__json__writer_8h.html#a4306de45b9aeed176f2f4204c705fca2">AzureIoTJSONWriter_AppendEndObject</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendEndObject(AzureIoTJSONWriter_t *pxWriter)</div><div class="ttdoc">Appends the end of the current JSON object (i.e. }).</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_a83dac4964d9999bffd16651b4bc80945"><div class="ttname"><a href="azure__iot__json__writer_8h.html#a83dac4964d9999bffd16651b4bc80945">AzureIoTJSONWriter_AppendPropertyWithStringValue</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue(AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint32_t ulPropertyNameLength, const uint8_t *pucValue, uint32_t ulValueLen)</div><div class="ttdoc">Appends the UTF-8 property name and value where value is string.</div></div>
@@ -175,7 +175,7 @@ $(function() {
 <div class="ttc" id="aazure__iot__json__writer_8h_html_aa88d476ee9d0b8cff4cd394487b84c34"><div class="ttname"><a href="azure__iot__json__writer_8h.html#aa88d476ee9d0b8cff4cd394487b84c34">AzureIoTJSONWriter_AppendPropertyWithBoolValue</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue(AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucPropertyName, uint32_t ulPropertyNameLength, bool usValue)</div><div class="ttdoc">Appends the UTF-8 property name and value where value is boolean.</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_a0ce98fec6844eff581530c35a8fcf593"><div class="ttname"><a href="azure__iot__json__writer_8h.html#a0ce98fec6844eff581530c35a8fcf593">AzureIoTJSONWriter_Init</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_Init(AzureIoTJSONWriter_t *pxWriter, uint8_t *pucBuffer, uint32_t ulBufferSize)</div><div class="ttdoc">Initializes an #AzureIoTJSONWriter_t which writes JSON text into a buffer passed.</div></div>
 <div class="ttc" id="aazure__iot__json__writer_8h_html_aff901b0fcdb5f268c84782b1685f93ed"><div class="ttname"><a href="azure__iot__json__writer_8h.html#aff901b0fcdb5f268c84782b1685f93ed">AzureIoTJSONWriter_AppendJSONText</a></div><div class="ttdeci">AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText(AzureIoTJSONWriter_t *pxWriter, const uint8_t *pucJSON, uint32_t ulJSONLen)</div><div class="ttdoc">Appends an existing UTF-8 encoded JSON text into the buffer, useful for appending nested JSON.</div></div>
-<div class="ttc" id="aazure__iot__result_8h_html"><div class="ttname"><a href="azure__iot__result_8h.html">azure_iot_result.h</a></div><div class="ttdoc">Provides version information for the Azure IoT FreeRTOS middleware.</div></div>
+<div class="ttc" id="aazure__iot__result_8h_html"><div class="ttname"><a href="azure__iot__result_8h.html">azure_iot_result.h</a></div><div class="ttdoc">Azure IoT FreeRTOS middleware result values.</div></div>
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
