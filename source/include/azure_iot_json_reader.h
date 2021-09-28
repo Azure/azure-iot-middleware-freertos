@@ -44,7 +44,6 @@ typedef enum AzureIoTJSONTokenType
 } AzureIoTJSONTokenType_t;
 
 /**
- * @struct AzureIoTJSONReader_t
  * @brief The struct to use for Azure IoT JSON reader functionality.
  */
 typedef struct AzureIoTJSONReader
