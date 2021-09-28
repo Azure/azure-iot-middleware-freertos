@@ -141,6 +141,7 @@ Enumerations</h2></td></tr>
 <tr class="memitem:ae15273584a1a437a17bb8e4f0bfad46a"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46a">AzureIoTHubMessageQoS</a> { <b>eAzureIoTHubMessageQoS0</b> = 0, 
 <a class="el" href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46aa214166adc1c1e186e48e22b9ffa4f9a0">eAzureIoTHubMessageQoS1</a> = 1
  }</td></tr>
+<tr class="memdesc:ae15273584a1a437a17bb8e4f0bfad46a"><td class="mdescLeft">&#160;</td><td class="mdescRight">MQTT quality of service values used for messages.  <a href="azure__iot__hub__client_8h.html#ae15273584a1a437a17bb8e4f0bfad46a">More...</a><br /></td></tr>
 <tr class="separator:ae15273584a1a437a17bb8e4f0bfad46a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92be11689791a8435db76d1146c55666"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666">AzureIoTHubMessageType</a> { <br />
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666ab35cdb9dc9b1820d38f70f85d9892fcf">eAzureIoTHubCloudToDeviceMessage</a> = 1, 
@@ -151,8 +152,9 @@ Enumerations</h2></td></tr>
 &#160;&#160;<a class="el" href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666a061fa37279447f021295dcb1b260501a">eAzureIoTHubPropertiesWritablePropertyMessage</a>
 <br />
  }</td></tr>
+<tr class="memdesc:a92be11689791a8435db76d1146c55666"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeration to dictate Azure IoT message types.  <a href="azure__iot__hub__client_8h.html#a92be11689791a8435db76d1146c55666">More...</a><br /></td></tr>
 <tr class="separator:a92be11689791a8435db76d1146c55666"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af7fe6a886b1c59af3f5876341b64ee32"><td class="memItemLeft" align="right" valign="top"><a id="af7fe6a886b1c59af3f5876341b64ee32"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHubMessageStatus</b> { <br />
+<tr class="memitem:af7fe6a886b1c59af3f5876341b64ee32"><td class="memItemLeft" align="right" valign="top"><a id="af7fe6a886b1c59af3f5876341b64ee32"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#af7fe6a886b1c59af3f5876341b64ee32">AzureIoTHubMessageStatus</a> { <br />
 &#160;&#160;<b>eAzureIoTStatusUnknown</b> = 0, 
 <b>eAzureIoTStatusOk</b> = 200, 
 <b>eAzureIoTStatusAccepted</b> = 202, 
@@ -178,6 +180,7 @@ Enumerations</h2></td></tr>
 <b>eAzureIoTStatusTimeout</b> = 504
 <br />
  }</td></tr>
+<tr class="memdesc:af7fe6a886b1c59af3f5876341b64ee32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Status codes for Azure IoT Hub responses. <br /></td></tr>
 <tr class="separator:af7fe6a886b1c59af3f5876341b64ee32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
@@ -185,7 +188,7 @@ Functions</h2></td></tr>
 <tr class="memitem:a832141ba6efb7cbce867baab57c8f8fb"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a832141ba6efb7cbce867baab57c8f8fb">AzureIoTHubClient_OptionsInit</a> (<a class="el" href="struct_azure_io_t_hub_client_options__t.html">AzureIoTHubClientOptions_t</a> *pxHubClientOptions)</td></tr>
 <tr class="memdesc:a832141ba6efb7cbce867baab57c8f8fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure IoT Hub Options with default values.  <a href="azure__iot__hub__client_8h.html#a832141ba6efb7cbce867baab57c8f8fb">More...</a><br /></td></tr>
 <tr class="separator:a832141ba6efb7cbce867baab57c8f8fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a35dd960e3d0b7c30180ec3886fb8fd49"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a35dd960e3d0b7c30180ec3886fb8fd49">AzureIoTHubClient_Init</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucHostname, uint16_t ulHostnameLength, const uint8_t *pucDeviceID, uint16_t ulDeviceIDLength, <a class="el" href="struct_azure_io_t_hub_client_options__t.html">AzureIoTHubClientOptions_t</a> *pxHubClientOptions, uint8_t *pucBuffer, uint32_t ulBufferLength, <a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a> xGetTimeFunction, const AzureIoTTransportInterface_t *pxTransportInterface)</td></tr>
+<tr class="memitem:a35dd960e3d0b7c30180ec3886fb8fd49"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a35dd960e3d0b7c30180ec3886fb8fd49">AzureIoTHubClient_Init</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient, const uint8_t *pucHostname, uint16_t ulHostnameLength, const uint8_t *pucDeviceID, uint16_t ulDeviceIDLength, <a class="el" href="struct_azure_io_t_hub_client_options__t.html">AzureIoTHubClientOptions_t</a> *pxHubClientOptions, uint8_t *pucBuffer, uint32_t ulBufferLength, <a class="el" href="azure__iot_8h.html#ad72c3a80ab66f18762dfca4ff4bd918c">AzureIoTGetCurrentTimeFunc_t</a> xGetTimeFunction, const <a class="el" href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a> *pxTransportInterface)</td></tr>
 <tr class="memdesc:a35dd960e3d0b7c30180ec3886fb8fd49"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure IoT Hub Client.  <a href="azure__iot__hub__client_8h.html#a35dd960e3d0b7c30180ec3886fb8fd49">More...</a><br /></td></tr>
 <tr class="separator:a35dd960e3d0b7c30180ec3886fb8fd49"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c5ecccaca98fd324f94578807e47989"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__hub__client_8h.html#a7c5ecccaca98fd324f94578807e47989">AzureIoTHubClient_Deinit</a> (<a class="el" href="struct_azure_io_t_hub_client__t.html">AzureIoTHubClient_t</a> *pxAzureIoTHubClient)</td></tr>
@@ -341,6 +344,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>MQTT quality of service values used for messages. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ae15273584a1a437a17bb8e4f0bfad46aa214166adc1c1e186e48e22b9ffa4f9a0"></a>eAzureIoTHubMessageQoS1&#160;</td><td class="fielddoc"><p>Delivery at most once. </p>
 </td></tr>
@@ -359,6 +364,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Enumeration to dictate Azure IoT message types. </p>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a92be11689791a8435db76d1146c55666ab35cdb9dc9b1820d38f70f85d9892fcf"></a>eAzureIoTHubCloudToDeviceMessage&#160;</td><td class="fielddoc"><p>The message is a cloud message. </p>
 </td></tr>
@@ -543,7 +550,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const AzureIoTTransportInterface_t *&#160;</td>
+          <td class="paramtype">const <a class="el" href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a> *&#160;</td>
           <td class="paramname"><em>pxTransportInterface</em>&#160;</td>
         </tr>
         <tr>
@@ -572,7 +579,7 @@ Functions</h2></td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucBuffer</td><td>The static buffer to use for middleware operations and MQTT messages until AzureIoTHubClient_Deinit is called. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferLength</td><td>The length of the <code>pucBuffer</code>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">xGetTimeFunction</td><td>A function pointer to a function which gives the current epoch time. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxTransportInterface</td><td>The #AzureIoTTransportInterface_t to use for the MQTT library. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxTransportInterface</td><td>The <a class="el" href="struct_azure_io_t_transport_interface__t.html" title="The transport layer interface.">AzureIoTTransportInterface_t</a> to use for the MQTT library. </td></tr>
   </table>
   </dd>
 </dl>
