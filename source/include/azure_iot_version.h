@@ -45,7 +45,7 @@
 #define azureiotVERSION_STRING                      \
     _azureiotSTRINGIFY( azureiotVERSION_MAJOR ) "." \
     _azureiotSTRINGIFY( azureiotVERSION_MINOR ) "." \
-    _azureiotSTRINGIFY( azureiotVERSION_PATCH ) \
+    _azureiotSTRINGIFY( azureiotVERSION_PATCH )     \
     azureiotVERSION_PRERELEASE
 
 #endif /* AZURE_IOT_VERSION_H */
