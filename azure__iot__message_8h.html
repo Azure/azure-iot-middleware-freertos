@@ -86,18 +86,17 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_message_properties.html">AzureIoTMessageProperties</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The bag of properties associated with a message.  <a href="struct_azure_io_t_message_properties.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a671ebf22a0611a380acf65b66aa7c344"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__message_8h.html#a671ebf22a0611a380acf65b66aa7c344">AzureIoTMessage_PropertiesInit</a> (AzureIoTMessageProperties_t *pxMessageProperties, uint8_t *pucBuffer, uint32_t ulAlreadyWrittenLength, uint32_t ulBufferLength)</td></tr>
+<tr class="memitem:a671ebf22a0611a380acf65b66aa7c344"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__message_8h.html#a671ebf22a0611a380acf65b66aa7c344">AzureIoTMessage_PropertiesInit</a> (<a class="el" href="struct_azure_io_t_message_properties__t.html">AzureIoTMessageProperties_t</a> *pxMessageProperties, uint8_t *pucBuffer, uint32_t ulAlreadyWrittenLength, uint32_t ulBufferLength)</td></tr>
 <tr class="memdesc:a671ebf22a0611a380acf65b66aa7c344"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the message properties.  <a href="azure__iot__message_8h.html#a671ebf22a0611a380acf65b66aa7c344">More...</a><br /></td></tr>
 <tr class="separator:a671ebf22a0611a380acf65b66aa7c344"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac978c6d93e76e619296d381551fe6822"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__message_8h.html#ac978c6d93e76e619296d381551fe6822">AzureIoTMessage_PropertiesAppend</a> (AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t *pucValue, uint32_t ulValueLength)</td></tr>
+<tr class="memitem:ac978c6d93e76e619296d381551fe6822"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__message_8h.html#ac978c6d93e76e619296d381551fe6822">AzureIoTMessage_PropertiesAppend</a> (<a class="el" href="struct_azure_io_t_message_properties__t.html">AzureIoTMessageProperties_t</a> *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t *pucValue, uint32_t ulValueLength)</td></tr>
 <tr class="memdesc:ac978c6d93e76e619296d381551fe6822"><td class="mdescLeft">&#160;</td><td class="mdescRight">Append a property name and value to a message.  <a href="azure__iot__message_8h.html#ac978c6d93e76e619296d381551fe6822">More...</a><br /></td></tr>
 <tr class="separator:ac978c6d93e76e619296d381551fe6822"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8312c96d78d157734f7ec0e0d9bcd8c9"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__message_8h.html#a8312c96d78d157734f7ec0e0d9bcd8c9">AzureIoTMessage_PropertiesFind</a> (AzureIoTMessageProperties_t *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t **ppucOutValue, uint32_t *pulOutValueLength)</td></tr>
+<tr class="memitem:a8312c96d78d157734f7ec0e0d9bcd8c9"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__message_8h.html#a8312c96d78d157734f7ec0e0d9bcd8c9">AzureIoTMessage_PropertiesFind</a> (<a class="el" href="struct_azure_io_t_message_properties__t.html">AzureIoTMessageProperties_t</a> *pxMessageProperties, const uint8_t *pucName, uint32_t ulNameLength, const uint8_t **ppucOutValue, uint32_t *pulOutValueLength)</td></tr>
 <tr class="memdesc:a8312c96d78d157734f7ec0e0d9bcd8c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find a property in the message property bag.  <a href="azure__iot__message_8h.html#a8312c96d78d157734f7ec0e0d9bcd8c9">More...</a><br /></td></tr>
 <tr class="separator:a8312c96d78d157734f7ec0e0d9bcd8c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -114,7 +113,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTMessage_PropertiesAppend </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_message_properties__t.html">AzureIoTMessageProperties_t</a> *&#160;</td>
           <td class="paramname"><em>pxMessageProperties</em>, </td>
         </tr>
         <tr>
@@ -159,7 +158,7 @@ Functions</h2></td></tr>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The <a class="el" href="struct_azure_io_t_message_properties__t.html" title="The bag of properties associated with a message.">AzureIoTMessageProperties_t</a>* to use for the operation. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucName</td><td>The name of the property to append. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulNameLength</td><td>The length of <code>pucName</code>. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucValue</td><td>The value of the property to append. </td></tr>
@@ -180,7 +179,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTMessage_PropertiesFind </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_message_properties__t.html">AzureIoTMessageProperties_t</a> *&#160;</td>
           <td class="paramname"><em>pxMessageProperties</em>, </td>
         </tr>
         <tr>
@@ -218,7 +217,7 @@ Functions</h2></td></tr>
 <p>Find a property in the message property bag. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxMessageProperties</td><td>The <a class="el" href="struct_azure_io_t_message_properties__t.html" title="The bag of properties associated with a message.">AzureIoTMessageProperties_t</a>* to use for the operation. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucName</td><td>The name of the property to find. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulNameLength</td><td>Length of the property name. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">ppucOutValue</td><td>The output pointer to the property value. </td></tr>
@@ -239,7 +238,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTMessage_PropertiesInit </td>
           <td>(</td>
-          <td class="paramtype">AzureIoTMessageProperties_t *&#160;</td>
+          <td class="paramtype"><a class="el" href="struct_azure_io_t_message_properties__t.html">AzureIoTMessageProperties_t</a> *&#160;</td>
           <td class="paramname"><em>pxMessageProperties</em>, </td>
         </tr>
         <tr>
@@ -278,7 +277,7 @@ Functions</h2></td></tr>
 </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">pxMessageProperties</td><td>The #AzureIoTMessageProperties_t* to use for the operation. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pxMessageProperties</td><td>The <a class="el" href="struct_azure_io_t_message_properties__t.html" title="The bag of properties associated with a message.">AzureIoTMessageProperties_t</a>* to use for the operation. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pucBuffer</td><td>The pointer to the buffer. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulAlreadyWrittenLength</td><td>The length of the properties already written (if applicable). </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferLength</td><td>The length of <code>pucBuffer</code>. </td></tr>
