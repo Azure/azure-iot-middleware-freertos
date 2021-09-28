@@ -4,7 +4,7 @@
 /**
  * @file azure_iot_result.h
  *
- * @brief Provides version information for the Azure IoT FreeRTOS middleware.
+ * @brief Azure IoT FreeRTOS middleware result values.
  *
  * @note You MUST NOT use any symbols (macros, functions, structures, enums, etc.)
  * prefixed with an underscore ('_') directly in your application code. These symbols
@@ -19,7 +19,7 @@
 #include <stdint.h>
 
 /**
- * @brief The results used by the
+ * @brief The results used by the middleware.
  */
 typedef enum AzureIoTResult
 {

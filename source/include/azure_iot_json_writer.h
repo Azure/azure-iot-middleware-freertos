@@ -25,6 +25,9 @@
 #include "azure/core/az_json.h"
 #include "azure/core/_az_cfg_prefix.h"
 
+/**
+ * @brief The struct to use for Azure IoT JSON writer functionality.
+ */
 typedef struct AzureIoTJSONWriter
 {
     struct
