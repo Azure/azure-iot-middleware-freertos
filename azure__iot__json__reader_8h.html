@@ -88,6 +88,7 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Data Structures</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_j_s_o_n_reader.html">AzureIoTJSONReader</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The struct to use for Azure IoT JSON reader functionality.  <a href="struct_azure_io_t_j_s_o_n_reader.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
@@ -113,32 +114,32 @@ Enumerations</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a966b57f160871eed2fd9774309c243eb"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">AzureIoTJSONReader_Init</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, const uint8_t *pucBuffer, uint32_t ulBufferSize)</td></tr>
-<tr class="memdesc:a966b57f160871eed2fd9774309c243eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">More...</a><br /></td></tr>
+<tr class="memitem:a966b57f160871eed2fd9774309c243eb"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">AzureIoTJSONReader_Init</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucBuffer, uint32_t ulBufferSize)</td></tr>
+<tr class="memdesc:a966b57f160871eed2fd9774309c243eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer.  <a href="azure__iot__json__reader_8h.html#a966b57f160871eed2fd9774309c243eb">More...</a><br /></td></tr>
 <tr class="separator:a966b57f160871eed2fd9774309c243eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5425081ad5dd69ca00537a37761fcd75"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader)</td></tr>
+<tr class="memitem:a5425081ad5dd69ca00537a37761fcd75"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">AzureIoTJSONReader_NextToken</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
 <tr class="memdesc:a5425081ad5dd69ca00537a37761fcd75"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads the next token in the JSON text and updates the reader state.  <a href="azure__iot__json__reader_8h.html#a5425081ad5dd69ca00537a37761fcd75">More...</a><br /></td></tr>
 <tr class="separator:a5425081ad5dd69ca00537a37761fcd75"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a40860e6cf94d171a454b85dcfd9b6341"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader)</td></tr>
+<tr class="memitem:a40860e6cf94d171a454b85dcfd9b6341"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">AzureIoTJSONReader_SkipChildren</a> (AzureIoTJSONReader_t *pxReader)</td></tr>
 <tr class="memdesc:a40860e6cf94d171a454b85dcfd9b6341"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads and skips over any nested JSON elements.  <a href="azure__iot__json__reader_8h.html#a40860e6cf94d171a454b85dcfd9b6341">More...</a><br /></td></tr>
 <tr class="separator:a40860e6cf94d171a454b85dcfd9b6341"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aded393d5f09978d32a7976bb666c3a46"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">AzureIoTJSONReader_GetTokenBool</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, bool *pxValue)</td></tr>
+<tr class="memitem:aded393d5f09978d32a7976bb666c3a46"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">AzureIoTJSONReader_GetTokenBool</a> (AzureIoTJSONReader_t *pxReader, bool *pxValue)</td></tr>
 <tr class="memdesc:aded393d5f09978d32a7976bb666c3a46"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's boolean value.  <a href="azure__iot__json__reader_8h.html#aded393d5f09978d32a7976bb666c3a46">More...</a><br /></td></tr>
 <tr class="separator:aded393d5f09978d32a7976bb666c3a46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">AzureIoTJSONReader_GetTokenInt32</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, int32_t *plValue)</td></tr>
+<tr class="memitem:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">AzureIoTJSONReader_GetTokenInt32</a> (AzureIoTJSONReader_t *pxReader, int32_t *plValue)</td></tr>
 <tr class="memdesc:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a 32-bit signed integer.  <a href="azure__iot__json__reader_8h.html#ace9bfb2526b7c9eea608e36bf177ba1f">More...</a><br /></td></tr>
 <tr class="separator:ace9bfb2526b7c9eea608e36bf177ba1f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9610a3717afd11e0f65b7d7da202c545"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, double *pxValue)</td></tr>
+<tr class="memitem:a9610a3717afd11e0f65b7d7da202c545"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">AzureIoTJSONReader_GetTokenDouble</a> (AzureIoTJSONReader_t *pxReader, double *pxValue)</td></tr>
 <tr class="memdesc:a9610a3717afd11e0f65b7d7da202c545"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's number as a <code>double</code>.  <a href="azure__iot__json__reader_8h.html#a9610a3717afd11e0f65b7d7da202c545">More...</a><br /></td></tr>
 <tr class="separator:a9610a3717afd11e0f65b7d7da202c545"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">AzureIoTJSONReader_GetTokenString</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, uint8_t *pucBuffer, uint32_t ulBufferSize, uint32_t *pusBytesCopied)</td></tr>
+<tr class="memitem:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">AzureIoTJSONReader_GetTokenString</a> (AzureIoTJSONReader_t *pxReader, uint8_t *pucBuffer, uint32_t ulBufferSize, uint32_t *pusBytesCopied)</td></tr>
 <tr class="memdesc:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the JSON token's string after unescaping it, if required.  <a href="azure__iot__json__reader_8h.html#af0fde64f6ae608e735f4ae72a5e7f55e">More...</a><br /></td></tr>
 <tr class="separator:af0fde64f6ae608e735f4ae72a5e7f55e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</td></tr>
-<tr class="memdesc:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the unescaped JSON token value that the <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison.  <a href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">More...</a><br /></td></tr>
+<tr class="memitem:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">AzureIoTJSONReader_TokenIsTextEqual</a> (AzureIoTJSONReader_t *pxReader, const uint8_t *pucExpectedText, uint32_t ulExpectedTextLength)</td></tr>
+<tr class="memdesc:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison.  <a href="azure__iot__json__reader_8h.html#ad215e5c3541d1fa55b63dc8866ccb9a9">More...</a><br /></td></tr>
 <tr class="separator:ad215e5c3541d1fa55b63dc8866ccb9a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">AzureIoTJSONReader_TokenType</a> (<a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *pxReader, AzureIoTJSONTokenType_t *pxTokenType)</td></tr>
-<tr class="memdesc:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines type of token currently <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> points to.  <a href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">More...</a><br /></td></tr>
+<tr class="memitem:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="memItemLeft" align="right" valign="top">AzureIoTResult_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">AzureIoTJSONReader_TokenType</a> (AzureIoTJSONReader_t *pxReader, AzureIoTJSONTokenType_t *pxTokenType)</td></tr>
+<tr class="memdesc:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines type of token currently #AzureIoTJSONReader_t points to.  <a href="azure__iot__json__reader_8h.html#a7ff8b6f96104b9c52735bc6dc41a814f">More...</a><br /></td></tr>
 <tr class="separator:a7ff8b6f96104b9c52735bc6dc41a814f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
@@ -154,7 +155,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenBool </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -174,7 +175,7 @@ Functions</h2></td></tr>
 <p>Gets the JSON token's boolean value. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pxValue</td><td>A pointer to a boolean to receive the value.</td></tr>
   </table>
   </dd>
@@ -198,7 +199,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenDouble </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -218,7 +219,7 @@ Functions</h2></td></tr>
 <p>Gets the JSON token's number as a <code>double</code>. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pxValue</td><td>A pointer to a variable to receive the value.</td></tr>
   </table>
   </dd>
@@ -242,7 +243,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenInt32 </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -262,7 +263,7 @@ Functions</h2></td></tr>
 <p>Gets the JSON token's number as a 32-bit signed integer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">plValue</td><td>A pointer to a variable to receive the value.</td></tr>
   </table>
   </dd>
@@ -286,7 +287,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_GetTokenString </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -318,7 +319,7 @@ Functions</h2></td></tr>
 <p>Gets the JSON token's string after unescaping it, if required. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pucBuffer</td><td>A pointer to a buffer where the string should be copied into. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferSize</td><td>The maximum available space within the buffer referred to by pucBuffer. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pusBytesCopied</td><td>Contains the number of bytes written to the <code>destination</code> which denote the length of the unescaped string.</td></tr>
@@ -344,7 +345,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_Init </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -367,10 +368,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Initializes an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> to read the JSON payload contained within the provided buffer. </p>
+<p>Initializes an #AzureIoTJSONReader_t to read the JSON payload contained within the provided buffer. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[out]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance to initialize. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance to initialize. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucBuffer</td><td>A pointer to a buffer containing the JSON text to read. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferSize</td><td>Length of buffer.</td></tr>
   </table>
@@ -379,7 +380,7 @@ Functions</h2></td></tr>
 <dl class="section return"><dt>Returns</dt><dd>An #AzureIoTResult_t value indicating the result of the operation. </dd></dl>
 <dl class="retval"><dt>Return values</dt><dd>
   <table class="retval">
-    <tr><td class="paramname">eAzureIoTSuccess</td><td>The <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> is initialized successfully. </td></tr>
+    <tr><td class="paramname">eAzureIoTSuccess</td><td>The #AzureIoTJSONReader_t is initialized successfully. </td></tr>
     <tr><td class="paramname">other</td><td>Initialization failed. </td></tr>
   </table>
   </dd>
@@ -396,7 +397,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_NextToken </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em></td><td>)</td>
           <td></td>
         </tr>
@@ -406,7 +407,7 @@ Functions</h2></td></tr>
 <p>Reads the next token in the JSON text and updates the reader state. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance containing the JSON to read.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance containing the JSON to read.</td></tr>
   </table>
   </dd>
 </dl>
@@ -429,7 +430,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_SkipChildren </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em></td><td>)</td>
           <td></td>
         </tr>
@@ -439,7 +440,7 @@ Functions</h2></td></tr>
 <p>Reads and skips over any nested JSON elements. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance containing the JSON to read.</td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance containing the JSON to read.</td></tr>
   </table>
   </dd>
 </dl>
@@ -463,7 +464,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">bool AzureIoTJSONReader_TokenIsTextEqual </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -486,10 +487,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Determines whether the unescaped JSON token value that the <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison. </p>
+<p>Determines whether the unescaped JSON token value that the #AzureIoTJSONReader_t points to is equal to the expected text within the provided buffer bytes by doing a case-sensitive comparison. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance containing the JSON string token. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance containing the JSON string token. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">pucExpectedText</td><td>A pointer to lookup text to compare the token against. </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">ulExpectedTextLength</td><td>Length of <code>pucExpectedText</code>.</td></tr>
   </table>
@@ -509,7 +510,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname">AzureIoTResult_t AzureIoTJSONReader_TokenType </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html">AzureIoTJSONReader_t</a> *&#160;</td>
+          <td class="paramtype">AzureIoTJSONReader_t *&#160;</td>
           <td class="paramname"><em>pxReader</em>, </td>
         </tr>
         <tr>
@@ -526,10 +527,10 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Determines type of token currently <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> points to. </p>
+<p>Determines type of token currently #AzureIoTJSONReader_t points to. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an <a class="el" href="struct_azure_io_t_j_s_o_n_reader__t.html" title="The struct to use for Azure IoT JSON reader functionality.">AzureIoTJSONReader_t</a> instance. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxReader</td><td>A pointer to an #AzureIoTJSONReader_t instance. </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">pxTokenType</td><td>The returned type of the token.</td></tr>
   </table>
   </dd>
