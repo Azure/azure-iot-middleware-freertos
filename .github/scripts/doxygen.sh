@@ -8,7 +8,7 @@ set -o nounset # Exit if variable not set.
 set -o pipefail # Exit if pipe failed.
 
 sudo apt update
-sudo apt install -y git cmake python
+sudo apt install -y git cmake python flex bison
 
 pushd ~
 git clone -b Release_1_8_13 https://github.com/doxygen/doxygen.git
