@@ -11,13 +11,13 @@ sudo apt update
 sudo apt install -y git cmake python flex bison
 
 pushd ~
-git clone -b Release_1_8_13 https://github.com/doxygen/doxygen.git
+git clone -b Release_1_9_0 https://github.com/doxygen/doxygen.git
 pushd doxygen
 mkdir build
 pushd build
 cmake -G "Unix Makefiles" ..
 make
-make install
+sudo make install
 popd
 popd
 popd
