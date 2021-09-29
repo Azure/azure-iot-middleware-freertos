@@ -8,6 +8,18 @@ set -o nounset # Exit if variable not set.
 set -o pipefail # Exit if pipe failed.
 
 sudo apt update
-sudo apt install -y doxygen
+sudo apt install -y git cmake python
+
+pushd ~
+git clone -b Release_1_8_13 https://github.com/doxygen/doxygen.git
+pushd doxygen
+mkdir build
+pushd build
+cmake -G "Unix Makefiles" ..
+make
+make install
+popd
+popd
+popd
 
 doxygen docs/Doxyfile
