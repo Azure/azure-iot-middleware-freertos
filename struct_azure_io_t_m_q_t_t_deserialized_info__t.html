@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.0"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Azure IoT middleware for FreeRTOS: AzureIoTHubClient_t Struct Reference</title>
+<title>Azure IoT middleware for FreeRTOS: AzureIoTMQTTDeserializedInfo_t Struct Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -61,19 +61,37 @@ $(function() {
 
 </div><!-- top -->
 <div class="header">
+  <div class="summary">
+<a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
-<div class="title">AzureIoTHubClient_t Struct Reference</div>  </div>
+<div class="title">AzureIoTMQTTDeserializedInfo_t Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Azure IoT Hub Client used to manage connections and features for Azure IoT Hub.  
- <a href="struct_azure_io_t_hub_client__t.html#details">More...</a></p>
+<p>MQTT packet deserialized info for the MQTT client.  
+ <a href="struct_azure_io_t_m_q_t_t_deserialized_info__t.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="azure__iot__hub__client_8h_source.html">azure_iot_hub_client.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="azure__iot__mqtt_8h_source.html">azure_iot_mqtt.h</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
+Data Fields</h2></td></tr>
+<tr class="memitem:a67601104c2703781940505f0425ebbb2"><td class="memItemLeft" align="right" valign="top"><a id="a67601104c2703781940505f0425ebbb2"></a>
+uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_deserialized_info__t.html#a67601104c2703781940505f0425ebbb2">usPacketIdentifier</a></td></tr>
+<tr class="memdesc:a67601104c2703781940505f0425ebbb2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Packet ID of deserialized packet. <br /></td></tr>
+<tr class="separator:a67601104c2703781940505f0425ebbb2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aade36f6d18b05359015d930e314f9084"><td class="memItemLeft" align="right" valign="top"><a id="aade36f6d18b05359015d930e314f9084"></a>
+<a class="el" href="struct_azure_io_t_m_q_t_t_publish_info__t.html">AzureIoTMQTTPublishInfo_t</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_deserialized_info__t.html#aade36f6d18b05359015d930e314f9084">pxPublishInfo</a></td></tr>
+<tr class="memdesc:aade36f6d18b05359015d930e314f9084"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pointer to deserialized publish info. <br /></td></tr>
+<tr class="separator:aade36f6d18b05359015d930e314f9084"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92c1272f2eb8f43a1a4dc4bbdef4aeb7"><td class="memItemLeft" align="right" valign="top"><a id="a92c1272f2eb8f43a1a4dc4bbdef4aeb7"></a>
+<a class="el" href="azure__iot__mqtt_8h.html#a68c0d784e59295944aa109f9051566fe">AzureIoTMQTTResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_azure_io_t_m_q_t_t_deserialized_info__t.html#a92c1272f2eb8f43a1a4dc4bbdef4aeb7">xDeserializationResult</a></td></tr>
+<tr class="memdesc:a92c1272f2eb8f43a1a4dc4bbdef4aeb7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return code of deserialization. <br /></td></tr>
+<tr class="separator:a92c1272f2eb8f43a1a4dc4bbdef4aeb7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Azure IoT Hub Client used to manage connections and features for Azure IoT Hub. </p>
+<div class="textblock"><p>MQTT packet deserialized info for the MQTT client. </p>
 </div><hr/>The documentation for this struct was generated from the following file:<ul>
-<li><a class="el" href="azure__iot__hub__client_8h_source.html">azure_iot_hub_client.h</a></li>
+<li><a class="el" href="azure__iot__mqtt_8h_source.html">azure_iot_mqtt.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->
