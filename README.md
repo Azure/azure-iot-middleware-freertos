@@ -26,6 +26,7 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
   - [TCP/IP and TLS](#tcpip-and-tls)
     - [Authentication](#authentication)
   - [MQTT](#mqtt)
+  - [Port Application from Azure IoT C SDK](#port-application-from-azure-iot-c-sdk)
 - [Support](#support)
 - [Contributing](#contributing)
   - [Code Style](#code-style)
@@ -146,6 +147,10 @@ Azure IoT supports x509 certificate and SAS key authentication. For details on w
 ### MQTT
 
 The middleware uses an MQTT abstraction to allow the substitution of the MQTT library. The default implementation is the FreeRTOS built [coreMQTT](https://github.com/FreeRTOS/coreMQTT) (see the port implementation [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/main/ports/coreMQTT)). If you would like to create a new MQTT abstraction implementation for an MQTT library of your choosing, please complete the interface described [in this header file](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h).
+
+### Port Application from Azure IoT C SDK
+
+If you are looking to port your application from the [Azure IoT C SDK](https://github.com/Azure/azure-iot-sdk-c), please see our document detailing the process here: [Porting from Azure IoT C SDK](./docs/c_sdk_port.md).
 
 ## Support
 
