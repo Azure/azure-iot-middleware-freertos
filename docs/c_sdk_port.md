@@ -23,6 +23,10 @@ Fundamentally what these differences mean is the following tradeoff.
 | *Azure IoT C SDK* | Provides a fully integrated solution, working out of the box for all *supported* platforms. Simple "Connect" and "Send" user experience. | Porting is more complex for unsupported scenarios and with numerous supported OS's, networking, and transport layers, comes increased code size and decreased performance from various abstraction layers. |
 | *Azure IoT middleware for FreeRTOS* | Embedded device focused architecture, increasing performance, reducing code size, and opening up freedom for users to bring their own networking implementations, uninhibited by strict abstraction layers. | Networking (TLS and TCP/IP) must be handled by the user and therefore requires acute knowledge of the platform for which you are porting. Guidance can be inferred from the samples but with greater flexibility comes more responsibility. |
 
+TODO: Single threaded vs Convenience
+
+TODO: Retry/reconnect
+
 ## User Code for Azure IoT Hub
 
 Let's look at some basic user level code for using Azure IoT Hub (no device provisioning) which one might write in both scenarios.
@@ -96,4 +100,6 @@ xResult = AzureIoTHubClient_SendTelemetry( &xAzureIoTHubClient,
 
 Both scenarios give very similar experiences for creating a telemetry message with some properties and sending it. The difference here is the C SDK will send the message asynchronously (only to be sent during the call to `IoTHubDeviceClient_LL_DoWork()`) while the middleware will send it synchronously (sent on the wire if returned successfully). Both scenarios have the ability to be notified if the message was delivered successfully assuming you are using MQTT QOS 1. The Azure IoT C SDK allows the user to pass a callback to be notififed whereas the Azure IoT middleware for FreeRTOS allows for [an option to be set on client initialization](https://github.com/Azure/azure-iot-middleware-freertos/blob/fa1552c596f638d688a66f4cc4939e7b9ae49334/source/include/azure_iot_hub_client.h#L226-L227).
 
+## User Code for Azure IoT Device Provisioning
 
+## Error Handling
