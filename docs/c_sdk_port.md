@@ -25,7 +25,7 @@ Fundamentally what these differences mean is the following tradeoff.
 
 ## User Code
 
-Let's look at some basic user level code for using Azure IoT Hub (no device provisioning) which one might write to initialize both scenarios
+Let's look at some basic user level code for using Azure IoT Hub (no device provisioning) which one might write to initialize both scenarios.
 
 *Azure IoT C SDK* [taken from the iothub_ll_telemetry_sample](https://github.com/Azure/azure-iot-sdk-c/blob/master/iothub_client/samples/iothub_ll_telemetry_sample/iothub_ll_telemetry_sample.c):
 
@@ -59,4 +59,8 @@ xResult = AzureIoTHubClient_Init( &xAzureIoTHubClient,
                                   &xTransport );
 ```
 
-Notice in the case of the Azure IoT C SDK, the full stack of networking is taken care of by Microsoft so you only need to initialize the client with a connection string containing your credentials and the protocol of your choice (MQTT, AMQP, or HTTP). After that point, you are ready to send telemetry messages or any other Azure IoT feature. With the Azure IoT middleware for FreeRTOS, the initialization of the client requires the user to pass a network context for which the MQTT layer uses to send and receive MQTT messages. This means that the network context must be intialized by the user before passing to the middleware (in this case a static function which handles the initialization). To see what that initialization entails, please see [the link here to the static function](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/bea90b2a7ce11dc06612bdce142b90f59f436be1/demos/sample_azure_iot/sample_azure_iot.c#L558-L612).
+Notice in the case of the Azure IoT C SDK, the full stack of networking is taken care of by Microsoft so you only need to initialize the client with a connection string containing your credentials and the protocol of your choice (MQTT, AMQP, or HTTP). After that point, you are ready to send telemetry messages or any use   other Azure IoT feature.
+
+With the Azure IoT middleware for FreeRTOS, the initialization of the client requires the user to pass a network context for which the MQTT layer uses to send and receive MQTT messages. This means that the network context must be initialized by the user before passing to the middleware (in this case a static function called `prvConnectToServerWithBackoffRetries` handles the initialization of that context). To see what that initialization entails, please see [the link here to the static function](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/bea90b2a7ce11dc06612bdce142b90f59f436be1/demos/sample_azure_iot/sample_azure_iot.c#L558-L612).
+
+If using x509 authentication, the client certificates, trusted server certs, and server endpoint must all be set using the guidance of the networking stack of your choosing. None of those are handled by the middleware. While this adds an extra step of complexity, this opens the door for easier integration of offloaded TLS stacks on modems or the freedom to use any software TLS or TCP/IP stack of your choosing; we do not interfere with any of those integration as long as they conform to the requirements of the service (for TLS requirements, [please see here](https://docs.microsoft.com/azure/iot-hub/iot-hub-tls-support)).
