@@ -231,6 +231,10 @@ typedef enum AzureIoTHubClientPropertyType_t
 /**
  * @brief Iteratively read the Azure IoT Plug and Play component properties.
  *
+ * @note If you are creating a multi-component application, component names must first be registered
+ * via the `pxHubClientOptions->pxComponentList` and `pxHubClientOptions->ulComponentListLength` in
+ * AzureIoTHubClient_Init().
+ *
  * Note that between calls, the uint8_t* pointed to by \p ppucComponentName shall not be modified,
  * only checked and compared. Internally, the pointer is only changed if the component name changes
  * in the JSON document and is not necessarily set every invocation of the function.
