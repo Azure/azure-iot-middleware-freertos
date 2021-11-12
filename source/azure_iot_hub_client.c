@@ -221,7 +221,7 @@ static uint32_t prvAzureIoTHubClientC2DProcess( AzureIoTHubClientReceiveContext_
     {
         AZLogDebug( ( "Cloud xCloudToDeviceMessage topic: %.*s  with payload : %.*s",
                       xMQTTPublishInfo->usTopicNameLength,
-                      xMQTTPublishInfo->pcTopicName,
+                      ( const char * ) xMQTTPublishInfo->pcTopicName,
                       xMQTTPublishInfo->xPayloadLength,
                       ( const char * ) xMQTTPublishInfo->pvPayload ) );
 
@@ -272,7 +272,7 @@ static uint32_t prvAzureIoTHubClientCommandProcess( AzureIoTHubClientReceiveCont
     {
         AZLogDebug( ( "Command topic: %.*s  with command payload : %.*s",
                       xMQTTPublishInfo->usTopicNameLength,
-                      xMQTTPublishInfo->pcTopicName,
+                      ( const char * ) xMQTTPublishInfo->pcTopicName,
                       xMQTTPublishInfo->xPayloadLength,
                       ( const char * ) xMQTTPublishInfo->pvPayload ) );
 
@@ -328,7 +328,7 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
     {
         AZLogDebug( ( "Properties topic: %.*s. with payload : %.*s",
                       xMQTTPublishInfo->usTopicNameLength,
-                      xMQTTPublishInfo->pcTopicName,
+                      ( const char * ) xMQTTPublishInfo->pcTopicName,
                       xMQTTPublishInfo->xPayloadLength,
                       ( const char * ) xMQTTPublishInfo->pvPayload ) );
 
