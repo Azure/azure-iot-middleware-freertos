@@ -1,4 +1,4 @@
-# Azure IoT middleware E2E Test Framework
+# Azure IoT Middleware E2E Test Framework
 
 ## Overview
 
