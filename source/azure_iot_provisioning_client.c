@@ -401,9 +401,12 @@ static void prvProvClientParseResponse( AzureIoTProvisioningClient_t * pxAzurePr
             break;
             
             case AZ_IOT_PROVISIONING_STATUS_FAILED:
-                AZLogError( ( "AzureIoTProvisioning client registration failed with error %d, extended error status: %u and no server retry time duration",
-                pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_code,
-                pxAzureProvClient->_internal.xRegisterResponse.registration_state.extended_error_code ) );
+                AZLogError( ( "AzureIoTProvisioning client registration failed with error %u: TrackingID: [%.*s] \"%.*s\"",
+                pxAzureProvClient->_internal.xRegisterResponse.registration_state.extended_error_code,
+                az_span_size(pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_tracking_id),
+                az_span_ptr(pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_tracking_id),
+                az_span_size(pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_message),
+                az_span_ptr(pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_message) ) );
                 prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorServerError );
             break;
 
