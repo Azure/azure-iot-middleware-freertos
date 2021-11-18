@@ -677,7 +677,7 @@ static void testAzureIoTProvisioningClient_Register_QueryShortFailure( void ** p
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorPending );
 
-    /* Process Invalid response */
+    /* Process invalid response */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorServerError );
@@ -709,7 +709,7 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure( void ** ppvSta
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorPending );
 
-    /* Process Invalid response */
+    /* Process invalid response */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorServerError );
@@ -719,7 +719,7 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure( void ** ppvSta
 
 
 
-static void testAzureIoTProvisioningClient_Register_QueryDeviceDisabledResponse( void ** ppvState )
+static void testAzureIoTProvisioningClient_Register_QueryDeviceDisabledResponseFailure( void ** ppvState )
 {
     AzureIoTProvisioningClient_t xTestProvisioningClient;
     AzureIoTMQTTPublishInfo_t xPublishInfo;
@@ -743,7 +743,7 @@ static void testAzureIoTProvisioningClient_Register_QueryDeviceDisabledResponse(
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorPending );
 
-    /* Process Invalid response */
+    /* Process invalid response */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorServerError );
@@ -775,7 +775,7 @@ static void testAzureIoTProvisioningClient_Register_QueryInvalidResponseFailure(
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorPending );
 
-    /* Process Invalid response */
+    /* Process invalid response */
     assert_int_equal( AzureIoTProvisioningClient_Register( &xTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorFailed );
@@ -949,7 +949,7 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTProvisioningClient_Register_QueryPublishFailure ),
         cmocka_unit_test( testAzureIoTProvisioningClient_Register_QueryShortFailure ),
         cmocka_unit_test( testAzureIoTProvisioningClient_Register_QueryFailure ),
-        cmocka_unit_test( testAzureIoTProvisioningClient_Register_QueryDeviceDisabledResponse ),
+        cmocka_unit_test( testAzureIoTProvisioningClient_Register_QueryDeviceDisabledResponseFailure ),
         cmocka_unit_test( testAzureIoTProvisioningClient_Register_QueryInvalidResponseFailure ),
         cmocka_unit_test( testAzureIoTProvisioningClient_Register_Success ),
         cmocka_unit_test( testAzureIoTProvisioningClient_GetDeviceAndHub_Failure ),

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The files in this directory implement the device SDK portion of E2E testing of the Embedded SDK for Azure IoT Convenience layer. For example, there are tests to make sure that a C2D is going through an IoTHub for real (NOT UT), and are properly received on a simulated device running the device SDK.
+The files in this directory implement the device SDK portion of E2E testing of the Azure IoT middleware for FreeRTOS. For example, there are tests to make sure that a C2D is going through an IoTHub for real (NOT UT), and are properly received on a simulated device running the device SDK.
 
 This is complicated by the fact that the Embedded SDK does *not* have a IoTHub service SDK.  So a naive approach of `CreateProcess(e2e_device_exe)` and having said process run the service and device SDK at the same time, checking internal state of each, will not work.
 

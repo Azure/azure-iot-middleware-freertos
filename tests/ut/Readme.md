@@ -2,7 +2,7 @@
 
 ## Overview
 
-The files in this directory implement the device SDK portion of unit testing of the Embedded SDK for Azure IoT Convenience layer.
+The files in this directory implement the device SDK portion of unit testing of the Azure IoT middleware for FreeRTOS.
 
 ## Prerequisites
 
@@ -10,7 +10,6 @@ The Unit Tests are using the [CMocka](https://cmocka.org/) framework.
 On Ubuntu, this can be installed by running:
 
 `sudo apt install libcmocka-dev libcmocka0`
-
 
 ## How to run the unit tests
 * Note: Currently these tests are only supported to run on Linux.
