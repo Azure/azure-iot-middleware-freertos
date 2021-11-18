@@ -164,31 +164,31 @@ static void prvGenerateResponse( AzureIoTMQTTPublishInfo_t * pxPublishInfo,
 
 static void prvGenerateShortFailureResponse( AzureIoTMQTTPublishInfo_t * pxPublishInfo )
 {
-    prvGenerateResponse (
+    prvGenerateResponse(
         pxPublishInfo,
         0,
         ucShortFailureHubResponse,
-        sizeof ( ucShortFailureHubResponse ) - 1);
+        sizeof( ucShortFailureHubResponse ) - 1 );
 }
 /*-----------------------------------------------------------*/
 
 static void prvGenerateDisabledResponse( AzureIoTMQTTPublishInfo_t * pxPublishInfo )
 {
-    prvGenerateResponse (
+    prvGenerateResponse(
         pxPublishInfo,
         0,
         ucDisabledHubResponse,
-        sizeof ( ucDisabledHubResponse ) - 1);
+        sizeof( ucDisabledHubResponse ) - 1 );
 }
 /*-----------------------------------------------------------*/
 
 static void prvGenerateFailureResponse( AzureIoTMQTTPublishInfo_t * pxPublishInfo )
 {
-    prvGenerateResponse (
+    prvGenerateResponse(
         pxPublishInfo,
         0,
         ucFailureHubResponse,
-        sizeof ( ucFailureHubResponse ) - 1);
+        sizeof( ucFailureHubResponse ) - 1 );
 }
 /*-----------------------------------------------------------*/
 
@@ -641,7 +641,7 @@ static void testAzureIoTProvisioningClient_Register_QueryPublishFailure( void **
     ( void ) ppvState;
 
     prvSetupTestProvisioningClient( &xTestProvisioningClient );
-    prvRegister ( &xTestProvisioningClient );
+    prvRegister( &xTestProvisioningClient );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
@@ -661,7 +661,7 @@ static void testAzureIoTProvisioningClient_Register_QueryShortFailure( void ** p
     ( void ) ppvState;
 
     prvSetupTestProvisioningClient( &xTestProvisioningClient );
-    prvRegister ( &xTestProvisioningClient );
+    prvRegister( &xTestProvisioningClient );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
@@ -693,7 +693,7 @@ static void testAzureIoTProvisioningClient_Register_QueryFailure( void ** ppvSta
     ( void ) ppvState;
 
     prvSetupTestProvisioningClient( &xTestProvisioningClient );
-    prvRegister ( &xTestProvisioningClient );
+    prvRegister( &xTestProvisioningClient );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
@@ -727,7 +727,7 @@ static void testAzureIoTProvisioningClient_Register_QueryDeviceDisabledResponse(
     ( void ) ppvState;
 
     prvSetupTestProvisioningClient( &xTestProvisioningClient );
-    prvRegister ( &xTestProvisioningClient );
+    prvRegister( &xTestProvisioningClient );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
@@ -759,7 +759,7 @@ static void testAzureIoTProvisioningClient_Register_QueryInvalidResponseFailure(
     ( void ) ppvState;
 
     prvSetupTestProvisioningClient( &xTestProvisioningClient );
-    prvRegister ( &xTestProvisioningClient );
+    prvRegister( &xTestProvisioningClient );
 
     /* Publish Registration Query */
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
