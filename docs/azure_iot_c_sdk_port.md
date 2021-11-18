@@ -111,9 +111,9 @@ IoTHubDeviceClient_LL_SendEventAsync(device_ll_handle, message_handle, send_conf
 
 ```c
 /* Create a bag of properties for the telemetry */
-xResult = AzureIoT_MessagePropertiesInit( &xPropertyBag, ucPropertyBuffer, 0, sizeof( xPropertyBag ) );
+xResult = AzureIoTMessage_PropertiesInit( &xPropertyBag, ucPropertyBuffer, 0, sizeof( xPropertyBag ) );
 
-xResult = AzureIoT_MessagePropertiesAppend( &xPropertyBag, ( uint8_t * ) "name", sizeof( "name" ) - 1,
+xResult = AzureIoTMessage_PropertiesAppend( &xPropertyBag, ( uint8_t * ) "name", sizeof( "name" ) - 1,
                                             ( uint8_t * ) "value", sizeof( "value" ) - 1 );
 
 xResult = AzureIoTHubClient_SendTelemetry( &xAzureIoTHubClient,
