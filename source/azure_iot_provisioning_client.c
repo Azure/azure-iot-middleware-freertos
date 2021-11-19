@@ -364,47 +364,72 @@ static void prvProvClientParseResponse( AzureIoTProvisioningClient_t * pxAzurePr
     {
         AZLogWarn( ( "AzureIoTProvisioning parse response action called in wrong state: [%u]",
                      pxAzureProvClient->_internal.ulWorkflowState ) );
+        return;
     }
-    else
+
+    if( ( pxAzureProvClient->_internal.usLastResponseTopicLength == 0 ) ||
+        ( pxAzureProvClient->_internal.xLastResponsePayloadLength == 0 ) )
     {
-        if( ( pxAzureProvClient->_internal.usLastResponseTopicLength == 0 ) ||
-            ( pxAzureProvClient->_internal.xLastResponsePayloadLength == 0 ) )
+        AZLogError( ( "AzureIoTProvisioning client failed with invalid server response" ) );
+        prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorInvalidResponse );
+        return;
+    }
+
+    xCoreResult =
+        az_iot_provisioning_client_parse_received_topic_and_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
+                                                                     xTopic, xPayload, &pxAzureProvClient->_internal.xRegisterResponse );
+
+    if( xCoreResult == AZ_ERROR_IOT_TOPIC_NO_MATCH )
+    {
+        AZLogInfo( ( "AzureIoTProvisioning ignoring unknown topic." ) );
+        /* Maintaining the same state. */
+        return;
+    }
+    else if( az_result_failed( xCoreResult ) )
+    {
+        AZLogError( ( "AzureIoTProvisioning client failed to parse packet: core error=0x%08x", xCoreResult ) );
+        prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorFailed );
+        return;
+    }
+
+    if( az_iot_provisioning_client_operation_complete( pxAzureProvClient->_internal.xRegisterResponse.operation_status ) )
+    {
+        switch( pxAzureProvClient->_internal.xRegisterResponse.operation_status )
         {
-            AZLogError( ( "AzureIoTProvisioning client failed with invalid server response" ) );
-            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorInvalidResponse );
-            return;
+            case AZ_IOT_PROVISIONING_STATUS_ASSIGNED:
+                prvProvClientUpdateState( pxAzureProvClient, eAzureIoTSuccess );
+                break;
+
+            case AZ_IOT_PROVISIONING_STATUS_FAILED:
+                AZLogError( ( "AzureIoTProvisioning client registration failed with error %u: TrackingID: [%.*s] \"%.*s\"",
+                              pxAzureProvClient->_internal.xRegisterResponse.registration_state.extended_error_code,
+                              az_span_size( pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_tracking_id ),
+                              az_span_ptr( pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_tracking_id ),
+                              az_span_size( pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_message ),
+                              az_span_ptr( pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_message ) ) );
+                prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorServerError );
+                break;
+
+            case AZ_IOT_PROVISIONING_STATUS_DISABLED:
+                AZLogError( ( "AzureIoTProvisioning client: device is disabled." ) );
+                prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorServerError );
+                break;
+
+            default:
+                AZLogError( ( "AzureIoTProvisioning unexpected operation status %d", pxAzureProvClient->_internal.xRegisterResponse.operation_status ) );
+        }
+    }
+    else /* Operation is not complete. */
+    {
+        if( pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds == 0 )
+        {
+            pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds = azureiotconfigPROVISIONING_POLLING_INTERVAL_S;
         }
 
-        xCoreResult =
-            az_iot_provisioning_client_parse_received_topic_and_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
-                                                                         xTopic, xPayload, &pxAzureProvClient->_internal.xRegisterResponse );
-
-        if( az_result_failed( xCoreResult ) )
-        {
-            AZLogError( ( "AzureIoTProvisioning client failed to parse packet: core error=0x%08x", xCoreResult ) );
-            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorFailed );
-            return;
-        }
-
-        if( pxAzureProvClient->_internal.xRegisterResponse.operation_status == AZ_IOT_PROVISIONING_STATUS_ASSIGNED )
-        {
-            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTSuccess );
-        }
-        else if( pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds == 0 )
-        {
-            AZLogError( ( "AzureIoTProvisioning client registration failed with error %d, extended error status: %u and no server retry time duration",
-                          pxAzureProvClient->_internal.xRegisterResponse.registration_state.error_code,
-                          pxAzureProvClient->_internal.xRegisterResponse.registration_state.extended_error_code ) );
-            /* Server responded with error with no retry.  */
-            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorServerError );
-        }
-        else
-        {
-            pxAzureProvClient->_internal.ullRetryAfter =
-                pxAzureProvClient->_internal.xGetTimeFunction() +
-                pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds;
-            prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorPending );
-        }
+        pxAzureProvClient->_internal.ullRetryAfter =
+            pxAzureProvClient->_internal.xGetTimeFunction() +
+            pxAzureProvClient->_internal.xRegisterResponse.retry_after_seconds;
+        prvProvClientUpdateState( pxAzureProvClient, eAzureIoTErrorPending );
     }
 }
 /*-----------------------------------------------------------*/

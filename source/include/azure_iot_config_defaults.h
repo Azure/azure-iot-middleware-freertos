@@ -65,6 +65,16 @@
 #endif
 
 /**
+ * @brief Provisioning polling interval.
+ *
+ * @details This is used for cases where the service does not supply a retry-after hint during the
+ *          register and query operations.
+ */
+#ifndef azureiotconfigPROVISIONING_POLLING_INTERVAL_S
+    #define azureiotconfigPROVISIONING_POLLING_INTERVAL_S    ( 3U )
+#endif
+
+/**
  * @brief Macro that is called in the Azure IoT middleware library for logging "Error" level
  * messages.
  *
