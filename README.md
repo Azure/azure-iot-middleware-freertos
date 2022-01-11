@@ -146,6 +146,8 @@ Azure IoT supports x509 certificate and SAS key authentication. For details on w
 
 ### MQTT
 
+THIS FEATURE IS IN PREVIEW AND THE API IS SUBJECT TO CHANGE
+
 The middleware uses an MQTT abstraction to allow the substitution of the MQTT library. The default implementation is the FreeRTOS built [coreMQTT](https://github.com/FreeRTOS/coreMQTT) (see the port implementation [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/main/ports/coreMQTT)). If you would like to create a new MQTT abstraction implementation for an MQTT library of your choosing, please complete the interface described [in this header file](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h).
 
 ### Port Application from Azure IoT C SDK
