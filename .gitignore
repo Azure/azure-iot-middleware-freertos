@@ -68,3 +68,8 @@ build/
 
 # VSCode directory
 /.vscode
+
+# node modules for e2e tests
+*node_modules/
+package-lock.json
+tests/e2e/service/lib/
