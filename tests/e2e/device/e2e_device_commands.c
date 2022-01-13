@@ -1286,14 +1286,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
  * */
 uint64_t ulGetUnixTime( void )
 {
-    TickType_t xTickCount = 0;
-    uint64_t ulTime = 0UL;
-
-    xTickCount = xTaskGetTickCount();
-    ulTime = ( uint64_t ) xTickCount / configTICK_RATE_HZ;
-    ulTime = ( uint64_t ) ( ulTime + ulGlobalEntryTime );
-
-    return ulTime;
+    return time( NULL );
 }
 /*-----------------------------------------------------------*/
 
