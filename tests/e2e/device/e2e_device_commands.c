@@ -63,7 +63,6 @@ typedef struct E2E_TEST_COMMAND_STRUCT
 typedef E2E_TEST_COMMAND * E2E_TEST_COMMAND_HANDLE;
 /*-----------------------------------------------------------*/
 
-static const uint64_t ulGlobalEntryTime = 1639093301;
 static uint8_t * ucC2DCommandData = NULL;
 static uint32_t ulC2DCommandDataLength = 0;
 static AzureIoTHubClientCommandRequest_t * pxMethodCommandData = NULL;
