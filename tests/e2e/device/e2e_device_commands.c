@@ -63,7 +63,6 @@ typedef struct E2E_TEST_COMMAND_STRUCT
 typedef E2E_TEST_COMMAND * E2E_TEST_COMMAND_HANDLE;
 /*-----------------------------------------------------------*/
 
-static const uint64_t ulGlobalEntryTime = 1639093301;
 static uint8_t * ucC2DCommandData = NULL;
 static uint32_t ulC2DCommandDataLength = 0;
 static AzureIoTHubClientCommandRequest_t * pxMethodCommandData = NULL;
@@ -1286,14 +1285,7 @@ uint32_t ulE2EDeviceProcessCommands( AzureIoTHubClient_t * pxAzureIoTHubClient )
  * */
 uint64_t ulGetUnixTime( void )
 {
-    TickType_t xTickCount = 0;
-    uint64_t ulTime = 0UL;
-
-    xTickCount = xTaskGetTickCount();
-    ulTime = ( uint64_t ) xTickCount / configTICK_RATE_HZ;
-    ulTime = ( uint64_t ) ( ulTime + ulGlobalEntryTime );
-
-    return ulTime;
+    return time( NULL );
 }
 /*-----------------------------------------------------------*/
 
