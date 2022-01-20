@@ -434,9 +434,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCommand( AzureIoTHubClient_t * pxA
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] pxMessage The pointer to the #AzureIoTHubClientCommandRequest_t to which a response is being sent.
- * @param[in] ulStatus A code that indicates the result of the method, as defined by the user.
- * @param[in] pucCommandPayload __[nullable]__ An optional method response payload.
- * @param[in] ulCommandPayloadLength The length of the method response payload.
+ * @param[in] ulStatus A code that indicates the result of the command, as defined by the user.
+ * @param[in] pucCommandPayload __[nullable]__ An optional command response payload.
+ * @param[in] ulCommandPayloadLength The length of the command response payload.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
