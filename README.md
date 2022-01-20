@@ -12,26 +12,27 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Samples](#samples)
-- [Repo Structure](#repo-structure)
-  - [Dependencies](#dependencies)
-- [Library Architecture](#library-architecture)
-- [Code Size](#code-size)
-- [Building](#building)
-  - [Using CMake](#using-cmake)
-  - [Using Source Files](#using-source-files)
-  - [Using Amazon FreeRTOS](#using-amazon-freertos)
-- [Porting](#porting)
-  - [TCP/IP and TLS](#tcpip-and-tls)
-    - [Authentication](#authentication)
-  - [MQTT](#mqtt)
-  - [Port Application from Azure IoT C SDK](#port-application-from-azure-iot-c-sdk)
-- [Support](#support)
-- [Contributing](#contributing)
-  - [Code Style](#code-style)
-  - [License](#license)
-- [Trademarks](#trademarks)
+- [Azure IoT Middleware for FreeRTOS](#azure-iot-middleware-for-freertos)
+  - [Table of Contents](#table-of-contents)
+  - [Samples](#samples)
+  - [Docs](#docs)
+  - [Repo Structure](#repo-structure)
+    - [Dependencies](#dependencies)
+  - [Library Architecture](#library-architecture)
+  - [Code Size](#code-size)
+  - [Building](#building)
+    - [Using CMake](#using-cmake)
+    - [Using Source Files](#using-source-files)
+    - [Using Amazon FreeRTOS](#using-amazon-freertos)
+  - [Porting](#porting)
+    - [TCP/IP and TLS](#tcpip-and-tls)
+    - [MQTT](#mqtt)
+    - [Port Application from Azure IoT C SDK](#port-application-from-azure-iot-c-sdk)
+  - [Support](#support)
+  - [Contributing](#contributing)
+    - [Code Style](#code-style)
+    - [License](#license)
+  - [Trademarks](#trademarks)
 
 ## Samples
 
@@ -48,6 +49,10 @@ To keep this repo simple without board specific dependencies, we have a separate
 For a video deep dive into this repo and the samples, please see the Microsoft Developers video below.
 
 [<img src="./docs/resources/deep-dive-video.jpg" width="50%">](https://youtu.be/PNykfuJ3VDs)
+
+## Docs
+
+We have published doxygen-generated documentation for all of our APIs. [Please see the link here to review how to use the APIs.](https://azure.github.io/azure-iot-middleware-freertos/)
 
 ## Repo Structure
 
