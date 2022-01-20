@@ -12,26 +12,27 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 
 ## Table of Contents
 
-- [Table of Contents](#table-of-contents)
-- [Samples](#samples)
-- [Repo Structure](#repo-structure)
-  - [Dependencies](#dependencies)
-- [Library Architecture](#library-architecture)
-- [Code Size](#code-size)
-- [Building](#building)
-  - [Using CMake](#using-cmake)
-  - [Using Source Files](#using-source-files)
-  - [Using Amazon FreeRTOS](#using-amazon-freertos)
-- [Porting](#porting)
-  - [TCP/IP and TLS](#tcpip-and-tls)
-    - [Authentication](#authentication)
-  - [MQTT](#mqtt)
-  - [Port Application from Azure IoT C SDK](#port-application-from-azure-iot-c-sdk)
-- [Support](#support)
-- [Contributing](#contributing)
-  - [Code Style](#code-style)
-  - [License](#license)
-- [Trademarks](#trademarks)
+- [Azure IoT Middleware for FreeRTOS](#azure-iot-middleware-for-freertos)
+  - [Table of Contents](#table-of-contents)
+  - [Samples](#samples)
+  - [Docs](#docs)
+  - [Repo Structure](#repo-structure)
+    - [Dependencies](#dependencies)
+  - [Library Architecture](#library-architecture)
+  - [Code Size](#code-size)
+  - [Building](#building)
+    - [Using CMake](#using-cmake)
+    - [Using Source Files](#using-source-files)
+    - [Using Amazon FreeRTOS](#using-amazon-freertos)
+  - [Porting](#porting)
+    - [TCP/IP and TLS](#tcpip-and-tls)
+    - [MQTT](#mqtt)
+    - [Port Application from Azure IoT C SDK](#port-application-from-azure-iot-c-sdk)
+  - [Support](#support)
+  - [Contributing](#contributing)
+    - [Code Style](#code-style)
+    - [License](#license)
+  - [Trademarks](#trademarks)
 
 ## Samples
 
@@ -48,6 +49,10 @@ To keep this repo simple without board specific dependencies, we have a separate
 For a video deep dive into this repo and the samples, please see the Microsoft Developers video below.
 
 [<img src="./docs/resources/deep-dive-video.jpg" width="50%">](https://youtu.be/PNykfuJ3VDs)
+
+## Docs
+
+We have published doxygen-generated documentation for all of our APIs. [Please see the link here to review how to use the APIs.](https://azure.github.io/azure-iot-middleware-freertos/)
 
 ## Repo Structure
 
@@ -145,6 +150,8 @@ The middleware for FreeRTOS operates at the MQTT level. This requires customers 
 Azure IoT supports x509 certificate and SAS key authentication. For details on which to use, you can refer to [this document going over the pros and cons of each](https://azure.microsoft.com/blog/iot-device-authentication-options/). For more details on the TLS requirements of Azure IoT (TLS versions, certificate requirements, supported crypto algorithms, etc), [please see this document here](https://docs.microsoft.com/azure/iot-hub/iot-hub-tls-support). Application integration hints for both authentication mechanisms can be found in our samples: for [x509 please see here](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/e88539df5e628caa44640dc5ce97079ab87d1327/demos/sample_azure_iot/sample_azure_iot.c#L271-L285) and for [SAS keys please see here](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/e88539df5e628caa44640dc5ce97079ab87d1327/demos/sample_azure_iot/sample_azure_iot.c#L374-L380).
 
 ### MQTT
+
+THIS FEATURE IS IN PREVIEW AND THE API IS SUBJECT TO CHANGE
 
 The middleware uses an MQTT abstraction to allow the substitution of the MQTT library. The default implementation is the FreeRTOS built [coreMQTT](https://github.com/FreeRTOS/coreMQTT) (see the port implementation [here](https://github.com/Azure/azure-iot-middleware-freertos/tree/main/ports/coreMQTT)). If you would like to create a new MQTT abstraction implementation for an MQTT library of your choosing, please complete the interface described [in this header file](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/source/interface/azure_iot_mqtt.h).
 
