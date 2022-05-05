@@ -15,13 +15,16 @@ TEST_RUN_LINE_COVERAGE_THRESHOLD=${4:-80}
 echo -e "Using FreeRTOS in libraries/FreeRTOS (`git name-rev --name-only HEAD`)"
 TEST_FREERTOS_SRC=`pwd`/libraries/FreeRTOS
 
-echo -e "::group::Building unit tests"
-cmake -Bbuild -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC ./tests/ut
+echo -e "::group::Building unit tests with Debug"
+cmake -Bbuild -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DMEMORYCHECK_COMMAND_OPTIONS="--error-exitcode=1 --leak-check=full" -DCMAKE_BUILD_TYPE=Debug ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
 pushd build
 
 echo -e "::group::Running unit tests"
 ctest -j $TEST_JOB_COUNT -C "debug" --output-on-failure --schedule-random -T test
+
+echo -e "::group::Running unit tests with memcheck"
+ctest -j $TEST_JOB_COUNT -C "debug" --output-on-failure --schedule-random -T memcheck
 
 echo -e "::group::Code coverage"
 gcovr -r $(pwd) -f ../source/.*.c
@@ -32,6 +35,11 @@ find ../source/*.c | while read file; \
     -r $(pwd) -f $file > /dev/null; done;
 
 popd
+
+echo -e "::group::Building unit tests with Release"
+rm -rf build
+cmake -Bbuild -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DCMAKE_BUILD_TYPE=Release ./tests/ut
+cmake --build build -- --jobs=$TEST_CORES
 
 if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
     ./tests/e2e/run.sh veth1 $TEST_FREERTOS_SRC
