@@ -23,6 +23,9 @@ pushd build
 echo -e "::group::Running unit tests"
 ctest -j $TEST_JOB_COUNT -C "debug" --output-on-failure --schedule-random -T test
 
+echo -e "::group::Running unit tests with memcheck"
+ctest -j $TEST_JOB_COUNT -C "debug" --output-on-failure --schedule-random -T memcheck
+
 echo -e "::group::Code coverage"
 gcovr -r $(pwd) -f ../source/.*.c
 
