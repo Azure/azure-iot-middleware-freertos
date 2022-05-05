@@ -390,8 +390,8 @@ static void testAzureIoTHubClientProperties_GetNextComponentProperty_Failure( vo
     AzureIoTJSONReader_t xJSONReader;
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesRequestedMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWritable;
-    const uint8_t * pucComponentName;
-    uint32_t usComponentNameLength;
+    const uint8_t * pucComponentName = NULL;
+    uint32_t usComponentNameLength = 0;
 
     /* Fail get next component property when client is NULL */
     assert_int_equal( AzureIoTHubClientProperties_GetNextComponentProperty( NULL,
@@ -595,8 +595,8 @@ static void testAzureIoTHubClientProperties_GetNextComponentPropertyGetDocument_
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesRequestedMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWritable;
     uint32_t ulVersion;
-    const uint8_t * ucComponentName;
-    uint32_t ulComponentNameLength;
+    const uint8_t * ucComponentName = NULL;
+    uint32_t ulComponentNameLength = 0;
     int32_t lValue = 0;
     AzureIoTHubClientOptions_t xOptions;
 
@@ -656,8 +656,8 @@ static void testAzureIoTHubClientProperties_GetNextComponentPropertyWriteableUpd
     AzureIoTHubMessageType_t xResponseType = eAzureIoTHubPropertiesWritablePropertyMessage;
     AzureIoTHubClientPropertyType_t xPropertyType = eAzureIoTHubClientPropertyWritable;
     uint32_t ulVersion;
-    const uint8_t * ucComponentName;
-    uint32_t ulComponentNameLength;
+    const uint8_t * ucComponentName = NULL;
+    uint32_t ulComponentNameLength = 0;
     int32_t lValue = 0;
 
     AzureIoTHubClientOptions_t xOptions;
