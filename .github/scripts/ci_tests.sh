@@ -16,7 +16,7 @@ echo -e "Using FreeRTOS in libraries/FreeRTOS (`git name-rev --name-only HEAD`)"
 TEST_FREERTOS_SRC=`pwd`/libraries/FreeRTOS
 
 echo -e "::group::Building unit tests"
-cmake -Bbuild -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC ./tests/ut
+cmake -Bbuild -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DMEMORYCHECK_COMMAND_OPTIONS="--error-exitcode=1 --leak-check=full" ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
 pushd build
 
