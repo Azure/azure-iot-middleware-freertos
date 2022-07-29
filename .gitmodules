@@ -4,3 +4,6 @@
 [submodule "libraries/coreMQTT"]
 	path = libraries/coreMQTT
 	url = https://github.com/FreeRTOS/coreMQTT.git
+[submodule "libraries/coreHTTP"]
+	path = libraries/coreHTTP
+	url = https://github.com/FreeRTOS/coreHTTP.git
