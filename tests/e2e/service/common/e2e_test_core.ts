@@ -432,7 +432,7 @@ function createTestDeviceAndTestProcess(testHubConnectionString:string, testexe:
         }
         else {
             const testDeviceConnectionString:string = getConnectionStringFromDeviceInfo(testHubConnectionString, newDeviceInfo)
-            console.log(`Successfully new device with connectionString=<${testDeviceConnectionString}>`)
+            // console.log(`Successfully new device with connectionString=<${testDeviceConnectionString}>`)
 
             // Creates the test process, providing connection string of the test created device it should associate with
             //console.log(`Invoking test executable ${testDeviceConnectionString}`)

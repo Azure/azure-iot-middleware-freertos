@@ -1,7 +1,7 @@
 /**
  * @file azure_iot_adu_client.h
  *
- * @brief
+ * @brief Definition for the Azure IoT ADU Client.
  *
  */
 #ifndef AZURE_IOT_ADU_CLIENT_H
