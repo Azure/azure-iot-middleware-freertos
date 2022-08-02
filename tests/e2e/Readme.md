@@ -34,7 +34,7 @@ How do the Node service application and the C simulated device interact?
 
 * The [service](./service) directory contains code authored in TypeScript. This code simulates a service application using IOTHUB service SDK's interacting with a IOTHUB. The code:
 
-  * Creates a device on the IoThub, using IoTHub API's. This device is prefixed with the name `azure_services_port_e2e_` followed by a random string for uniqueness.
+  * Creates a device on the IoThub, using IoTHub API's. This device is prefixed with the name `azure_mid_freertos_e2e_` followed by a random string for uniqueness.
 
   * Creates a process built from the [device](./device) directory, passing the device_id, module_id and sas_token as the only command line arguments.
 

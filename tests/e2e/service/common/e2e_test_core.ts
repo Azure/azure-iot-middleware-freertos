@@ -425,7 +425,7 @@ function verifyTelemetryMessageWithTimeout(testHubConnectionString:string, devic
 //
 function createTestDeviceAndTestProcess(testHubConnectionString:string, testexe:string, done) {
     // First, we create a new test device on IoTHub.  This will be destroyed on test tear down.
-    createTestDevice(testHubConnectionString, "azure_services_port_e2e_", function(err, newDeviceInfo) {
+    createTestDevice(testHubConnectionString, "azure_mid_freertos_e2e_", function(err, newDeviceInfo) {
         if (err) {
             console.log(`createTestDevice fails, error=<${err}>`)
             done(err, null)

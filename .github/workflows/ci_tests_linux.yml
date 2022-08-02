@@ -9,7 +9,7 @@ on:
     types: [labeled]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
     # Only allow build to start when label 'Run CI' added for forked
     # based PR
     if: ( github.event.pull_request.head.repo.fork == false ) ||
