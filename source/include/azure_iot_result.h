@@ -44,6 +44,7 @@ typedef enum AzureIoTResult
     eAzureIoTErrorTokenGenerationFailed, /**< There was a failure. */
     eAzureIoTErrorEndOfProperties,       /**< End of properties when iterating with AzureIoTHubClientProperties_GetNextComponentProperty(). */
     eAzureIoTErrorInvalidResponse,       /**< Invalid response from server. */
+    eAzureIoTErrorServerRefused,         /**< The server refused a CONNECT or SUBSCRIBE. */
     eAzureIoTErrorUnexpectedChar,        /**< Input can't be successfully parsed. */
 
     /* === JSON: Error results === */

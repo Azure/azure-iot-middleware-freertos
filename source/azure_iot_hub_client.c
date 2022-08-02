@@ -795,7 +795,15 @@ AzureIoTResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubC
                 AZLogError( ( "Failed to establish MQTT connection: Server=%.*s, MQTT error=0x%08x",
                               pxAzureIoTHubClient->_internal.ulHostnameLength, ( const char * ) pxAzureIoTHubClient->_internal.pucHostname,
                               xMQTTResult ) );
-                xResult = eAzureIoTErrorFailed;
+
+                if( xMQTTResult == eAzureIoTMQTTServerRefused )
+                {
+                    xResult = eAzureIoTErrorServerRefused;
+                }
+                else
+                {
+                    xResult = eAzureIoTErrorFailed;
+                }
             }
             else
             {

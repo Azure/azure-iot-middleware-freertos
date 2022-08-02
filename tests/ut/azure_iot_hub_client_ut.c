@@ -424,7 +424,7 @@ static void testAzureIoTHubClient_Connect_MQTTConnectFailure( void ** ppvState )
                                                  false,
                                                  &xSessionPresent,
                                                  60 ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorServerRefused );
 }
 /*-----------------------------------------------------------*/
 
