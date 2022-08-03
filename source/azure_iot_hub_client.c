@@ -34,7 +34,7 @@
 #endif /* azureiothubSUBACK_WAIT_INTERVAL_MS */
 
 #ifndef azureiothubUSER_AGENT
-    #define azureiothubUSER_AGENT    "c%2F" azureiotVERSION_STRING "%28FreeRTOS%29"
+    #define azureiothubUSER_AGENT    "DeviceClientType=c%2F" azureiotVERSION_STRING "%28FreeRTOS%29"
 #endif /* azureiothubUSER_AGENT */
 
 /*
