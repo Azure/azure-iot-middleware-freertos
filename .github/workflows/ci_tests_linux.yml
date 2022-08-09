@@ -89,11 +89,22 @@ jobs:
             github.event.pull_request.head.repo.fork == true
           )
 
-      - name: Check-in Tests
+      - name: Unit Tests
+        run: sudo bash -c ".github/scripts/unit_tests.sh"
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
+
+      - name: E2E Tests
         run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
                            export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
                            export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
-                           .github/scripts/ci_tests.sh"
+                           .github/scripts/e2e_tests.sh"
         if: >-
           (
             github.event_name == 'pull_request' &&
