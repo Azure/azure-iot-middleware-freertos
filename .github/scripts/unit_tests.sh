@@ -40,9 +40,3 @@ echo -e "::group::Building unit tests with Release"
 rm -rf build
 cmake -Bbuild -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DCMAKE_BUILD_TYPE=Release ./tests/ut
 cmake --build build -- --jobs=$TEST_CORES
-
-if [ $TEST_RUN_E2E_TESTS -ne 0 ]; then
-    ./tests/e2e/run.sh veth1 $TEST_FREERTOS_SRC
-else
-    echo -e "Skipping E2E tests"
-fi
