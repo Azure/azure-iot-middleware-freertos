@@ -80,7 +80,6 @@ typedef struct AzureIoTADUClientDeviceProperties
  */
 typedef enum AzureIoTADUAction
 {
-    eAzureIoTADUActionDownload = 0,
     eAzureIoTADUActionApplyDownload = 3,
     eAzureIoTADUActionCancel = 255
 } AzureIoTADUAction_t;
