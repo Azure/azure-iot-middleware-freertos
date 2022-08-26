@@ -175,7 +175,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
                                                    const char * pucPath,
                                                    uint32_t ulPathLength,
                                                    char * pucHeaderBuffer,
-                                        uint32_t ulHeaderBufferLength )
+                                                   uint32_t ulHeaderBufferLength )
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
@@ -207,8 +207,8 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
 }
 
 int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle,
-char * pucDataBuffer,
-                                           uint32_t ulDataBufferLength )
+                                  char * pucDataBuffer,
+                                  uint32_t ulDataBufferLength )
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
