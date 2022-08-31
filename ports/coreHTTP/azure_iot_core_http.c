@@ -11,9 +11,6 @@
 /* Kernel includes. */
 #include "FreeRTOS.h"
 
-static uint8_t pucHeaderBuffer[ azureiothttpHEADER_BUFFER_SIZE ];
-static uint8_t pucResponseBuffer[ azureiothttpCHUNK_DOWNLOAD_BUFFER_SIZE ];
-
 static AzureIoTHTTPResult_t prvTranslateToAzureIoTHTTPResult( HTTPStatus_t xResult )
 {
     switch( xResult )
@@ -79,7 +76,9 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,
                                         const char * pucURL,
                                         uint32_t ulURLLength,
                                         const char * pucPath,
-                                        uint32_t ulPathLength )
+                                        uint32_t ulPathLength,
+                                        char * pucHeaderBuffer,
+                                        uint32_t ulHeaderBufferLength )
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
@@ -93,7 +92,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,
     ( void ) memset( &xHTTPHandle->xResponse, 0, sizeof( xHTTPHandle->xResponse ) );
 
     xHTTPHandle->xRequestHeaders.pBuffer = pucHeaderBuffer;
-    xHTTPHandle->xRequestHeaders.bufferLen = sizeof( pucHeaderBuffer );
+    xHTTPHandle->xRequestHeaders.bufferLen = ulHeaderBufferLength;
 
     xHTTPHandle->xRequestInfo.pHost = pucURL;
     xHTTPHandle->xRequestInfo.hostLen = ulURLLength;
@@ -113,13 +112,15 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,
 AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
                                            int32_t lRangeStart,
                                            int32_t lRangeEnd,
-                                           char ** ppucDataBuffer,
-                                           uint32_t * pulDataLength )
+                                           char * pucDataBuffer,
+                                           uint32_t ulDataBufferLength,
+                                           char ** ppucOutData,
+                                           uint32_t * pulOutDataLength )
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
-    xHTTPHandle->xResponse.pBuffer = pucResponseBuffer;
-    xHTTPHandle->xResponse.bufferLen = sizeof( pucResponseBuffer );
+    xHTTPHandle->xResponse.pBuffer = pucDataBuffer;
+    xHTTPHandle->xResponse.bufferLen = ulDataBufferLength;
 
     if( !( ( lRangeStart == 0 ) && ( lRangeEnd == azureiothttpHttpRangeRequestEndOfFile ) ) )
     {
@@ -137,7 +138,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
 
     if( xHttpLibraryStatus != HTTPSuccess )
     {
-        AZLogError( ( "[HTTP] ERROR: %d", xHttpLibraryStatus ) );
+        SdkLog( ( "[HTTP] ERROR: %d\n", xHttpLibraryStatus ) );
         return prvTranslateToAzureIoTHTTPResult( xHttpLibraryStatus );
     }
 
@@ -146,20 +147,20 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
         if( xHTTPHandle->xResponse.statusCode == 200 )
         {
             /* Handle a response Status-Code of 200 OK. */
-            AZLogInfo( ( "[HTTP] Success 200" ) );
+            SdkLog( ( "[HTTP] Success 200\n" ) );
         }
         else if( xHTTPHandle->xResponse.statusCode == 206 )
         {
             /* Handle a response Status-Code of 200 OK. */
-            AZLogInfo( ( "[HTTP] [Status 206] Received range %i to %i", ( int ) lRangeStart, ( int ) lRangeEnd ) );
+            SdkLog( ( "[HTTP] [Status 206] Received range %i to %i\n", ( int ) lRangeStart, ( int ) lRangeStart + xHTTPHandle->xResponse.bodyLen ) );
 
-            *ppucDataBuffer = ( char * ) xHTTPHandle->xResponse.pBody;
-            *pulDataLength = ( uint32_t ) xHTTPHandle->xResponse.bodyLen;
+            *ppucOutData = ( char * ) xHTTPHandle->xResponse.pBody;
+            *pulOutDataLength = ( uint32_t ) xHTTPHandle->xResponse.bodyLen;
         }
         else
         {
             /* Handle an error */
-            AZLogError( ( "[HTTP] Failed %d.", xHTTPHandle->xResponse.statusCode ) );
+            SdkLog( ( "[HTTP] Failed %d\n.", xHTTPHandle->xResponse.statusCode ) );
             xHttpLibraryStatus = 1;
         }
     }
@@ -172,7 +173,9 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
                                                    const char * pucURL,
                                                    uint32_t ulURLLength,
                                                    const char * pucPath,
-                                                   uint32_t ulPathLength )
+                                                   uint32_t ulPathLength,
+                                                   char * pucHeaderBuffer,
+                                                   uint32_t ulHeaderBufferLength )
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
@@ -186,7 +189,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
     ( void ) memset( &xHTTPHandle->xResponse, 0, sizeof( xHTTPHandle->xResponse ) );
 
     xHTTPHandle->xRequestHeaders.pBuffer = pucHeaderBuffer;
-    xHTTPHandle->xRequestHeaders.bufferLen = sizeof( pucHeaderBuffer );
+    xHTTPHandle->xRequestHeaders.bufferLen = ulHeaderBufferLength;
 
     xHTTPHandle->xRequestInfo.pHost = pucURL;
     xHTTPHandle->xRequestInfo.hostLen = ulURLLength;
@@ -203,12 +206,14 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
     return prvTranslateToAzureIoTHTTPResult( xHttpLibraryStatus );
 }
 
-int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle )
+int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle,
+                                  char * pucDataBuffer,
+                                  uint32_t ulDataBufferLength )
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
-    xHTTPHandle->xResponse.pBuffer = pucResponseBuffer;
-    xHTTPHandle->xResponse.bufferLen = sizeof( pucResponseBuffer );
+    xHTTPHandle->xResponse.pBuffer = pucDataBuffer;
+    xHTTPHandle->xResponse.bufferLen = ulDataBufferLength;
 
     xHttpLibraryStatus = HTTPClient_Send( ( TransportInterface_t * ) xHTTPHandle->pxHTTPTransport, &xHTTPHandle->xRequestHeaders, NULL, 0, &xHTTPHandle->xResponse, 0 );
 
@@ -222,13 +227,13 @@ int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle )
         if( xHTTPHandle->xResponse.statusCode == 200 )
         {
             /* Handle a response Status-Code of 200 OK. */
-            AZLogDebug( ( "[HTTP] Size Request Success 200" ) );
+            SdkLog( ( "[HTTP] Size Request Success 200\n" ) );
             return ( int32_t ) xHTTPHandle->xResponse.contentLength;
         }
         else
         {
             /* Handle an error */
-            AZLogError( ( "[HTTP] Size Request Failed %d.", xHTTPHandle->xResponse.statusCode ) );
+            SdkLog( ( "[HTTP] Size Request Failed %d.\n", xHTTPHandle->xResponse.statusCode ) );
             return -1;
         }
     }
