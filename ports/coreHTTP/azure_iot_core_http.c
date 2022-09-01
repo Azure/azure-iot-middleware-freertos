@@ -91,7 +91,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,
     ( void ) memset( &xHTTPHandle->xRequestHeaders, 0, sizeof( xHTTPHandle->xRequestHeaders ) );
     ( void ) memset( &xHTTPHandle->xResponse, 0, sizeof( xHTTPHandle->xResponse ) );
 
-    xHTTPHandle->xRequestHeaders.pBuffer = pucHeaderBuffer;
+    xHTTPHandle->xRequestHeaders.pBuffer = (uint8_t*)pucHeaderBuffer;
     xHTTPHandle->xRequestHeaders.bufferLen = ulHeaderBufferLength;
 
     xHTTPHandle->xRequestInfo.pHost = pucURL;
@@ -119,7 +119,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
-    xHTTPHandle->xResponse.pBuffer = pucDataBuffer;
+    xHTTPHandle->xResponse.pBuffer = (uint8_t*)pucDataBuffer;
     xHTTPHandle->xResponse.bufferLen = ulDataBufferLength;
 
     if( !( ( lRangeStart == 0 ) && ( lRangeEnd == azureiothttpHttpRangeRequestEndOfFile ) ) )
@@ -188,7 +188,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
     ( void ) memset( &xHTTPHandle->xRequestHeaders, 0, sizeof( xHTTPHandle->xRequestHeaders ) );
     ( void ) memset( &xHTTPHandle->xResponse, 0, sizeof( xHTTPHandle->xResponse ) );
 
-    xHTTPHandle->xRequestHeaders.pBuffer = pucHeaderBuffer;
+    xHTTPHandle->xRequestHeaders.pBuffer = (uint8_t*)pucHeaderBuffer;
     xHTTPHandle->xRequestHeaders.bufferLen = ulHeaderBufferLength;
 
     xHTTPHandle->xRequestInfo.pHost = pucURL;
@@ -212,7 +212,7 @@ int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle,
 {
     HTTPStatus_t xHttpLibraryStatus = HTTPSuccess;
 
-    xHTTPHandle->xResponse.pBuffer = pucDataBuffer;
+    xHTTPHandle->xResponse.pBuffer = (uint8_t*)pucDataBuffer;
     xHTTPHandle->xResponse.bufferLen = ulDataBufferLength;
 
     xHttpLibraryStatus = HTTPClient_Send( ( TransportInterface_t * ) xHTTPHandle->pxHTTPTransport, &xHTTPHandle->xRequestHeaders, NULL, 0, &xHTTPHandle->xResponse, 0 );
