@@ -1,0 +1,9 @@
+###########
+# Azure IoT middleware for FreeRTOS
+###########
+
+# Catch all for whole project
+* @CIPop @danewalton @ericwol-msft @ewertons @josesanchez7 @jspaith @preethi826 @RLeclair @vaavva
+
+# README Files
+*.md @CIPop @danewalton @ericwol-msft @ewertons @josesanchez7 @jspaith @preethi826 @RLeclair @vaavva @wduraes
