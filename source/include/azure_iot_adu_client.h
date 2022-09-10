@@ -20,22 +20,6 @@ extern const uint8_t AzureIoTADURootKeyN[ 385 ];
 extern const uint8_t AzureIoTADURootKeyE[ 3 ];
 
 /**
- * @brief ADU Update ID.
- * @link https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
- */
-typedef struct AzureIoTADUClientUpdateId
-{
-    const uint8_t * ucProvider;
-    uint32_t ulProviderLength;
-
-    const uint8_t * ucName;
-    uint32_t ulNameLength;
-
-    const uint8_t * ucVersion;
-    uint32_t ulVersionLength;
-} AzureIoTADUClientUpdateId_t;
-
-/**
  * @brief Holds any user-defined custom properties of the device.
  * @remark Implementer can define other device properties to be used
  *         for the compatibility check while targeting the update deployment.
@@ -68,7 +52,8 @@ typedef struct AzureIoTADUClientDeviceProperties
 
     AzureIoTADUDeviceCustomProperties_t * pxCustomProperties;
 
-    AzureIoTADUClientUpdateId_t xCurrentUpdateId;
+    const uint8_t * ucCurrentUpdateId;
+    uint32_t ulCurrentUpdateIdLength;
 
     const uint8_t * ucDeliveryOptimizationAgentVersion;
     uint32_t ulDeliveryOptimizationAgentVersionLength;
