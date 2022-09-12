@@ -377,15 +377,9 @@ static void prvFillBaseAduDeviceProperties( AzureIoTADUClientDeviceProperties_t 
             &pxDeviceProperties->pxCustomProperties->_internal.xCustomProperties;
     }
 
-    pxBaseAduDeviceProperties->update_id.name = az_span_create(
-        ( uint8_t * ) pxDeviceProperties->xCurrentUpdateId.ucName,
-        ( int32_t ) pxDeviceProperties->xCurrentUpdateId.ulNameLength );
-    pxBaseAduDeviceProperties->update_id.provider = az_span_create(
-        ( uint8_t * ) pxDeviceProperties->xCurrentUpdateId.ucProvider,
-        ( int32_t ) pxDeviceProperties->xCurrentUpdateId.ulProviderLength );
-    pxBaseAduDeviceProperties->update_id.version = az_span_create(
-        ( uint8_t * ) pxDeviceProperties->xCurrentUpdateId.ucVersion,
-        ( int32_t ) pxDeviceProperties->xCurrentUpdateId.ulVersionLength );
+    pxBaseAduDeviceProperties->update_id = az_span_create(
+        ( uint8_t * ) pxDeviceProperties->ucCurrentUpdateId,
+        ( int32_t ) pxDeviceProperties->ulCurrentUpdateIdLength );
     pxBaseAduDeviceProperties->adu_version = AZ_SPAN_FROM_STR( AZ_IOT_ADU_CLIENT_AGENT_VERSION );
     pxBaseAduDeviceProperties->delivery_optimization_agent_version = az_span_create(
         ( uint8_t * ) pxDeviceProperties->ucDeliveryOptimizationAgentVersion,

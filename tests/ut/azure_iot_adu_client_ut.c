@@ -25,7 +25,7 @@
 #define testDEVICE_CUSTOM_PROPERTY_VALUE_1    "123"
 #define testDEVICE_CUSTOM_PROPERTY_NAME_2     "def"
 #define testDEVICE_CUSTOM_PROPERTY_VALUE_2    "456"
-
+#define testUPDATE_ID                         "{\"provider\":\"" testUPDATE_PROVIDER "\",\"name\":\"" testUPDATE_NAME "\",\"version\":\"" testUPDATE_VERSION "\"}"
 
 static const uint8_t ucHostname[] = "unittest.azure-devices.net";
 static const uint8_t ucDeviceId[] = "testiothub";
@@ -82,15 +82,8 @@ AzureIoTADUClientDeviceProperties_t xADUDeviceProperties =
     .ucModel                                  = testDEVICE_MODEL,
     .ulModelLength                            = sizeof( testDEVICE_MODEL ) - 1,
     .pxCustomProperties                       = NULL,
-    .xCurrentUpdateId                         =
-    {
-        .ucProvider                           = testUPDATE_PROVIDER,
-        .ulProviderLength                     = sizeof( testUPDATE_PROVIDER ) - 1,
-        .ucName                               = testUPDATE_NAME,
-        .ulNameLength                         = sizeof( testUPDATE_NAME ) - 1,
-        .ucVersion                            = testUPDATE_VERSION,
-        .ulVersionLength                      = sizeof( testUPDATE_VERSION ) - 1
-    },
+    .ucCurrentUpdateId                        = testUPDATE_ID,
+    .ulCurrentUpdateIdLength                  = sizeof( testUPDATE_ID ) - 1,
     .ucDeliveryOptimizationAgentVersion       = testDO_VERSION,
     .ulDeliveryOptimizationAgentVersionLength = sizeof( testDO_VERSION ) - 1
 };
