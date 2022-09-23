@@ -15,9 +15,12 @@
 #include <azure/iot/az_iot_adu_client.h>
 
 /* ADU.200702.R: root production key from 7/2/2020  */
-extern const uint8_t AzureIoTADURootKeyId[ 13 ];
-extern const uint8_t AzureIoTADURootKeyN[ 385 ];
-extern const uint8_t AzureIoTADURootKeyE[ 3 ];
+extern const uint8_t * AzureIoTADURootKeyId;
+extern const uint32_t AzureIoTADURootKeyIdSize;
+extern const uint8_t * AzureIoTADURootKeyN;
+extern const uint32_t AzureIoTADURootKeyNSize;
+extern const uint8_t * AzureIoTADURootKeyE;
+extern const uint32_t AzureIoTADURootKeyESize;
 
 /**
  * @brief Holds any user-defined custom properties of the device.
