@@ -223,6 +223,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
     az_result xAzResult;
     az_json_reader jr;
     az_span xBufferSpan;
+    int32_t lOutManifestSize;
 
     if( ( pxAzureIoTADUClient == NULL ) || ( pxReader == NULL ) ||
         ( pxAduUpdateRequest == NULL ) || ( pucBuffer == NULL ) || ( ulBufferSize == 0 ) )
@@ -236,9 +237,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
     xAzResult = az_iot_adu_client_parse_service_properties(
         &pxAzureIoTADUClient->_internal.xADUClient,
         &pxReader->_internal.xCoreReader,
-        xBufferSpan,
-        &xBaseUpdateRequest,
-        &xBufferSpan );
+        &xBaseUpdateRequest );
 
     if( az_result_failed( xAzResult ) )
     {
@@ -249,7 +248,15 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
     {
         if( az_span_size( xBaseUpdateRequest.update_manifest ) > 0 )
         {
-            xAzResult = az_json_reader_init( &jr, xBaseUpdateRequest.update_manifest, NULL );
+            xAzResult = az_json_string_unescape( xBaseUpdateRequest.update_manifest, ( char * ) az_span_ptr( xBufferSpan ), az_span_size( xBufferSpan ), &lOutManifestSize );
+
+            if( az_result_failed( xAzResult ) )
+            {
+                AZLogError( ( "az_json_string_unescape failed: 0x%08x", xAzResult ) );
+                return AzureIoT_TranslateCoreError( xAzResult );
+            }
+
+            xAzResult = az_json_reader_init( &jr, az_span_slice( xBufferSpan, 0, lOutManifestSize ), NULL );
 
             if( az_result_failed( xAzResult ) )
             {
