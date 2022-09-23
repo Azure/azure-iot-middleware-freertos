@@ -19,11 +19,11 @@
 /* The following key is used to validate the Azure Device Update update manifest signature */
 /* For more details, please see https://docs.microsoft.com/en-us/azure/iot-hub-device-update/device-update-security */
 const uint8_t * AzureIoTADURootKeyId = azure_iot_adu_root_key_id;
-const uint32_t AzureIoTADURootKeyIdSize = sizeof(azure_iot_adu_root_key_id) - 1; // This is a string so minus 1
+const uint32_t AzureIoTADURootKeyIdSize = sizeof( azure_iot_adu_root_key_id ) - 1; /* This is a string so minus 1 */
 const uint8_t * AzureIoTADURootKeyN = azure_iot_adu_root_key_n;
-const uint32_t AzureIoTADURootKeyNSize = sizeof(azure_iot_adu_root_key_n);
+const uint32_t AzureIoTADURootKeyNSize = sizeof( azure_iot_adu_root_key_n );
 const uint8_t * AzureIoTADURootKeyE = azure_iot_adu_root_key_e;
-const uint32_t AzureIoTADURootKeyESize = sizeof(azure_iot_adu_root_key_e);
+const uint32_t AzureIoTADURootKeyESize = sizeof( azure_iot_adu_root_key_e );
 
 AzureIoTResult_t AzureIoTADUClient_OptionsInit( AzureIoTADUClientOptions_t * pxADUClientOptions )
 {
