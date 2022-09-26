@@ -15,9 +15,20 @@
 #include <azure/iot/az_iot_adu_client.h>
 
 /* ADU.200702.R: root production key from 7/2/2020  */
-extern const uint8_t AzureIoTADURootKeyId[ 13 ];
-extern const uint8_t AzureIoTADURootKeyN[ 385 ];
-extern const uint8_t AzureIoTADURootKeyE[ 3 ];
+extern const uint8_t * AzureIoTADURootKeyId;
+extern const uint32_t AzureIoTADURootKeyIdSize;
+extern const uint8_t * AzureIoTADURootKeyN;
+extern const uint32_t AzureIoTADURootKeyNSize;
+extern const uint8_t * AzureIoTADURootKeyE;
+extern const uint32_t AzureIoTADURootKeyESize;
+
+/**
+ * @brief The DTMI specifying the capabilities for the Azure Device Update client.
+ *
+ * This may be used in the #AzureIoTHubClientOptions_t as the `pucModelID`.
+ */
+extern const uint8_t * AzureIoTADUInterfaceID;
+extern const uint32_t AzureIoTADUInterfaceIDLength;
 
 /**
  * @brief Holds any user-defined custom properties of the device.
