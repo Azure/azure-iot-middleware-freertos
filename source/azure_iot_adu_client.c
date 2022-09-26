@@ -25,6 +25,9 @@ const uint32_t AzureIoTADURootKeyNSize = sizeof( azure_iot_adu_root_key_n );
 const uint8_t * AzureIoTADURootKeyE = azure_iot_adu_root_key_e;
 const uint32_t AzureIoTADURootKeyESize = sizeof( azure_iot_adu_root_key_e );
 
+const uint8_t * AzureIoTADUInterfaceID = AZ_IOT_ADU_CLIENT_AGENT_INTERFACE_ID;
+const uint32_t AzureIoTADUInterfaceIDLength = sizeof( AZ_IOT_ADU_CLIENT_AGENT_INTERFACE_ID ) - 1;
+
 AzureIoTResult_t AzureIoTADUClient_OptionsInit( AzureIoTADUClientOptions_t * pxADUClientOptions )
 {
     AzureIoTResult_t xResult;

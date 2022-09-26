@@ -23,6 +23,14 @@ extern const uint8_t * AzureIoTADURootKeyE;
 extern const uint32_t AzureIoTADURootKeyESize;
 
 /**
+ * @brief The DTMI specifying the capabilities for the Azure Device Update client.
+ *
+ * This may be used in the #AzureIoTHubClientOptions_t as the `pucModelID`.
+ */
+extern const uint8_t * AzureIoTADUInterfaceID;
+extern const uint32_t AzureIoTADUInterfaceIDLength;
+
+/**
  * @brief Holds any user-defined custom properties of the device.
  * @remark Implementer can define other device properties to be used
  *         for the compatibility check while targeting the update deployment.
