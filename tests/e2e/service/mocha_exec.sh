@@ -34,6 +34,8 @@ echo -e "Installing node dependencies using npm"
 
 npm install
 
+npm audit fix --force --registry=https://registry.npmjs.org/
+
 echo -e "Done installing node dependencies"
 
 echo -e "Compiling typescripts to js"
