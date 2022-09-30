@@ -31,7 +31,10 @@ fi
 
 echo -e "Installing node dependencies using npm"
 
-nvm use 8
+. $HOME/.nvm/nvm.sh > /dev/null 2>&1 || true
+nvm ls
+nvm use v8
+
 npm install
 
 echo -e "Done installing node dependencies"
