@@ -29,13 +29,9 @@ if [ "$1" == "iot_provisioning_e2e_test" ]; then
    [ -v IOT_PROVISIONING_SCOPE_ID ] || die "IOT_PROVISIONING_SCOPE_ID is not set!" 
 fi
 
-npm install -g npm@8.19.2 --unsafe-perm=true --allow-root
-
 echo -e "Installing node dependencies using npm"
 
-npm install
-
-npm audit fix --force --registry=https://registry.npmjs.org/
+npm install -g npm@8.19.2 --unsafe-perm=true --allow-root
 
 echo -e "Done installing node dependencies"
 
