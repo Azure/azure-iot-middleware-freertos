@@ -249,7 +249,7 @@ static void testAzureIoTADUClient_ParseRequest_InvalidArgFailure( void ** ppvSta
 }
 
 static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
-                                  int32_t lRequestPayloadLength )
+                                    int32_t lRequestPayloadLength )
 {
     AzureIoTADUClient_t xTestIoTADUClient;
     AzureIoTJSONReader_t xReader;
@@ -257,7 +257,7 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
 
     assert_int_equal( AzureIoTADUClient_Init( &xTestIoTADUClient, NULL ), eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, pucRequestPayload, lRequestPayloadLength  ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, pucRequestPayload, lRequestPayloadLength ), eAzureIoTSuccess );
 
     /* ParseRequest requires that the reader be placed on the "service" prop name */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ), eAzureIoTSuccess );
