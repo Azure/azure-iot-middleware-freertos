@@ -27,8 +27,8 @@ extern const uint32_t AzureIoTADURootKeyESize;
  *
  * This may be used in the #AzureIoTHubClientOptions_t as the `pucModelID`.
  */
-extern const uint8_t * AzureIoTADUInterfaceID;
-extern const uint32_t AzureIoTADUInterfaceIDLength;
+extern const uint8_t * AzureIoTADUModelID;
+extern const uint32_t AzureIoTADUModelIDLength;
 
 /**
  * @brief Holds any user-defined custom properties of the device.
