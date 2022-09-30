@@ -248,8 +248,8 @@ static void testAzureIoTADUClient_ParseRequest_InvalidArgFailure( void ** ppvSta
                                                       0 ), eAzureIoTErrorInvalidArgument );
 }
 
-static void ParseRequest_Success( uint8_t * request_payload,
-                                  int32_t request_payload_size )
+static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
+                                  int32_t lRequestPayloadLength )
 {
     AzureIoTADUClient_t xTestIoTADUClient;
     AzureIoTJSONReader_t xReader;
@@ -257,7 +257,7 @@ static void ParseRequest_Success( uint8_t * request_payload,
 
     assert_int_equal( AzureIoTADUClient_Init( &xTestIoTADUClient, NULL ), eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, request_payload, request_payload_size ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, pucRequestPayload, lRequestPayloadLength  ), eAzureIoTSuccess );
 
     /* ParseRequest requires that the reader be placed on the "service" prop name */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ), eAzureIoTSuccess );
@@ -314,13 +314,13 @@ static void ParseRequest_Success( uint8_t * request_payload,
 
 static void testAzureIoTADUClient_ParseRequest_Success( void ** ppvState )
 {
-    ParseRequest_Success( ucADURequestPayload, sizeof( ucADURequestPayload ) - 1 );
+    prvParseRequestSuccess( ucADURequestPayload, sizeof( ucADURequestPayload ) - 1 );
 }
 
 /* Test that a request payload with delta update fields parses without errors (ignoring the fields) */
 static void testAzureIoTADUClient_ParseRequest_UnusedFields_Success( void ** ppvState )
 {
-    ParseRequest_Success( ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1 );
+    prvParseRequestSuccess( ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1 );
 }
 
 static void testAzureIoTADUClient_ParseRequest_NoDeployment_Success( void ** ppvState )
