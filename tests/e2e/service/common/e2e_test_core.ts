@@ -44,7 +44,7 @@ let device_exit_status = 0;
 //
 function executeTestProcess(test_process:string, cmd_args:string, resultCallback) {
     // Start the process
-    let command_line:string = test_process + ` ` + cmd_args + ``
+    let command_line:string = `sudo ` + test_process + ` ` + cmd_args + ``
     //console.log(`Invoking exec(${command_line})`)
     test_exe = exec(command_line);
 
