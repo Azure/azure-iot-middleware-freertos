@@ -31,7 +31,7 @@ fi
 
 echo -e "Installing node dependencies using npm"
 
-npm install -g npm@8.19.2 --unsafe-perm=true --allow-root
+nvm use 8
 npm install
 
 echo -e "Done installing node dependencies"
