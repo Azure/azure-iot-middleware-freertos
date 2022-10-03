@@ -32,7 +32,7 @@ function testSetup(done) {
             else {
                 // Store information about this device for later
                 testHubInfo = newDeviceInfo
-                e2eTestCore.createProvisioningEnrollment(testProvisioningConnectionString, "azure_services_port_e2e_", (err, newEnrollmentInfo) => {
+                e2eTestCore.createProvisioningEnrollment(testProvisioningConnectionString, "azure_mid_freertos_e2e_", (err, newEnrollmentInfo) => {
                     // Store information about this device for later
                     testEnrollmentInfo = newEnrollmentInfo
                     done(err)
