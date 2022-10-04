@@ -56,6 +56,8 @@ static uint8_t ucADURequestPayload[] = "{\"service\":{\"workflow\":{\"action\":3
 static uint8_t ucADURequestPayloadUnusedFields[] = "{\"service\":{\"workflow\":{\"action\":3,\"id\":\"51552a54-765e-419f-892a-c822549b6f38\"},\"updateManifest\":\"{\\\"manifestVersion\\\":\\\"4\\\",\\\"updateId\\\":{\\\"provider\\\":\\\"Contoso\\\",\\\"name\\\":\\\"Foobar\\\",\\\"version\\\":\\\"1.1\\\"},\\\"compatibility\\\":[{\\\"deviceManufacturer\\\":\\\"Contoso\\\",\\\"deviceModel\\\":\\\"Foobar\\\"}],\\\"instructions\\\":{\\\"steps\\\":[{\\\"handler\\\":\\\"microsoft/swupdate:1\\\",\\\"files\\\":[\\\"f2f4a804ca17afbae\\\"],\\\"handlerProperties\\\":{\\\"installedCriteria\\\":\\\"1.0\\\"}}]},\\\"files\\\":{\\\"f2f4a804ca17afbae\\\":{\\\"fileName\\\":\\\"iot-middleware-sample-adu-v1.1\\\",\\\"sizeInBytes\\\":844976,\\\"hashes\\\":{\\\"sha256\\\":\\\"xsoCnYAMkZZ7m9RL9Vyg9jKfFehCNxyuPFaJVM/WBi0=\\\"},\\\"mimeType\\\":\\\"application/octet-stream\\\",\\\"relatedFiles\\\":[{\\\"filename\\\":\\\"in1_in2_deltaupdate.dat\\\",\\\"sizeInBytes\\\":\\\"102910752\\\",\\\"hashes\\\":{\\\"sha256\\\":\\\"2MIl...\\\"},\\\"properties\\\":{\\\"microsoft.sourceFileAlgorithm\\\":\\\"sha256\\\",\\\"microsoft.sourceFileHash\\\":\\\"YmFY...\\\"}}],\\\"downloadHandler\\\":{\\\"id\\\":\\\"microsoft/delta:1\\\"}}},\\\"createdDateTime\\\":\\\"2022-07-07T03:02:48.8449038Z\\\"}\",\"updateManifestSignature\":\"eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdjaU9pSlNVekkxTmlJc0ltdHBaQ0k2SWtGRVZTNHlNREEzTURJdVVpSjkuZXlKcmRIa2lPaUpTVTBFaUxDSnVJam9pYkV4bWMwdHZPRmwwWW1Oak1sRXpUalV3VlhSTVNXWlhVVXhXVTBGRlltTm9LMFl2WTJVM1V6Rlpja3BvV0U5VGNucFRaa051VEhCVmFYRlFWSGMwZWxndmRHbEJja0ZGZFhrM1JFRmxWVzVGU0VWamVEZE9hM2QzZVRVdk9IcExaV3AyWTBWWWNFRktMMlV6UWt0SE5FVTBiMjVtU0ZGRmNFOXplSGRQUzBWbFJ6QkhkamwzVjB3emVsUmpUblprUzFoUFJGaEdNMVZRWlVveGIwZGlVRkZ0Y3pKNmJVTktlRUppZEZOSldVbDBiWFpwWTNneVpXdGtWbnBYUm5jdmRrdFVUblZMYXpob2NVczNTRkptYWs5VlMzVkxXSGxqSzNsSVVVa3dZVVpDY2pKNmEyc3plR2d4ZEVWUFN6azRWMHBtZUdKamFsQnpSRTgyWjNwWmVtdFlla05OZW1Fd1R6QkhhV0pDWjB4QlZGUTVUV1k0V1ZCd1dVY3lhblpQWVVSVmIwTlJiakpWWTFWU1RtUnNPR2hLWW5scWJscHZNa3B5SzFVNE5IbDFjVTlyTjBZMFdubFRiMEoyTkdKWVNrZ3lXbEpTV2tab0wzVlRiSE5XT1hkU2JWbG9XWEoyT1RGRVdtbHhhemhJVWpaRVUyeHVabTVsZFRJNFJsUm9SVzF0YjNOVlRUTnJNbGxNYzBKak5FSnZkWEIwTTNsaFNEaFpia3BVTnpSMU16TjFlakU1TDAxNlZIVnFTMmMzVkdGcE1USXJXR0owYmxwRU9XcFVSMkY1U25Sc2FFWmxWeXRJUXpVM1FYUkJSbHBvY1ZsM2VVZHJXQ3M0TTBGaFVGaGFOR0V4VHpoMU1qTk9WVWQxTWtGd04yOU5NVTR3ZVVKS0swbHNUM29pTENKbElqb2lRVkZCUWlJc0ltRnNaeUk2SWxKVE1qVTJJaXdpYTJsa0lqb2lRVVJWTGpJeE1EWXdPUzVTTGxNaWZRLlJLS2VBZE02dGFjdWZpSVU3eTV2S3dsNFpQLURMNnEteHlrTndEdkljZFpIaTBIa2RIZ1V2WnoyZzZCTmpLS21WTU92dXp6TjhEczhybXo1dnMwT1RJN2tYUG1YeDZFLUYyUXVoUXNxT3J5LS1aN2J3TW5LYTNkZk1sbkthWU9PdURtV252RWMyR0hWdVVTSzREbmw0TE9vTTQxOVlMNThWTDAtSEthU18xYmNOUDhXYjVZR08xZXh1RmpiVGtIZkNIU0duVThJeUFjczlGTjhUT3JETHZpVEtwcWtvM3RiSUwxZE1TN3NhLWJkZExUVWp6TnVLTmFpNnpIWTdSanZGbjhjUDN6R2xjQnN1aVQ0XzVVaDZ0M05rZW1UdV9tZjdtZUFLLTBTMTAzMFpSNnNTR281azgtTE1sX0ZaUmh4djNFZFNtR2RBUTNlMDVMRzNnVVAyNzhTQWVzWHhNQUlHWmcxUFE3aEpoZGZHdmVGanJNdkdTSVFEM09wRnEtZHREcEFXbUo2Zm5sZFA1UWxYek5tQkJTMlZRQUtXZU9BYjh0Yjl5aVhsemhtT1dLRjF4SzlseHpYUG9GNmllOFRUWlJ4T0hxTjNiSkVISkVoQmVLclh6YkViV2tFNm4zTEoxbkd5M1htUlVFcER0Umdpa0tBUzZybFhFT0VneXNjIn0.eyJzaGEyNTYiOiJiUlkrcis0MzdsYTV5d2hIeDdqVHhlVVRkeDdJdXQyQkNlcVpoQys5bmFNPSJ9.eYoBoq9EOiCebTJAMhRh9DARC69F3C4Qsia86no9YbMJzwKt-rH88Va4dL59uNTlPNBQid4u0RlXSUTuma_v-Sf4hyw70tCskwru5Fp41k9Ve3YSkulUKzctEhaNUJ9tUSA11Tz9HwJHOAEA1-S_dXWR_yuxabk9G_BiucsuKhoI0Bas4e1ydQE2jXZNdVVibrFSqxvuVZrxHKVhwm-G9RYHjZcoSgmQ58vWyaC2l8K8ZqnlQWmuLur0CZFQlanUVxDocJUtu1MnB2ER6emMRD_4Azup2K4apq9E1EfYBbXxOZ0N5jaSr-2xg8NVSow5NqNSaYYY43wy_NIUefRlbSYu5zOrSWtuIwRdsO-43Eo8b9vuJj1Qty9ee6xz1gdUNHnUdnM6dHEplZK0GZznsxRviFXt7yv8bVLd32Z7QDtFh3s17xlKulBZxWP-q96r92RoUTov2M3ynPZSDmc6Mz7-r8ioO5VHO5pAPCH-tF5zsqzipPJKmBMaf5gYk8wR\",\"fileUrls\":{\"f2f4a804ca17afbae\":\"http://contoso-adu-instance--contoso-adu.b.nlu.dl.adu.microsoft.com/westus2/contoso-adu-instance--contoso-adu/67c8d2ef5148403391bed74f51a28597/iot-middleware-sample-adu-v1.1\"}}}";
 static uint8_t ucADURequestPayloadNoDeployment[] = "{\"service\":{\"workflow\":{\"action\":255,\"id\":\"nodeployment\"}},\"__t\":\"c\"}";
 static uint8_t ucADURequestPayloadNoDeployementNullManifest[] = "{\"service\":{\"workflow\":{\"action\":255,\"id\":\"nodeployment\"},\"updateManifest\":null,\"updateManifestSignature\":null,\"fileUrls\":null},\"__t\":\"c\"}";
+static uint8_t ucADURequestManifest[] = "{\"manifestVersion\":\"4\",\"updateId\":{\"provider\":\"Contoso\",\"name\":\"Foobar\",\"version\":\"1.1\"},\"compatibility\":[{\"deviceManufacturer\":\"Contoso\",\"deviceModel\":\"Foobar\"}],\"instructions\":{\"steps\":[{\"handler\":\"microsoft/swupdate:1\",\"files\":[\"f2f4a804ca17afbae\"],\"handlerProperties\":{\"installedCriteria\":\"1.0\"}}]},\"files\":{\"f2f4a804ca17afbae\":{\"fileName\":\"iot-middleware-sample-adu-v1.1\",\"sizeInBytes\":844976,\"hashes\":{\"sha256\":\"xsoCnYAMkZZ7m9RL9Vyg9jKfFehCNxyuPFaJVM/WBi0=\"}}},\"createdDateTime\":\"2022-07-07T03:02:48.8449038Z\"}";
+static uint8_t ucADURequestManifestUnusedFields[] = "{\"manifestVersion\":\"4\",\"updateId\":{\"provider\":\"Contoso\",\"name\":\"Foobar\",\"version\":\"1.1\"},\"compatibility\":[{\"deviceManufacturer\":\"Contoso\",\"deviceModel\":\"Foobar\"}],\"instructions\":{\"steps\":[{\"handler\":\"microsoft/swupdate:1\",\"files\":[\"f2f4a804ca17afbae\"],\"handlerProperties\":{\"installedCriteria\":\"1.0\"}}]},\"files\":{\"f2f4a804ca17afbae\":{\"fileName\":\"iot-middleware-sample-adu-v1.1\",\"sizeInBytes\":844976,\"hashes\":{\"sha256\":\"xsoCnYAMkZZ7m9RL9Vyg9jKfFehCNxyuPFaJVM/WBi0=\"},\"mimeType\":\"application/octet-stream\",\"relatedFiles\":[{\"filename\":\"in1_in2_deltaupdate.dat\",\"sizeInBytes\":\"102910752\",\"hashes\":{\"sha256\":\"2MIl...\"},\"properties\":{\"microsoft.sourceFileAlgorithm\":\"sha256\",\"microsoft.sourceFileHash\":\"YmFY...\"}}],\"downloadHandler\":{\"id\":\"microsoft/delta:1\"}}},\"createdDateTime\":\"2022-07-07T03:02:48.8449038Z\"}";
 static uint32_t ulWorkflowAction = 3;
 static uint32_t ulWorkflowActionNoDeployment = 255;
 static uint8_t ucWorkflowID[] = "51552a54-765e-419f-892a-c822549b6f38";
@@ -249,7 +251,9 @@ static void testAzureIoTADUClient_ParseRequest_InvalidArgFailure( void ** ppvSta
 }
 
 static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
-                                    int32_t lRequestPayloadLength )
+                                    int32_t lRequestPayloadLength,
+                                    uint8_t * pucExpectedManifest,
+                                    int32_t lExpectedPayloadLength )
 {
     AzureIoTADUClient_t xTestIoTADUClient;
     AzureIoTJSONReader_t xReader;
@@ -273,6 +277,8 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
 
     /* Update Manifest */
+    assert_memory_equal( xRequest.pucUpdateManifest, pucExpectedManifest, lExpectedPayloadLength );
+    assert_int_equal( xRequest.ulUpdateManifestLength, lExpectedPayloadLength );
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
     assert_memory_equal( xRequest.xWorkflow.pucID, ucWorkflowID, sizeof( ucWorkflowID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pucManifestVersion, ucManifestVersion, sizeof( ucManifestVersion ) - 1 );
@@ -314,13 +320,15 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
 
 static void testAzureIoTADUClient_ParseRequest_Success( void ** ppvState )
 {
-    prvParseRequestSuccess( ucADURequestPayload, sizeof( ucADURequestPayload ) - 1 );
+    prvParseRequestSuccess( ucADURequestPayload, sizeof( ucADURequestPayload ) - 1,
+                            ucADURequestManifest, sizeof( ucADURequestManifest ) - 1 );
 }
 
 /* Test that a request payload with delta update fields parses without errors (ignoring the fields) */
 static void testAzureIoTADUClient_ParseRequest_UnusedFields_Success( void ** ppvState )
 {
-    prvParseRequestSuccess( ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1 );
+    prvParseRequestSuccess( ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1,
+                            ucADURequestManifestUnusedFields, sizeof( ucADURequestManifestUnusedFields ) - 1 );
 }
 
 static void testAzureIoTADUClient_ParseRequest_NoDeployment_Success( void ** ppvState )
