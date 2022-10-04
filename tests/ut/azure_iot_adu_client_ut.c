@@ -253,7 +253,7 @@ static void testAzureIoTADUClient_ParseRequest_InvalidArgFailure( void ** ppvSta
 static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
                                     int32_t lRequestPayloadLength,
                                     uint8_t * pucExpectedManifest,
-                                    int32_t lExpectedPayloadLength )
+                                    int32_t lExpectedManifestLength )
 {
     AzureIoTADUClient_t xTestIoTADUClient;
     AzureIoTJSONReader_t xReader;
@@ -277,8 +277,8 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
 
     /* Update Manifest */
-    assert_memory_equal( xRequest.pucUpdateManifest, pucExpectedManifest, lExpectedPayloadLength );
-    assert_int_equal( xRequest.ulUpdateManifestLength, lExpectedPayloadLength );
+    assert_memory_equal( xRequest.pucUpdateManifest, pucExpectedManifest, lExpectedManifestLength );
+    assert_int_equal( xRequest.ulUpdateManifestLength, lExpectedManifestLength );
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
     assert_memory_equal( xRequest.xWorkflow.pucID, ucWorkflowID, sizeof( ucWorkflowID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pucManifestVersion, ucManifestVersion, sizeof( ucManifestVersion ) - 1 );
