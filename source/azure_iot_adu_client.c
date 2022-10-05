@@ -99,15 +99,17 @@ bool AzureIoTADUClient_IsADUComponent( AzureIoTADUClient_t * pxAzureIoTADUClient
 
 static void prvCastUpdateRequest( az_iot_adu_client_update_request * pxBaseUpdateRequest,
                                   az_iot_adu_client_update_manifest * pxBaseUpdateManifest,
-                                  AzureIoTADUUpdateRequest_t * pxUpdateRequest )
+                                  AzureIoTADUUpdateRequest_t * pxUpdateRequest,
+                                  uint8_t * pucUnescapedManifest,
+                                  uint32_t ulUnescapedManifestLength )
 {
     pxUpdateRequest->xWorkflow.pucID = az_span_ptr( pxBaseUpdateRequest->workflow.id );
     pxUpdateRequest->xWorkflow.ulIDLength = ( uint32_t ) az_span_size( pxBaseUpdateRequest->workflow.id );
     pxUpdateRequest->xWorkflow.xAction = ( AzureIoTADUAction_t ) pxBaseUpdateRequest->workflow.action;
     pxUpdateRequest->xWorkflow.pucRetryTimestamp = az_span_ptr( pxBaseUpdateRequest->workflow.retry_timestamp );
     pxUpdateRequest->xWorkflow.ulRetryTimestampLength = ( uint32_t ) az_span_size( pxBaseUpdateRequest->workflow.retry_timestamp );
-    pxUpdateRequest->pucUpdateManifest = az_span_ptr( pxBaseUpdateRequest->update_manifest );
-    pxUpdateRequest->ulUpdateManifestLength = ( uint32_t ) az_span_size( pxBaseUpdateRequest->update_manifest );
+    pxUpdateRequest->pucUpdateManifest = ulUnescapedManifestLength > 0 ? pucUnescapedManifest : NULL;
+    pxUpdateRequest->ulUpdateManifestLength = ulUnescapedManifestLength;
     pxUpdateRequest->pucUpdateManifestSignature = az_span_ptr( pxBaseUpdateRequest->update_manifest_signature );
     pxUpdateRequest->ulUpdateManifestSignatureLength = ( uint32_t ) az_span_size( pxBaseUpdateRequest->update_manifest_signature );
     pxUpdateRequest->ulFileUrlCount = pxBaseUpdateRequest->file_urls_count;
@@ -201,7 +203,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
     az_result xAzResult;
     az_json_reader jr;
     az_span xBufferSpan;
-    int32_t lOutManifestSize;
+    int32_t lOutManifestSize = 0;
 
     if( ( pxAzureIoTADUClient == NULL ) || ( pxReader == NULL ) ||
         ( pxAduUpdateRequest == NULL ) || ( pucBuffer == NULL ) || ( ulBufferSize == 0 ) )
@@ -260,7 +262,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
 
         prvCastUpdateRequest( &xBaseUpdateRequest,
                               az_span_size( xBaseUpdateRequest.update_manifest ) > 0 ? &xBaseUpdateManifest : NULL,
-                              pxAduUpdateRequest );
+                              pxAduUpdateRequest, pucBuffer, ( uint32_t ) lOutManifestSize );
     }
 
     return eAzureIoTSuccess;
