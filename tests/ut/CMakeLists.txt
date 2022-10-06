@@ -266,8 +266,8 @@ if(UNIX)
       INCLUDE_DIRECTORIES
         ${CMOCKA_INCLUDE_DIR}
         ${CMAKE_CURRENT_LIST_DIR}
-        ${CMAKE_CURRENT_LIST_DIR}/../config_files
         ${CMAKE_CURRENT_LIST_DIR}/mbedtls
+        ${CMAKE_CURRENT_LIST_DIR}/../config_files
         ${CMAKE_CURRENT_LIST_DIR}/../../libraries/FreeRTOS/FreeRTOS/Source/include
         ${CMAKE_CURRENT_LIST_DIR}/../../libraries/FreeRTOS/FreeRTOS/Source/portable/ThirdParty/GCC/Posix
         ${CMAKE_CURRENT_LIST_DIR}/../../libraries/FreeRTOS/FreeRTOS/Source/portable/ThirdParty/GCC/Posix/utils
