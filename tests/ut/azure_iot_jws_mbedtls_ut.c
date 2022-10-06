@@ -1,11 +1,13 @@
 /* Copyright (c) Microsoft Corporation.
  * Licensed under the MIT License. */
 
+#include <errno.h>
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <setjmp.h>
 
 #include <cmocka.h>
@@ -16,15 +18,22 @@
 
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/entropy.h"
+#include "mbedtls/threading.h"
+
+#include "threading_alt.h"
 
 #include "azure_iot_jws.h"
-#include "demo_config.h"
+// #include "demo_config.h"
 #include "FreeRTOSConfig.h"
 
 #define SAMPLE_TEST_SUCCESS    0
 
 static mbedtls_entropy_context xEntropyContext;
 static mbedtls_ctr_drbg_context xCtrDrgbContext;
+extern int mbedtls_platform_entropy_poll( void * data,
+                                   unsigned char * output,
+                                   size_t len,
+                                   size_t * olen );
 
 uint32_t ulGetAllTests();
 
@@ -89,42 +98,6 @@ static char ucWrongSHAManifestJWS[] = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdja
                                       "k-O9g03pB-fk1D_3sL1ju364STs87s77DfGK9e0oHbHgfzp4EdgrwRQBvTCWWKG3iT6ByfSH4N0";
 static char ucScratchBuffer[ jwsSCRATCH_BUFFER_SIZE ];
 
-/* Needed for compilation */
-int mbedtls_platform_entropy_poll( void * data,
-                                   unsigned char * output,
-                                   size_t len,
-                                   size_t * olen )
-{
-    FILE * file;
-    size_t read_len;
-
-    ( ( void ) data );
-
-    *olen = 0;
-
-    file = fopen( "/dev/urandom", "rb" );
-
-    if( file == NULL )
-    {
-        printf( "fopen failed: %i\n", errno );
-        return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
-    }
-
-    read_len = fread( output, 1, len, file );
-
-    if( read_len != len )
-    {
-        printf( "fread failed: %i\n", errno );
-        fclose( file );
-        return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
-    }
-
-    fclose( file );
-    *olen = len;
-
-    return( 0 );
-}
-
 static int initMbedtls( mbedtls_entropy_context * pxEntropyContext,
                         mbedtls_ctr_drbg_context * pxCtrDrgbContext )
 {
@@ -179,63 +152,18 @@ static void testAzureIoTJWS_ManifestAuthenticate_Failure( void ** ppvState )
 {
   assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucInvalidManifest, strlen( ucInvalidManifest ),
                                   ucValidManifestJWS, strlen( ucValidManifestJWS ),
-                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTSuccess);
+                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed);
 }
 
 static void testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure( void ** ppvState )
 {
   assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
                                   ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ),
-                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTSuccess);
+                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed);
 }
-
-/*
- * @brief Create the task that runs the test
- */
-// int vStartTestTask( void )
-// {
-//     if( initMbedtls( &xEntropyContext, &xCtrDrgbContext ) != 0 )
-//     {
-//         printf( "mbedtls init failed\n" );
-//         return 1;
-//     }
-
-//     printf( "Testing Valid Manifest\n" );
-
-//     if( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
-//                                   ucValidManifestJWS, strlen( ucValidManifestJWS ),
-//                                   ucScratchBuffer, sizeof( ucScratchBuffer ) ) != SAMPLE_TEST_SUCCESS )
-//     {
-//         printf( "Valid manifest check was not successful\n" );
-//         return 1;
-//     }
-
-//     printf( "Testing Invalid Manifest\n" );
-
-//     if( AzureIoTJWS_ManifestAuthenticate( ucInvalidManifest, strlen( ucInvalidManifest ),
-//                                   ucValidManifestJWS, strlen( ucValidManifestJWS ),
-//                                   ucScratchBuffer, sizeof( ucScratchBuffer ) ) == SAMPLE_TEST_SUCCESS )
-//     {
-//         printf( "Invalid manifest check was not successful\n" );
-//         return 1;
-//     }
-
-//     printf( "Testing Wrong SHA\n" );
-
-//     if( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
-//                                   ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ),
-//                                   ucScratchBuffer, sizeof( ucScratchBuffer ) ) == SAMPLE_TEST_SUCCESS )
-//     {
-//         printf( "Wrong SHA manifest check was not successful\n" );
-//         return 1;
-//     }
-
-//     return 0;
-// }
 
 uint32_t ulGetAllTests()
 {
-
     if( initMbedtls( &xEntropyContext, &xCtrDrgbContext ) != 0 )
     {
         printf( "mbedtls init failed\n" );

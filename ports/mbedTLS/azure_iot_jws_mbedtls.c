@@ -1,11 +1,12 @@
 /* Copyright (c) Microsoft Corporation.
  * Licensed under the MIT License. */
 
-#include "azure_sample_adu_jws.h"
+#include "azure_iot_jws.h"
 
 #include "azure/az_core.h"
 #include "azure/az_iot.h"
 
+#include "azure_iot_config.h"
 #include "azure_iot_result.h"
 #include "azure_iot_json_reader.h"
 #include "azure_iot_adu_client.h"
@@ -16,9 +17,6 @@
 #include "mbedtls/ctr_drbg.h"
 #include "mbedtls/entropy.h"
 #include "mbedtls/cipher.h"
-
-/* For logging */
-#include "demo_config.h"
 
 /**
  * @brief Convenience macro to return if an operation failed.
@@ -116,7 +114,7 @@ static AzureIoTResult_t prvSplitJWS( uint8_t * pucJWS,
             }
             else if( ulDotCount > 2 )
             {
-                LogError( ( "JWS had more '.' than required (2)" ) );
+                AZLogError( ( "JWS had more '.' than required (2)" ) );
                 return eAzureIoTErrorFailed;
             }
         }
@@ -204,7 +202,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( ulBufferLength < jwsSHA_CALCULATION_SCRATCH_SIZE )
     {
-        LogError( ( "[JWS] Buffer Not Large Enough" ) );
+        AZLogError( ( "[JWS] Buffer Not Large Enough" ) );
         return eAzureIoTErrorOutOfMemory;
     }
 
@@ -224,7 +222,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        LogError( ( "[JWS] mbedtls_rsa_import_raw res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_import_raw res: %i", lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -233,7 +231,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        LogError( ( "[JWS] mbedtls_rsa_complete res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_complete res: %i", lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -242,7 +240,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        LogError( ( "[JWS] mbedtls_rsa_check_pubkey res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_check_pubkey res: %i", lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -252,7 +250,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        LogError( ( "[JWS] mbedtls_rsa_pkcs1_decrypt res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_pkcs1_decrypt res: %i", lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -264,7 +262,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] prvJWS_SHA256Calculate failed" ) );
+        AZLogError( ( "[JWS] prvJWS_SHA256Calculate failed" ) );
         return xResult;
     }
 
@@ -273,7 +271,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( shaMatchResult != 0 )
     {
-        LogError( ( "[JWS] SHA of JWK does NOT match" ) );
+        AZLogError( ( "[JWS] SHA of JWK does NOT match" ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
@@ -310,7 +308,7 @@ static AzureIoTResult_t prvFindSJWKValue( AzureIoTJSONReader_t * pxPayload,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] Parse JSK JSON Payload Error: 0x%08x", xResult ) );
+        AZLogError( ( "[JWS] Parse JSK JSON Payload Error: 0x%08x", xResult ) );
         return xResult;
     }
 
@@ -318,7 +316,7 @@ static AzureIoTResult_t prvFindSJWKValue( AzureIoTJSONReader_t * pxPayload,
 
     if( xJSONTokenType != eAzureIoTJSONTokenSTRING )
     {
-        LogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
+        AZLogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -357,7 +355,7 @@ static AzureIoTResult_t prvFindRootKeyValue( AzureIoTJSONReader_t * pxPayload,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] Parse Root Key Error: 0x%08x", xResult ) );
+        AZLogError( ( "[JWS] Parse Root Key Error: 0x%08x", xResult ) );
         return xResult;
     }
 
@@ -365,7 +363,7 @@ static AzureIoTResult_t prvFindRootKeyValue( AzureIoTJSONReader_t * pxPayload,
 
     if( xJSONTokenType != eAzureIoTJSONTokenSTRING )
     {
-        LogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
+        AZLogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -423,7 +421,7 @@ static AzureIoTResult_t prvFindKeyParts( AzureIoTJSONReader_t * pxPayload,
         ( az_span_size( *pxBase64EncodedESpan ) == 0 ) ||
         ( az_span_size( *pxAlgSpan ) == 0 ) )
     {
-        LogError( ( "[JWS] Parse Signing Key Payload Error: %i",
+        AZLogError( ( "[JWS] Parse Signing Key Payload Error: %i",
                     xResult != eAzureIoTSuccess ? xResult : eAzureIoTErrorFailed ) );
         return xResult != eAzureIoTSuccess ? xResult : eAzureIoTErrorFailed;
     }
@@ -459,7 +457,7 @@ static AzureIoTResult_t prvFindManifestSHA( AzureIoTJSONReader_t * pxPayload,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] Parse manifest SHA error: 0x%08x", xResult ) );
+        AZLogError( ( "[JWS] Parse manifest SHA error: 0x%08x", xResult ) );
         return xResult;
     }
 
@@ -467,7 +465,7 @@ static AzureIoTResult_t prvFindManifestSHA( AzureIoTJSONReader_t * pxPayload,
 
     if( xJSONTokenType != eAzureIoTJSONTokenSTRING )
     {
-        LogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
+        AZLogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -486,11 +484,11 @@ static AzureIoTResult_t prvBase64DecodeJWK( prvJWSValidationContext_t * pxManife
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWK_HEADER_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWK_HEADER_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -502,11 +500,11 @@ static AzureIoTResult_t prvBase64DecodeJWK( prvJWSValidationContext_t * pxManife
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWK_PAYLOAD_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWK_PAYLOAD_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -518,11 +516,11 @@ static AzureIoTResult_t prvBase64DecodeJWK( prvJWSValidationContext_t * pxManife
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSIGNATURE_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSIGNATURE_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -541,11 +539,11 @@ static AzureIoTResult_t prvBase64DecodeSigningKey( prvJWSValidationContext_t * p
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsRSA3072_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsRSA3072_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -557,11 +555,11 @@ static AzureIoTResult_t prvBase64DecodeSigningKey( prvJWSValidationContext_t * p
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSIGNING_KEY_E_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSIGNING_KEY_E_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -580,11 +578,11 @@ static AzureIoTResult_t prvBase64DecodeJWSHeaderAndPayload( prvJWSValidationCont
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWS_PAYLOAD_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWS_PAYLOAD_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -596,11 +594,11 @@ static AzureIoTResult_t prvBase64DecodeJWSHeaderAndPayload( prvJWSValidationCont
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSIGNATURE_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSIGNATURE_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -617,13 +615,13 @@ static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManife
 
     if( prvFindRootKeyValue( &xJSONReader, &pxManifestContext->kidSpan ) != eAzureIoTSuccess )
     {
-        LogError( ( "Could not find kid in JSON" ) );
+        AZLogError( ( "Could not find kid in JSON" ) );
         return eAzureIoTErrorFailed;
     }
 
     if( !az_span_is_content_equal( az_span_create( ( uint8_t * ) AzureIoTADURootKeyId, AzureIoTADURootKeyIdSize ), pxManifestContext->kidSpan ) )
     {
-        LogError( ( "[JWS] Using the wrong root key" ) );
+        AZLogError( ( "[JWS] Using the wrong root key" ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -644,7 +642,7 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( ulVerificationResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] SHA256 Calculation failed" ) );
+        AZLogError( ( "[JWS] SHA256 Calculation failed" ) );
         return ulVerificationResult;
     }
 
@@ -652,7 +650,7 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( prvFindManifestSHA( &xJSONReader, &pxManifestContext->sha256Span ) != eAzureIoTSuccess )
     {
-        LogError( ( "Error finding manifest signature SHA" ) );
+        AZLogError( ( "Error finding manifest signature SHA" ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -662,11 +660,11 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSHA256_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsSHA256_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -674,7 +672,7 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( pxManifestContext->outParsedManifestShaSize != jwsSHA256_SIZE )
     {
-        LogError( ( "[JWS] Base64 decoded SHA256 is not the correct length | expected: %i | actual: %i", jwsSHA256_SIZE, pxManifestContext->outParsedManifestShaSize ) );
+        AZLogError( ( "[JWS] Base64 decoded SHA256 is not the correct length | expected: %i | actual: %i", jwsSHA256_SIZE, pxManifestContext->outParsedManifestShaSize ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -682,12 +680,12 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( lComparisonResult != 0 )
     {
-        LogError( ( "[JWS] Calculated manifest SHA does not match SHA in payload" ) );
+        AZLogError( ( "[JWS] Calculated manifest SHA does not match SHA in payload" ) );
         return eAzureIoTErrorFailed;
     }
     else
     {
-        LogInfo( ( "[JWS] Calculated manifest SHA matches parsed SHA" ) );
+        AZLogInfo( ( "[JWS] Calculated manifest SHA matches parsed SHA" ) );
     }
 
     return eAzureIoTSuccess;
@@ -719,7 +717,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] prvSplitJWS failed" ) );
+        AZLogError( ( "[JWS] prvSplitJWS failed" ) );
         return xResult;
     }
 
@@ -731,11 +729,11 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( az_result_failed( xCoreResult ) )
     {
-        LogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
-            LogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWS_HEADER_SIZE ) );
+            AZLogError( ( "[JWS] Decode buffer was too small: %i bytes", jwsJWS_HEADER_SIZE ) );
         }
 
         return eAzureIoTErrorFailed;
@@ -748,7 +746,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( prvFindSJWKValue( &xJSONReader, &xManifestContext.xJWKManifestSpan ) != eAzureIoTSuccess )
     {
-        LogError( ( "Error finding sjwk value in payload" ) );
+        AZLogError( ( "Error finding sjwk value in payload" ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -761,7 +759,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] prvSplitJWS failed" ) );
+        AZLogError( ( "[JWS] prvSplitJWS failed" ) );
         return xResult;
     }
 
@@ -785,7 +783,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( prvFindKeyParts( &xJSONReader, &xManifestContext.xBase64EncodedNSpan, &xManifestContext.xBase64EncodedESpan, &xManifestContext.xAlgSpan ) != eAzureIoTSuccess )
     {
-        LogError( ( "Could not find parts for the signing key" ) );
+        AZLogError( ( "Could not find parts for the signing key" ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -801,7 +799,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] prvJWS_RS256Verify failed" ) );
+        AZLogError( ( "[JWS] prvJWS_RS256Verify failed" ) );
         return xResult;
     }
 
@@ -821,7 +819,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] prvBase64DecodeJWSHeaderAndPayload failed" ) );
+        AZLogError( ( "[JWS] prvBase64DecodeJWSHeaderAndPayload failed" ) );
         return xResult;
     }
 
@@ -836,7 +834,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] prvBase64DecodeSigningKey failed" ) );
+        AZLogError( ( "[JWS] prvBase64DecodeSigningKey failed" ) );
         return xResult;
     }
 
@@ -844,7 +842,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( !az_span_is_content_equal( xManifestContext.xAlgSpan, az_span_create( ( uint8_t * ) jws_alg_rs256, sizeof( jws_alg_rs256 ) - 1 ) ) )
     {
-        LogError( ( "[JWS] Algorithm not supported | expected %.*s | actual %.*s",
+        AZLogError( ( "[JWS] Algorithm not supported | expected %.*s | actual %.*s",
                     sizeof( jws_alg_rs256 ) - 1, jws_alg_rs256,
                     az_span_size( xManifestContext.xAlgSpan ), az_span_ptr( xManifestContext.xAlgSpan ) ) );
         return eAzureIoTErrorFailed;
@@ -858,7 +856,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( xResult != eAzureIoTSuccess )
     {
-        LogError( ( "[JWS] Verification of signed manifest SHA failed" ) );
+        AZLogError( ( "[JWS] Verification of signed manifest SHA failed" ) );
         return xResult;
     }
 
