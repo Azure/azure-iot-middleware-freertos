@@ -4,47 +4,51 @@
 /**
  * @file
  *
- * @brief APIs to authenticate an ADU manifest.
+ * @brief APIs working with JWS signatures to authenticate an ADU manifest.
  *
  */
 
-#ifndef SAMPLE_ADU_JWS_H
-#define SAMPLE_ADU_JWS_H
+#ifndef AZURE_IOT_JWS_H
+#define AZURE_IOT_JWS_H
 
 #include <stdint.h>
 
 #include "azure_iot_result.h"
 
-#define jwsPKCS7_PAYLOAD_OFFSET            19
+#define azureiotjwsPKCS7_PAYLOAD_OFFSET            19
 
-#define jwsRSA3072_SIZE                    384
-#define jwsSHA256_SIZE                     32
-#define jwsJWS_HEADER_SIZE                 1400
-#define jwsJWS_PAYLOAD_SIZE                60
-#define jwsJWK_HEADER_SIZE                 48
-#define jwsJWK_PAYLOAD_SIZE                700
-#define jwsSIGNATURE_SIZE                  400
-#define jwsSIGNING_KEY_E_SIZE              10
-#define jwsSIGNING_KEY_N_SIZE              jwsRSA3072_SIZE
-#define jwsSHA_CALCULATION_SCRATCH_SIZE    jwsRSA3072_SIZE + jwsSHA256_SIZE
+#define azureiotjwsRSA3072_SIZE                    384
+#define azureiotjwsSHA256_SIZE                     32
+#define azureiotjwsJWS_HEADER_SIZE                 1400
+#define azureiotjwsJWS_PAYLOAD_SIZE                60
+#define azureiotjwsJWK_HEADER_SIZE                 48
+#define azureiotjwsJWK_PAYLOAD_SIZE                700
+#define azureiotjwsSIGNATURE_SIZE                  400
+#define azureiotjwsSIGNING_KEY_E_SIZE              10
+#define azureiotjwsSIGNING_KEY_N_SIZE              azureiotjwsRSA3072_SIZE
+#define azureiotjwsSHA_CALCULATION_SCRATCH_SIZE    azureiotjwsRSA3072_SIZE + azureiotjwsSHA256_SIZE
 
 /* This is the minimum amount of space needed to store values which are held at the same time. */
-/* jwsJWS_PAYLOAD_SIZE, one jwsSIGNATURE_SIZE, and one jwsSHA256_SIZE are excluded since */
+/* azureiotjwsJWS_PAYLOAD_SIZE, one azureiotjwsSIGNATURE_SIZE, and one azureiotjwsSHA256_SIZE are excluded since */
 /* they will reuse buffer space. */
-#define jwsSCRATCH_BUFFER_SIZE                                            \
-    ( jwsJWS_HEADER_SIZE + jwsJWK_HEADER_SIZE + jwsJWK_PAYLOAD_SIZE       \
-      + jwsSIGNATURE_SIZE + jwsSIGNING_KEY_N_SIZE + jwsSIGNING_KEY_E_SIZE \
-      + jwsSHA_CALCULATION_SCRATCH_SIZE )
+#define azureiotjwsSCRATCH_BUFFER_SIZE                                                            \
+    ( azureiotjwsJWS_HEADER_SIZE + azureiotjwsJWK_HEADER_SIZE + azureiotjwsJWK_PAYLOAD_SIZE       \
+      + azureiotjwsSIGNATURE_SIZE + azureiotjwsSIGNING_KEY_N_SIZE + azureiotjwsSIGNING_KEY_E_SIZE \
+      + azureiotjwsSHA_CALCULATION_SCRATCH_SIZE )
 
 /**
  * @brief Authenticate the manifest from ADU.
  *
- * @param[in] pucManifest The escaped manifest from the ADU twin property.
+ * @param[in] pucManifest The unescaped manifest from the ADU twin property
+ * (`pucUpdateManifest` from #AzureIoTADUUpdateRequest_t).
  * @param[in] ulManifestLength The length of \p pucManifest.
- * @param[in] pucJWS The JWS used to authenticate \p pucManifest.
+ * (`ulUpdateManifestLength` from #AzureIoTADUUpdateRequest_t).
+ * @param[in] pucJWS The JWS signature used to authenticate \p pucManifest.
+ * (`pucUpdateManifestSignature` from #AzureIoTADUUpdateRequest_t).
  * @param[in] ulJWSLength The length of \p pucJWS.
+ * (`ulUpdateManifestSignatureLength` from #AzureIoTADUUpdateRequest_t).
  * @param[in] pucScratchBuffer Scratch buffer space for calculations. It should be
- * `jwsSCRATCH_BUFFER_SIZE` in length.
+ * `azureiotjwsSCRATCH_BUFFER_SIZE` in length.
  * @param[in] ulScratchBufferLength The length of \p pucScratchBuffer.
  * @return AzureIoTResult_t The return value of this function.
  * @retval eAzureIoTSuccess if successful.
@@ -57,4 +61,4 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
                                                    uint8_t * pucScratchBuffer,
                                                    uint32_t ulScratchBufferLength );
 
-#endif /* SAMPLE_ADU_JWS_H */
+#endif /* AZURE_IOT_JWS_H */

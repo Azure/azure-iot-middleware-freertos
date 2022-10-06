@@ -92,10 +92,10 @@ static char ucWrongSHAManifestJWS[] = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdja
                                       "eetARTYE7qGQr7oZPh0RWXVP5b5XR3wbJ_IeZ6i85YmjFpbRGJaSPCuzpa7XKvvFzB5rB5lGmbkWsOMyLbVzUriW87BzbB06g-wzs1S-z07s-ZGjTbFdr"
                                       "XrGjkKtv3TaDirjTqHhhJyI2cVLBctr4Wv4XITPyZeJt2KcIQZup-KfCRNbM3c3_PXPgvJtOg5BhmUrUKGMqFTl84EIB44B1QqKmuiTdH3bNQxPKBecpC"
                                       "k-O9g03pB-fk1D_3sL1ju364STs87s77DfGK9e0oHbHgfzp4EdgrwRQBvTCWWKG3iT6ByfSH4N0";
-static char ucScratchBuffer[ jwsSCRATCH_BUFFER_SIZE ];
+static char ucScratchBuffer[ azureiotjwsSCRATCH_BUFFER_SIZE ];
 
 static int prvInitMbedTLS( mbedtls_entropy_context * pxEntropyContext,
-                        mbedtls_ctr_drbg_context * pxCtrDrgbContext )
+                           mbedtls_ctr_drbg_context * pxCtrDrgbContext )
 {
     int32_t lMbedtlsError = 0;
 
