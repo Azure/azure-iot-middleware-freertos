@@ -148,3 +148,21 @@ add_cmocka_test(azure_iot_provisioning_client_ut
     ${CMOCKA_INCLUDE_DIR}
     ${CMAKE_CURRENT_LIST_DIR}
 )
+
+add_cmocka_test(azure_iot_jws_mbedtls_ut
+  SOURCES
+    main.c
+    azure_iot_jws_mbedtls_ut.c
+    azure_iot_cmocka_mqtt.c
+    ${CMAKE_CURRENT_LIST_DIR}/../../ports/mbedTLS/azure_iot_jws_mbedtls.c
+    ${CMAKE_CURRENT_LIST_DIR}/../e2e/device/mbedtls_freertos_port.c
+  COMPILE_OPTIONS
+    ${DEFAULT_C_COMPILE_FLAGS}
+  LINK_LIBRARIES
+    cmocka
+    az::iot_middleware::freertos
+  LINK_OPTIONS ${MOCK_LINKER_OPTIONS}
+  INCLUDE_DIRECTORIES
+    ${CMOCKA_INCLUDE_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}
+)
