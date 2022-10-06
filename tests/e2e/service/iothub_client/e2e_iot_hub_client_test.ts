@@ -23,16 +23,16 @@ function testSetup(done) {
         iothubTestCore.setCommandToExecuteCommand();
     }
     
-    iothubTestCore.createTestDeviceAndTestProcess(testHubConnectionString, argv.testexe, (err, newDeviceInfo) => {
-        if (err) {
-            done(err)
-        }
-        else {
-            // Store information about this device for later
-            testDeviceInfo = newDeviceInfo
-            done(err)
-        }
-    })
+    // iothubTestCore.createTestDeviceAndTestProcess(testHubConnectionString, argv.testexe, (err, newDeviceInfo) => {
+    //     if (err) {
+    //         done(err)
+    //     }
+    //     else {
+    //         // Store information about this device for later
+    //         testDeviceInfo = newDeviceInfo
+    //         done(err)
+    //     }
+    // })
 }
 
 //
