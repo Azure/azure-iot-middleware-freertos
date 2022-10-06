@@ -52,4 +52,4 @@ echo -e "::group::Running E2E tests"
 export DEVICE_TEST_EXE="$dir/device/build/azure_iot_e2e_tests"
 chown root $DEVICE_TEST_EXE
 chmod u+s $DEVICE_TEST_EXE
-cd $dir/service; stdbuf -o0 ./mocha_exec.sh iothub_e2e_test
+cd $dir/service; stdbuf -o0 ./mocha_exec.sh alltest
