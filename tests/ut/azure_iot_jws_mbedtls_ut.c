@@ -23,7 +23,7 @@
 #include "threading_alt.h"
 
 #include "azure_iot_jws.h"
-// #include "demo_config.h"
+/* #include "demo_config.h" */
 #include "FreeRTOSConfig.h"
 
 #define SAMPLE_TEST_SUCCESS    0
@@ -31,9 +31,9 @@
 static mbedtls_entropy_context xEntropyContext;
 static mbedtls_ctr_drbg_context xCtrDrgbContext;
 extern int mbedtls_platform_entropy_poll( void * data,
-                                   unsigned char * output,
-                                   size_t len,
-                                   size_t * olen );
+                                          unsigned char * output,
+                                          size_t len,
+                                          size_t * olen );
 
 uint32_t ulGetAllTests();
 
@@ -143,23 +143,23 @@ static int initMbedtls( mbedtls_entropy_context * pxEntropyContext,
 
 static void testAzureIoTJWS_ManifestAuthenticate_Success( void ** ppvState )
 {
-  assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
-                                  ucValidManifestJWS, strlen( ucValidManifestJWS ),
-                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTSuccess);
+    assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
+                                                        ucValidManifestJWS, strlen( ucValidManifestJWS ),
+                                                        ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
 }
 
 static void testAzureIoTJWS_ManifestAuthenticate_Failure( void ** ppvState )
 {
-  assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucInvalidManifest, strlen( ucInvalidManifest ),
-                                  ucValidManifestJWS, strlen( ucValidManifestJWS ),
-                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed);
+    assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucInvalidManifest, strlen( ucInvalidManifest ),
+                                                        ucValidManifestJWS, strlen( ucValidManifestJWS ),
+                                                        ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed );
 }
 
 static void testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure( void ** ppvState )
 {
-  assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
-                                  ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ),
-                                  ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed);
+    assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
+                                                        ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ),
+                                                        ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed );
 }
 
 uint32_t ulGetAllTests()

@@ -51,10 +51,10 @@
  * @retval Otherwise if failed.
  */
 AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
-                                           uint32_t ulManifestLength,
-                                           uint8_t * pucJWS,
-                                           uint32_t ulJWSLength,
-                                           uint8_t * pucScratchBuffer,
-                                           uint32_t ulScratchBufferLength );
+                                                   uint32_t ulManifestLength,
+                                                   uint8_t * pucJWS,
+                                                   uint32_t ulJWSLength,
+                                                   uint8_t * pucScratchBuffer,
+                                                   uint32_t ulScratchBufferLength );
 
 #endif /* SAMPLE_ADU_JWS_H */
