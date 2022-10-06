@@ -26,8 +26,6 @@
 /* #include "demo_config.h" */
 #include "FreeRTOSConfig.h"
 
-#define SAMPLE_TEST_SUCCESS    0
-
 static mbedtls_entropy_context xEntropyContext;
 static mbedtls_ctr_drbg_context xCtrDrgbContext;
 
@@ -137,6 +135,12 @@ static int prvInitMbedTLS( mbedtls_entropy_context * pxEntropyContext,
     return lMbedtlsError;
 }
 
+static int setup( void ** state )
+{
+    memset( ucScratchBuffer, 0, sizeof( ucScratchBuffer ) );
+    return 0;
+}
+
 static void testAzureIoTJWS_ManifestAuthenticate_Success( void ** ppvState )
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
@@ -168,9 +172,9 @@ uint32_t ulGetAllTests()
 
     const struct CMUnitTest tests[] =
     {
-        cmocka_unit_test( testAzureIoTJWS_ManifestAuthenticate_Success ),
-        cmocka_unit_test( testAzureIoTJWS_ManifestAuthenticate_Failure ),
-        cmocka_unit_test( testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure ),
+        cmocka_unit_test_setup( testAzureIoTJWS_ManifestAuthenticate_Success,          setup ),
+        cmocka_unit_test_setup( testAzureIoTJWS_ManifestAuthenticate_Failure,          setup ),
+        cmocka_unit_test_setup( testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure, setup ),
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_jws_ut", tests, NULL, NULL );

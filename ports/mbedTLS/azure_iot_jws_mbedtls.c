@@ -33,13 +33,13 @@
 
 #define azureiotjwsPKCS7_PAYLOAD_OFFSET            19
 
-const uint8_t jws_sha256_json_value[] = "sha256";
-const uint8_t jws_sjwk_json_value[] = "sjwk";
-const uint8_t jws_kid_json_value[] = "kid";
-const uint8_t jws_n_json_value[] = "n";
-const uint8_t jws_e_json_value[] = "e";
-const uint8_t jws_alg_json_value[] = "alg";
-const uint8_t jws_alg_rs256[] = "RS256";
+static const uint8_t jws_sha256_json_value[] = "sha256";
+static const uint8_t jws_sjwk_json_value[] = "sjwk";
+static const uint8_t jws_kid_json_value[] = "kid";
+static const uint8_t jws_n_json_value[] = "n";
+static const uint8_t jws_e_json_value[] = "e";
+static const uint8_t jws_alg_json_value[] = "alg";
+static const uint8_t jws_alg_rs256[] = "RS256";
 
 typedef struct prvJWSValidationContext
 {
