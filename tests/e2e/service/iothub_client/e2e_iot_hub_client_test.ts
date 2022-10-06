@@ -46,7 +46,6 @@ function testCleanup(done) {
 // getTestHubConnectionString returns hub's connection string, from either command line or environment
 //
 function getTestHubConnectionString(): string {
-    console.log("GETTING THE CONNECTION STRING")
     if (argv.connectionString != null) {
         return argv.connectionString
     }
@@ -57,8 +56,6 @@ function getTestHubConnectionString(): string {
         throw "Hub connection string must be configured in the command line or environment variable IOTHUB_CONNECTION_STRING"
     }
 }
-
-console.log("BEFORE YARGS")
 
 let argv = require('yargs')
     .usage('Usage: $0 --connectionString <HUB CONNECTION STRING> --testexe <PATH OF EXECUTABLE TO HOST C SDK TESTS>')
@@ -91,8 +88,6 @@ let argv = require('yargs')
 
 // testHubConnectionString is the Hub connection string used to create our test device against
 const testHubConnectionString:string = getTestHubConnectionString()
-
-console.log("AFTER GET CONNECTION STRING")
 
 if (argv.deviceId == null) {
     //
