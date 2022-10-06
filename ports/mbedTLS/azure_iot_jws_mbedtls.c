@@ -31,6 +31,8 @@
         }                                            \
     } while( 0 )
 
+#define azureiotjwsPKCS7_PAYLOAD_OFFSET            19
+
 const uint8_t jws_sha256_json_value[] = "sha256";
 const uint8_t jws_sjwk_json_value[] = "sjwk";
 const uint8_t jws_kid_json_value[] = "kid";

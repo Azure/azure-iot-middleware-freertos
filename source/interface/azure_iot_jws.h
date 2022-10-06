@@ -15,8 +15,6 @@
 
 #include "azure_iot_result.h"
 
-#define azureiotjwsPKCS7_PAYLOAD_OFFSET            19
-
 #define azureiotjwsRSA3072_SIZE                    384
 #define azureiotjwsSHA256_SIZE                     32
 #define azureiotjwsJWS_HEADER_SIZE                 1400
@@ -28,7 +26,7 @@
 #define azureiotjwsSIGNING_KEY_N_SIZE              azureiotjwsRSA3072_SIZE
 #define azureiotjwsSHA_CALCULATION_SCRATCH_SIZE    azureiotjwsRSA3072_SIZE + azureiotjwsSHA256_SIZE
 
-/* This is the minimum amount of space needed to store values which are held at the same time. */
+/* This is the minimum amount of space needed to store values which are held at the same time during the calculation. */
 /* azureiotjwsJWS_PAYLOAD_SIZE, one azureiotjwsSIGNATURE_SIZE, and one azureiotjwsSHA256_SIZE are excluded since */
 /* they will reuse buffer space. */
 #define azureiotjwsSCRATCH_BUFFER_SIZE                                                            \
