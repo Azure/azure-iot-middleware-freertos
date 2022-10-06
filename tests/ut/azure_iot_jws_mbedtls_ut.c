@@ -30,10 +30,6 @@
 
 static mbedtls_entropy_context xEntropyContext;
 static mbedtls_ctr_drbg_context xCtrDrgbContext;
-extern int mbedtls_platform_entropy_poll( void * data,
-                                          unsigned char * output,
-                                          size_t len,
-                                          size_t * olen );
 
 uint32_t ulGetAllTests();
 
@@ -98,7 +94,7 @@ static char ucWrongSHAManifestJWS[] = "eyJhbGciOiJSUzI1NiIsInNqd2siOiJleUpoYkdja
                                       "k-O9g03pB-fk1D_3sL1ju364STs87s77DfGK9e0oHbHgfzp4EdgrwRQBvTCWWKG3iT6ByfSH4N0";
 static char ucScratchBuffer[ jwsSCRATCH_BUFFER_SIZE ];
 
-static int initMbedtls( mbedtls_entropy_context * pxEntropyContext,
+static int prvInitMbedTLS( mbedtls_entropy_context * pxEntropyContext,
                         mbedtls_ctr_drbg_context * pxCtrDrgbContext )
 {
     int32_t lMbedtlsError = 0;
@@ -164,7 +160,7 @@ static void testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure( void ** ppvSt
 
 uint32_t ulGetAllTests()
 {
-    if( initMbedtls( &xEntropyContext, &xCtrDrgbContext ) != 0 )
+    if( prvInitMbedTLS( &xEntropyContext, &xCtrDrgbContext ) != 0 )
     {
         printf( "mbedtls init failed\n" );
         return 1;

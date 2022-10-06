@@ -150,7 +150,7 @@ add_cmocka_test(azure_iot_provisioning_client_ut
 )
 
 # The jws needs mbedtls and threading, which uses pthreads
-if(LINUX)
+if(UNIX)
     add_cmocka_test(azure_iot_jws_mbedtls_ut
       SOURCES
         main.c
