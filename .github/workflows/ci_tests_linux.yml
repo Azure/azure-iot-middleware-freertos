@@ -101,7 +101,7 @@ jobs:
           )
 
       - name: E2E Tests
-        run: bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
+        run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
                            export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
                            export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
                            .github/scripts/e2e_tests.sh"
