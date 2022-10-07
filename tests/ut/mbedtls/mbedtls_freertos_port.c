@@ -4,6 +4,8 @@
 /**
  * @file mbedtls_freertos_port.c
  * @brief Implements mbed TLS platform functions for FreeRTOS.
+ * 
+ * THIS IS FOR TESTS ONLY DO NOT USE THIS IN PRODUCTION
  */
 
 #include <stdio.h>
