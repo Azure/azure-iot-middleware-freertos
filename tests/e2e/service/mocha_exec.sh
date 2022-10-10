@@ -21,14 +21,8 @@ die() {
 
 [ -v IOTHUB_CONNECTION_STRING ] || die "IOTHUB_CONNECTION_STRING is not set!"
 [ -v DEVICE_TEST_EXE ] || die "DEVICE_TEST_EXE is not set!. Please set it to device side binary of e2e tests"
-
-[ -n $1 ] || die "Run type need to be set, like: alltest, iot_provisioning_e2e_test, iothub_e2e_test"
-
-if [ "$1" == "iot_provisioning_e2e_test" ]; then
-   [ -v IOT_PROVISIONING_CONNECTION_STRING ] || die "IOT_PROVISIONING_CONNECTION_STRING is not set!"
-   [ -v IOT_PROVISIONING_SCOPE_ID ] || die "IOT_PROVISIONING_SCOPE_ID is not set!" 
-fi
-
+[ -v IOT_PROVISIONING_CONNECTION_STRING ] || die "IOT_PROVISIONING_CONNECTION_STRING is not set!"
+[ -v IOT_PROVISIONING_SCOPE_ID ] || die "IOT_PROVISIONING_SCOPE_ID is not set!" 
 
 echo -e "Installing node dependencies using npm"
 
@@ -44,8 +38,13 @@ echo -e "Cleaning expired e2e resources"
 IOTHUB_CONNECTION_STRING=$IOTHUB_CONNECTION_STRING npm run cleanup
 echo -e "Done Cleaning expired e2e resources"
 
+# Github Ubuntu 20.04 runners have issues running `npm run` inside an `npm run` call
+# so we don't use `npm run alltest` here. Call each one individually.
 echo -e "Running tests"
 IOTHUB_CONNECTION_STRING=$IOTHUB_CONNECTION_STRING DEVICE_TEST_EXE=$DEVICE_TEST_EXE \
 IOT_PROVISIONING_CONNECTION_STRING=${IOT_PROVISIONING_CONNECTION_STRING:-""} \
 IOT_PROVISIONING_SCOPE_ID=${IOT_PROVISIONING_SCOPE_ID:-""} \
-npm run $1
+npm run iothub_e2e_test
+npm run iothub_e2e_test_using_dm
+npm run iot_provisioning_e2e_test
+npm run iot_provisioning_e2e_test_using_dm
