@@ -293,8 +293,8 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
     assert_int_equal( xRequest.ulUpdateManifestLength, lExpectedManifestLength );
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
     assert_memory_equal( xRequest.xWorkflow.pucID, ucWorkflowID, sizeof( ucWorkflowID ) - 1 );
-    assert_null( xRequest.xWorkflow.pucRetryTimestamp);
-    assert_int_equal( xRequest.xWorkflow.ulRetryTimestampLength, 0);
+    assert_null( xRequest.xWorkflow.pucRetryTimestamp );
+    assert_int_equal( xRequest.xWorkflow.ulRetryTimestampLength, 0 );
     assert_memory_equal( xRequest.xUpdateManifest.pucManifestVersion, ucManifestVersion, sizeof( ucManifestVersion ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.ulManifestVersionLength, sizeof( ucManifestVersion ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.xUpdateId.pucProvider, ucUpdateIDProvider, sizeof( ucUpdateIDProvider ) - 1 );
@@ -353,7 +353,7 @@ static void testAzureIoTADUClient_ParseRequestWithRetry_Success( void ** ppvStat
 
     assert_int_equal( AzureIoTADUClient_Init( &xTestIoTADUClient, NULL ), eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucADURequestPayloadWithRetry, sizeof(ucADURequestPayloadWithRetry) - 1 ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 ), eAzureIoTSuccess );
 
     /* ParseRequest requires that the reader be placed on the "service" prop name */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ), eAzureIoTSuccess );
@@ -369,12 +369,12 @@ static void testAzureIoTADUClient_ParseRequestWithRetry_Success( void ** ppvStat
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
 
     /* Update Manifest */
-    assert_memory_equal( xRequest.pucUpdateManifest, ucADURequestManifest, sizeof(ucADURequestManifest) - 1 );
-    assert_int_equal( xRequest.ulUpdateManifestLength, sizeof(ucADURequestManifest) - 1 );
+    assert_memory_equal( xRequest.pucUpdateManifest, ucADURequestManifest, sizeof( ucADURequestManifest ) - 1 );
+    assert_int_equal( xRequest.ulUpdateManifestLength, sizeof( ucADURequestManifest ) - 1 );
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
     assert_memory_equal( xRequest.xWorkflow.pucID, ucWorkflowID, sizeof( ucWorkflowID ) - 1 );
-    assert_memory_equal( xRequest.xWorkflow.pucRetryTimestamp, ucWorkflowRetryTimestamp, sizeof(ucWorkflowRetryTimestamp) - 1);
-    assert_int_equal( xRequest.xWorkflow.ulRetryTimestampLength, sizeof(ucWorkflowRetryTimestamp) - 1);
+    assert_memory_equal( xRequest.xWorkflow.pucRetryTimestamp, ucWorkflowRetryTimestamp, sizeof( ucWorkflowRetryTimestamp ) - 1 );
+    assert_int_equal( xRequest.xWorkflow.ulRetryTimestampLength, sizeof( ucWorkflowRetryTimestamp ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pucManifestVersion, ucManifestVersion, sizeof( ucManifestVersion ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.ulManifestVersionLength, sizeof( ucManifestVersion ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.xUpdateId.pucProvider, ucUpdateIDProvider, sizeof( ucUpdateIDProvider ) - 1 );
@@ -830,7 +830,8 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTADUClient_SendResponse_Success ),
         cmocka_unit_test( testAzureIoTADUClient_SendAgentState_InvalidArgFailure ),
         cmocka_unit_test( testAzureIoTADUClient_SendAgentState_Success ),
-        cmocka_unit_test( testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequest_Success )
+        cmocka_unit_test( testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequest_Success ),
+        cmocka_unit_test( testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequestWithRetry_Success )
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_hub_client_ut", tests, NULL, NULL );
