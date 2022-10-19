@@ -34,7 +34,7 @@ abspath () {
 
 filepath=`abspath $0`
 dir=`dirname $filepath`
-test_root_dir=$dir/..
+test_root_dir=$dir/../..
 test_freertos_src_path=${2:-""}
 test_ethernet_if=${1:-""}
 
