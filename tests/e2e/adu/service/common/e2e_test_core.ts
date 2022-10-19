@@ -526,22 +526,14 @@ function deleteDeviceAndEndProcess(testHubConnectionString:string, testDeviceInf
         const exitCmd = new CommandTestData_ExitCommands()
         runTestCommand(testHubConnectionString, testDeviceInfo.deviceId, exitCmd).then(() => {});
 
-        // TODO: Delete this once done debugging
-        closeServiceEventHubClients(function(err) {
-          setTimeout(function() {
-              terminateTestProcessIfNecessary(done);
-          }, sleepBeforeTermination);
+        deleteDevice(testHubConnectionString, testDeviceInfo.deviceId, () => {
+            // Always attempt to terminate the test process, regardless of whether device deletion succeeded or failed
+            closeServiceEventHubClients(function(err) {
+                setTimeout(function() {
+                    terminateTestProcessIfNecessary(done);
+                }, sleepBeforeTermination);
+            });
         });
-
-
-        // deleteDevice(testHubConnectionString, testDeviceInfo.deviceId, () => {
-        //     // Always attempt to terminate the test process, regardless of whether device deletion succeeded or failed
-        //     closeServiceEventHubClients(function(err) {
-        //         setTimeout(function() {
-        //             terminateTestProcessIfNecessary(done);
-        //         }, sleepBeforeTermination);
-        //     });
-        // });
     }
     else {
         done()
