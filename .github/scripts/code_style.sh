@@ -41,8 +41,10 @@ if [[ "$FIX" == "check" ]]; then
     ./ports/coreHTTP/*.h                                      \
     ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
-    ./tests/e2e/device/*.c                                    \
-    ./tests/e2e/device/*.h                                    \
+    ./tests/e2e/adu/device/*.c                                \
+    ./tests/e2e/adu/device/*.h                                \
+    ./tests/e2e/iot/device/*.c                                \
+    ./tests/e2e/iot/device/*.h                                \
     ./tests/ut/*.h                                            \
     ./tests/ut/*.c)
 
@@ -62,8 +64,10 @@ elif [[ "$FIX" == "fix" ]]; then
     ./ports/coreHTTP/*.h                                      \
     ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
-    ./tests/e2e/device/*.c                                    \
-    ./tests/e2e/device/*.h                                    \
+    ./tests/e2e/adu/device/*.c                                \
+    ./tests/e2e/adu/device/*.h                                \
+    ./tests/e2e/iot/device/*.c                                \
+    ./tests/e2e/iot/device/*.h                                \
     ./tests/ut/*.h                                            \
     ./tests/ut/*.c
 else

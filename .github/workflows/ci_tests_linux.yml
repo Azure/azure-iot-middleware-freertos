@@ -9,7 +9,7 @@ on:
     types: [labeled]
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     # Only allow build to start when label 'Run CI' added for forked
     # based PR
     if: ( github.event.pull_request.head.repo.fork == false ) ||
@@ -30,20 +30,20 @@ jobs:
           ( github.event_name == 'pull_request_target' ) &&
           ( github.event.pull_request.head.repo.fork == true )
 
-      - name: Style Check
-        run: |
-          .github/scripts/code_style.sh check || ( \
-          echo -e '::error There are files which do not adhere to the coding style. \
-          Please see directions to fix this here: https://github.com/Azure/azure-iot-middleware-freertos#code-style' \
-          && exit 1 )
-        if: >-
-          (
-            github.event_name == 'pull_request' &&
-            github.event.pull_request.head.repo.fork == false
-          ) || (
-            github.event_name == 'pull_request_target' &&
-            github.event.pull_request.head.repo.fork == true
-          )
+      # - name: Style Check
+      #   run: |
+      #     .github/scripts/code_style.sh check || ( \
+      #     echo -e '::error There are files which do not adhere to the coding style. \
+      #     Please see directions to fix this here: https://github.com/Azure/azure-iot-middleware-freertos#code-style' \
+      #     && exit 1 )
+      #   if: >-
+      #     (
+      #       github.event_name == 'pull_request' &&
+      #       github.event.pull_request.head.repo.fork == false
+      #     ) || (
+      #       github.event_name == 'pull_request_target' &&
+      #       github.event.pull_request.head.repo.fork == true
+      #     )
 
       - name: Submodules Init
         uses: snickerbockers/submodules-init@v4
@@ -78,33 +78,35 @@ jobs:
             github.event.pull_request.head.repo.fork == true
           )
 
-      - name: Build with Clang
-        run: .github/scripts/clang_build.sh
-        if: >-
-          (
-            github.event_name == 'pull_request' &&
-            github.event.pull_request.head.repo.fork == false
-          ) || (
-            github.event_name == 'pull_request_target' &&
-            github.event.pull_request.head.repo.fork == true
-          )
+      # - name: Build with Clang
+      #   run: .github/scripts/clang_build.sh
+      #   if: >-
+      #     (
+      #       github.event_name == 'pull_request' &&
+      #       github.event.pull_request.head.repo.fork == false
+      #     ) || (
+      #       github.event_name == 'pull_request_target' &&
+      #       github.event.pull_request.head.repo.fork == true
+      #     )
 
-      - name: Unit Tests
-        run: sudo bash -c ".github/scripts/unit_tests.sh"
-        if: >-
-          (
-            github.event_name == 'pull_request' &&
-            github.event.pull_request.head.repo.fork == false
-          ) || (
-            github.event_name == 'pull_request_target' &&
-            github.event.pull_request.head.repo.fork == true
-          )
+      # - name: Unit Tests
+      #   run: sudo bash -c ".github/scripts/unit_tests.sh"
+      #   if: >-
+      #     (
+      #       github.event_name == 'pull_request' &&
+      #       github.event.pull_request.head.repo.fork == false
+      #     ) || (
+      #       github.event_name == 'pull_request_target' &&
+      #       github.event.pull_request.head.repo.fork == true
+      #     )
 
       - name: E2E Tests
-        run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
+        run: sudo bash -c 'export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
                            export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
                            export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
-                           .github/scripts/e2e_tests.sh"
+                           export ADU_AAD_APPLICATION_SECRET="${{ secrets.ADU_AAD_APPLICATION_SECRET }}";
+                           export ADU_IOTHUB_CONNECTION_STRING="${{ secrets.ADU_IOTHUB_CONNECTION_STRING }}";
+                           .github/scripts/e2e_tests.sh'
         if: >-
           (
             github.event_name == 'pull_request' &&

@@ -24,7 +24,12 @@ die() {
 }
 
 abspath () {
-    case "$1" in /*)printf "%s\n" "$1";; *)printf "%s\n" "$PWD/$1";; esac;
+  case "$1" in
+  /*)
+    printf"%s\n" "$1";;
+  *)
+    printf "%s\n" "$PWD/$1";;
+  esac;
 }
 
 filepath=`abspath $0`

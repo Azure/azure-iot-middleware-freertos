@@ -14,7 +14,7 @@ enable_testing()
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
 
-include_directories(${CMAKE_CURRENT_LIST_DIR}/../config_files)# Include config
+include_directories(${CMAKE_CURRENT_LIST_DIR}/../../config_files)# Include config
 
 add_compile_options(-DprojCOVERAGE_TEST=0 -DMBEDTLS_CONFIG_FILE=\"mbedtls_config.h\")
 
@@ -27,7 +27,7 @@ include_directories(${FREERTOS_DIRECTORY}/FreeRTOS-Plus/Source/Utilities/logging
 include_directories(${FREERTOS_DIRECTORY}/FreeRTOS/Source/portable/ThirdParty/GCC/Posix)
 
 # Add source files and libs
-add_subdirectory(../../source source)
+add_subdirectory(../../../source source)
 
 # Create FreeRTOS Lib
 add_library(freertos

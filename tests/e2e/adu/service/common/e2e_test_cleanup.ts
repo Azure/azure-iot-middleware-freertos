@@ -35,15 +35,16 @@ async function iothubRegistryCleanup(hubConnectionString:string, registryPrefix:
             });
         }
     }
-    
-    if(expiredDevicesDescription.length > 0)
+
+    if (expiredDevicesDescription.length > 0)
     {
       expiredDevicesDescription.forEach((des) => {
         console.log("Deleting device: " + des.deviceId)
-    })
-
+      })
+  
       await registry.removeDevices(expiredDevicesDescription, true);
     }
+
 }
 
 let argv = require('yargs')
@@ -63,7 +64,7 @@ let argv = require('yargs')
     .argv;
 
 async function main() {
-    let e2eTestDevicePrefix = "azure_mid_freertos_e2e_"
+    let e2eTestDevicePrefix = "azure_mid_freertos_adu_e2e_"
     /* 86400000 is millisecond epoch in one day */
     let timeStamp:number = Date.now().valueOf() - 86400000 * argv.cleanupAfter;
     let expiryDate =  new Date(timeStamp);
