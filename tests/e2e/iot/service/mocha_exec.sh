@@ -48,4 +48,7 @@ echo -e "Running tests"
 IOTHUB_CONNECTION_STRING=$IOTHUB_CONNECTION_STRING DEVICE_TEST_EXE=$DEVICE_TEST_EXE \
 IOT_PROVISIONING_CONNECTION_STRING=${IOT_PROVISIONING_CONNECTION_STRING:-""} \
 IOT_PROVISIONING_SCOPE_ID=${IOT_PROVISIONING_SCOPE_ID:-""} \
-npm run $1
+npm run iothub_e2e_test
+npm run iothub_e2e_test_using_dm
+npm run iot_provisioning_e2e_test
+npm run iot_provisioning_e2e_test_using_dm
