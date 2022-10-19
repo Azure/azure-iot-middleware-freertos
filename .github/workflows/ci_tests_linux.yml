@@ -30,20 +30,20 @@ jobs:
           ( github.event_name == 'pull_request_target' ) &&
           ( github.event.pull_request.head.repo.fork == true )
 
-      # - name: Style Check
-      #   run: |
-      #     .github/scripts/code_style.sh check || ( \
-      #     echo -e '::error There are files which do not adhere to the coding style. \
-      #     Please see directions to fix this here: https://github.com/Azure/azure-iot-middleware-freertos#code-style' \
-      #     && exit 1 )
-      #   if: >-
-      #     (
-      #       github.event_name == 'pull_request' &&
-      #       github.event.pull_request.head.repo.fork == false
-      #     ) || (
-      #       github.event_name == 'pull_request_target' &&
-      #       github.event.pull_request.head.repo.fork == true
-      #     )
+      - name: Style Check
+        run: |
+          .github/scripts/code_style.sh check || ( \
+          echo -e '::error There are files which do not adhere to the coding style. \
+          Please see directions to fix this here: https://github.com/Azure/azure-iot-middleware-freertos#code-style' \
+          && exit 1 )
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
 
       - name: Submodules Init
         uses: snickerbockers/submodules-init@v4
@@ -78,27 +78,27 @@ jobs:
             github.event.pull_request.head.repo.fork == true
           )
 
-      # - name: Build with Clang
-      #   run: .github/scripts/clang_build.sh
-      #   if: >-
-      #     (
-      #       github.event_name == 'pull_request' &&
-      #       github.event.pull_request.head.repo.fork == false
-      #     ) || (
-      #       github.event_name == 'pull_request_target' &&
-      #       github.event.pull_request.head.repo.fork == true
-      #     )
+      - name: Build with Clang
+        run: .github/scripts/clang_build.sh
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
 
-      # - name: Unit Tests
-      #   run: sudo bash -c ".github/scripts/unit_tests.sh"
-      #   if: >-
-      #     (
-      #       github.event_name == 'pull_request' &&
-      #       github.event.pull_request.head.repo.fork == false
-      #     ) || (
-      #       github.event_name == 'pull_request_target' &&
-      #       github.event.pull_request.head.repo.fork == true
-      #     )
+      - name: Unit Tests
+        run: sudo bash -c ".github/scripts/unit_tests.sh"
+        if: >-
+          (
+            github.event_name == 'pull_request' &&
+            github.event.pull_request.head.repo.fork == false
+          ) || (
+            github.event_name == 'pull_request_target' &&
+            github.event.pull_request.head.repo.fork == true
+          )
 
       - name: E2E Tests
         run: sudo bash -c 'export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
