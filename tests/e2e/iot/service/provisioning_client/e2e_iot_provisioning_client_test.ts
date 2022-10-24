@@ -197,7 +197,7 @@ describe("mainTest", () => {
     });
 
     it("Get Device Provisioning data test", async function() {
-        let serviceEndpoint = e2eTestCore.getHubnameFromConnectionString(testProvisioningConnectionString);
+        let serviceEndpoint = e2eTestCore.getHubNameFromConnectionString(testProvisioningConnectionString);
         const device_provisioning = new CommandTestData_DeviceProvisioningCommands(serviceEndpoint, argv.idScope, testEnrollmentInfo);
         let expectedMessage = await e2eTestCore.runTestCommand(testHubConnectionString, testHubInfo.deviceId, device_provisioning);
         let result = await e2eTestCore.verifyTelemetryMessageWithTimeout(testHubConnectionString, testHubInfo.deviceId, expectedMessage, eventHubTimeout);
