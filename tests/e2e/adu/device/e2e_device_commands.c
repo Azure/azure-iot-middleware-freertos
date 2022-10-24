@@ -7,7 +7,6 @@
 
 #include "azure_iot_http.h"
 #include "azure_iot_transport_interface.h"
-#include "transport_socket.h"
 #include "azure_iot_json_writer.h"
 #include "azure_iot_jws.h"
 #include "azure_iot_hub_client_properties.h"
@@ -187,22 +186,6 @@ static void prvFreeMethodData( AzureIoTHubClientCommandRequest_t * pxMethodData 
         vPortFree( ( void * ) pxMethodData->pucRequestID );
         vPortFree( ( void * ) pxMethodData );
     }
-}
-/*-----------------------------------------------------------*/
-
-static uint32_t prvInitHttp( void )
-{
-    /*HTTP Connection */
-    AzureIoTTransportInterface_t xHTTPTransport;
-    NetworkContext_t xHTTPNetworkContext = { 0 };
-    TlsTransportParams_t xHTTPTlsTransportParams = { 0 };
-
-    /* Fill in Transport Interface send and receive function pointers. */
-    xHTTPTransport.pxNetworkContext = &xHTTPNetworkContext;
-    xHTTPTransport.xSend = Azure_Socket_Send;
-    xHTTPTransport.xRecv = Azure_Socket_Recv;
-
-    xHTTPNetworkContext.pParams = &xHTTPTlsTransportParams;
 }
 /*-----------------------------------------------------------*/
 

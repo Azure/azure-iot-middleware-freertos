@@ -197,8 +197,6 @@ target_link_libraries(mbedtls
 
 # Add E2E Test Executable
 add_executable(azure_iot_e2e_adu_tests
-  # ${CMAKE_CURRENT_LIST_DIR}/device/transport_socket.c
-  # ${CMAKE_CURRENT_LIST_DIR}/device/sockets_wrapper_freertos_tcpip.c
   ${CMAKE_CURRENT_LIST_DIR}/../../../ports/mbedTLS/azure_iot_jws_mbedtls.c
   ${CMAKE_CURRENT_LIST_DIR}/device/mbedtls_freertos_port.c
   ${CMAKE_CURRENT_LIST_DIR}/device/e2e_device_commands.c
