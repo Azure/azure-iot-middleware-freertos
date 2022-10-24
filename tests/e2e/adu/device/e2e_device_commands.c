@@ -89,7 +89,6 @@ static uint16_t usReceivedTelemetryPubackID;
 #define e2eADU_UPDATE_ID              "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"" e2eADU_UPDATE_NAME "\",\"version\":\"" e2eADU_UPDATE_VERSION "\"}"
 #define e2eADU_UPDATE_ID_NEW          "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"" e2eADU_UPDATE_NAME "\",\"version\":\"" e2eADU_UPDATE_VERSION_NEW "\"}"
 
-
 static AzureIoTADUClientDeviceProperties_t xADUDeviceProperties =
 {
     .ucManufacturer                           = ( const uint8_t * ) e2eADU_DEVICE_MANUFACTURER,
@@ -229,131 +228,7 @@ static uint32_t prvGetJsonValueForKey( az_json_reader * pxState,
 
     return ulStatus;
 }
-/*-----------------------------------------------------------*/
 
-/**
- * Do find on JSON buffer
- *
- **/
-static uint32_t prvGetValueForKey( az_span xJsonSpan,
-                                   const char * pcKey,
-                                   az_span * pxValue )
-{
-    az_json_reader xState;
-
-    if( az_json_reader_init( &xState, xJsonSpan, NULL ) != AZ_OK )
-    {
-        RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to parse json" );
-    }
-
-    return prvGetJsonValueForKey( &xState, pcKey, pxValue );
-}
-/*-----------------------------------------------------------*/
-
-/**
- * Move JSON reader curser to particular key
- *
- **/
-static uint32_t prvMoveToObject( az_json_reader * pxState,
-                                 const char * pcKey )
-{
-    uint32_t ulStatus = e2etestE2E_TEST_NOT_FOUND;
-    az_span xKeySpan = az_span_create( ( uint8_t * ) pcKey, strlen( pcKey ) );
-
-    while( az_result_succeeded( az_json_reader_next_token( pxState ) ) )
-    {
-        if( pxState->token.kind != AZ_JSON_TOKEN_PROPERTY_NAME )
-        {
-            continue;
-        }
-
-        if( az_json_token_is_text_equal( &( pxState->token ), xKeySpan ) )
-        {
-            if( az_result_succeeded( az_json_reader_next_token( pxState ) ) &&
-                ( pxState->token.kind == AZ_JSON_TOKEN_BEGIN_OBJECT ) )
-            {
-                ulStatus = e2etestE2E_TEST_SUCCESS;
-            }
-            else
-            {
-                ulStatus = e2etestE2E_TEST_FAILED;
-            }
-
-            break;
-        }
-    }
-
-    return ulStatus;
-}
-/*-----------------------------------------------------------*/
-
-/**
- * Append all test properties
- *
- **/
-static uint32_t prvAddAllProperties( az_json_reader * pxState,
-                                     AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                     E2E_TEST_COMMAND_HANDLE xCMD,
-                                     AzureIoTMessageProperties_t * pxProperties )
-{
-    uint32_t ulStatus = e2etestE2E_TEST_SUCCESS;
-    uint32_t ulPropertyValueLength;
-    uint32_t ulPropertyNameLength;
-
-    while( az_result_succeeded( az_json_reader_next_token( pxState ) ) )
-    {
-        if( pxState->token.kind != AZ_JSON_TOKEN_PROPERTY_NAME )
-        {
-            continue;
-        }
-
-        if( az_result_failed( az_json_token_get_string( &pxState->token, ucScratchBuffer,
-                                                        sizeof( ucScratchBuffer ),
-                                                        ( int32_t * ) &ulPropertyNameLength ) ) )
-        {
-            ulStatus = e2etestE2E_TEST_FAILED;
-            RETURN_IF_FAILED( ulStatus, "Failed to get property name" );
-        }
-
-        if( az_result_failed( az_json_reader_next_token( pxState ) ) )
-        {
-            ulStatus = e2etestE2E_TEST_FAILED;
-            RETURN_IF_FAILED( ulStatus, "Failed to get property value" );
-        }
-
-        if( pxState->token.kind == AZ_JSON_TOKEN_STRING )
-        {
-            if( az_result_failed( az_json_token_get_string( &pxState->token, ucScratchBuffer + ulPropertyNameLength,
-                                                            sizeof( ucScratchBuffer ) - ulPropertyNameLength,
-                                                            ( int32_t * ) &ulPropertyValueLength ) ) )
-            {
-                ulStatus = e2etestE2E_TEST_FAILED;
-                RETURN_IF_FAILED( ulStatus, "Failed to get property value" );
-            }
-
-            if( AzureIoTMessage_PropertiesAppend( pxProperties,
-                                                  ucScratchBuffer,
-                                                  ulPropertyNameLength,
-                                                  ucScratchBuffer + ulPropertyNameLength,
-                                                  ulPropertyValueLength ) != eAzureIoTSuccess )
-            {
-                RETURN_IF_FAILED( e2etestE2E_TEST_FAILED, "Failed to add property" );
-            }
-
-            ulStatus = e2etestE2E_TEST_SUCCESS;
-        }
-        else if( pxState->token.kind == AZ_JSON_TOKEN_BEGIN_OBJECT )
-        {
-            if( az_result_failed( az_json_reader_skip_children( pxState ) ) )
-            {
-                ulStatus = e2etestE2E_TEST_FAILED;
-                RETURN_IF_FAILED( ulStatus, "Failed to skip object" );
-            }
-        }
-    }
-
-    return ulStatus;
-}
 /*-----------------------------------------------------------*/
 
 static void prvSkipPropertyAndValue( AzureIoTJSONReader_t * pxReader )
@@ -372,6 +247,9 @@ static void prvSkipPropertyAndValue( AzureIoTJSONReader_t * pxReader )
 
 /*-----------------------------------------------------------*/
 
+/**
+ * Fully parses the twin document for the ADU subcomponent.
+ */
 static uint32_t prvParseADUTwin( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                  AzureIoTADUClient_t * pxAzureIoTAduClient,
                                  AzureIoTHubClientPropertiesResponse_t * pxPropertiesResponse )
@@ -458,6 +336,14 @@ static uint32_t prvParseADUTwin( AzureIoTHubClient_t * pxAzureIoTHubClient,
 
 /*-----------------------------------------------------------*/
 
+/**
+ * This checks if the ADU subcomponent exists in the twin.
+ * We have to wait for the update to be deployed to the device before we can
+ * start the tests. Once we receive a PATCH update with the subcomponent
+ * successfully parsed, we move on to start the tests where we will do a full
+ * twin GET and parse the whole twin (void of possible NULLs for values in a
+ * twin PATCH update).
+ */
 static uint32_t prvCheckTwinForADU( AzureIoTHubClient_t * pxAzureIoTHubClient,
                                     AzureIoTADUClient_t * pxAzureIoTAduClient,
                                     AzureIoTHubClientPropertiesResponse_t * pxPropertiesResponse )
