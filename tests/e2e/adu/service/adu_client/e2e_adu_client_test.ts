@@ -14,10 +14,9 @@ const e2eTestCommands = require ('../common/e2e_test_commands');
 // testDeviceInfo contains the settings for our test device on the IoTHub.
 let testDeviceInfo:any = null;
 
-let aduDeviceStateIdle:number = 0;
-let aduDeviceStateInProgress: number = 6;
-let aduDeviceTwinAccepted: number = 200;
-
+const aduDeviceStateIdle: number = 0;
+const aduDeviceStateInProgress: number = 6;
+const aduDeviceTwinAccepted: number = 200;
 
 //
 // testSetup creates a device for test scenario and creates the test process that hosts the C SDK
