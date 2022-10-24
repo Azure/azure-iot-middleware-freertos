@@ -48,7 +48,7 @@ let device_exit_status = 0;
 function executeTestProcess(test_process:string, cmd_args:string, resultCallback) {
     // Start the process
     let command_line:string = test_process + ` ` + cmd_args + ``
-    //console.log(`Invoking exec(${command_line})`)
+
     test_exe = exec(command_line);
 
     test_exe.stdout.on('data', (data:string) => {
@@ -135,9 +135,9 @@ function deleteDevice(hubConnectionString:string, testDeviceName:string, resultC
 }
 
 //
-// getHubnameFromConnectionString retrieves the hostname from a given hub connection string
+// getHubNameFromConnectionString retrieves the hostname from a given hub connection string
 //
-function getHubnameFromConnectionString(hubConnectionString:string) {
+function getHubNameFromConnectionString(hubConnectionString:string) {
     // For given hub connection string, remove the HostName=<USER_SPECIFIED_VALUE>;Etc. so it's just the <sUSER_SPECIFIED_VALUE>
     return (hubConnectionString.replace("HostName=","")).replace(/;.*/,"")
 }
@@ -148,7 +148,7 @@ function getHubnameFromConnectionString(hubConnectionString:string) {
 //
 function getConnectionStringFromDeviceInfo(hubConnectionString:string, deviceInfo) {
     // The deviceInfo doesn't contain the hub hostname, so need to parse it from initial connection string
-    let hubHostName = getHubnameFromConnectionString(hubConnectionString)
+    let hubHostName = getHubNameFromConnectionString(hubConnectionString)
     return ("HostName=" + hubHostName + ";DeviceId=" + deviceInfo.deviceId + ";SharedAccessKey=" + deviceInfo.authentication.symmetricKey.primaryKey)
 }
 
@@ -157,7 +157,7 @@ function getConnectionStringFromDeviceInfo(hubConnectionString:string, deviceInf
 //
 function getTestProcessArgs(hubConnectionString:string, deviceInfo) {
     // Start the process
-    let hubHostName = getHubnameFromConnectionString(hubConnectionString)
+    let hubHostName = getHubNameFromConnectionString(hubConnectionString)
     let test_process_args = "'" + hubHostName + "' '" + deviceInfo.deviceId + "' '' '" + deviceInfo.authentication.symmetricKey.primaryKey + "'";
     return test_process_args;
 }
@@ -462,10 +462,8 @@ function createTestDeviceAndTestProcess(testHubConnectionString:string, testexe:
             });
 
             const testDeviceConnectionString:string = getConnectionStringFromDeviceInfo(testHubConnectionString, newDeviceInfo)
-            // console.log(`Successfully new device with connectionString=<${testDeviceConnectionString}>`)
 
             // Creates the test process, providing connection string of the test created device it should associate with
-            // console.log(`Invoking test executable ${testexe}`)
             let test_args:string = getTestProcessArgs(testHubConnectionString, newDeviceInfo);
             executeTestProcess(testexe, test_args, function processCompleteCallback(result:number) {
                 console.log(`Test process has completed execution with exit status ${result}`)
@@ -481,36 +479,6 @@ function createTestDeviceAndTestProcess(testHubConnectionString:string, testexe:
               }).catch(function (error) {
                 done(error, null)
               })
-
-            // Now we need to wait until the test EXE is connected.
-            // verifyTelemetryMessage(testHubConnectionString, newDeviceInfo.deviceId, deviceConnectedMessage)
-            //     .then(function (result) {
-            //         console.log("Received telemetry message");
-            //     }).then(() => {
-            //         console.log("Waiting for device to receive ADU payload");
-            //         verifyTelemetryMessageWithTimeout(testHubConnectionString,
-            //           newDeviceInfo.deviceId,
-            //           deviceReceivedAduPayloadMessage,
-            //           aduWaitForDeploymentToReachDeviceTimeout).then(function (result) {
-            //             done(result, newDeviceInfo)
-            //           }).catch(function (error) {
-            //             done(error, null)
-            //           })
-            //         }
-            //     ).catch(function (error) {
-            //       done(error, null)
-            // })
-
-            // console.log("Waiting for device to receive ADU payload");
-
-            // verifyTelemetryMessageWithTimeout(testHubConnectionString,
-            //     newDeviceInfo.deviceId,
-            //     deviceReceivedAduPayloadMessage,
-            //     aduWaitForDeploymentToReachDeviceTimeout).then(function (result) {
-            //         done(result, newDeviceInfo)
-            //     }).catch(function (error) {
-            //         done(error, null)
-            //     })
         }
     })
 }
@@ -637,7 +605,7 @@ function getTwinProperties(connectionString:string, deviceId:string) : Promise<s
 
 module.exports = {
     getConnectionStringFromDeviceInfo : getConnectionStringFromDeviceInfo,
-    getHubnameFromConnectionString : getHubnameFromConnectionString,
+    getHubNameFromConnectionString : getHubNameFromConnectionString,
     createTestDevice : createTestDevice,
     executeTestProcess : executeTestProcess,
     deleteDevice : deleteDevice,

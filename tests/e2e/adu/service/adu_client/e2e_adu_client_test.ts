@@ -3,7 +3,7 @@
 
 // These TypeScript tests are the test driver for E2E tests, acting as service application
 // calling into an EXE hosting the C Azure IoT device SDK.
-// See ../../readme.md for a full architectural review of how it works.
+// See ../../../readme.md for a full architectural review of how it works.
 'use strict'
 
 import assert from 'assert';
@@ -13,6 +13,10 @@ const e2eTestCommands = require ('../common/e2e_test_commands');
 
 // testDeviceInfo contains the settings for our test device on the IoTHub.
 let testDeviceInfo:any = null;
+
+let aduDeviceStateIdle:number = 0;
+let aduDeviceStateInProgress: number = 6;
+let aduDeviceTwinAccepted: number = 200;
 
 
 //
@@ -140,7 +144,7 @@ describe("mainTest", () => {
         var twinObject = JSON.parse(twin);
         assert.ok(twinObject.reported.deviceUpdate);
         assert.ok(twinObject.reported.deviceUpdate.agent);
-        assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, 0);
+        assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, aduDeviceStateIdle);
         assert.strictEqual(twinObject.reported.deviceUpdate.agent.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.0\"}")
     })
 
@@ -159,11 +163,11 @@ describe("mainTest", () => {
       var twinObject = JSON.parse(twin);
       assert.ok(twinObject.reported.deviceUpdate);
       assert.ok(twinObject.reported.deviceUpdate.agent);
-      assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, 6);
+      assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, aduDeviceStateInProgress);
       assert.strictEqual(twinObject.reported.deviceUpdate.agent.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.0\"}")
       assert.ok(twinObject.reported.deviceUpdate.service);
       assert.ok(twinObject.reported.deviceUpdate.service.ac);
-      assert.strictEqual(twinObject.reported.deviceUpdate.service.ac, 200);
+      assert.strictEqual(twinObject.reported.deviceUpdate.service.ac, aduDeviceTwinAccepted);
     })
 
     it("Verify Final ADU State", async function() {
@@ -175,7 +179,7 @@ describe("mainTest", () => {
         var twinObject = JSON.parse(twin);
         assert.ok(twinObject.reported.deviceUpdate);
         assert.ok(twinObject.reported.deviceUpdate.agent);
-        assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, 0);
+        assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, aduDeviceStateIdle);
         assert.strictEqual(twinObject.reported.deviceUpdate.agent.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.1\"}")
     })
 
