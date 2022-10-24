@@ -141,10 +141,8 @@ describe("mainTest", () => {
         let twin = await iothubTestCore.getTwinProperties(testHubConnectionString, testDeviceInfo.deviceId);
         console.log(twin)
         var twinObject = JSON.parse(twin);
-        assert.ok(twinObject.reported.deviceUpdate);
-        assert.ok(twinObject.reported.deviceUpdate.agent);
-        assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, aduDeviceStateIdle);
-        assert.strictEqual(twinObject.reported.deviceUpdate.agent.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.0\"}")
+        assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.state, aduDeviceStateIdle);
+        assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.0\"}")
     })
 
     it("Get full ADU twin doc", async function() {
@@ -160,13 +158,9 @@ describe("mainTest", () => {
       let twin = await iothubTestCore.getTwinProperties(testHubConnectionString, testDeviceInfo.deviceId);
       console.log(twin)
       var twinObject = JSON.parse(twin);
-      assert.ok(twinObject.reported.deviceUpdate);
-      assert.ok(twinObject.reported.deviceUpdate.agent);
-      assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, aduDeviceStateInProgress);
-      assert.strictEqual(twinObject.reported.deviceUpdate.agent.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.0\"}")
-      assert.ok(twinObject.reported.deviceUpdate.service);
-      assert.ok(twinObject.reported.deviceUpdate.service.ac);
-      assert.strictEqual(twinObject.reported.deviceUpdate.service.ac, aduDeviceTwinAccepted);
+      assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.state, aduDeviceStateInProgress);
+      assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.0\"}")
+      assert.strictEqual(twinObject.reported.deviceUpdate?.service?.ac, aduDeviceTwinAccepted);
     })
 
     it("Verify Final ADU State", async function() {
@@ -176,10 +170,8 @@ describe("mainTest", () => {
         let twin = await iothubTestCore.getTwinProperties(testHubConnectionString, testDeviceInfo.deviceId);
         console.log(twin)
         var twinObject = JSON.parse(twin);
-        assert.ok(twinObject.reported.deviceUpdate);
-        assert.ok(twinObject.reported.deviceUpdate.agent);
-        assert.strictEqual(twinObject.reported.deviceUpdate.agent.state, aduDeviceStateIdle);
-        assert.strictEqual(twinObject.reported.deviceUpdate.agent.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.1\"}")
+        assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.state, aduDeviceStateIdle);
+        assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.1\"}")
     })
 
 })
