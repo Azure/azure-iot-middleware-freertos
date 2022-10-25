@@ -74,7 +74,7 @@ pwsh -File ./create_and_import_manifest.ps1 -AccountEndpoint "iotsdk-c-productio
 -AzureAdTenantId "72f988bf-86f1-41af-91ab-2d7cd011db47" \
 -AzureAdApplicationSecret $ADU_AAD_APPLICATION_SECRET \
 -AzureSubscriptionId "db2f889d-dd6c-4269-8d41-a38efcdace46" \
--AzureResourceGroupName "cleanupservice" \
+-AzureResourceGroupName "azureiot-euap-e2e" \
 -AzureStorageAccountName "euapuploadacct" \
 -AzureBlobContainerName "adu-e2e" \
 -GroupID "linux-e2e-group" \
