@@ -67,16 +67,16 @@ fi
 pushd service
 
 echo -e "::group::Create, upload, deploy update manifest and payload"
-pwsh -File ./create_and_import_manifest.ps1 -AccountEndpoint "dwalton-adu.api.adu.microsoft.com" \
--InstanceId "dwalton-adu-instance" \
+pwsh -File ./create_and_import_manifest.ps1 -AccountEndpoint "iotsdk-c-production-adu.api.adu.microsoft.com" \
+-InstanceId "iotsdk-c-production-adu" \
 -UpdateVersion "1.1" \
--AzureAdClientId "0c165f17-b3d5-4944-9695-137d2f07e16e" \
+-AzureAdClientId "321e2686-c228-4c8d-ac77-d19674cb62b5" \
 -AzureAdTenantId "72f988bf-86f1-41af-91ab-2d7cd011db47" \
 -AzureAdApplicationSecret $ADU_AAD_APPLICATION_SECRET \
--AzureSubscriptionId "f62a95ba-87fa-4b4d-98ff-37ccc89b56ab" \
+-AzureSubscriptionId "db2f889d-dd6c-4269-8d41-a38efcdace46" \
 -AzureResourceGroupName "cleanupservice" \
--AzureStorageAccountName "dawalton" \
--AzureBlobContainerName "adu" \
+-AzureStorageAccountName "euapuploadacct" \
+-AzureBlobContainerName "adu-e2e" \
 -GroupID "linux-e2e-group" \
 -UpdateProvider "ADU-E2E-Tests" \
 -UpdateName "Linux-E2E-Update"
