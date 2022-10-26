@@ -74,12 +74,12 @@ Param(
 # Errors in system routines will stop script execution
 $errorActionPreference    = "stop"
 
-Install-Module MSAL.PS
-Install-Module Az.Accounts
-Install-Module Az.Storage
-Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduUpdate.psm1 -ErrorAction Stop
-Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduImportUpdate.psm1 -ErrorAction Stop
-Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduRestApi.psm1 -ErrorAction Stop
+Install-Module MSAL.PS -Force
+Install-Module Az.Accounts -Force
+Install-Module Az.Storage -Force
+Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduUpdate.psm1 -ErrorAction Stop -Force
+Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduImportUpdate.psm1 -ErrorAction Stop -Force
+Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduRestApi.psm1 -ErrorAction Stop -Force
 
 # Set up Azure Account using the passed AAD secret
 $accountSecret = ConvertTo-SecureString -String $AzureAdApplicationSecret -AsPlainText -Force
