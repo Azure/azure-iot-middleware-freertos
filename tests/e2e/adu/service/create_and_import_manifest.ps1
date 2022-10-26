@@ -72,7 +72,8 @@ Param(
 )
 
 # Errors in system routines will stop script execution
-$errorActionPreference    = "stop"
+$errorActionPreference = "stop"
+$VerbosePreference = "continue"
 
 Install-Module MSAL.PS -Force
 Install-Module Az.Accounts -Force
@@ -102,7 +103,7 @@ $parsedJsonResponse = $getResponse | ConvertFrom-Json
 
 foreach ($deployment in $parsedJsonResponse.value)
 {
-  Write-Host("Deleting previous deployment: $deployment.deploymentId")
+  Write-Host("Deleting previous deployment: $($deployment.deploymentId)")
   $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
   $deleteDeploymentResponse = Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
   $operationId = $deleteDeploymentResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
