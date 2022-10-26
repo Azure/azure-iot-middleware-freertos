@@ -102,10 +102,13 @@ $parsedJsonResponse = $getResponse | ConvertFrom-Json
 
 foreach ($deployment in $parsedJsonResponse.value)
 {
-  Write-Host("Deleting previous update: $deployment.deploymentId")
-  $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
-  Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+  Write-Host("Deleting previous deployment: $deployment.deploymentId")
+  $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
+  Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 }
+
+$deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$UpdateName/versions/$UpdateVersion/?api-version=2021-06-01-preview"
+Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 
 # Set up Azure Account using the passed AAD secret for blob storage
 $accountSecret = ConvertTo-SecureString -String $AzureAdApplicationSecret -AsPlainText -Force
