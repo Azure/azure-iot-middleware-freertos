@@ -81,7 +81,33 @@ Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduUpdate.psm1
 Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduImportUpdate.psm1 -ErrorAction Stop -Force
 Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduRestApi.psm1 -ErrorAction Stop -Force
 
-# Set up Azure Account using the passed AAD secret
+Write-Host("Get auth token for ADU operations")
+$secureStringAuth = ConvertTo-SecureString $AzureAdApplicationSecret -AsPlainText -Force
+$AuthorizationToken = Get-MsalToken `
+            -ClientId $AzureAdClientId `
+            -TenantId $AzureAdTenantId `
+            -Scope 'https://api.adu.microsoft.com/.default' `
+            -Authority "https://login.microsoftonline.com/$AzureAdTenantId/v2.0" `
+            -ClientSecret $secureStringAuth `
+            -ErrorAction Stop
+
+Write-Host("Get previous deployments")
+$getUpdatesUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/?api-version=2021-06-01-preview"
+$authHeaders = @{'Authorization' = "Bearer $($AuthorizationToken.AccessToken)"}
+$authHeaders.Add('Content-Type', 'application/json')
+$getResponse = Invoke-WebRequest -Uri $getUpdatesUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+Write-Host($getResponse)
+
+$parsedJsonResponse = $getResponse | ConvertFrom-Json
+
+foreach ($deployment in $parsedJsonResponse.value)
+{
+  Write-Host("Deleting previous update: $deployment.deploymentId")
+  $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
+  Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+}
+
+# Set up Azure Account using the passed AAD secret for blob storage
 $accountSecret = ConvertTo-SecureString -String $AzureAdApplicationSecret -AsPlainText -Force
 $accountCredential = [System.Management.Automation.PSCredential]::new($AzureAdClientId, $accountSecret)
 Connect-AzAccount -ServicePrincipal -Credential $accountCredential -Tenant $AzureAdTenantId -ErrorAction Stop
@@ -130,8 +156,6 @@ Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
 $currentTime = [DateTime]::UtcNow.ToString('u')
 $deploymentId = [guid]::NewGuid().toString()
 $deploymentUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/management/groups/$GroupID/deployments/$deploymentId/?api-version=2021-06-01-preview"
-$headers = @{'Authorization' = "Bearer $($AuthorizationToken.AccessToken)"}
-$headers.Add('Content-Type', 'application/json')
 $payload = @"
 {
   "deploymentId": "$deploymentId",
@@ -148,12 +172,12 @@ $payload = @"
 Write-Host($deploymentUri)
 Write-Host($payload)
 
-$response = Invoke-WebRequest -Uri $deploymentUri -Method PUT -Headers $headers -Body $payload -UseBasicParsing -Verbose:$VerbosePreference
+$response = Invoke-WebRequest -Uri $deploymentUri -Method PUT -Headers $authHeaders -Body $payload -UseBasicParsing -Verbose:$VerbosePreference
 
 Write-Host($response)
 
 # Get the status of the deployment
 $deploymenetStatusUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$deploymentId/status?api-version=2021-06-01-preview"
-$statusResponse = Invoke-WebRequest -Uri $deploymenetStatusUri -Method GET -Headers $headers -UseBasicParsing -Verbose:$VerbosePreference
+$statusResponse = Invoke-WebRequest -Uri $deploymenetStatusUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 
 Write-Host($statusResponse)
