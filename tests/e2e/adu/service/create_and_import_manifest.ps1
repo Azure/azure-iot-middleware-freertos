@@ -104,11 +104,26 @@ foreach ($deployment in $parsedJsonResponse.value)
 {
   Write-Host("Deleting previous deployment: $deployment.deploymentId")
   $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
-  Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+  $deleteDeploymentResponse = Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+  $operationId = $deleteDeploymentResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
+  Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
+                        -InstanceId $InstanceId `
+                        -AuthorizationToken $AuthorizationToken.AccessToken `
+                        -OperationId $operationId `
+                        -Timeout (New-TimeSpan -Minutes 2) `
+                        -Verbose:$VerbosePreference
 }
 
+Write-Host("Deleting previous 1.1 update")
 $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$UpdateName/versions/$UpdateVersion/?api-version=2021-06-01-preview"
-Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+$deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+$operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
+Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
+                        -InstanceId $InstanceId `
+                        -AuthorizationToken $AuthorizationToken.AccessToken `
+                        -OperationId $operationId `
+                        -Timeout (New-TimeSpan -Minutes 2) `
+                        -Verbose:$VerbosePreference
 
 # Set up Azure Account using the passed AAD secret for blob storage
 $accountSecret = ConvertTo-SecureString -String $AzureAdApplicationSecret -AsPlainText -Force
