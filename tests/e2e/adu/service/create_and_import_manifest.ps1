@@ -106,14 +106,6 @@ foreach ($deployment in $parsedJsonResponse.value)
   Write-Host("Deleting previous deployment: $($deployment.deploymentId)")
   $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
   $deleteDeploymentResponse = Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
-  # Write-Host("Headers $($getResponse.Headers)")
-  # $operationId = $deleteDeploymentResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
-  # Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
-  #                       -InstanceId $InstanceId `
-  #                       -AuthorizationToken $AuthorizationToken.AccessToken `
-  #                       -OperationId $operationId `
-  #                       -Timeout (New-TimeSpan -Minutes 2) `
-  #                       -Verbose:$VerbosePreference
 }
 
 Write-Host("Deleting previous 1.1 update")
