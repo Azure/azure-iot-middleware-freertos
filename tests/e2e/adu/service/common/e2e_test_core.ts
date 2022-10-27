@@ -28,6 +28,9 @@ const sleepBeforeTermination:number = 5000;
 const deviceConnectedMessage = "\"CONNECTED\"";
 // Time, in 40s, for event hub partition polling.
 const eventHubPartitionTimeout:number = 40000;
+// Time, in 10 minutes, for device update twin to reach the device.
+const aduWaitForDeploymentToReachDeviceTimeout:number = 10 * 60 * 1000;
+const deviceReceivedAduPayloadMessage = "\"ADU-RECEIVED\"";
 
 // "Handle" to test executable.  Because this is global, means that there
 // can only be one sub-process test executable per suite.
@@ -45,7 +48,7 @@ let device_exit_status = 0;
 function executeTestProcess(test_process:string, cmd_args:string, resultCallback) {
     // Start the process
     let command_line:string = test_process + ` ` + cmd_args + ``
-    //console.log(`Invoking exec(${command_line})`)
+
     test_exe = exec(command_line);
 
     test_exe.stdout.on('data', (data:string) => {
@@ -98,25 +101,28 @@ function terminateTestProcessIfNecessary(done) {
 // it easier for cleaning up test suites under development.  On device creation, the passed
 // resultCallback function will be invoked.
 //
-function createTestDevice(hubConnectionString:string, testDeviceNamePrefix:string, resultCallback:any) {
-    let registry = iothubRegistry.fromConnectionString(hubConnectionString)
+// Note that we add an ADUGroup tag to the device to deploy updates to
+//
+function createTestDevice(hubConnectionString: string, testDeviceNamePrefix: string, resultCallback: any) {
+  let registry = iothubRegistry.fromConnectionString(hubConnectionString)
 
-    // device side limitation
-    let testDeviceName:string = (testDeviceNamePrefix + uuid.v4()).substring(0, 32)
+  // device side limitation
+  let testDeviceName: string = (testDeviceNamePrefix + uuid.v4()).substring(0, 32)
 
-    let new_device =
-    {
-        deviceId: testDeviceName,
-        status: 'enabled',
-        authentication: {
-            symmetricKey: {
-                primaryKey: new Buffer(uuid.v4()).toString('base64'),
-                secondaryKey: new Buffer(uuid.v4()).toString('base64')
-            }
-        }
+  let new_device =
+  {
+    deviceId: testDeviceName,
+    status: 'enabled',
+    authentication: {
+      symmetricKey: {
+        primaryKey: new Buffer(uuid.v4()).toString('base64'),
+        secondaryKey: new Buffer(uuid.v4()).toString('base64')
+      }
     }
+  }
 
-    registry.create(new_device, resultCallback)
+  registry.create(new_device, resultCallback)
+
 }
 
 //
@@ -129,9 +135,9 @@ function deleteDevice(hubConnectionString:string, testDeviceName:string, resultC
 }
 
 //
-// getHubnameFromConnectionString retrieves the hostname from a given hub connection string
+// getHubNameFromConnectionString retrieves the hostname from a given hub connection string
 //
-function getHubnameFromConnectionString(hubConnectionString:string) {
+function getHubNameFromConnectionString(hubConnectionString:string) {
     // For given hub connection string, remove the HostName=<USER_SPECIFIED_VALUE>;Etc. so it's just the <sUSER_SPECIFIED_VALUE>
     return (hubConnectionString.replace("HostName=","")).replace(/;.*/,"")
 }
@@ -142,7 +148,7 @@ function getHubnameFromConnectionString(hubConnectionString:string) {
 //
 function getConnectionStringFromDeviceInfo(hubConnectionString:string, deviceInfo) {
     // The deviceInfo doesn't contain the hub hostname, so need to parse it from initial connection string
-    let hubHostName = getHubnameFromConnectionString(hubConnectionString)
+    let hubHostName = getHubNameFromConnectionString(hubConnectionString)
     return ("HostName=" + hubHostName + ";DeviceId=" + deviceInfo.deviceId + ";SharedAccessKey=" + deviceInfo.authentication.symmetricKey.primaryKey)
 }
 
@@ -151,7 +157,7 @@ function getConnectionStringFromDeviceInfo(hubConnectionString:string, deviceInf
 //
 function getTestProcessArgs(hubConnectionString:string, deviceInfo) {
     // Start the process
-    let hubHostName = getHubnameFromConnectionString(hubConnectionString)
+    let hubHostName = getHubNameFromConnectionString(hubConnectionString)
     let test_process_args = "'" + hubHostName + "' '" + deviceInfo.deviceId + "' '' '" + deviceInfo.authentication.symmetricKey.primaryKey + "'";
     return test_process_args;
 }
@@ -360,7 +366,7 @@ function verifyTelemetryMessageWithTimeout(testHubConnectionString:string, devic
 
         getEventHubClient(testHubConnectionString).then(function(client) {
             let found = 0;
-            let timmer = null;
+            let timer = null;
 
             const onEventHubMessage = function (eventData) {
                 if (eventData.annotations['iothub-connection-device-id'] === deviceId) {
@@ -371,7 +377,7 @@ function verifyTelemetryMessageWithTimeout(testHubConnectionString:string, devic
                         found = 1;
                         client.close().then(function() {
                             console.log(('Resolving message verification promise'))
-                            clearTimeout(timmer)
+                            clearTimeout(timer)
                             resolve(0)
                         });
                     }
@@ -385,16 +391,16 @@ function verifyTelemetryMessageWithTimeout(testHubConnectionString:string, devic
                 console.log(('Error from Event Hub Client Receiver: ' + err.toString()));
             };
 
-            // Listing for message in all paritions
+            // Listing for message in all partitions
             client.getPartitionIds().then(function(partitionIds) {
                 partitionIds.forEach(function (partitionId) {
                     client.receive(partitionId, onEventHubMessage, onEventHubError, { eventPosition: EventPosition.fromEnqueuedTime(startAfterTime) })
                 });
             });
 
-            // timeout parition after eventHubPartitionTimeout
+            // timeout partition after eventHubPartitionTimeout
             // and close connection if result not found
-            timmer = setTimeout(function() {
+            timer = setTimeout(function() {
                 if (!found) {
                     console.log(('Event hub timeout triggered'))
                     client.close().then(function() {
@@ -425,29 +431,54 @@ function verifyTelemetryMessageWithTimeout(testHubConnectionString:string, devic
 //
 function createTestDeviceAndTestProcess(testHubConnectionString:string, testexe:string, done) {
     // First, we create a new test device on IoTHub.  This will be destroyed on test tear down.
-    createTestDevice(testHubConnectionString, "azure_mid_freertos_e2e_", function(err, newDeviceInfo) {
+    createTestDevice(testHubConnectionString, "azure_mid_freertos_adu_e2e_", function(err, newDeviceInfo) {
         if (err) {
             console.log(`createTestDevice fails, error=<${err}>`)
             done(err, null)
         }
         else {
+
+            let registry = iothubRegistry.fromConnectionString(testHubConnectionString)
+
+            // Add the ADUGroup to the device twin
+            registry.getTwin(newDeviceInfo.deviceId, function (err, twin) {
+              if (err) {
+                console.error(err.constructor.name + ': ' + err.message);
+              } else {
+                var patch = {
+                  tags: {
+                    ADUGroup: "linux-e2e-group"
+                  }
+                };
+          
+                twin.update(patch, function (err) {
+                  if (err) {
+                    console.error('Could not update twin: ' + err.constructor.name + ': ' + err.message);
+                  } else {
+                    console.log(twin.deviceId + ' twin updated successfully with ADU tag');
+                  }
+                });
+              }
+            });
+
             const testDeviceConnectionString:string = getConnectionStringFromDeviceInfo(testHubConnectionString, newDeviceInfo)
-            // console.log(`Successfully new device with connectionString=<${testDeviceConnectionString}>`)
 
             // Creates the test process, providing connection string of the test created device it should associate with
-            //console.log(`Invoking test executable ${testDeviceConnectionString}`)
             let test_args:string = getTestProcessArgs(testHubConnectionString, newDeviceInfo);
             executeTestProcess(testexe, test_args, function processCompleteCallback(result:number) {
                 console.log(`Test process has completed execution with exit status ${result}`)
                 device_exit_status = result
             })
 
-            // Now we need to wait until the test EXE is connected.
-            verifyTelemetryMessage(testHubConnectionString, newDeviceInfo.deviceId, deviceConnectedMessage).then(function(result) {
+            console.log("Waiting for device to receive ADU payload");
+            verifyTelemetryMessageWithTimeout(testHubConnectionString,
+              newDeviceInfo.deviceId,
+              deviceReceivedAduPayloadMessage,
+              aduWaitForDeploymentToReachDeviceTimeout).then(function (result) {
                 done(result, newDeviceInfo)
-            }).catch(function(error) {
+              }).catch(function (error) {
                 done(error, null)
-            });
+              })
         }
     })
 }
@@ -555,38 +586,6 @@ function verifyReportedProperties(connectionString:string, deviceId:string, valu
     return result;
 }
 
-function postDesiredProperty(connectionString:string, deviceId:string, key:string, value:string) : Promise<string> {
-    var registry = iothubRegistry.fromConnectionString(connectionString);
-    var rv = registry.getTwin(deviceId);
-    let result = new Promise<string> ((resolve, reject) => {
-        rv.then((httResponse:any) => {
-            let twin = httResponse.responseBody;
-            let properties = {};
-            properties[key] = value;
-
-            var twinPatch = {
-                properties: {
-                  desired : properties
-                }
-            };
-            
-            twin.update(twinPatch, (err:any, newTwin:any) => {
-                JSON.stringify(newTwin)
-                if (err) {
-                    reject(err)
-                }
-                else {
-                    resolve(JSON.stringify(newTwin));
-                }
-            });
-        }).catch((err:any) => {
-            reject(err)
-        });
-    });
-
-    return result;
-}
-
 function getTwinProperties(connectionString:string, deviceId:string) : Promise<string> {
     var registry = iothubRegistry.fromConnectionString(connectionString);
     var rv = registry.getTwin(deviceId);
@@ -606,7 +605,7 @@ function getTwinProperties(connectionString:string, deviceId:string) : Promise<s
 
 module.exports = {
     getConnectionStringFromDeviceInfo : getConnectionStringFromDeviceInfo,
-    getHubnameFromConnectionString : getHubnameFromConnectionString,
+    getHubNameFromConnectionString : getHubNameFromConnectionString,
     createTestDevice : createTestDevice,
     executeTestProcess : executeTestProcess,
     deleteDevice : deleteDevice,
@@ -625,6 +624,5 @@ module.exports = {
     deleteProvisioningEnrollment : deleteProvisioningEnrollment,
     verifyTelemetryMessageWithTimeout : verifyTelemetryMessageWithTimeout,
     verifyReportedProperties : verifyReportedProperties,
-    postDesiredProperty : postDesiredProperty,
     getTwinProperties : getTwinProperties
 }

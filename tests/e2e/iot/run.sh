@@ -24,12 +24,17 @@ die() {
 }
 
 abspath () {
-    case "$1" in /*)printf "%s\n" "$1";; *)printf "%s\n" "$PWD/$1";; esac;
+  case "$1" in
+  /*)
+    printf"%s\n" "$1";;
+  *)
+    printf "%s\n" "$PWD/$1";;
+  esac;
 }
 
 filepath=`abspath $0`
 dir=`dirname $filepath`
-test_root_dir=$dir/..
+test_root_dir=$dir/../..
 test_freertos_src_path=${2:-""}
 test_ethernet_if=${1:-""}
 
@@ -52,4 +57,4 @@ echo -e "::group::Running E2E tests"
 export DEVICE_TEST_EXE="$dir/device/build/azure_iot_e2e_tests"
 chown root $DEVICE_TEST_EXE
 chmod u+s $DEVICE_TEST_EXE
-cd $dir/service; stdbuf -o0 ./mocha_exec.sh alltest
+cd $dir/service; stdbuf -o0 ./mocha_exec.sh

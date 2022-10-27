@@ -35,15 +35,16 @@ async function iothubRegistryCleanup(hubConnectionString:string, registryPrefix:
             });
         }
     }
-    
-    if(expiredDevicesDescription.length > 0)
+
+    if (expiredDevicesDescription.length > 0)
     {
       expiredDevicesDescription.forEach((des) => {
         console.log("Deleting device: " + des.deviceId)
-    })
+      })
 
       await registry.removeDevices(expiredDevicesDescription, true);
     }
+
 }
 
 let argv = require('yargs')

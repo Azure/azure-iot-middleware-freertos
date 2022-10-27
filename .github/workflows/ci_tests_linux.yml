@@ -9,7 +9,7 @@ on:
     types: [labeled]
 jobs:
   build:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     # Only allow build to start when label 'Run CI' added for forked
     # based PR
     if: ( github.event.pull_request.head.repo.fork == false ) ||
@@ -99,12 +99,15 @@ jobs:
             github.event_name == 'pull_request_target' &&
             github.event.pull_request.head.repo.fork == true
           )
-
+      # Note that the ADU_AAD_APPLICATION_SECRET expires after a year.
+      # Next expiration 10/24/2023
       - name: E2E Tests
-        run: sudo bash -c "export IOTHUB_CONNECTION_STRING=${{ secrets.IOTHUB_CONNECTION_STRING }};
-                           export IOT_PROVISIONING_CONNECTION_STRING=${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }};
-                           export IOT_PROVISIONING_SCOPE_ID=${{ secrets.IOT_PROVISIONING_SCOPE_ID }};
-                           .github/scripts/e2e_tests.sh"
+        run: sudo bash -c 'export IOTHUB_CONNECTION_STRING="${{ secrets.IOTHUB_CONNECTION_STRING }}";
+                           export IOT_PROVISIONING_CONNECTION_STRING="${{ secrets.IOT_PROVISIONING_CONNECTION_STRING }}";
+                           export IOT_PROVISIONING_SCOPE_ID="${{ secrets.IOT_PROVISIONING_SCOPE_ID }}";
+                           export ADU_AAD_APPLICATION_SECRET="${{ secrets.ADU_AAD_APPLICATION_SECRET }}";
+                           export ADU_IOTHUB_CONNECTION_STRING="${{ secrets.ADU_IOTHUB_CONNECTION_STRING }}";
+                           .github/scripts/e2e_tests.sh'
         if: >-
           (
             github.event_name == 'pull_request' &&

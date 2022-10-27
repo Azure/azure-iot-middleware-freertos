@@ -3,7 +3,7 @@
 
 // These TypeScript tests are the test driver for E2E tests, acting as service application
 // calling into an EXE hosting the C Azure IoT device SDK.
-// See ../../readme.md for a full architectural review of how it works.
+// See ../../../readme.md for a full architectural review of how it works.
 'use strict'
 
 import assert from 'assert';
