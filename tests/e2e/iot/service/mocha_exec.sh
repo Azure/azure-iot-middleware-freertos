@@ -22,7 +22,6 @@ die() {
 [ -v IOTHUB_CONNECTION_STRING ] || die "IOTHUB_CONNECTION_STRING is not set!"
 [ -v DEVICE_TEST_EXE ] || die "DEVICE_TEST_EXE is not set!. Please set it to device side binary of e2e tests"
 
-
 echo -e "Installing node dependencies using npm"
 
 npm install

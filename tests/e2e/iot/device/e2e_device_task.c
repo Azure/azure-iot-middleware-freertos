@@ -69,7 +69,7 @@ static void vTestEntry( void ** ppvState )
 
     xHubOptions.xTelemetryCallback = prvTelemetryPubackCallback;
 
-    xHubOptions.pucModelID = ( const uint8_t * ) ppcArgv[ 3 ];
+    xHubOptions.pucModuleID = ( const uint8_t * ) ppcArgv[ 3 ];
     xHubOptions.ulModuleIDLength = ( uint32_t ) strlen( ppcArgv[ 3 ] );
 
     assert_int_equal( AzureIoTHubClient_Init( &xAzureIoTHubClient,
