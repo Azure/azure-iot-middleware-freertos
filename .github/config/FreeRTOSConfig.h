@@ -145,10 +145,10 @@ extern void vAssertCalled( const char * pcFile,
 /* Default DNS server configuration.  OpenDNS addresses are 208.67.222.222 and
  * 208.67.220.220.  Used in ipconfigUSE_DNS is set to 0, or ipconfigUSE_DNS is set
  * to 1 but a DNS server cannot be contacted.*/
-#define configDNS_SERVER_ADDR0              1
-#define configDNS_SERVER_ADDR1              1
-#define configDNS_SERVER_ADDR2              1
-#define configDNS_SERVER_ADDR3              1
+#define configDNS_SERVER_ADDR0              208
+#define configDNS_SERVER_ADDR1              67
+#define configDNS_SERVER_ADDR2              222
+#define configDNS_SERVER_ADDR3              222
 
 /* Default netmask configuration.  Used in ipconfigUSE_DNS is set to 0, or
  * ipconfigUSE_DNS is set to 1 but a DNS server cannot be contacted. */
