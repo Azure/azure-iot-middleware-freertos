@@ -609,7 +609,7 @@ static AzureIoTResult_t prvBase64DecodeJWSHeaderAndPayload( prvJWSValidationCont
     return eAzureIoTSuccess;
 }
 
-static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManifestContext )
+static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManifestContext, AzureIoTJWS_RootKey_t * xADURootKey )
 {
     AzureIoTJSONReader_t xJSONReader;
 
@@ -621,7 +621,7 @@ static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManife
         return eAzureIoTErrorFailed;
     }
 
-    if( !az_span_is_content_equal( az_span_create( ( uint8_t * ) AzureIoTADURootKeyId, AzureIoTADURootKeyIdSize ), pxManifestContext->kidSpan ) )
+    if( !az_span_is_content_equal( az_span_create( ( uint8_t * ) xADURootKey->pucRootKeyId, xADURootKey->ulRootKeyIdLength ), pxManifestContext->kidSpan ) )
     {
         AZLogError( ( "[JWS] Using the wrong root key" ) );
         return eAzureIoTErrorFailed;
@@ -697,6 +697,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
                                            uint32_t ulManifestLength,
                                            uint8_t * pucJWS,
                                            uint32_t ulJWSLength,
+                                           AzureIoTJWS_RootKey_t * xADURootKey,
                                            uint8_t * pucScratchBuffer,
                                            uint32_t ulScratchBufferLength )
 {
@@ -777,7 +778,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     /*------------------- Parse root key id ------------------------*/
 
-    prvValidateRootKey( &xManifestContext );
+    prvValidateRootKey( &xManifestContext, xADURootKey );
 
     /*------------------- Parse necessary pieces for signing key ------------------------*/
 
@@ -795,8 +796,8 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
     ucReusableScratchSpaceHead += azureiotjwsSHA_CALCULATION_SCRATCH_SIZE;
     xResult = prvJWS_RS256Verify( xManifestContext.pucJWKBase64EncodedHeader, xManifestContext.ulJWKBase64EncodedHeaderLength + xManifestContext.ulJWKBase64EncodedPayloadLength + 1,
                                   xManifestContext.ucJWKSignature, xManifestContext.outJWKSignatureLength,
-                                  ( uint8_t * ) AzureIoTADURootKeyN, AzureIoTADURootKeyNSize,
-                                  ( uint8_t * ) AzureIoTADURootKeyE, AzureIoTADURootKeyESize,
+                                  ( uint8_t * ) xADURootKey->pucRootKeyN, xADURootKey->ulRootKeyNLength,
+                                  ( uint8_t * ) xADURootKey->pucRootKeyExponent, xADURootKey->ulRootKeyExponentLength,
                                   xManifestContext.ucScratchCalculationBuffer, azureiotjwsSHA_CALCULATION_SCRATCH_SIZE );
 
     if( xResult != eAzureIoTSuccess )
