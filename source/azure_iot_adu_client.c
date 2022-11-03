@@ -16,6 +16,9 @@
 #define azureiotaduREQUEST_ACCEPTED_CODE    200
 #define azureiotaduREQUEST_REJECTED_CODE    406
 
+const uint8_t * AzureIoTADUModelID = ( uint8_t * ) AZ_IOT_ADU_CLIENT_AGENT_MODEL_ID;
+const uint32_t AzureIoTADUModelIDLength = sizeof( AZ_IOT_ADU_CLIENT_AGENT_MODEL_ID ) - 1;
+
 AzureIoTResult_t AzureIoTADUClient_OptionsInit( AzureIoTADUClientOptions_t * pxADUClientOptions )
 {
     AzureIoTResult_t xResult;

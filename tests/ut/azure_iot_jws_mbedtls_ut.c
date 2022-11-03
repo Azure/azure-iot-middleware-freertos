@@ -64,7 +64,7 @@ static uint8_t ucAzureIoTADURootKeyN[ 385 ]
     };
 static uint8_t ucAzureIoTADURootKeyE[ 3 ] = { 0x01, 0x00, 0x01 };
 
-AzureIoTJWS_RootKey_t xADURootKey =
+static AzureIoTJWS_RootKey_t xADURootKey =
 {
     .pucRootKeyId            = ucAzureIoTADURootKeyId,
     .ulRootKeyIdLength       = sizeof( ucAzureIoTADURootKeyId ) - 1,
