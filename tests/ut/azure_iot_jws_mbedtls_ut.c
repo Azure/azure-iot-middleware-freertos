@@ -31,7 +31,7 @@ static mbedtls_ctr_drbg_context xCtrDrgbContext;
 
 uint32_t ulGetAllTests();
 
-// ADU.200702.R
+/* ADU.200702.R */
 static uint8_t ucAzureIoTADURootKeyId200702[ 13 ] = "ADU.200702.R";
 static uint8_t ucAzureIoTADURootKeyN200702[ 385 ]
     =
@@ -65,7 +65,7 @@ static uint8_t ucAzureIoTADURootKeyN200702[ 385 ]
     };
 static uint8_t ucAzureIoTADURootKeyE200702[ 3 ] = { 0x01, 0x00, 0x01 };
 
-// ADU.200703.R
+/* ADU.200703.R */
 static uint8_t ucAzureIoTADURootKeyId200703[ 13 ] = "ADU.200703.R";
 static uint8_t ucAzureIoTADURootKeyN200703[ 385 ] =
 {
