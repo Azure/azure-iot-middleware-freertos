@@ -58,7 +58,8 @@ typedef struct AzureIoTJWS_RootKey
  * (`pucUpdateManifestSignature` from #AzureIoTADUUpdateRequest_t).
  * @param[in] ulJWSLength The length of \p pucJWS.
  * (`ulUpdateManifestSignatureLength` from #AzureIoTADUUpdateRequest_t).
- * @param[in] xADURootKey The root key used to verify the payload.
+ * @param[in] xADURootKeys An array of root keys that may be used to verify the payload.
+ * @param[in] ulADURootKeysLength The length of the array of root keys.
  * @param[in] pucScratchBuffer Scratch buffer space for calculations. It should be
  * `azureiotjwsSCRATCH_BUFFER_SIZE` in length.
  * @param[in] ulScratchBufferLength The length of \p pucScratchBuffer.
@@ -71,6 +72,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
                                                    uint8_t * pucJWS,
                                                    uint32_t ulJWSLength,
                                                    AzureIoTJWS_RootKey_t * xADURootKey,
+                                                   uint32_t ulADURootKeysLength,
                                                    uint8_t * pucScratchBuffer,
                                                    uint32_t ulScratchBufferLength );
 
