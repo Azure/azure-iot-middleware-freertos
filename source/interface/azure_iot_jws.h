@@ -15,7 +15,10 @@
 
 #include "azure_iot_result.h"
 
-typedef struct
+/**
+ * @brief Holds the values of the root key used to verify the JWS signature.
+ */
+typedef struct AzureIoTJWS_RootKey
 {
     uint8_t * pucRootKeyId;
     uint32_t ulRootKeyIdLength;
