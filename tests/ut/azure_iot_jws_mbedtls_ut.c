@@ -232,21 +232,24 @@ static int setup( void ** state )
 static void testAzureIoTJWS_ManifestAuthenticate_Success( void ** ppvState )
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
-                                                        ucValidManifestJWS, strlen( ucValidManifestJWS ), &xADURootKey[ 0 ], 2,
+                                                        ucValidManifestJWS, strlen( ucValidManifestJWS ),
+                                                        &xADURootKey[ 0 ], sizeof( xADURootKey ) / sizeof( xADURootKey[ 0 ] ),
                                                         ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
 }
 
 static void testAzureIoTJWS_ManifestAuthenticate_Failure( void ** ppvState )
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucInvalidManifest, strlen( ucInvalidManifest ),
-                                                        ucValidManifestJWS, strlen( ucValidManifestJWS ), &xADURootKey[ 0 ], 2,
+                                                        ucValidManifestJWS, strlen( ucValidManifestJWS ),
+                                                        &xADURootKey[ 0 ], sizeof( xADURootKey ) / sizeof( xADURootKey[ 0 ] ),
                                                         ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed );
 }
 
 static void testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure( void ** ppvState )
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
-                                                        ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ), &xADURootKey[ 0 ], 2,
+                                                        ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ),
+                                                        &xADURootKey[ 0 ], sizeof( xADURootKey ) / sizeof( xADURootKey[ 0 ] ),
                                                         ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed );
 }
 
