@@ -313,7 +313,7 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ulIdLength, sizeof( ucFilesID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pucFileName, ucFilesFilename, sizeof( ucFilesFilename ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ulFileNameLength, sizeof( ucFilesFilename ) - 1 );
-    assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ullSizeInBytes, xFilesSizeInBytes );
+    assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ullSizeInBytes, ullFilesSizeInBytes );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].pucId, ucFilesHashID, sizeof( ucFilesHashID ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].ulIdLength, sizeof( ucFilesHashID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].pucHash, ucFilesHashesSHA, sizeof( ucFilesHashesSHA ) - 1 );
