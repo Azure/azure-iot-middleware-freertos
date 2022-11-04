@@ -83,7 +83,7 @@ static uint8_t ucInstructionsStepsFile[] = "f2f4a804ca17afbae";
 static uint8_t ucInstructionsStepsHandlerPropertiesInstallCriteria[] = "1.0";
 static uint8_t ucFilesID[] = "f2f4a804ca17afbae";
 static uint8_t ucFilesFilename[] = "iot-middleware-sample-adu-v1.1";
-static size_t xFilesSizeInBytes = 844976;
+static uint64_t ullFilesSizeInBytes = 844976;
 static uint8_t ucFilesHashID[] = "sha256";
 static uint8_t ucFilesHashesSHA[] = "xsoCnYAMkZZ7m9RL9Vyg9jKfFehCNxyuPFaJVM/WBi0=";
 static uint8_t ucCreateDateTime[] = "2022-07-07T03:02:48.8449038Z";
@@ -313,7 +313,7 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ulIdLength, sizeof( ucFilesID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pucFileName, ucFilesFilename, sizeof( ucFilesFilename ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ulFileNameLength, sizeof( ucFilesFilename ) - 1 );
-    assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].xSizeInBytes, xFilesSizeInBytes );
+    assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ullSizeInBytes, xFilesSizeInBytes );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].pucId, ucFilesHashID, sizeof( ucFilesHashID ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].ulIdLength, sizeof( ucFilesHashID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].pucHash, ucFilesHashesSHA, sizeof( ucFilesHashesSHA ) - 1 );
@@ -393,7 +393,7 @@ static void testAzureIoTADUClient_ParseRequestWithRetry_Success( void ** ppvStat
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ulIdLength, sizeof( ucFilesID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pucFileName, ucFilesFilename, sizeof( ucFilesFilename ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ulFileNameLength, sizeof( ucFilesFilename ) - 1 );
-    assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].xSizeInBytes, xFilesSizeInBytes );
+    assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].ullSizeInBytes, ullFilesSizeInBytes );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].pucId, ucFilesHashID, sizeof( ucFilesHashID ) - 1 );
     assert_int_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].ulIdLength, sizeof( ucFilesHashID ) - 1 );
     assert_memory_equal( xRequest.xUpdateManifest.pxFiles[ 0 ].pxHashes[ 0 ].pucHash, ucFilesHashesSHA, sizeof( ucFilesHashesSHA ) - 1 );
