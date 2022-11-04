@@ -98,7 +98,7 @@ static uint8_t ucAzureIoTADURootKeyN200703[ 385 ] =
 };
 static uint8_t ucAzureIoTADURootKeyE200703[ 3 ] = { 0x01, 0x00, 0x01 };
 
-static AzureIoTJWS_RootKey_t xADURootKey[] =
+static AzureIoTJWS_RootKey_t xADURootKeys[] =
 {
     /*Put Root key 03 first since we know 02 is used in these ut (makes sure we cycle through the array) */
     {
@@ -233,7 +233,7 @@ static void testAzureIoTJWS_ManifestAuthenticate_Success( void ** ppvState )
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
                                                         ucValidManifestJWS, strlen( ucValidManifestJWS ),
-                                                        &xADURootKey[ 0 ], sizeof( xADURootKey ) / sizeof( xADURootKey[ 0 ] ),
+                                                        &xADURootKeys[ 0 ], sizeof( xADURootKeys ) / sizeof( xADURootKeys[ 0 ] ),
                                                         ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
 }
 
@@ -241,7 +241,7 @@ static void testAzureIoTJWS_ManifestAuthenticate_Failure( void ** ppvState )
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucInvalidManifest, strlen( ucInvalidManifest ),
                                                         ucValidManifestJWS, strlen( ucValidManifestJWS ),
-                                                        &xADURootKey[ 0 ], sizeof( xADURootKey ) / sizeof( xADURootKey[ 0 ] ),
+                                                        &xADURootKeys[ 0 ], sizeof( xADURootKeys ) / sizeof( xADURootKeys[ 0 ] ),
                                                         ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed );
 }
 
@@ -249,7 +249,7 @@ static void testAzureIoTJWS_ManifestAuthenticate_WrongSha_Failure( void ** ppvSt
 {
     assert_int_equal( AzureIoTJWS_ManifestAuthenticate( ucValidManifest, strlen( ucValidManifest ),
                                                         ucWrongSHAManifestJWS, strlen( ucWrongSHAManifestJWS ),
-                                                        &xADURootKey[ 0 ], sizeof( xADURootKey ) / sizeof( xADURootKey[ 0 ] ),
+                                                        &xADURootKeys[ 0 ], sizeof( xADURootKeys ) / sizeof( xADURootKeys[ 0 ] ),
                                                         ucScratchBuffer, sizeof( ucScratchBuffer ) ), eAzureIoTErrorFailed );
 }
 
