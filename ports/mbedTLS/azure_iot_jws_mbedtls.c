@@ -31,7 +31,7 @@
         }                                            \
     } while( 0 )
 
-#define azureiotjwsPKCS7_PAYLOAD_OFFSET            19
+#define azureiotjwsPKCS7_PAYLOAD_OFFSET    19
 
 static const uint8_t jws_sha256_json_value[] = "sha256";
 static const uint8_t jws_sjwk_json_value[] = "sjwk";
@@ -424,7 +424,7 @@ static AzureIoTResult_t prvFindKeyParts( AzureIoTJSONReader_t * pxPayload,
         ( az_span_size( *pxAlgSpan ) == 0 ) )
     {
         AZLogError( ( "[JWS] Parse Signing Key Payload Error: %i",
-                    xResult != eAzureIoTSuccess ? xResult : eAzureIoTErrorFailed ) );
+                      xResult != eAzureIoTSuccess ? xResult : eAzureIoTErrorFailed ) );
         return xResult != eAzureIoTSuccess ? xResult : eAzureIoTErrorFailed;
     }
 
@@ -609,7 +609,10 @@ static AzureIoTResult_t prvBase64DecodeJWSHeaderAndPayload( prvJWSValidationCont
     return eAzureIoTSuccess;
 }
 
-static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManifestContext )
+static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManifestContext,
+                                            AzureIoTJWS_RootKey_t * xADURootKeys,
+                                            uint32_t ulADURootKeysLength,
+                                            int32_t * pulADURootKeyIndex )
 {
     AzureIoTJSONReader_t xJSONReader;
 
@@ -621,13 +624,20 @@ static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManife
         return eAzureIoTErrorFailed;
     }
 
-    if( !az_span_is_content_equal( az_span_create( ( uint8_t * ) AzureIoTADURootKeyId, AzureIoTADURootKeyIdSize ), pxManifestContext->kidSpan ) )
+    for( int i = 0; i < ulADURootKeysLength; i++ )
     {
-        AZLogError( ( "[JWS] Using the wrong root key" ) );
-        return eAzureIoTErrorFailed;
+        if( az_span_is_content_equal( az_span_create( ( uint8_t * ) xADURootKeys[ i ].pucRootKeyId, xADURootKeys[ i ].ulRootKeyIdLength ), pxManifestContext->kidSpan ) )
+        {
+            *pulADURootKeyIndex = i;
+            return eAzureIoTSuccess;
+        }
     }
 
-    return eAzureIoTSuccess;
+    *pulADURootKeyIndex = -1;
+
+    AZLogError( ( "[JWS] Using the wrong root key" ) );
+
+    return eAzureIoTErrorFailed;
 }
 
 static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifestContext,
@@ -694,16 +704,19 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 }
 
 AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
-                                           uint32_t ulManifestLength,
-                                           uint8_t * pucJWS,
-                                           uint32_t ulJWSLength,
-                                           uint8_t * pucScratchBuffer,
-                                           uint32_t ulScratchBufferLength )
+                                                   uint32_t ulManifestLength,
+                                                   uint8_t * pucJWS,
+                                                   uint32_t ulJWSLength,
+                                                   AzureIoTJWS_RootKey_t * xADURootKeys,
+                                                   uint32_t ulADURootKeysLength,
+                                                   uint8_t * pucScratchBuffer,
+                                                   uint32_t ulScratchBufferLength )
 {
     az_result xCoreResult;
     AzureIoTResult_t xResult;
     AzureIoTJSONReader_t xJSONReader;
     prvJWSValidationContext_t xManifestContext = { 0 };
+    int32_t lRootKeyIndex;
 
     /* Break up scratch buffer for reusable and persistant sections */
     uint8_t * ucPersistentScratchSpaceHead = pucScratchBuffer;
@@ -777,7 +790,13 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     /*------------------- Parse root key id ------------------------*/
 
-    prvValidateRootKey( &xManifestContext );
+    xResult = prvValidateRootKey( &xManifestContext, xADURootKeys, ulADURootKeysLength, &lRootKeyIndex );
+
+    if( xResult != eAzureIoTSuccess )
+    {
+        AZLogError( ( "[JWS] prvValidateRootKey failed" ) );
+        return xResult;
+    }
 
     /*------------------- Parse necessary pieces for signing key ------------------------*/
 
@@ -795,8 +814,8 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
     ucReusableScratchSpaceHead += azureiotjwsSHA_CALCULATION_SCRATCH_SIZE;
     xResult = prvJWS_RS256Verify( xManifestContext.pucJWKBase64EncodedHeader, xManifestContext.ulJWKBase64EncodedHeaderLength + xManifestContext.ulJWKBase64EncodedPayloadLength + 1,
                                   xManifestContext.ucJWKSignature, xManifestContext.outJWKSignatureLength,
-                                  ( uint8_t * ) AzureIoTADURootKeyN, AzureIoTADURootKeyNSize,
-                                  ( uint8_t * ) AzureIoTADURootKeyE, AzureIoTADURootKeyESize,
+                                  ( uint8_t * ) xADURootKeys[ lRootKeyIndex ].pucRootKeyN, xADURootKeys[ lRootKeyIndex ].ulRootKeyNLength,
+                                  ( uint8_t * ) xADURootKeys[ lRootKeyIndex ].pucRootKeyExponent, xADURootKeys[ lRootKeyIndex ].ulRootKeyExponentLength,
                                   xManifestContext.ucScratchCalculationBuffer, azureiotjwsSHA_CALCULATION_SCRATCH_SIZE );
 
     if( xResult != eAzureIoTSuccess )
@@ -845,8 +864,8 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
     if( !az_span_is_content_equal( xManifestContext.xAlgSpan, az_span_create( ( uint8_t * ) jws_alg_rs256, sizeof( jws_alg_rs256 ) - 1 ) ) )
     {
         AZLogError( ( "[JWS] Algorithm not supported | expected %.*s | actual %.*s",
-                    sizeof( jws_alg_rs256 ) - 1, jws_alg_rs256,
-                    az_span_size( xManifestContext.xAlgSpan ), az_span_ptr( xManifestContext.xAlgSpan ) ) );
+                      sizeof( jws_alg_rs256 ) - 1, jws_alg_rs256,
+                      az_span_size( xManifestContext.xAlgSpan ), az_span_ptr( xManifestContext.xAlgSpan ) ) );
         return eAzureIoTErrorFailed;
     }
 

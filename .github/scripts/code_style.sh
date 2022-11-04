@@ -39,6 +39,7 @@ if [[ "$FIX" == "check" ]]; then
     ./ports/coreMQTT/*.h                                      \
     ./ports/coreHTTP/*.c                                      \
     ./ports/coreHTTP/*.h                                      \
+    ./ports/mbedTLS/*.c                                       \
     ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
     ./tests/e2e/adu/device/*.c                                \
@@ -62,6 +63,7 @@ elif [[ "$FIX" == "fix" ]]; then
     ./ports/coreMQTT/*.h                                      \
     ./ports/coreHTTP/*.c                                      \
     ./ports/coreHTTP/*.h                                      \
+    ./ports/mbedTLS/*.c                                       \
     ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
     ./tests/e2e/adu/device/*.c                                \
