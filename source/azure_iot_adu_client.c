@@ -158,7 +158,7 @@ static void prvCastUpdateRequest( az_iot_adu_client_update_request * pxBaseUpdat
                 az_span_ptr( pxBaseUpdateManifest->files[ ulFileIndex ].file_name );
             pxUpdateRequest->xUpdateManifest.pxFiles[ ulFileIndex ].ulFileNameLength =
                 ( uint32_t ) az_span_size( pxBaseUpdateManifest->files[ ulFileIndex ].file_name );
-            pxUpdateRequest->xUpdateManifest.pxFiles[ ulFileIndex ].ulSizeInBytes =
+            pxUpdateRequest->xUpdateManifest.pxFiles[ ulFileIndex ].xSizeInBytes =
                 pxBaseUpdateManifest->files[ ulFileIndex ].size_in_bytes;
             pxUpdateRequest->xUpdateManifest.pxFiles[ ulFileIndex ].ulHashesCount =
                 pxBaseUpdateManifest->files[ ulFileIndex ].hashes_count;
