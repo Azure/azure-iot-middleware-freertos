@@ -365,7 +365,7 @@ static void prvFillBaseAduWorkflow( AzureIoTADUUpdateRequest_t * pxAduUpdateRequ
 {
     if( pxAduUpdateRequest != NULL )
     {
-        pxBaseWorkflow->action = ( int32_t ) pxAduUpdateRequest->xWorkflow.xAction;
+        pxBaseWorkflow->action = ( az_iot_adu_client_service_action ) pxAduUpdateRequest->xWorkflow.xAction;
         pxBaseWorkflow->id = az_span_create(
             ( uint8_t * ) pxAduUpdateRequest->xWorkflow.pucID,
             ( int32_t ) pxAduUpdateRequest->xWorkflow.ulIDLength );
@@ -461,7 +461,7 @@ AzureIoTResult_t AzureIoTADUClient_SendAgentState( AzureIoTADUClient_t * pxAzure
     xAzResult = az_iot_adu_client_get_agent_state_payload(
         &pxAzureIoTADUClient->_internal.xADUClient,
         &xBaseADUDeviceProperties,
-        ( int32_t ) xAgentState,
+        ( az_iot_adu_client_agent_state ) xAgentState,
         pxAduUpdateRequest != NULL ? &xBaseWorkflow : NULL,
         pxUpdateResults != NULL ? &xInstallResult : NULL,
         &jw );
