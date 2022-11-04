@@ -14,14 +14,6 @@
 #include "azure_iot_json_reader.h"
 #include <azure/iot/az_iot_adu_client.h>
 
-/* ADU.200702.R: root production key from 7/2/2020  */
-extern const uint8_t * AzureIoTADURootKeyId;
-extern const uint32_t AzureIoTADURootKeyIdSize;
-extern const uint8_t * AzureIoTADURootKeyN;
-extern const uint32_t AzureIoTADURootKeyNSize;
-extern const uint8_t * AzureIoTADURootKeyE;
-extern const uint32_t AzureIoTADURootKeyESize;
-
 /**
  * @brief The DTMI specifying the capabilities for the Azure Device Update client.
  *
@@ -230,7 +222,7 @@ typedef struct AzureIoTADUInstructionStep
     uint8_t * pucInstalledCriteria;
     uint32_t ulInstalledCriteriaLength;
     uint32_t ulFilesCount;
-    AzureIoTADUUpdateManifestInstructionStepFile_t pxFiles[ AZ_IOT_ADU_CLIENT_MAX_FILE_URL_COUNT ];
+    AzureIoTADUUpdateManifestInstructionStepFile_t pxFiles[ AZ_IOT_ADU_CLIENT_MAX_FILE_COUNT_PER_STEP ];
 } AzureIoTADUInstructionStep_t;
 
 /**
@@ -251,7 +243,7 @@ typedef struct AzureIoTADUUpdateManifest
     AzureIoTADUUpdateId_t xUpdateId;
     AzureIoTADUInstructions_t xInstructions;
     uint32_t ulFilesCount;
-    AzureIoTADUUpdateManifestFile_t pxFiles[ AZ_IOT_ADU_CLIENT_MAX_FILE_URL_COUNT ];
+    AzureIoTADUUpdateManifestFile_t pxFiles[ AZ_IOT_ADU_CLIENT_MAX_TOTAL_FILE_COUNT ];
     uint8_t * pucManifestVersion;
     uint32_t ulManifestVersionLength;
     uint8_t * pucCreateDateTime;
@@ -271,7 +263,7 @@ typedef struct AzureIoTADUUpdateRequest
     uint8_t * pucUpdateManifestSignature;
     uint32_t ulUpdateManifestSignatureLength;
     uint32_t ulFileUrlCount;
-    AzureIoTADUUpdateManifestFileUrl_t pxFileUrls[ AZ_IOT_ADU_CLIENT_MAX_FILE_URL_COUNT ];
+    AzureIoTADUUpdateManifestFileUrl_t pxFileUrls[ AZ_IOT_ADU_CLIENT_MAX_TOTAL_FILE_COUNT ];
     AzureIoTADUUpdateManifest_t xUpdateManifest;
 } AzureIoTADUUpdateRequest_t;
 

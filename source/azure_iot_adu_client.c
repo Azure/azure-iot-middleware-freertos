@@ -12,10 +12,6 @@
 #include "azure_iot_private.h"
 #include <azure/iot/az_iot_adu_client.h>
 
-/* Code 406 is "Not Acceptable" */
-#define azureiotaduREQUEST_ACCEPTED_CODE    200
-#define azureiotaduREQUEST_REJECTED_CODE    406
-
 const uint8_t * AzureIoTADUModelID = ( uint8_t * ) AZ_IOT_ADU_CLIENT_AGENT_MODEL_ID;
 const uint32_t AzureIoTADUModelIDLength = sizeof( AZ_IOT_ADU_CLIENT_AGENT_MODEL_ID ) - 1;
 
@@ -292,7 +288,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
     xCoreResult = az_iot_adu_client_get_service_properties_response(
         &pxAzureIoTADUClient->_internal.xADUClient,
         ( int32_t ) ulPropertyVersion,
-        xRequestDecision == eAzureIoTADURequestDecisionAccept ? azureiotaduREQUEST_ACCEPTED_CODE : azureiotaduREQUEST_REJECTED_CODE,
+        xRequestDecision == eAzureIoTADURequestDecisionAccept ? AZ_IOT_ADU_CLIENT_REQUEST_DECISION_ACCEPTED : AZ_IOT_ADU_CLIENT_REQUEST_DECISION_REJECTED,
         &jw );
 
     if( az_result_failed( xCoreResult ) )
