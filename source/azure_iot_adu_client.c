@@ -288,7 +288,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
     xCoreResult = az_iot_adu_client_get_service_properties_response(
         &pxAzureIoTADUClient->_internal.xADUClient,
         ( int32_t ) ulPropertyVersion,
-        xRequestDecision == eAzureIoTADURequestDecisionAccept ? AZ_IOT_ADU_CLIENT_REQUEST_DECISION_ACCEPTED : AZ_IOT_ADU_CLIENT_REQUEST_DECISION_REJECTED,
+        xRequestDecision == eAzureIoTADURequestDecisionAccept ? AZ_IOT_ADU_CLIENT_REQUEST_DECISION_ACCEPT : AZ_IOT_ADU_CLIENT_REQUEST_DECISION_REJECT,
         &jw );
 
     if( az_result_failed( xCoreResult ) )
