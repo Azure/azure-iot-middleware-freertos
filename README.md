@@ -38,12 +38,12 @@ The Azure IoT middleware for FreeRTOS simplifies the connection of devices runni
 
 To keep this repo simple without board specific dependencies, we have a separate repo with all of the samples ([please see the link here for working samples](https://github.com/Azure-Samples/iot-middleware-freertos-samples)). There we have samples for several devices including:
 
-- STM32L475
+- STM32L475 (Azure IoT Hub, Azure Device Update)
 - STM32L4+
 - STM32H745
 - NXP RT1060
 - ESPRESSIF ESP32 (Azure IoT Hub, Azure Device Update)
-- Linux
+- Linux (Azure IoT Hub, Azure Device Update)
 - Windows
 
 For a video deep dive into this repo and the samples, please see the Microsoft Developers video below.
