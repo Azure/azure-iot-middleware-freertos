@@ -206,7 +206,7 @@ typedef struct AzureIoTADUUpdateManifestFile
     uint32_t ulIdLength;
     uint8_t * pucFileName;
     uint32_t ulFileNameLength;
-    uint64_t llSizeInBytes;
+    int64_t llSizeInBytes;
     uint32_t ulHashesCount;
     AzureIoTADUUpdateManifestFileHash_t pxHashes[ _AZ_IOT_ADU_CLIENT_MAX_FILE_HASH_COUNT ];
 } AzureIoTADUUpdateManifestFile_t;
