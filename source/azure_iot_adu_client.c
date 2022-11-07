@@ -12,10 +12,6 @@
 #include "azure_iot_private.h"
 #include <azure/iot/az_iot_adu_client.h>
 
-/* Code 406 is "Not Acceptable" */
-#define azureiotaduREQUEST_ACCEPTED_CODE    200
-#define azureiotaduREQUEST_REJECTED_CODE    406
-
 const uint8_t * AzureIoTADUModelID = ( uint8_t * ) AZ_IOT_ADU_CLIENT_AGENT_MODEL_ID;
 const uint32_t AzureIoTADUModelIDLength = sizeof( AZ_IOT_ADU_CLIENT_AGENT_MODEL_ID ) - 1;
 
@@ -292,7 +288,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
     xCoreResult = az_iot_adu_client_get_service_properties_response(
         &pxAzureIoTADUClient->_internal.xADUClient,
         ( int32_t ) ulPropertyVersion,
-        xRequestDecision == eAzureIoTADURequestDecisionAccept ? azureiotaduREQUEST_ACCEPTED_CODE : azureiotaduREQUEST_REJECTED_CODE,
+        xRequestDecision == eAzureIoTADURequestDecisionAccept ? AZ_IOT_ADU_CLIENT_REQUEST_DECISION_ACCEPTED : AZ_IOT_ADU_CLIENT_REQUEST_DECISION_REJECTED,
         &jw );
 
     if( az_result_failed( xCoreResult ) )
@@ -369,7 +365,7 @@ static void prvFillBaseAduWorkflow( AzureIoTADUUpdateRequest_t * pxAduUpdateRequ
 {
     if( pxAduUpdateRequest != NULL )
     {
-        pxBaseWorkflow->action = ( int32_t ) pxAduUpdateRequest->xWorkflow.xAction;
+        pxBaseWorkflow->action = ( az_iot_adu_client_service_action ) pxAduUpdateRequest->xWorkflow.xAction;
         pxBaseWorkflow->id = az_span_create(
             ( uint8_t * ) pxAduUpdateRequest->xWorkflow.pucID,
             ( int32_t ) pxAduUpdateRequest->xWorkflow.ulIDLength );
@@ -465,7 +461,7 @@ AzureIoTResult_t AzureIoTADUClient_SendAgentState( AzureIoTADUClient_t * pxAzure
     xAzResult = az_iot_adu_client_get_agent_state_payload(
         &pxAzureIoTADUClient->_internal.xADUClient,
         &xBaseADUDeviceProperties,
-        ( int32_t ) xAgentState,
+        ( az_iot_adu_client_agent_state ) xAgentState,
         pxAduUpdateRequest != NULL ? &xBaseWorkflow : NULL,
         pxUpdateResults != NULL ? &xInstallResult : NULL,
         &jw );

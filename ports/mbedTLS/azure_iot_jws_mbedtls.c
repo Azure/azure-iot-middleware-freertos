@@ -626,7 +626,8 @@ static AzureIoTResult_t prvValidateRootKey( prvJWSValidationContext_t * pxManife
 
     for( int i = 0; i < ulADURootKeysLength; i++ )
     {
-        if( az_span_is_content_equal( az_span_create( ( uint8_t * ) xADURootKeys[ i ].pucRootKeyId, xADURootKeys[ i ].ulRootKeyIdLength ), pxManifestContext->kidSpan ) )
+        if( az_span_is_content_equal( az_span_create( ( uint8_t * ) xADURootKeys[ i ].pucRootKeyId, xADURootKeys[ i ].ulRootKeyIdLength ),
+                                      pxManifestContext->kidSpan ) )
         {
             *pulADURootKeyIndex = i;
             return eAzureIoTSuccess;
