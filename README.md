@@ -42,7 +42,7 @@ To keep this repo simple without board specific dependencies, we have a separate
 - STM32L4+
 - STM32H745
 - NXP RT1060
-- ESPRESSIF ESP32
+- ESPRESSIF ESP32 (Azure IoT Hub, Azure Device Update)
 - Linux
 - Windows
 
