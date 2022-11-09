@@ -181,25 +181,19 @@ static void prvCastUpdateRequest( az_iot_adu_client_update_request * pxBaseUpdat
 
 AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIoTADUClient,
                                                  AzureIoTJSONReader_t * pxReader,
-                                                 AzureIoTADUUpdateRequest_t * pxAduUpdateRequest,
-                                                 uint8_t * pucBuffer,
-                                                 uint32_t ulBufferSize )
+                                                 AzureIoTADUUpdateRequest_t * pxAduUpdateRequest)
 {
     az_iot_adu_client_update_request xBaseUpdateRequest;
     az_iot_adu_client_update_manifest xBaseUpdateManifest;
     az_result xAzResult;
     az_json_reader jr;
-    az_span xBufferSpan;
-    int32_t lOutManifestSize = 0;
 
     if( ( pxAzureIoTADUClient == NULL ) || ( pxReader == NULL ) ||
-        ( pxAduUpdateRequest == NULL ) || ( pucBuffer == NULL ) || ( ulBufferSize == 0 ) )
+        ( pxAduUpdateRequest == NULL ) )
     {
         AZLogError( ( "AzureIoTADUClient_ParseRequest failed: invalid argument" ) );
         return eAzureIoTErrorInvalidArgument;
     }
-
-    xBufferSpan = az_span_create( pucBuffer, ( int32_t ) ulBufferSize );
 
     xAzResult = az_iot_adu_client_parse_service_properties(
         &pxAzureIoTADUClient->_internal.xADUClient,
@@ -215,7 +209,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
     {
         if( az_span_size( xBaseUpdateRequest.update_manifest ) > 0 )
         {
-            xAzResult = az_json_string_unescape( xBaseUpdateRequest.update_manifest, ( char * ) az_span_ptr( xBufferSpan ), az_span_size( xBufferSpan ), &lOutManifestSize );
+            xBaseUpdateRequest.update_manifest = az_json_string_unescape( xBaseUpdateRequest.update_manifest, xBaseUpdateRequest.update_manifest );
 
             if( az_result_failed( xAzResult ) )
             {
@@ -223,7 +217,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
                 return AzureIoT_TranslateCoreError( xAzResult );
             }
 
-            xAzResult = az_json_reader_init( &jr, az_span_slice( xBufferSpan, 0, lOutManifestSize ), NULL );
+            xAzResult = az_json_reader_init( &jr, xBaseUpdateRequest.update_manifest, NULL );
 
             if( az_result_failed( xAzResult ) )
             {
@@ -249,7 +243,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
 
         prvCastUpdateRequest( &xBaseUpdateRequest,
                               az_span_size( xBaseUpdateRequest.update_manifest ) > 0 ? &xBaseUpdateManifest : NULL,
-                              pxAduUpdateRequest, pucBuffer, ( uint32_t ) lOutManifestSize );
+                              pxAduUpdateRequest, az_span_ptr(xBaseUpdateRequest.update_manifest), (uint32_t)az_span_size(xBaseUpdateRequest.update_manifest) );
     }
 
     return eAzureIoTSuccess;

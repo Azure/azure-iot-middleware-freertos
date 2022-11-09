@@ -408,9 +408,7 @@ static uint32_t prvParseADUTwin( AzureIoTHubClient_t * pxAzureIoTHubClient,
                 xAzIoTResult = AzureIoTADUClient_ParseRequest(
                     pxAzureIoTAduClient,
                     &xJsonReader,
-                    &xAzureIoTAduUpdateRequest,
-                    ucScratchBuffer,
-                    sizeof( ucScratchBuffer ) );
+                    &xAzureIoTAduUpdateRequest );
             }
             else
             {
