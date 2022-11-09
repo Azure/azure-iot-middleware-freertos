@@ -72,17 +72,15 @@ function testCleanup(done) {
         e2eTestCore.deleteDeviceAndEndProcess(testHubConnectionString, testHubInfo, (err) => {
             if (testEnrollmentInfo) {
                 e2eTestCore.deleteProvisioningEnrollment(testProvisioningConnectionString, testEnrollmentInfo.registrationId, (err2) => {
-                    e2eTestCore.deleteDevice(testHubConnectionString, testEnrollmentInfo.deviceId, (e) => {
-                        if (err) {
-                            done(err)
-                        }
-                        else if (err2) {
-                            done(err2)
-                        }
-                        else {
-                            done()
-                        }
-                    });
+                    if (err) {
+                        done(err)
+                    }
+                    else if (err2) {
+                        done(err2)
+                    }
+                    else {
+                        done()
+                    }
                 });
             }
             else {
