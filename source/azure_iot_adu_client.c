@@ -181,7 +181,7 @@ static void prvCastUpdateRequest( az_iot_adu_client_update_request * pxBaseUpdat
 
 AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIoTADUClient,
                                                  AzureIoTJSONReader_t * pxReader,
-                                                 AzureIoTADUUpdateRequest_t * pxAduUpdateRequest)
+                                                 AzureIoTADUUpdateRequest_t * pxAduUpdateRequest )
 {
     az_iot_adu_client_update_request xBaseUpdateRequest;
     az_iot_adu_client_update_manifest xBaseUpdateManifest;
@@ -243,7 +243,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
 
         prvCastUpdateRequest( &xBaseUpdateRequest,
                               az_span_size( xBaseUpdateRequest.update_manifest ) > 0 ? &xBaseUpdateManifest : NULL,
-                              pxAduUpdateRequest, az_span_ptr(xBaseUpdateRequest.update_manifest), (uint32_t)az_span_size(xBaseUpdateRequest.update_manifest) );
+                              pxAduUpdateRequest, az_span_ptr( xBaseUpdateRequest.update_manifest ), ( uint32_t ) az_span_size( xBaseUpdateRequest.update_manifest ) );
     }
 
     return eAzureIoTSuccess;

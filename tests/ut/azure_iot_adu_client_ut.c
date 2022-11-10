@@ -237,7 +237,7 @@ static void testAzureIoTADUClient_ParseRequest_InvalidArgFailure( void ** ppvSta
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       NULL,
-                                                      &xRequest), eAzureIoTErrorInvalidArgument );
+                                                      &xRequest ), eAzureIoTErrorInvalidArgument );
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
@@ -314,8 +314,8 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
 
 static void testAzureIoTADUClient_ParseRequest_Success( void ** ppvState )
 {
-    // We have to copy the expected payload to a scratch buffer since it's unescaped in place
-    memcpy(ucRequestPayloadCopy, ucADURequestPayload, sizeof(ucADURequestPayload)- 1);
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayload, sizeof( ucADURequestPayload ) - 1 );
     prvParseRequestSuccess( ucRequestPayloadCopy, sizeof( ucADURequestPayload ) - 1,
                             ucADURequestManifest, sizeof( ucADURequestManifest ) - 1 );
 }
@@ -323,8 +323,8 @@ static void testAzureIoTADUClient_ParseRequest_Success( void ** ppvState )
 /* Test that a request payload with delta update fields parses without errors (ignoring the fields) */
 static void testAzureIoTADUClient_ParseRequest_UnusedFields_Success( void ** ppvState )
 {
-  // We have to copy the expected payload to a scratch buffer since it's unescaped in place
-    memcpy(ucRequestPayloadCopy, ucADURequestPayloadUnusedFields, sizeof(ucADURequestPayloadUnusedFields)- 1);
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1 );
     prvParseRequestSuccess( ucRequestPayloadCopy, sizeof( ucADURequestPayloadUnusedFields ) - 1,
                             ucADURequestManifestUnusedFields, sizeof( ucADURequestManifestUnusedFields ) - 1 );
 }
@@ -335,8 +335,8 @@ static void testAzureIoTADUClient_ParseRequestWithRetry_Success( void ** ppvStat
     AzureIoTJSONReader_t xReader;
     AzureIoTADUUpdateRequest_t xRequest;
 
-    // We have to copy the expected payload to a scratch buffer since it's unescaped in place
-    memcpy(ucRequestPayloadCopy, ucADURequestPayloadWithRetry, sizeof(ucADURequestPayloadWithRetry)- 1);
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 );
 
     assert_int_equal( AzureIoTADUClient_Init( &xTestIoTADUClient, NULL ), eAzureIoTSuccess );
 
@@ -724,8 +724,8 @@ static void testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequestWithRet
     uint32_t ulRequestId;
     AzureIoTADUDeviceCustomProperties_t xDeviceCustomProperties;
 
-    // We have to copy the expected payload to a scratch buffer since it's unescaped in place
-    memcpy(ucRequestPayloadCopy, ucADURequestPayloadWithRetry, sizeof(ucADURequestPayloadWithRetry)- 1);
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 );
 
     xDeviceCustomProperties.ulPropertyCount = 2;
     xDeviceCustomProperties.pucPropertyNames[ 0 ] = testDEVICE_CUSTOM_PROPERTY_NAME_1;
