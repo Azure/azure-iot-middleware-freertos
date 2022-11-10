@@ -211,12 +211,6 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
         {
             xBaseUpdateRequest.update_manifest = az_json_string_unescape( xBaseUpdateRequest.update_manifest, xBaseUpdateRequest.update_manifest );
 
-            if( az_result_failed( xAzResult ) )
-            {
-                AZLogError( ( "az_json_string_unescape failed: 0x%08x", xAzResult ) );
-                return AzureIoT_TranslateCoreError( xAzResult );
-            }
-
             xAzResult = az_json_reader_init( &jr, xBaseUpdateRequest.update_manifest, NULL );
 
             if( az_result_failed( xAzResult ) )
