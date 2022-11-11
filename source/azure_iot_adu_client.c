@@ -209,6 +209,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
     {
         if( az_span_size( xBaseUpdateRequest.update_manifest ) > 0 )
         {
+            /* This unescape is done in place to save space. It will modify the original payload buffer. */
             xBaseUpdateRequest.update_manifest = az_json_string_unescape( xBaseUpdateRequest.update_manifest, xBaseUpdateRequest.update_manifest );
 
             xAzResult = az_json_reader_init( &jr, xBaseUpdateRequest.update_manifest, NULL );
