@@ -13,7 +13,7 @@ TEST_FREERTOS_SRC=`pwd`/libraries/FreeRTOS
 # Turn off exit on error briefly since we know the docs fail for FreeRTOS
 set +e
 echo -e "::group::Checking doxygen documentation matches sources"
-cmake -Bbuild -Dcheck_docs=ON -DCMAKE_C_COMPILER=clang -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DFREERTOS_PORT_DIRECTORY=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -DCONFIG_DIRECTORY=.github/config .
+cmake -Bbuild -Dcheck_docs=ON -DCMAKE_C_COMPILER=clang -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DFREERTOS_PORT_DIRECTORY=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -DCONFIG_DIRECTORY=.github/config -DUSE_COREHTTP=ON .
 cmake --build build > /dev/null 2> build.log
 cat build.log | grep -A 3 -E 'azure_.*\.h'
 
