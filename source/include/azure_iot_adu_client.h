@@ -334,16 +334,11 @@ bool AzureIoTADUClient_IsADUComponent( AzureIoTADUClient_t * pxAzureIoTADUClient
  * @param pxReader The initialized JSON reader positioned at the beginning of the ADU subcomponent
  * property.
  * @param pxAduUpdateRequest The #AzureIoTADUUpdateRequest_t into which the properties will be parsed.
- * @param pucBuffer Scratch space for the property values to be copied into. The current recommmended size for this
- * buffer is at least 8KB.
- * @param ulBufferSize The size of \p pucBuffer.
  * @return AzureIoTResult_t An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIoTADUClient,
                                                  AzureIoTJSONReader_t * pxReader,
-                                                 AzureIoTADUUpdateRequest_t * pxAduUpdateRequest,
-                                                 uint8_t * pucBuffer,
-                                                 uint32_t ulBufferSize );
+                                                 AzureIoTADUUpdateRequest_t * pxAduUpdateRequest );
 
 /**
  * @brief Updates the ADU Agent Client with ADU service device update properties.

@@ -54,7 +54,7 @@ static uint8_t ucSendStateLongPayloadWithRetry[] = "{\"deviceUpdate\":{\"__t\":\
 
 static uint8_t ucSendResponsePayload[] = "{\"deviceUpdate\":{\"__t\":\"c\",\"service\":{\"ac\":200,\"av\":1,\"value\":{}}}}";
 static uint8_t ucHubClientBuffer[ 512 ];
-static uint8_t ucScratchBuffer[ 8000 ];
+static uint8_t ucRequestPayloadCopy[ 8000 ];
 static uint8_t ucPayloadBuffer[ 8000 ];
 static uint32_t ulReceivedCallbackFunctionId;
 static uint32_t ulExtendedResultCode = 1234;
@@ -233,33 +233,15 @@ static void testAzureIoTADUClient_ParseRequest_InvalidArgFailure( void ** ppvSta
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( NULL,
                                                       &xReader,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTErrorInvalidArgument );
+                                                      &xRequest ), eAzureIoTErrorInvalidArgument );
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       NULL,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTErrorInvalidArgument );
+                                                      &xRequest ), eAzureIoTErrorInvalidArgument );
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      NULL,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTErrorInvalidArgument );
-
-    assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
-                                                      &xReader,
-                                                      &xRequest,
-                                                      NULL,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTErrorInvalidArgument );
-
-    assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
-                                                      &xReader,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      0 ), eAzureIoTErrorInvalidArgument );
+                                                      NULL ), eAzureIoTErrorInvalidArgument );
 }
 
 static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
@@ -281,9 +263,7 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
+                                                      &xRequest ), eAzureIoTSuccess );
 
     /* Workflow */
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
@@ -334,14 +314,18 @@ static void prvParseRequestSuccess( uint8_t * pucRequestPayload,
 
 static void testAzureIoTADUClient_ParseRequest_Success( void ** ppvState )
 {
-    prvParseRequestSuccess( ucADURequestPayload, sizeof( ucADURequestPayload ) - 1,
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayload, sizeof( ucADURequestPayload ) - 1 );
+    prvParseRequestSuccess( ucRequestPayloadCopy, sizeof( ucADURequestPayload ) - 1,
                             ucADURequestManifest, sizeof( ucADURequestManifest ) - 1 );
 }
 
 /* Test that a request payload with delta update fields parses without errors (ignoring the fields) */
 static void testAzureIoTADUClient_ParseRequest_UnusedFields_Success( void ** ppvState )
 {
-    prvParseRequestSuccess( ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1,
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayloadUnusedFields, sizeof( ucADURequestPayloadUnusedFields ) - 1 );
+    prvParseRequestSuccess( ucRequestPayloadCopy, sizeof( ucADURequestPayloadUnusedFields ) - 1,
                             ucADURequestManifestUnusedFields, sizeof( ucADURequestManifestUnusedFields ) - 1 );
 }
 
@@ -351,9 +335,12 @@ static void testAzureIoTADUClient_ParseRequestWithRetry_Success( void ** ppvStat
     AzureIoTJSONReader_t xReader;
     AzureIoTADUUpdateRequest_t xRequest;
 
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 );
+
     assert_int_equal( AzureIoTADUClient_Init( &xTestIoTADUClient, NULL ), eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucRequestPayloadCopy, sizeof( ucADURequestPayloadWithRetry ) - 1 ), eAzureIoTSuccess );
 
     /* ParseRequest requires that the reader be placed on the "service" prop name */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ), eAzureIoTSuccess );
@@ -361,9 +348,7 @@ static void testAzureIoTADUClient_ParseRequestWithRetry_Success( void ** ppvStat
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
+                                                      &xRequest ), eAzureIoTSuccess );
 
     /* Workflow */
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowAction );
@@ -428,9 +413,7 @@ static void testAzureIoTADUClient_ParseRequest_NoDeployment_Success( void ** ppv
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
+                                                      &xRequest ), eAzureIoTSuccess );
 
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowActionNoDeployment );
     assert_memory_equal( xRequest.xWorkflow.pucID, ucWorkflowIDNoDeployment, sizeof( ucWorkflowIDNoDeployment ) - 1 );
@@ -460,9 +443,7 @@ static void testAzureIoTADUClient_ParseRequest_NoDeploymentNullManifest_Success(
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      &xRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
+                                                      &xRequest ), eAzureIoTSuccess );
 
     assert_int_equal( xRequest.xWorkflow.xAction, ulWorkflowActionNoDeployment );
     assert_memory_equal( xRequest.xWorkflow.pucID, ucWorkflowIDNoDeployment, sizeof( ucWorkflowIDNoDeployment ) - 1 );
@@ -702,9 +683,7 @@ static void testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequest_Succes
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      &xUpdateRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
+                                                      &xUpdateRequest ), eAzureIoTSuccess );
 
     will_return( AzureIoTMQTT_Subscribe, eAzureIoTMQTTSuccess );
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
@@ -745,6 +724,9 @@ static void testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequestWithRet
     uint32_t ulRequestId;
     AzureIoTADUDeviceCustomProperties_t xDeviceCustomProperties;
 
+    /* We have to copy the expected payload to a scratch buffer since it's unescaped in place */
+    memcpy( ucRequestPayloadCopy, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 );
+
     xDeviceCustomProperties.ulPropertyCount = 2;
     xDeviceCustomProperties.pucPropertyNames[ 0 ] = testDEVICE_CUSTOM_PROPERTY_NAME_1;
     xDeviceCustomProperties.ulPropertyNamesLengths[ 0 ] = sizeof( testDEVICE_CUSTOM_PROPERTY_NAME_1 ) - 1;
@@ -770,7 +752,7 @@ static void testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequestWithRet
 
     assert_int_equal( AzureIoTADUClient_Init( &xTestIoTADUClient, NULL ), eAzureIoTSuccess );
 
-    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucADURequestPayloadWithRetry, sizeof( ucADURequestPayloadWithRetry ) - 1 ), eAzureIoTSuccess );
+    assert_int_equal( AzureIoTJSONReader_Init( &xReader, ucRequestPayloadCopy, sizeof( ucADURequestPayloadWithRetry ) - 1 ), eAzureIoTSuccess );
 
     /* ParseRequest requires that the reader be placed on the "service" prop name */
     assert_int_equal( AzureIoTJSONReader_NextToken( &xReader ), eAzureIoTSuccess );
@@ -778,9 +760,7 @@ static void testAzureIoTADUClient_SendAgentState_WithAgentStateAndRequestWithRet
 
     assert_int_equal( AzureIoTADUClient_ParseRequest( &xTestIoTADUClient,
                                                       &xReader,
-                                                      &xUpdateRequest,
-                                                      ucScratchBuffer,
-                                                      sizeof( ucScratchBuffer ) ), eAzureIoTSuccess );
+                                                      &xUpdateRequest ), eAzureIoTSuccess );
 
     will_return( AzureIoTMQTT_Subscribe, eAzureIoTMQTTSuccess );
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
