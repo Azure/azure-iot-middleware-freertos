@@ -6,7 +6,7 @@
 # This script install dependencies of service side of e2e tests and runs e2e test
 
 # ./run.sh <RTOS connectivity interface> [FreeRTOS Src path]
-# e.g. ./run.sh veth1
+# e.g. ./run.sh rtosveth1
 
 # Trace each command by: export DEBUG_SHELL=1
 if [[ ! -z ${DEBUG_SHELL} ]]
@@ -33,7 +33,7 @@ test_root_dir=$dir/../..
 test_freertos_src_path=${2:-""}
 test_ethernet_if=${1:-""}
 
-[ -n "$test_ethernet_if" ] || die "\$1=ethernet interface need to be passed; like veth1"
+[ -n "$test_ethernet_if" ] || die "\$1=ethernet interface need to be passed; like rtosveth1"
 [ -n "$test_freertos_src_path" ] || die "\$2=FreeRTOS source path not set"
 
 pushd "$dir"
