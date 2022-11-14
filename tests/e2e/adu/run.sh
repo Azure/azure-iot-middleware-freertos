@@ -50,7 +50,7 @@ sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFA
 
 # Build and create new update image
 echo -e "::group::Build update image"
-pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path ../ ; cmake --build build
+pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path -DUSE_COREHTTP=ON ../ ; cmake --build build
 cp ./build/azure_iot_e2e_adu_tests $dir/e2e_build/azure_iot_e2e_adu_tests_v1.1
 popd
 
@@ -89,7 +89,7 @@ echo -e "::group::Revert application version | build base image"
 sed -i "s/#define e2eADU_UPDATE_VERSION .*/#define e2eADU_UPDATE_VERSION \"1.0\"/g" $dir/device/e2e_device_commands.c
 
 # Build and create base image
-pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path ../ ; cmake --build build
+pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path -DUSE_COREHTTP=ON ../ ; cmake --build build
 cp ./build/azure_iot_e2e_adu_tests ./build/azure_iot_e2e_adu_tests_v1.0
 popd # $dir/device
 
