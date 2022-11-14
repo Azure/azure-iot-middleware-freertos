@@ -106,8 +106,14 @@ else()
   target_link_libraries(az_iot_middleware_freertos
     PUBLIC
       coremqtt
-      corehttp
   )
+
+  if(${USE_COREHTTP})
+    target_link_libraries(az_iot_middleware_freertos
+      PUBLIC
+        corehttp
+    )
+  endif()
 
   target_compile_definitions(az_iot_middleware_freertos
     PRIVATE
