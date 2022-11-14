@@ -57,7 +57,7 @@ jobs:
           )
 
       - name: Configure
-        run: .github/scripts/install_software.sh; sudo .github/scripts/init_vm_network.sh
+        run: .github/scripts/install_software.sh; sudo .github/scripts/init_linux_port_vm_network.sh
         if: >-
           (
             github.event_name == 'pull_request' &&
