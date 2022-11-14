@@ -77,7 +77,7 @@ AzureIoTResult_t AzureIoTADUClient_DevicePropertiesInit( AzureIoTADUClientDevice
 
     if( pxADUDeviceProperties == NULL )
     {
-        AZLogError( ( "AzureIoTADUClient_OptionsInit failed: invalid argument" ) );
+        AZLogError( ( "AzureIoTADUClient_DevicePropertiesInit failed: invalid argument" ) );
         xResult = eAzureIoTErrorInvalidArgument;
     }
     else
