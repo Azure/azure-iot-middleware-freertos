@@ -307,6 +307,14 @@ AzureIoTResult_t AzureIoTADUClient_Init( AzureIoTADUClient_t * pxAzureIoTADUClie
                                          AzureIoTADUClientOptions_t * pxADUClientOptions );
 
 /**
+ * @brief Initialize the Azure IoT Device Properties with default values.
+ *
+ * @param[out] pxADUDeviceProperties The #AzureIoTADUClientDeviceProperties_t instance to set with default values.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTADUClient_DevicePropertiesInit( AzureIoTADUClientDeviceProperties_t * pxADUDeviceProperties );
+
+/**
  * @brief Returns whether the component is the ADU component
  *
  * @note If it is, user should follow by parsing the component with the
