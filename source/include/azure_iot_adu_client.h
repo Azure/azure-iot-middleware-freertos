@@ -44,7 +44,7 @@ typedef struct AzureIoTADUDeviceCustomProperties
 /**
  * @brief ADU Device Properties.
  * @link https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
- * 
+ *
  * @note AzureIoTADUClient_DevicePropertiesInit() should be called first to initialize this struct.
  */
 typedef struct AzureIoTADUClientDeviceProperties
