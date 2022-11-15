@@ -4,7 +4,7 @@
 
 ### Features Added
 
-- [[#281](https://github.com/Azure/azure-iot-middleware-freertos/pull/281)] Add Azure Device Update for IoT Hub, enabling Over-the-Air (OTA) updates for embedded devices.
+- [[#281]](https://github.com/Azure/azure-iot-middleware-freertos/pull/281) Add Azure Device Update for IoT Hub, enabling Over-the-Air (OTA) updates for embedded devices.
 
 ### Other Changes and Improvements
 
