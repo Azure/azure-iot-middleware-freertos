@@ -65,9 +65,9 @@ extern void vLoggingPrintf( const char * pcFormatString,
  * call to FreeRTOS_gethostbyname() will return immediately, without even creating
  * a socket. */
 #define ipconfigUSE_DNS_CACHE                      ( 1 )
-#define ipconfigDNS_CACHE_NAME_LENGTH              ( 64 )
+#define ipconfigDNS_CACHE_NAME_LENGTH              ( 256 )
 #define ipconfigDNS_CACHE_ENTRIES                  ( 4 )
-#define ipconfigDNS_REQUEST_ATTEMPTS               ( 2 )
+#define ipconfigDNS_REQUEST_ATTEMPTS               ( 5 )
 
 /* The IP stack executes it its own task (although any application task can make
  * use of its services through the published sockets API). ipconfigUDP_TASK_PRIORITY

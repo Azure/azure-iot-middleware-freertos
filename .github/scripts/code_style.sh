@@ -37,10 +37,15 @@ if [[ "$FIX" == "check" ]]; then
     ./source/interface/*.h                                    \
     ./ports/coreMQTT/*.c                                      \
     ./ports/coreMQTT/*.h                                      \
+    ./ports/coreHTTP/*.c                                      \
+    ./ports/coreHTTP/*.h                                      \
+    ./ports/mbedTLS/*.c                                       \
     ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
-    ./tests/e2e/device/*.c                                    \
-    ./tests/e2e/device/*.h                                    \
+    ./tests/e2e/adu/device/*.c                                \
+    ./tests/e2e/adu/device/*.h                                \
+    ./tests/e2e/iot/device/*.c                                \
+    ./tests/e2e/iot/device/*.h                                \
     ./tests/ut/*.h                                            \
     ./tests/ut/*.c)
 
@@ -56,10 +61,15 @@ elif [[ "$FIX" == "fix" ]]; then
     ./source/interface/*.h                                    \
     ./ports/coreMQTT/*.c                                      \
     ./ports/coreMQTT/*.h                                      \
+    ./ports/coreHTTP/*.c                                      \
+    ./ports/coreHTTP/*.h                                      \
+    ./ports/mbedTLS/*.c                                       \
     ./.github/config/*.h                                      \
     ./tests/config_files/*.h                                  \
-    ./tests/e2e/device/*.c                                    \
-    ./tests/e2e/device/*.h                                    \
+    ./tests/e2e/adu/device/*.c                                \
+    ./tests/e2e/adu/device/*.h                                \
+    ./tests/e2e/iot/device/*.c                                \
+    ./tests/e2e/iot/device/*.h                                \
     ./tests/ut/*.h                                            \
     ./tests/ut/*.c
 else

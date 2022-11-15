@@ -72,4 +72,6 @@ build/
 # node modules for e2e tests
 *node_modules/
 package-lock.json
-tests/e2e/service/lib/
+tests/e2e/adu/service/lib/
+tests/e2e/iot/service/lib/
+tests/e2e/adu/e2e_build/

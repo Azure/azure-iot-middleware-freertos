@@ -1,0 +1,31 @@
+{
+  "name": "ts-e2e",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "npmlockrefresh": "npm i --package-lock-only",
+    "build": "tsc",
+    "cleanup": "node ./lib/common/e2e_test_cleanup.js --connectionString ${ADU_IOTHUB_CONNECTION_STRING} --e 5",
+    "adu": "mocha ./lib/adu_client/e2e_adu_client_test.js  --connectionString ${ADU_IOTHUB_CONNECTION_STRING} --e ${DEVICE_TEST_EXE} --timeout 120000"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/event-hubs": "^1.0.8",
+    "@azure/ms-rest-js": "^2.0.5",
+    "@types/mocha": "^7.0.2",
+    "@types/node": "^13.9.0",
+    "azure-iot-common": "^1.12.9",
+    "azure-iothub": "^1.14.2",
+    "chai": "^4.2.0",
+    "mocha": "^7.1.1",
+    "terminate": "^2.1.2",
+    "typescript": "^3.8.3",
+    "yargs": "^15.3.0",
+    "minimist": "^1.2.5",
+    "azure-iot-provisioning-service": "1.8.9"
+  },
+  "devDependencies": {},
+  "description": ""
+}
