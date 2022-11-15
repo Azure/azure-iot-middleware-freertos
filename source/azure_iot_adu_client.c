@@ -70,6 +70,26 @@ AzureIoTResult_t AzureIoTADUClient_Init( AzureIoTADUClient_t * pxAzureIoTADUClie
     return eAzureIoTSuccess;
 }
 
+
+AzureIoTResult_t AzureIoTADUClient_DevicePropertiesInit( AzureIoTADUClientDeviceProperties_t * pxADUDeviceProperties )
+{
+    AzureIoTResult_t xResult;
+
+    if( pxADUDeviceProperties == NULL )
+    {
+        AZLogError( ( "AzureIoTADUClient_DevicePropertiesInit failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else
+    {
+        memset( pxADUDeviceProperties, 0, sizeof( AzureIoTADUClientDeviceProperties_t ) );
+
+        xResult = eAzureIoTSuccess;
+    }
+
+    return xResult;
+}
+
 bool AzureIoTADUClient_IsADUComponent( AzureIoTADUClient_t * pxAzureIoTADUClient,
                                        const uint8_t * pucComponentName,
                                        uint32_t ulComponentNameLength )

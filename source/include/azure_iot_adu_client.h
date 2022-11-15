@@ -44,6 +44,8 @@ typedef struct AzureIoTADUDeviceCustomProperties
 /**
  * @brief ADU Device Properties.
  * @link https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
+ *
+ * @note AzureIoTADUClient_DevicePropertiesInit() should be called first to initialize this struct.
  */
 typedef struct AzureIoTADUClientDeviceProperties
 {
@@ -305,6 +307,14 @@ AzureIoTResult_t AzureIoTADUClient_OptionsInit( AzureIoTADUClientOptions_t * pxA
  */
 AzureIoTResult_t AzureIoTADUClient_Init( AzureIoTADUClient_t * pxAzureIoTADUClient,
                                          AzureIoTADUClientOptions_t * pxADUClientOptions );
+
+/**
+ * @brief Initialize the Azure IoT Device Properties with default values.
+ *
+ * @param[out] pxADUDeviceProperties The #AzureIoTADUClientDeviceProperties_t instance to set with default values.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTADUClient_DevicePropertiesInit( AzureIoTADUClientDeviceProperties_t * pxADUDeviceProperties );
 
 /**
  * @brief Returns whether the component is the ADU component
