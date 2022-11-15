@@ -18,7 +18,7 @@ The e2e tests for Azure IoT Convenience layer use a different approach, splittin
 
   * [Install software](../../.github/scripts/install_software.sh)
 
-  * [Configure network](../../.github/scripts/init_vm_network.sh) **Note: This creates a veth1 interface for RTOS connectivity.**
+  * [Configure network](../../.github/scripts/init_linux_port_vm_network.sh) **Note: This creates a rtosveth1 interface for RTOS connectivity.**
 
   * [Fetch FreeRTOS](../../.github/scripts/fetch_freertos.sh): You will have to set the full path to this directory in the script later.
 
@@ -28,7 +28,7 @@ The e2e tests for Azure IoT Convenience layer use a different approach, splittin
   sudo bash -c 'export IOTHUB_CONNECTION_STRING="<iothub_connection_string>";
    export IOT_PROVISIONING_CONNECTION_STRING="<dps_connection_string>";
    export IOT_PROVISIONING_SCOPE_ID="<dps_id_scope>";
-   tests/e2e/iot/run.sh veth1 <PATH TO FREERTOS>'
+   tests/e2e/iot/run.sh rtosveth1 <PATH TO FREERTOS>'
   ```
 
   * Note: if an error pops up stating that it was unable to find .js files, the transpile may have failed, check your npm installs.

@@ -26,7 +26,7 @@ set -e
 rm -rf build/
 
 echo -e "::group::Build using clang"
-cmake -Bbuild -DCMAKE_C_COMPILER=clang -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DFREERTOS_PORT_DIRECTORY=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -DCONFIG_DIRECTORY=.github/config .
+cmake -Bbuild -DCMAKE_C_COMPILER=clang -DFREERTOS_DIRECTORY=$TEST_FREERTOS_SRC -DFREERTOS_PORT_DIRECTORY=$TEST_FREERTOS_SRC/FreeRTOS/Source/portable/ThirdParty/GCC/Posix -DCONFIG_DIRECTORY=.github/config -DUSE_COREHTTP=ON .
 cmake --build build
 
 rm -rf build/

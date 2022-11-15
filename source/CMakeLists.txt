@@ -21,18 +21,20 @@ target_include_directories(coremqtt
     ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreMQTT/source/interface
 )
 
-# Add coreHTTP Lib
-add_library(corehttp
-  ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/core_http_client.c
-  ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/dependency/3rdparty/http_parser/http_parser.c
-)
+if(${USE_COREHTTP})
+  # Add coreHTTP Lib
+  add_library(corehttp
+    ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/core_http_client.c
+    ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/dependency/3rdparty/http_parser/http_parser.c
+  )
 
-target_include_directories(corehttp
-  PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/dependency/3rdparty/http_parser
-    ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/include
-    ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/interface
-)
+  target_include_directories(corehttp
+    PUBLIC
+      ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/dependency/3rdparty/http_parser
+      ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/include
+      ${CMAKE_CURRENT_LIST_DIR}/../libraries/coreHTTP/source/interface
+  )
+endif()
 
 # Add embedded SDK lib
 add_subdirectory(../libraries/azure-sdk-for-c azure-sdk-for-c)
@@ -62,23 +64,25 @@ target_include_directories(az_iot_middleware_freertos
       ${CMAKE_CURRENT_LIST_DIR}/interface
 )
 
-add_library(azure_iot_core_http
-    ${CMAKE_CURRENT_LIST_DIR}/../ports/coreHTTP/azure_iot_core_http.c
-)
+if(${USE_COREHTTP})
+  add_library(azure_iot_core_http
+      ${CMAKE_CURRENT_LIST_DIR}/../ports/coreHTTP/azure_iot_core_http.c
+  )
 
-target_include_directories(azure_iot_core_http
-  PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/interface
-    ${CMAKE_CURRENT_LIST_DIR}/../ports/coreHTTP
-)
+  target_include_directories(azure_iot_core_http
+    PUBLIC
+      ${CMAKE_CURRENT_LIST_DIR}/interface
+      ${CMAKE_CURRENT_LIST_DIR}/../ports/coreHTTP
+  )
 
-target_link_libraries(azure_iot_core_http
-  PUBLIC
-    az_iot_middleware_freertos
-    corehttp
-)
+  target_link_libraries(azure_iot_core_http
+    PUBLIC
+      az_iot_middleware_freertos
+      corehttp
+  )
 
-add_library(az::iot_middleware::core_http ALIAS azure_iot_core_http)
+  add_library(az::iot_middleware::core_http ALIAS azure_iot_core_http)
+endif()
 
 # Check if custom mqtt port path is set, otherwise
 # use default coreMQTT port
@@ -102,8 +106,14 @@ else()
   target_link_libraries(az_iot_middleware_freertos
     PUBLIC
       coremqtt
-      corehttp
   )
+
+  if(${USE_COREHTTP})
+    target_link_libraries(az_iot_middleware_freertos
+      PUBLIC
+        corehttp
+    )
+  endif()
 
   target_compile_definitions(az_iot_middleware_freertos
     PRIVATE
