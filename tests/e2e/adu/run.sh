@@ -6,7 +6,7 @@
 # This script install dependencies of service side of e2e tests and runs e2e test
 
 # ./run.sh <RTOS connectivity interface> [FreeRTOS Src path]
-# e.g. ./run.sh veth1
+# e.g. ./run.sh rtosveth1
 
 # Trace each command by: export DEBUG_SHELL=1
 if [[ ! -z ${DEBUG_SHELL} ]]
@@ -33,7 +33,7 @@ test_root_dir=$dir/../..
 test_freertos_src_path=${2:-""}
 test_ethernet_if=${1:-""}
 
-[ -n "$test_ethernet_if" ] || die "\$1=ethernet interface need to be passed; like veth1"
+[ -n "$test_ethernet_if" ] || die "\$1=ethernet interface need to be passed; like rtosveth1"
 [ -n "$test_freertos_src_path" ] || die "\$2=FreeRTOS source path not set"
 
 pushd "$dir"
@@ -50,7 +50,7 @@ sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFA
 
 # Build and create new update image
 echo -e "::group::Build update image"
-pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path ../ ; cmake --build build
+pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path -DUSE_COREHTTP=ON ../ ; cmake --build build
 cp ./build/azure_iot_e2e_adu_tests $dir/e2e_build/azure_iot_e2e_adu_tests_v1.1
 popd
 
@@ -89,7 +89,7 @@ echo -e "::group::Revert application version | build base image"
 sed -i "s/#define e2eADU_UPDATE_VERSION .*/#define e2eADU_UPDATE_VERSION \"1.0\"/g" $dir/device/e2e_device_commands.c
 
 # Build and create base image
-pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path ../ ; cmake --build build
+pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path -DUSE_COREHTTP=ON ../ ; cmake --build build
 cp ./build/azure_iot_e2e_adu_tests ./build/azure_iot_e2e_adu_tests_v1.0
 popd # $dir/device
 
