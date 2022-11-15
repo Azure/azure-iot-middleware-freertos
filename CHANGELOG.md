@@ -1,6 +1,14 @@
 # Release History
 
-## 1.1.0-beta.1 (Unreleased)
+## 1.1.0 (2022-11-15)
+
+### Features Added
+
+- [[#281](https://github.com/Azure/azure-iot-middleware-freertos/pull/281)] Add Azure Device Update for IoT Hub, enabling Over-the-Air (OTA) updates for embedded devices.
+
+### Other Changes and Improvements
+
+- [[#220](https://github.com/Azure/azure-iot-middleware-freertos/pull/220)] DPS state machine fixes.
 
 ## 1.0.0 (2021-09-28)
 

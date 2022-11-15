@@ -36,7 +36,7 @@
 /**
  * @brief Optional pre-release identifier. SDK is in a pre-release state when present.
  */
-#define azureiotVERSION_PRERELEASE    "-beta.1"
+#define azureiotVERSION_PRERELEASE    ""
 
 /**
  * @brief The version in string format used for telemetry following the `semver.org` standard
