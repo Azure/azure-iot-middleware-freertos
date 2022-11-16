@@ -75,7 +75,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The port file for http APIs.  
+<p>The port file for HTTP APIs.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &lt;stdint.h&gt;</code><br />
 <code>#include &quot;azure_iot_http_port.h&quot;</code><br />
@@ -86,18 +86,24 @@ $(function() {
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="define-members"></a>
 Macros</h2></td></tr>
 <tr class="memitem:a5f96bc4e41d72e9d46335a8bf8e3b462"><td class="memItemLeft" align="right" valign="top"><a id="a5f96bc4e41d72e9d46335a8bf8e3b462"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>azureiothttpHttpRangeRequestEndOfFile</b>&#160;&#160;&#160;-1</td></tr>
+#define&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a5f96bc4e41d72e9d46335a8bf8e3b462">azureiothttpHttpRangeRequestEndOfFile</a>&#160;&#160;&#160;-1</td></tr>
+<tr class="memdesc:a5f96bc4e41d72e9d46335a8bf8e3b462"><td class="mdescLeft">&#160;</td><td class="mdescRight">Value to request the end of the file. <br /></td></tr>
 <tr class="separator:a5f96bc4e41d72e9d46335a8bf8e3b462"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="typedef-members"></a>
 Typedefs</h2></td></tr>
 <tr class="memitem:a169c0ae4ffaaced4077e2bca928c068e"><td class="memItemLeft" align="right" valign="top"><a id="a169c0ae4ffaaced4077e2bca928c068e"></a>
-typedef AzureIoTHTTP_t *&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTPHandle_t</b></td></tr>
+typedef AzureIoTHTTP_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a></td></tr>
+<tr class="memdesc:a169c0ae4ffaaced4077e2bca928c068e"><td class="mdescLeft">&#160;</td><td class="mdescRight">The handle for the Azure HTTP client. <br /></td></tr>
 <tr class="separator:a169c0ae4ffaaced4077e2bca928c068e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8692e71c5ec9a60be5c2aa89c527d0e3"><td class="memItemLeft" align="right" valign="top"><a id="a8692e71c5ec9a60be5c2aa89c527d0e3"></a>
+typedef enum <a class="el" href="azure__iot__http_8h.html#a9ca24362259658afb787a9bb91dfcb0b">AzureIoTHTTPResult</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a></td></tr>
+<tr class="memdesc:a8692e71c5ec9a60be5c2aa89c527d0e3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Azure HTTP return codes. <br /></td></tr>
+<tr class="separator:a8692e71c5ec9a60be5c2aa89c527d0e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a2cbf11d64d55e595733480fca3a721e9"><td class="memItemLeft" align="right" valign="top"><a id="a2cbf11d64d55e595733480fca3a721e9"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTPResult_t</b> { <br />
+<tr class="memitem:a9ca24362259658afb787a9bb91dfcb0b"><td class="memItemLeft" align="right" valign="top"><a id="a9ca24362259658afb787a9bb91dfcb0b"></a>enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a9ca24362259658afb787a9bb91dfcb0b">AzureIoTHTTPResult</a> { <br />
 &#160;&#160;<b>eAzureIoTHTTPSuccess</b> = 0
 , <b>eAzureIoTHTTPInvalidParameter</b>
 , <b>eAzureIoTHTTPNetworkError</b>
@@ -121,30 +127,351 @@ Enumerations</h2></td></tr>
 &#160;&#160;<b>eAzureIoTHTTPError</b>
 <br />
  }</td></tr>
-<tr class="separator:a2cbf11d64d55e595733480fca3a721e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memdesc:a9ca24362259658afb787a9bb91dfcb0b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Azure HTTP return codes. <br /></td></tr>
+<tr class="separator:a9ca24362259658afb787a9bb91dfcb0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a016d3f9833dad342db10d87dee20155d"><td class="memItemLeft" align="right" valign="top"><a id="a016d3f9833dad342db10d87dee20155d"></a>
-AzureIoTHTTPResult_t&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTP_Init</b> (AzureIoTHTTPHandle_t xHTTPHandle, <a class="el" href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a> *pxHTTPTransport, const char *pucURL, uint32_t ulURLLength, const char *pucPath, uint32_t ulPathLength, char *pucHeaderBuffer, uint32_t ulHeaderBufferLength)</td></tr>
+<tr class="memitem:a016d3f9833dad342db10d87dee20155d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a016d3f9833dad342db10d87dee20155d">AzureIoTHTTP_Init</a> (<a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle, <a class="el" href="azure__iot__transport__interface_8h.html#adfb2fa4547881490b99d85cce4a5169c">AzureIoTTransportInterface_t</a> *pxHTTPTransport, const char *pucURL, uint32_t ulURLLength, const char *pucPath, uint32_t ulPathLength, char *pucHeaderBuffer, uint32_t ulHeaderBufferLength)</td></tr>
+<tr class="memdesc:a016d3f9833dad342db10d87dee20155d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the Azure HTTP client.  <a href="azure__iot__http_8h.html#a016d3f9833dad342db10d87dee20155d">More...</a><br /></td></tr>
 <tr class="separator:a016d3f9833dad342db10d87dee20155d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5283899f4536d27bd714c3b7d6883912"><td class="memItemLeft" align="right" valign="top"><a id="a5283899f4536d27bd714c3b7d6883912"></a>
-AzureIoTHTTPResult_t&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTP_Request</b> (AzureIoTHTTPHandle_t xHTTPHandle, int32_t lRangeStart, int32_t lRangeEnd, char *pucDataBuffer, uint32_t ulDataBufferLength, char **ppucOutData, uint32_t *pulOutDataLength)</td></tr>
+<tr class="memitem:a5283899f4536d27bd714c3b7d6883912"><td class="memItemLeft" align="right" valign="top"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a5283899f4536d27bd714c3b7d6883912">AzureIoTHTTP_Request</a> (<a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle, int32_t lRangeStart, int32_t lRangeEnd, char *pucDataBuffer, uint32_t ulDataBufferLength, char **ppucOutData, uint32_t *pulOutDataLength)</td></tr>
+<tr class="memdesc:a5283899f4536d27bd714c3b7d6883912"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send an HTTP GET request.  <a href="azure__iot__http_8h.html#a5283899f4536d27bd714c3b7d6883912">More...</a><br /></td></tr>
 <tr class="separator:a5283899f4536d27bd714c3b7d6883912"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8f27285b0cbb31cc5629d80ea42bbbe0"><td class="memItemLeft" align="right" valign="top"><a id="a8f27285b0cbb31cc5629d80ea42bbbe0"></a>
-AzureIoTHTTPResult_t&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTP_RequestSizeInit</b> (AzureIoTHTTPHandle_t xHTTPHandle, <a class="el" href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a> *pxHTTPTransport, const char *pucURL, uint32_t ulURLLength, const char *pucPath, uint32_t ulPathLength, char *pucHeaderBuffer, uint32_t ulHeaderBufferLength)</td></tr>
+<tr class="memitem:a8f27285b0cbb31cc5629d80ea42bbbe0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a8f27285b0cbb31cc5629d80ea42bbbe0">AzureIoTHTTP_RequestSizeInit</a> (<a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle, <a class="el" href="azure__iot__transport__interface_8h.html#adfb2fa4547881490b99d85cce4a5169c">AzureIoTTransportInterface_t</a> *pxHTTPTransport, const char *pucURL, uint32_t ulURLLength, const char *pucPath, uint32_t ulPathLength, char *pucHeaderBuffer, uint32_t ulHeaderBufferLength)</td></tr>
+<tr class="memdesc:a8f27285b0cbb31cc5629d80ea42bbbe0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a size request.  <a href="azure__iot__http_8h.html#a8f27285b0cbb31cc5629d80ea42bbbe0">More...</a><br /></td></tr>
 <tr class="separator:a8f27285b0cbb31cc5629d80ea42bbbe0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2fbc8ce7647b5e946d169a004e8ef683"><td class="memItemLeft" align="right" valign="top"><a id="a2fbc8ce7647b5e946d169a004e8ef683"></a>
-int32_t&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTP_RequestSize</b> (AzureIoTHTTPHandle_t xHTTPHandle, char *pucDataBuffer, uint32_t ulDataBufferLength)</td></tr>
+<tr class="memitem:a2fbc8ce7647b5e946d169a004e8ef683"><td class="memItemLeft" align="right" valign="top">int32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a2fbc8ce7647b5e946d169a004e8ef683">AzureIoTHTTP_RequestSize</a> (<a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle, char *pucDataBuffer, uint32_t ulDataBufferLength)</td></tr>
+<tr class="memdesc:a2fbc8ce7647b5e946d169a004e8ef683"><td class="mdescLeft">&#160;</td><td class="mdescRight">Send a size request.  <a href="azure__iot__http_8h.html#a2fbc8ce7647b5e946d169a004e8ef683">More...</a><br /></td></tr>
 <tr class="separator:a2fbc8ce7647b5e946d169a004e8ef683"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b7b492dc84639674ae0d653a757c356"><td class="memItemLeft" align="right" valign="top"><a id="a7b7b492dc84639674ae0d653a757c356"></a>
-AzureIoTHTTPResult_t&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTHTTP_Deinit</b> (AzureIoTHTTPHandle_t xHTTPHandle)</td></tr>
+<tr class="memitem:a7b7b492dc84639674ae0d653a757c356"><td class="memItemLeft" align="right" valign="top"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__http_8h.html#a7b7b492dc84639674ae0d653a757c356">AzureIoTHTTP_Deinit</a> (<a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle)</td></tr>
+<tr class="memdesc:a7b7b492dc84639674ae0d653a757c356"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deinitialize the Azure HTTP client.  <a href="azure__iot__http_8h.html#a7b7b492dc84639674ae0d653a757c356">More...</a><br /></td></tr>
 <tr class="separator:a7b7b492dc84639674ae0d653a757c356"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The port file for http APIs. </p>
+<div class="textblock"><p>The port file for HTTP APIs. </p>
 <p>Used in ADU. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a7b7b492dc84639674ae0d653a757c356"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b7b492dc84639674ae0d653a757c356">&#9670;&nbsp;</a></span>AzureIoTHTTP_Deinit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> AzureIoTHTTP_Deinit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a>&#160;</td>
+          <td class="paramname"><em>xHTTPHandle</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Deinitialize the Azure HTTP client. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHTTPHandle</td><td>The HTTP handle to use for this operation. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AzureIoTHTTPResult_t </dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">eAzureIoTHTTPSuccess</td><td>if success. </td></tr>
+    <tr><td class="paramname">Otherwise</td><td>if failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a016d3f9833dad342db10d87dee20155d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a016d3f9833dad342db10d87dee20155d">&#9670;&nbsp;</a></span>AzureIoTHTTP_Init()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> AzureIoTHTTP_Init </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a>&#160;</td>
+          <td class="paramname"><em>xHTTPHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="azure__iot__transport__interface_8h.html#adfb2fa4547881490b99d85cce4a5169c">AzureIoTTransportInterface_t</a> *&#160;</td>
+          <td class="paramname"><em>pxHTTPTransport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucURL</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulURLLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulPathLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>pucHeaderBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulHeaderBufferLength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize the Azure HTTP client. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHTTPHandle</td><td>The HTTP handle to use for this operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxHTTPTransport</td><td>The Azure IoT Transport interface to use for this operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucURL</td><td>The URL to use for this request. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulURLLength</td><td>The length <code>pucURL</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucPath</td><td>The path to use for this request. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulPathLength</td><td>The length <code>pucPath</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucHeaderBuffer</td><td>The buffer into which the headers for the request will be placed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulHeaderBufferLength</td><td>The length of <code>pucHeaderBuffer</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AzureIoTHTTPResult_t </dd></dl>
+
+</div>
+</div>
+<a id="a5283899f4536d27bd714c3b7d6883912"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5283899f4536d27bd714c3b7d6883912">&#9670;&nbsp;</a></span>AzureIoTHTTP_Request()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> AzureIoTHTTP_Request </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a>&#160;</td>
+          <td class="paramname"><em>xHTTPHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>lRangeStart</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int32_t&#160;</td>
+          <td class="paramname"><em>lRangeEnd</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>pucDataBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulDataBufferLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **&#160;</td>
+          <td class="paramname"><em>ppucOutData</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t *&#160;</td>
+          <td class="paramname"><em>pulOutDataLength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send an HTTP GET request. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHTTPHandle</td><td>The HTTP handle to use for this operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lRangeStart</td><td>The start point for the request payload. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lRangeEnd</td><td>The end point for the request payload. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucDataBuffer</td><td>The buffer into which the response header and payload will be placed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulDataBufferLength</td><td>The length of <code>pucDataBuffer</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">ppucOutData</td><td>The pointer to the point in the buffer where the payload starts. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pulOutDataLength</td><td>The length of the payload returned by <code>ppucOutData</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AzureIoTHTTPResult_t </dd></dl>
+
+</div>
+</div>
+<a id="a2fbc8ce7647b5e946d169a004e8ef683"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2fbc8ce7647b5e946d169a004e8ef683">&#9670;&nbsp;</a></span>AzureIoTHTTP_RequestSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int32_t AzureIoTHTTP_RequestSize </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a>&#160;</td>
+          <td class="paramname"><em>xHTTPHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>pucDataBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulDataBufferLength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Send a size request. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHTTPHandle</td><td>The HTTP handle to use for this operation. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucDataBuffer</td><td>The buffer where the response will be placed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulDataBufferLength</td><td>The size of <code>pucDataBuffer</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>int32_t </dd></dl>
+<dl class="retval"><dt>Return values</dt><dd>
+  <table class="retval">
+    <tr><td class="paramname">The</td><td>size of the file if success. </td></tr>
+    <tr><td class="paramname">-1</td><td>if failure. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8f27285b0cbb31cc5629d80ea42bbbe0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8f27285b0cbb31cc5629d80ea42bbbe0">&#9670;&nbsp;</a></span>AzureIoTHTTP_RequestSizeInit()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> AzureIoTHTTP_RequestSizeInit </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a>&#160;</td>
+          <td class="paramname"><em>xHTTPHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="azure__iot__transport__interface_8h.html#adfb2fa4547881490b99d85cce4a5169c">AzureIoTTransportInterface_t</a> *&#160;</td>
+          <td class="paramname"><em>pxHTTPTransport</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucURL</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulURLLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucPath</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulPathLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>pucHeaderBuffer</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulHeaderBufferLength</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initialize a size request. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">xHTTPHandle</td><td>The HTTP handle to use for this operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pxHTTPTransport</td><td>The Azure IoT Transport interface to use for this operation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucURL</td><td>The URL to use for this request. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulURLLength</td><td>The length <code>pucURL</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucPath</td><td>The path to use for this request. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulPathLength</td><td>The length <code>pucPath</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucHeaderBuffer</td><td>The buffer into which the response will be placed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulHeaderBufferLength</td><td>The size of <code>pucHeaderBuffer</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AzureIoTHTTPResult_t </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.0

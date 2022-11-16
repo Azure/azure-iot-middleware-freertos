@@ -80,66 +80,74 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &quot;azure_iot_http_port.h&quot;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="azure__iot__transport__interface_8h.html">azure_iot_transport_interface.h</a>&quot;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#define azureiothttpHttpRangeRequestEndOfFile    -1</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">typedef</span> AzureIoTHTTP_t * AzureIoTHTTPHandle_t;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> AzureIoTHTTPResult</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;{</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    eAzureIoTHTTPSuccess = 0,</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    eAzureIoTHTTPInvalidParameter,</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    eAzureIoTHTTPNetworkError,</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    eAzureIoTHTTPPartialResponse,</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    eAzureIoTHTTPNoResponse,</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    eAzureIoTHTTPInsufficientMemory,</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    eAzureIoTHTTPSecurityAlertResponseHeadersSizeLimitExceeded,</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    eAzureIoTHTTPSecurityAlertExtraneousResponseData,</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidChunkHeader,</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidProtocolVersion,</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidStatusCode,</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidCharacter,</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidContentLength,</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    eAzureIoTHTTPParserInternalError,</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    eAzureIoTHTTPHeaderNotFound,</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    eAzureIoTHTTPInvalidResponse,</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    eAzureIoTHTTPError</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;} AzureIoTHTTPResult_t;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;                                        <a class="code" href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a> * pxHTTPTransport,</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> * pucURL,</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;                                        uint32_t ulURLLength,</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> * pucPath,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                                        uint32_t ulPathLength,</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;                                        <span class="keywordtype">char</span> * pucHeaderBuffer,</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;                                        uint32_t ulHeaderBufferLength );</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                           int32_t lRangeStart,</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;                                           int32_t lRangeEnd,</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;                                           <span class="keywordtype">char</span> * pucDataBuffer,</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;                                           uint32_t ulDataBufferLength,</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;                                           <span class="keywordtype">char</span> ** ppucOutData,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;                                           uint32_t * pulOutDataLength );</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHandle,</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;                                                   <a class="code" href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a> * pxHTTPTransport,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> * pucURL,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;                                                   uint32_t ulURLLength,</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> * pucPath,</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;                                                   uint32_t ulPathLength,</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;                                                   <span class="keywordtype">char</span> * pucHeaderBuffer,</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                                                   uint32_t ulHeaderBufferLength );</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle,</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                                  <span class="keywordtype">char</span> * pucDataBuffer,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                  uint32_t ulDataBufferLength );</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;AzureIoTHTTPResult_t AzureIoTHTTP_Deinit( AzureIoTHTTPHandle_t xHTTPHandle );</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_HTTP_H */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a5f96bc4e41d72e9d46335a8bf8e3b462">   24</a></span>&#160;<span class="preprocessor">#define azureiothttpHttpRangeRequestEndOfFile    -1</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">   30</a></span>&#160;<span class="keyword">typedef</span> AzureIoTHTTP_t * <a class="code" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a>;</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a9ca24362259658afb787a9bb91dfcb0b">   36</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">enum</span> <a class="code" href="azure__iot__http_8h.html#a9ca24362259658afb787a9bb91dfcb0b">AzureIoTHTTPResult</a></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;{</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    eAzureIoTHTTPSuccess = 0,</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    eAzureIoTHTTPInvalidParameter,</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    eAzureIoTHTTPNetworkError,</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    eAzureIoTHTTPPartialResponse,</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    eAzureIoTHTTPNoResponse,</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    eAzureIoTHTTPInsufficientMemory,</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    eAzureIoTHTTPSecurityAlertResponseHeadersSizeLimitExceeded,</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    eAzureIoTHTTPSecurityAlertExtraneousResponseData,</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidChunkHeader,</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidProtocolVersion,</div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidStatusCode,</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidCharacter,</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    eAzureIoTHTTPSecurityAlertInvalidContentLength,</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    eAzureIoTHTTPParserInternalError,</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    eAzureIoTHTTPHeaderNotFound,</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    eAzureIoTHTTPInvalidResponse,</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    eAzureIoTHTTPError</div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">   55</a></span>&#160;} <a class="code" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a016d3f9833dad342db10d87dee20155d">   70</a></span>&#160;<a class="code" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> <a class="code" href="azure__iot__http_8h.html#a016d3f9833dad342db10d87dee20155d">AzureIoTHTTP_Init</a>( <a class="code" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                                        <a class="code" href="struct_azure_io_t_transport_interface.html">AzureIoTTransportInterface_t</a> * pxHTTPTransport,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> * pucURL,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                                        uint32_t ulURLLength,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;                                        <span class="keyword">const</span> <span class="keywordtype">char</span> * pucPath,</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;                                        uint32_t ulPathLength,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;                                        <span class="keywordtype">char</span> * pucHeaderBuffer,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                                        uint32_t ulHeaderBufferLength );</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a5283899f4536d27bd714c3b7d6883912">   91</a></span>&#160;<a class="code" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> <a class="code" href="azure__iot__http_8h.html#a5283899f4536d27bd714c3b7d6883912">AzureIoTHTTP_Request</a>( <a class="code" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                                           int32_t lRangeStart,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                                           int32_t lRangeEnd,</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;                                           <span class="keywordtype">char</span> * pucDataBuffer,</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;                                           uint32_t ulDataBufferLength,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                                           <span class="keywordtype">char</span> ** ppucOutData,</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;                                           uint32_t * pulOutDataLength );</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a8f27285b0cbb31cc5629d80ea42bbbe0">  112</a></span>&#160;<a class="code" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> <a class="code" href="azure__iot__http_8h.html#a8f27285b0cbb31cc5629d80ea42bbbe0">AzureIoTHTTP_RequestSizeInit</a>( <a class="code" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle,</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;                                                   <a class="code" href="struct_azure_io_t_transport_interface.html">AzureIoTTransportInterface_t</a> * pxHTTPTransport,</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> * pucURL,</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;                                                   uint32_t ulURLLength,</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;                                                   <span class="keyword">const</span> <span class="keywordtype">char</span> * pucPath,</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                                                   uint32_t ulPathLength,</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                                                   <span class="keywordtype">char</span> * pucHeaderBuffer,</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;                                                   uint32_t ulHeaderBufferLength );</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160; </div>
+<div class="line"><a name="l00131"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a2fbc8ce7647b5e946d169a004e8ef683">  131</a></span>&#160;int32_t <a class="code" href="azure__iot__http_8h.html#a2fbc8ce7647b5e946d169a004e8ef683">AzureIoTHTTP_RequestSize</a>( <a class="code" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle,</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;                                  <span class="keywordtype">char</span> * pucDataBuffer,</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;                                  uint32_t ulDataBufferLength );</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno"><a class="line" href="azure__iot__http_8h.html#a7b7b492dc84639674ae0d653a757c356">  143</a></span>&#160;<a class="code" href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a> <a class="code" href="azure__iot__http_8h.html#a7b7b492dc84639674ae0d653a757c356">AzureIoTHTTP_Deinit</a>( <a class="code" href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a> xHTTPHandle );</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* AZURE_IOT_HTTP_H */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a016d3f9833dad342db10d87dee20155d"><div class="ttname"><a href="azure__iot__http_8h.html#a016d3f9833dad342db10d87dee20155d">AzureIoTHTTP_Init</a></div><div class="ttdeci">AzureIoTHTTPResult_t AzureIoTHTTP_Init(AzureIoTHTTPHandle_t xHTTPHandle, AzureIoTTransportInterface_t *pxHTTPTransport, const char *pucURL, uint32_t ulURLLength, const char *pucPath, uint32_t ulPathLength, char *pucHeaderBuffer, uint32_t ulHeaderBufferLength)</div><div class="ttdoc">Initialize the Azure HTTP client.</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a169c0ae4ffaaced4077e2bca928c068e"><div class="ttname"><a href="azure__iot__http_8h.html#a169c0ae4ffaaced4077e2bca928c068e">AzureIoTHTTPHandle_t</a></div><div class="ttdeci">AzureIoTHTTP_t * AzureIoTHTTPHandle_t</div><div class="ttdoc">The handle for the Azure HTTP client.</div><div class="ttdef"><b>Definition:</b> azure_iot_http.h:30</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a2fbc8ce7647b5e946d169a004e8ef683"><div class="ttname"><a href="azure__iot__http_8h.html#a2fbc8ce7647b5e946d169a004e8ef683">AzureIoTHTTP_RequestSize</a></div><div class="ttdeci">int32_t AzureIoTHTTP_RequestSize(AzureIoTHTTPHandle_t xHTTPHandle, char *pucDataBuffer, uint32_t ulDataBufferLength)</div><div class="ttdoc">Send a size request.</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a5283899f4536d27bd714c3b7d6883912"><div class="ttname"><a href="azure__iot__http_8h.html#a5283899f4536d27bd714c3b7d6883912">AzureIoTHTTP_Request</a></div><div class="ttdeci">AzureIoTHTTPResult_t AzureIoTHTTP_Request(AzureIoTHTTPHandle_t xHTTPHandle, int32_t lRangeStart, int32_t lRangeEnd, char *pucDataBuffer, uint32_t ulDataBufferLength, char **ppucOutData, uint32_t *pulOutDataLength)</div><div class="ttdoc">Send an HTTP GET request.</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a7b7b492dc84639674ae0d653a757c356"><div class="ttname"><a href="azure__iot__http_8h.html#a7b7b492dc84639674ae0d653a757c356">AzureIoTHTTP_Deinit</a></div><div class="ttdeci">AzureIoTHTTPResult_t AzureIoTHTTP_Deinit(AzureIoTHTTPHandle_t xHTTPHandle)</div><div class="ttdoc">Deinitialize the Azure HTTP client.</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a8692e71c5ec9a60be5c2aa89c527d0e3"><div class="ttname"><a href="azure__iot__http_8h.html#a8692e71c5ec9a60be5c2aa89c527d0e3">AzureIoTHTTPResult_t</a></div><div class="ttdeci">enum AzureIoTHTTPResult AzureIoTHTTPResult_t</div><div class="ttdoc">Azure HTTP return codes.</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a8f27285b0cbb31cc5629d80ea42bbbe0"><div class="ttname"><a href="azure__iot__http_8h.html#a8f27285b0cbb31cc5629d80ea42bbbe0">AzureIoTHTTP_RequestSizeInit</a></div><div class="ttdeci">AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit(AzureIoTHTTPHandle_t xHTTPHandle, AzureIoTTransportInterface_t *pxHTTPTransport, const char *pucURL, uint32_t ulURLLength, const char *pucPath, uint32_t ulPathLength, char *pucHeaderBuffer, uint32_t ulHeaderBufferLength)</div><div class="ttdoc">Initialize a size request.</div></div>
+<div class="ttc" id="aazure__iot__http_8h_html_a9ca24362259658afb787a9bb91dfcb0b"><div class="ttname"><a href="azure__iot__http_8h.html#a9ca24362259658afb787a9bb91dfcb0b">AzureIoTHTTPResult</a></div><div class="ttdeci">AzureIoTHTTPResult</div><div class="ttdoc">Azure HTTP return codes.</div><div class="ttdef"><b>Definition:</b> azure_iot_http.h:37</div></div>
 <div class="ttc" id="aazure__iot__transport__interface_8h_html"><div class="ttname"><a href="azure__iot__transport__interface_8h.html">azure_iot_transport_interface.h</a></div><div class="ttdoc">Transport interface definition to send and receive data over the network.</div></div>
-<div class="ttc" id="astruct_azure_io_t_transport_interface__t_html"><div class="ttname"><a href="struct_azure_io_t_transport_interface__t.html">AzureIoTTransportInterface_t</a></div><div class="ttdoc">The transport layer interface.</div><div class="ttdef"><b>Definition:</b> azure_iot_transport_interface.h:159</div></div>
+<div class="ttc" id="astruct_azure_io_t_transport_interface_html"><div class="ttname"><a href="struct_azure_io_t_transport_interface.html">AzureIoTTransportInterface</a></div><div class="ttdoc">The transport layer interface.</div><div class="ttdef"><b>Definition:</b> azure_iot_transport_interface.h:159</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

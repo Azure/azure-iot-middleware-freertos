@@ -81,17 +81,164 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a195a8989fcdc24b3e236f9932a721a04"><td class="memItemLeft" align="right" valign="top"><a id="a195a8989fcdc24b3e236f9932a721a04"></a>
-<a class="el" href="azure__iot__result_8h.html#a7340eb32140950309bbb31922a4432dd">AzureIoTResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTCrypto_SHA256Calculate</b> (const char *pucInputPtr, uint64_t ulInputSize, const char *pucOutputPtr, uint64_t ulOutputSize)</td></tr>
+<tr class="memitem:a195a8989fcdc24b3e236f9932a721a04"><td class="memItemLeft" align="right" valign="top"><a class="el" href="azure__iot__result_8h.html#a3b744fe2339a0821ab45cd9b2c314645">AzureIoTResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__crypto_8h.html#a195a8989fcdc24b3e236f9932a721a04">AzureIoTCrypto_SHA256Calculate</a> (const char *pucInputPtr, uint64_t ulInputSize, const char *pucOutputPtr, uint64_t ulOutputSize)</td></tr>
+<tr class="memdesc:a195a8989fcdc24b3e236f9932a721a04"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate a SHA256 hash.  <a href="azure__iot__crypto_8h.html#a195a8989fcdc24b3e236f9932a721a04">More...</a><br /></td></tr>
 <tr class="separator:a195a8989fcdc24b3e236f9932a721a04"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a809298032541284ee59582bcbd50515d"><td class="memItemLeft" align="right" valign="top"><a id="a809298032541284ee59582bcbd50515d"></a>
-<a class="el" href="azure__iot__result_8h.html#a7340eb32140950309bbb31922a4432dd">AzureIoTResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><b>AzureIoTCrypto_RS256Verify</b> (const char *pucInputPtr, uint64_t ulInputSize, const char *pucSignaturePtr, uint64_t ulSignatureSize, const char *pucN, uint64_t ullNSize, const char *pucE, uint64_t ullESize, const char *pucBufferPtr, uint32_t ulBufferSize)</td></tr>
+<tr class="memitem:a809298032541284ee59582bcbd50515d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="azure__iot__result_8h.html#a3b744fe2339a0821ab45cd9b2c314645">AzureIoTResult_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="azure__iot__crypto_8h.html#a809298032541284ee59582bcbd50515d">AzureIoTCrypto_RS256Verify</a> (const char *pucInputPtr, uint64_t ulInputSize, const char *pucSignaturePtr, uint64_t ulSignatureSize, const char *pucN, uint64_t ullNSize, const char *pucE, uint64_t ullESize, const char *pucBufferPtr, uint32_t ulBufferSize)</td></tr>
+<tr class="memdesc:a809298032541284ee59582bcbd50515d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Verify an RS256 signed payload.  <a href="azure__iot__crypto_8h.html#a809298032541284ee59582bcbd50515d">More...</a><br /></td></tr>
 <tr class="separator:a809298032541284ee59582bcbd50515d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The port file for crypto APIs. </p>
 <p>Used for verifying the ADU image payload. </p>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a id="a809298032541284ee59582bcbd50515d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a809298032541284ee59582bcbd50515d">&#9670;&nbsp;</a></span>AzureIoTCrypto_RS256Verify()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="azure__iot__result_8h.html#a3b744fe2339a0821ab45cd9b2c314645">AzureIoTResult_t</a> AzureIoTCrypto_RS256Verify </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucInputPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>ulInputSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucSignaturePtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>ulSignatureSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucN</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>ullNSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucE</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>ullESize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucBufferPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint32_t&#160;</td>
+          <td class="paramname"><em>ulBufferSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Verify an RS256 signed payload. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucInputPtr</td><td>The input to verify. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulInputSize</td><td>The length of <code>pucInputPtr</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucSignaturePtr</td><td>The signature of the <code>pucInputPtr</code> payload. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulSignatureSize</td><td>The length of <code>pucSignaturePtr</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucN</td><td>The pointer to the key modulus. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ullNSize</td><td>The length of <code>pucN</code>. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucE</td><td>The pointer to the key exponent. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ullESize</td><td>The length of <code>pucE</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucBufferPtr</td><td>The buffer which will be used to make the calculation. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulBufferSize</td><td>The size of <code>pucBufferPtr</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AzureIoTResult_t </dd></dl>
+
+</div>
+</div>
+<a id="a195a8989fcdc24b3e236f9932a721a04"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a195a8989fcdc24b3e236f9932a721a04">&#9670;&nbsp;</a></span>AzureIoTCrypto_SHA256Calculate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="azure__iot__result_8h.html#a3b744fe2339a0821ab45cd9b2c314645">AzureIoTResult_t</a> AzureIoTCrypto_SHA256Calculate </td>
+          <td>(</td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucInputPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>ulInputSize</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const char *&#160;</td>
+          <td class="paramname"><em>pucOutputPtr</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint64_t&#160;</td>
+          <td class="paramname"><em>ulOutputSize</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Calculate a SHA256 hash. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">pucInputPtr</td><td>The input to calculate the SHA over. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulInputSize</td><td>The size of <code>pucInputPtr</code>. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">pucOutputPtr</td><td>The buffer into which the calculation will be placed. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">ulOutputSize</td><td>The length of <code>pucOutputPtr</code>. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>AzureIoTResult_t </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.0
