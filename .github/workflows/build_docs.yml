@@ -21,7 +21,7 @@ jobs:
         run: .github/scripts/doxygen.sh
 
       - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.4.1
+        uses: JamesIves/github-pages-deploy-action@v4.4.1
         with:
           branch: gh-pages
           folder: doc/html
