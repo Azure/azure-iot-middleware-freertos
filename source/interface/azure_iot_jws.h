@@ -20,28 +20,32 @@
  */
 typedef struct AzureIoTJWS_RootKey
 {
-    uint8_t * pucRootKeyId;
-    uint32_t ulRootKeyIdLength;
-    uint8_t * pucRootKeyN;
-    uint32_t ulRootKeyNLength;
-    uint8_t * pucRootKeyExponent;
-    uint32_t ulRootKeyExponentLength;
+    uint8_t * pucRootKeyId;           /**< The pointer to the root key id. */
+    uint32_t ulRootKeyIdLength;       /**< The length of the root key id. */
+    uint8_t * pucRootKeyN;            /**< The pointer to the root key modulus. */
+    uint32_t ulRootKeyNLength;        /**< The length of the root key modulus. */
+    uint8_t * pucRootKeyExponent;     /**< The pointer to the root key exponent. */
+    uint32_t ulRootKeyExponentLength; /**< The length of the root key exponent. */
 } AzureIoTJWS_RootKey_t;
 
-#define azureiotjwsRSA3072_SIZE                    384
-#define azureiotjwsSHA256_SIZE                     32
-#define azureiotjwsJWS_HEADER_SIZE                 1400
-#define azureiotjwsJWS_PAYLOAD_SIZE                60
-#define azureiotjwsJWK_HEADER_SIZE                 48
-#define azureiotjwsJWK_PAYLOAD_SIZE                700
-#define azureiotjwsSIGNATURE_SIZE                  400
-#define azureiotjwsSIGNING_KEY_E_SIZE              10
-#define azureiotjwsSIGNING_KEY_N_SIZE              azureiotjwsRSA3072_SIZE
-#define azureiotjwsSHA_CALCULATION_SCRATCH_SIZE    azureiotjwsRSA3072_SIZE + azureiotjwsSHA256_SIZE
 
-/* This is the minimum amount of space needed to store values which are held at the same time during the calculation. */
-/* azureiotjwsJWS_PAYLOAD_SIZE, one azureiotjwsSIGNATURE_SIZE, and one azureiotjwsSHA256_SIZE are excluded since */
-/* they will reuse buffer space. */
+#define azureiotjwsRSA3072_SIZE                    384                                              /**< Size of the RSA 3072 key. */
+#define azureiotjwsSHA256_SIZE                     32                                               /**< Size of the SHA256 hash. */
+#define azureiotjwsJWS_HEADER_SIZE                 1400                                             /**< Size of the JWS header. */
+#define azureiotjwsJWS_PAYLOAD_SIZE                60                                               /**< Size of the JWS payload. */
+#define azureiotjwsJWK_HEADER_SIZE                 48                                               /**< Size of the JWK header. */
+#define azureiotjwsJWK_PAYLOAD_SIZE                700                                              /**< Size of the JWK payload. */
+#define azureiotjwsSIGNATURE_SIZE                  400                                              /**< Size of the JWS/JWK signature. */
+#define azureiotjwsSIGNING_KEY_E_SIZE              10                                               /**< Size of the signed key exponent. */
+#define azureiotjwsSIGNING_KEY_N_SIZE              azureiotjwsRSA3072_SIZE                          /**< Size of the signing key modulus. */
+#define azureiotjwsSHA_CALCULATION_SCRATCH_SIZE    azureiotjwsRSA3072_SIZE + azureiotjwsSHA256_SIZE /**< Size of the sha calculation scratch space. */
+
+/**
+ * @brief The minimum amount of space needed to authenticate a JWS signature.
+ *
+ * @note azureiotjwsJWS_PAYLOAD_SIZE, one azureiotjwsSIGNATURE_SIZE, and one azureiotjwsSHA256_SIZE are excluded since
+ * they will reuse buffer space.
+ */
 #define azureiotjwsSCRATCH_BUFFER_SIZE                                                            \
     ( azureiotjwsJWS_HEADER_SIZE + azureiotjwsJWK_HEADER_SIZE + azureiotjwsJWK_PAYLOAD_SIZE       \
       + azureiotjwsSIGNATURE_SIZE + azureiotjwsSIGNING_KEY_N_SIZE + azureiotjwsSIGNING_KEY_E_SIZE \
@@ -60,7 +64,7 @@ typedef struct AzureIoTJWS_RootKey
  * (`ulUpdateManifestSignatureLength` from #AzureIoTADUUpdateRequest_t).
  * @param[in] xADURootKeys An array of root keys that may be used to verify the payload.
  * @param[in] ulADURootKeysLength The length of the array of root keys.
- * @param[in] pucScratchBuffer Scratch buffer space for calculations. It should be
+ * @param[out] pucScratchBuffer Scratch buffer space for calculations. It should be
  * `azureiotjwsSCRATCH_BUFFER_SIZE` in length.
  * @param[in] ulScratchBufferLength The length of \p pucScratchBuffer.
  * @return AzureIoTResult_t The return value of this function.
