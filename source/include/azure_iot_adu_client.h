@@ -399,7 +399,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
  * @param[in] xAgentState The current #AzureIoTADUAgentState_t.
  * @param[in] pxUpdateResults The current #AzureIoTADUClientInstallResult_t. This can be `NULL` if there aren't any
  * results from an update.
- * @param[in] pucBuffer The buffer into which the generated payload will be placed.
+ * @param[out] pucBuffer The buffer into which the generated payload will be placed.
  * @param[in] ulBufferSize The length of \p pucBuffer.
  * @param[in] pulRequestId An optional request id to be used for the publish. This can be `NULL`.
  * @return An #AzureIoTResult_t with the result of the operation.
