@@ -19,7 +19,7 @@
 
 /**
  * @brief Value to request the end of the file.
- * 
+ *
  */
 #define azureiothttpHttpRangeRequestEndOfFile    -1
 

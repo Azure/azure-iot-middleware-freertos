@@ -16,7 +16,7 @@
 
 /**
  * @brief Calculate a SHA256 hash.
- * 
+ *
  * @param pucInputPtr The input to calculate the SHA over.
  * @param ulInputSize The size of \p pucInputPtr.
  * @param pucOutputPtr The buffer into which the calculation will be placed.
@@ -30,7 +30,7 @@ AzureIoTResult_t AzureIoTCrypto_SHA256Calculate( const char * pucInputPtr,
 
 /**
  * @brief Verify an RS256 signed payload.
- * 
+ *
  * @param[in] pucInputPtr The input to verify.
  * @param[in] ulInputSize The length of \p pucInputPtr.
  * @param[in] pucSignaturePtr The signature of the \p pucInputPtr payload.

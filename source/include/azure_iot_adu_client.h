@@ -20,6 +20,7 @@
  * This may be used in the #AzureIoTHubClientOptions_t as the `pucModelID`.
  */
 extern const uint8_t * AzureIoTADUModelID;
+
 /**
  * @brief The length of #AzureIoTADUModelID
  */
@@ -86,7 +87,7 @@ typedef enum AzureIoTADUAction
  *      "id": "someguid",
  *      "retryTimestamp": "2020-04-22T12:12:12.0000000+00:00"
  *  }
- * 
+ *
  * https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
  */
 typedef struct AzureIoTADUClientWorkflow
