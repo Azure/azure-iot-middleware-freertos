@@ -16,7 +16,7 @@ pushd doxygen
 mkdir build
 pushd build
 cmake -G "Unix Makefiles" ..
-make -j
+make
 sudo make install
 popd
 popd
