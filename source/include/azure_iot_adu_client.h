@@ -331,9 +331,8 @@ AzureIoTResult_t AzureIoTADUClient_DevicePropertiesInit( AzureIoTADUClientDevice
  *       processed into the AzureIoTADUClient.
  *
  * @param[in] pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
- * @param[in] pucComponentName Name of writable properties component to be
- *                             checked.
- * @param[in] ulComponentNameLength Length of `pucComponentName`.
+ * @param[in] pucComponentName Name of writable properties component to be checked.
+ * @param[in] ulComponentNameLength Length of \p pucComponentName.
  * @return A boolean value indicating if the writable properties component
  *         is from ADU service.
  */
@@ -348,8 +347,7 @@ bool AzureIoTADUClient_IsADUComponent( AzureIoTADUClient_t * pxAzureIoTADUClient
  * should be passed to this API.
  *
  * @param[in] pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
- * @param[in,out] pxReader The initialized JSON reader positioned at the beginning of the ADU subcomponent
- * property.
+ * @param[in,out] pxReader The initialized JSON reader positioned at the beginning of the ADU subcomponent property.
  * @param[out] pxAduUpdateRequest The #AzureIoTADUUpdateRequest_t into which the properties will be parsed.
  * @return AzureIoTResult_t An #AzureIoTResult_t with the result of the operation.
  */
@@ -372,12 +370,9 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] xRequestDecision  The #AzureIoTADURequestDecision_t for this response.
  * @param[in] ulPropertyVersion Version of the writable properties.
- * @param[in] pucWritablePropertyResponseBuffer
- *              An pointer to the memory buffer where to
- *              write the resulting Azure Plug-and-Play properties acknowledgement
- *              payload.
- * @param[in] ulWritablePropertyResponseBufferSize
- *              Size of `pucWritablePropertyResponseBuffer.
+ * @param[out] pucWritablePropertyResponseBuffer A pointer to the memory buffer where to write
+ * the resulting Azure Plug-and-Play properties acknowledgement payload.
+ * @param[in] ulWritablePropertyResponseBufferSize Size of \p pucWritablePropertyResponseBuffer.
  * @param[in] pulRequestId Pointer to request id to use for the operation.
  * @return An #AzureIoTResult_t with the result of the operation.
  */

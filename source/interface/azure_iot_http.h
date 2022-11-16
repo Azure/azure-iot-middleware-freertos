@@ -63,7 +63,7 @@ typedef enum AzureIoTHTTPResult
  * @param[in] ulURLLength The length \p pucURL.
  * @param[in] pucPath The path to use for this request.
  * @param[in] ulPathLength The length \p pucPath.
- * @param[in] pucHeaderBuffer The buffer into which the headers for the request will be placed.
+ * @param[out] pucHeaderBuffer The buffer into which the headers for the request will be placed.
  * @param[in] ulHeaderBufferLength The length of \p pucHeaderBuffer.
  * @return AzureIoTHTTPResult_t
  */
@@ -82,7 +82,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,
  * @param[in] xHTTPHandle The HTTP handle to use for this operation.
  * @param[in] lRangeStart The start point for the request payload.
  * @param[in] lRangeEnd The end point for the request payload.
- * @param[in] pucDataBuffer The buffer into which the response header and payload will be placed.
+ * @param[out] pucDataBuffer The buffer into which the response header and payload will be placed.
  * @param[in] ulDataBufferLength The length of \p pucDataBuffer.
  * @param[out] ppucOutData The pointer to the point in the buffer where the payload starts.
  * @param[out] pulOutDataLength The length of the payload returned by \p ppucOutData.
@@ -105,7 +105,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
  * @param[in] ulURLLength The length \p pucURL.
  * @param[in] pucPath The path to use for this request.
  * @param[in] ulPathLength The length \p pucPath.
- * @param[in] pucHeaderBuffer The buffer into which the response will be placed.
+ * @param[out] pucHeaderBuffer The buffer into which the response will be placed.
  * @param[in] ulHeaderBufferLength The size of \p pucHeaderBuffer.
  * @return AzureIoTHTTPResult_t
  */
@@ -122,7 +122,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
  * @brief Send a size request.
  *
  * @param[in] xHTTPHandle The HTTP handle to use for this operation.
- * @param[in] pucDataBuffer The buffer where the response will be placed.
+ * @param[out] pucDataBuffer The buffer where the response will be placed.
  * @param[in] ulDataBufferLength The size of \p pucDataBuffer.
  * @return int32_t
  * @retval The size of the file if success.

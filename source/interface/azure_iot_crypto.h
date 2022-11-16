@@ -17,10 +17,10 @@
 /**
  * @brief Calculate a SHA256 hash.
  *
- * @param pucInputPtr The input to calculate the SHA over.
- * @param ulInputSize The size of \p pucInputPtr.
- * @param pucOutputPtr The buffer into which the calculation will be placed.
- * @param ulOutputSize The length of \p pucOutputPtr.
+ * @param[in] pucInputPtr The input to calculate the SHA over.
+ * @param[in] ulInputSize The size of \p pucInputPtr.
+ * @param[out] pucOutputPtr The buffer into which the calculation will be placed.
+ * @param[in] ulOutputSize The length of \p pucOutputPtr.
  * @return AzureIoTResult_t
  */
 AzureIoTResult_t AzureIoTCrypto_SHA256Calculate( const char * pucInputPtr,
@@ -39,7 +39,7 @@ AzureIoTResult_t AzureIoTCrypto_SHA256Calculate( const char * pucInputPtr,
  * @param[in] ullNSize The length of \p pucN.
  * @param[in] pucE The pointer to the key exponent.
  * @param[in] ullESize The length of \p pucE.
- * @param[in] pucBufferPtr The buffer which will be used to make the calculation.
+ * @param[out] pucBufferPtr The buffer which will be used to make the calculation.
  * @param[in] ulBufferSize The size of \p pucBufferPtr.
  * @return AzureIoTResult_t
  */
