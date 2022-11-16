@@ -1,14 +1,19 @@
 var searchData=
 [
-  ['azure_5fiot_2eh_266',['azure_iot.h',['../azure__iot_8h.html',1,'']]],
-  ['azure_5fiot_5fhub_5fclient_2eh_267',['azure_iot_hub_client.h',['../azure__iot__hub__client_8h.html',1,'']]],
-  ['azure_5fiot_5fhub_5fclient_5fproperties_2eh_268',['azure_iot_hub_client_properties.h',['../azure__iot__hub__client__properties_8h.html',1,'']]],
-  ['azure_5fiot_5fjson_5freader_2eh_269',['azure_iot_json_reader.h',['../azure__iot__json__reader_8h.html',1,'']]],
-  ['azure_5fiot_5fjson_5fwriter_2eh_270',['azure_iot_json_writer.h',['../azure__iot__json__writer_8h.html',1,'']]],
-  ['azure_5fiot_5fmessage_2eh_271',['azure_iot_message.h',['../azure__iot__message_8h.html',1,'']]],
-  ['azure_5fiot_5fmqtt_2eh_272',['azure_iot_mqtt.h',['../azure__iot__mqtt_8h.html',1,'']]],
-  ['azure_5fiot_5fprovisioning_5fclient_2eh_273',['azure_iot_provisioning_client.h',['../azure__iot__provisioning__client_8h.html',1,'']]],
-  ['azure_5fiot_5fresult_2eh_274',['azure_iot_result.h',['../azure__iot__result_8h.html',1,'']]],
-  ['azure_5fiot_5ftransport_5finterface_2eh_275',['azure_iot_transport_interface.h',['../azure__iot__transport__interface_8h.html',1,'']]],
-  ['azure_5fiot_5fversion_2eh_276',['azure_iot_version.h',['../azure__iot__version_8h.html',1,'']]]
+  ['azure_5fiot_2eh_318',['azure_iot.h',['../azure__iot_8h.html',1,'']]],
+  ['azure_5fiot_5fadu_5fclient_2eh_319',['azure_iot_adu_client.h',['../azure__iot__adu__client_8h.html',1,'']]],
+  ['azure_5fiot_5fcrypto_2eh_320',['azure_iot_crypto.h',['../azure__iot__crypto_8h.html',1,'']]],
+  ['azure_5fiot_5fflash_5fplatform_2eh_321',['azure_iot_flash_platform.h',['../azure__iot__flash__platform_8h.html',1,'']]],
+  ['azure_5fiot_5fhttp_2eh_322',['azure_iot_http.h',['../azure__iot__http_8h.html',1,'']]],
+  ['azure_5fiot_5fhub_5fclient_2eh_323',['azure_iot_hub_client.h',['../azure__iot__hub__client_8h.html',1,'']]],
+  ['azure_5fiot_5fhub_5fclient_5fproperties_2eh_324',['azure_iot_hub_client_properties.h',['../azure__iot__hub__client__properties_8h.html',1,'']]],
+  ['azure_5fiot_5fjson_5freader_2eh_325',['azure_iot_json_reader.h',['../azure__iot__json__reader_8h.html',1,'']]],
+  ['azure_5fiot_5fjson_5fwriter_2eh_326',['azure_iot_json_writer.h',['../azure__iot__json__writer_8h.html',1,'']]],
+  ['azure_5fiot_5fjws_2eh_327',['azure_iot_jws.h',['../azure__iot__jws_8h.html',1,'']]],
+  ['azure_5fiot_5fmessage_2eh_328',['azure_iot_message.h',['../azure__iot__message_8h.html',1,'']]],
+  ['azure_5fiot_5fmqtt_2eh_329',['azure_iot_mqtt.h',['../azure__iot__mqtt_8h.html',1,'']]],
+  ['azure_5fiot_5fprovisioning_5fclient_2eh_330',['azure_iot_provisioning_client.h',['../azure__iot__provisioning__client_8h.html',1,'']]],
+  ['azure_5fiot_5fresult_2eh_331',['azure_iot_result.h',['../azure__iot__result_8h.html',1,'']]],
+  ['azure_5fiot_5ftransport_5finterface_2eh_332',['azure_iot_transport_interface.h',['../azure__iot__transport__interface_8h.html',1,'']]],
+  ['azure_5fiot_5fversion_2eh_333',['azure_iot_version.h',['../azure__iot__version_8h.html',1,'']]]
 ];

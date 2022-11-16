@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['security_494',['SECURITY',['../md__s_e_c_u_r_i_t_y.html',1,'']]],
-  ['support_495',['Support',['../md__s_u_p_p_o_r_t.html',1,'']]]
+  ['release_20history_563',['Release History',['../md__c_h_a_n_g_e_l_o_g.html',1,'']]]
 ];

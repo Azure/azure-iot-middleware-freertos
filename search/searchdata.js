@@ -4,12 +4,12 @@ var indexSectionsWithContent =
   1: "a",
   2: "a",
   3: "a",
-  4: "_pux",
+  4: "_apux",
   5: "a",
   6: "a",
   7: "e",
   8: "_a",
-  9: "amrs"
+  9: "amprs"
 };
 
 var indexSectionNames =

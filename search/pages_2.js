@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['release_20history_493',['Release History',['../md__c_h_a_n_g_e_l_o_g.html',1,'']]]
+  ['porting_20from_20azure_20iot_20c_20sdk_20to_20azure_20middleware_20for_20freertos_562',['Porting from Azure IoT C SDK to Azure middleware for FreeRTOS',['../md_docs_azure_iot_c_sdk_port.html',1,'']]]
 ];

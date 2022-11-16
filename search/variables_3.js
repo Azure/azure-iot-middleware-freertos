@@ -1,16 +1,20 @@
 var searchData=
 [
-  ['xcleansession_384',['xCleanSession',['../struct_azure_io_t_m_q_t_t_connect_info__t.html#a764596b17ebc5eaf6616b4c6a5987c0d',1,'AzureIoTMQTTConnectInfo_t']]],
-  ['xdeserializationresult_385',['xDeserializationResult',['../struct_azure_io_t_m_q_t_t_deserialized_info__t.html#a92c1272f2eb8f43a1a4dc4bbdef4aeb7',1,'AzureIoTMQTTDeserializedInfo_t']]],
-  ['xdup_386',['xDup',['../struct_azure_io_t_m_q_t_t_publish_info__t.html#a3e144a91fd134fc5b2f1a4ff13e55376',1,'AzureIoTMQTTPublishInfo_t']]],
-  ['xmessagestatus_387',['xMessageStatus',['../struct_azure_io_t_hub_client_properties_response__t.html#ae46a193ae985f51987e7b32e122a17bc',1,'AzureIoTHubClientPropertiesResponse_t']]],
-  ['xmessagetype_388',['xMessageType',['../struct_azure_io_t_hub_client_properties_response__t.html#a93c82ee884b1becc552de01612b97fdb',1,'AzureIoTHubClientPropertiesResponse_t']]],
-  ['xpayloadlength_389',['xPayloadLength',['../struct_azure_io_t_m_q_t_t_publish_info__t.html#abb3c413ff2856ab956049c6dfcf126e2',1,'AzureIoTMQTTPublishInfo_t']]],
-  ['xproperties_390',['xProperties',['../struct_azure_io_t_hub_client_cloud_to_device_message_request__t.html#af63b43b2d3dc85baa0c1ba4b0cf71b96',1,'AzureIoTHubClientCloudToDeviceMessageRequest_t']]],
-  ['xqos_391',['xQOS',['../struct_azure_io_t_m_q_t_t_publish_info__t.html#a58e3045969d555b83ab9e77f2a03684b',1,'AzureIoTMQTTPublishInfo_t::xQOS()'],['../struct_azure_io_t_m_q_t_t_subscribe_info__t.html#a309cdb56c27083791c690c9574ab8769',1,'AzureIoTMQTTSubscribeInfo_t::xQoS()']]],
-  ['xrecv_392',['xRecv',['../struct_azure_io_t_transport_interface__t.html#a058de681de053a62f614222c978e708e',1,'AzureIoTTransportInterface_t']]],
-  ['xremaininglength_393',['xRemainingLength',['../struct_azure_io_t_m_q_t_t_packet_info__t.html#a8621eb4866a33dec0d1fe86a908e46a8',1,'AzureIoTMQTTPacketInfo_t']]],
-  ['xretain_394',['xRetain',['../struct_azure_io_t_m_q_t_t_publish_info__t.html#adbddb053a3347fbea5e2dbd5e34490d3',1,'AzureIoTMQTTPublishInfo_t']]],
-  ['xsend_395',['xSend',['../struct_azure_io_t_transport_interface__t.html#af0ca907c527344cce5d04bd4dfa94e82',1,'AzureIoTTransportInterface_t']]],
-  ['xtelemetrycallback_396',['xTelemetryCallback',['../struct_azure_io_t_hub_client_options__t.html#a2e04d1833ae0f71d9281a9370b83b81b',1,'AzureIoTHubClientOptions_t']]]
+  ['uctype_433',['ucType',['../struct_azure_io_t_m_q_t_t_packet_info__t.html#afd94fb7bf67fe757a5f768a4eb38a85d',1,'AzureIoTMQTTPacketInfo_t']]],
+  ['ulcomponentlistlength_434',['ulComponentListLength',['../struct_azure_io_t_hub_client_options__t.html#a0b9ed4c9ee7e7a5f81ad659eedcfc383',1,'AzureIoTHubClientOptions_t']]],
+  ['ulmodelidlength_435',['ulModelIDLength',['../struct_azure_io_t_hub_client_options__t.html#aa2aac8485bb55acdade87ac9e4ca0f2b',1,'AzureIoTHubClientOptions_t']]],
+  ['ulmoduleidlength_436',['ulModuleIDLength',['../struct_azure_io_t_hub_client_options__t.html#acbe4af3285345563bb23e69824e32470',1,'AzureIoTHubClientOptions_t']]],
+  ['ulpayloadlength_437',['ulPayloadLength',['../struct_azure_io_t_hub_client_cloud_to_device_message_request__t.html#a9f0ba63c43e0015aa85406eef3b2b3bc',1,'AzureIoTHubClientCloudToDeviceMessageRequest_t::ulPayloadLength()'],['../struct_azure_io_t_hub_client_command_request__t.html#a6683d41290943c20959f65f7d5c94ed3',1,'AzureIoTHubClientCommandRequest_t::ulPayloadLength()'],['../struct_azure_io_t_hub_client_properties_response__t.html#a6652ec0f7d39ceeb4a78a9c57f43e5b5',1,'AzureIoTHubClientPropertiesResponse_t::ulPayloadLength()']]],
+  ['ulrequestid_438',['ulRequestID',['../struct_azure_io_t_hub_client_properties_response__t.html#a07af816f84258dbcd50b22e16269fd64',1,'AzureIoTHubClientPropertiesResponse_t']]],
+  ['uluseragentlength_439',['ulUserAgentLength',['../struct_azure_io_t_hub_client_options__t.html#a73cb2d6f126a065cde4713e0bd140154',1,'AzureIoTHubClientOptions_t::ulUserAgentLength()'],['../struct_azure_io_t_provisioning_client_options__t.html#a91fd4e3ffa702723d9040689e715473e',1,'AzureIoTProvisioningClientOptions_t::ulUserAgentLength()']]],
+  ['usclientidentifierlength_440',['usClientIdentifierLength',['../struct_azure_io_t_m_q_t_t_connect_info__t.html#acf75a1450f3b2d0a5fdad62f9e5252d7',1,'AzureIoTMQTTConnectInfo_t']]],
+  ['uscommandnamelength_441',['usCommandNameLength',['../struct_azure_io_t_hub_client_command_request__t.html#a137e8c72e3a30ad88155977ca5e47817',1,'AzureIoTHubClientCommandRequest_t']]],
+  ['uscomponentnamelength_442',['usComponentNameLength',['../struct_azure_io_t_hub_client_command_request__t.html#a8374edd3e8a362cfaae47904385cfb42',1,'AzureIoTHubClientCommandRequest_t']]],
+  ['uskeepaliveseconds_443',['usKeepAliveSeconds',['../struct_azure_io_t_m_q_t_t_connect_info__t.html#a4f521118510ba32bdf1a89aed903c212',1,'AzureIoTMQTTConnectInfo_t']]],
+  ['uspacketidentifier_444',['usPacketIdentifier',['../struct_azure_io_t_m_q_t_t_deserialized_info__t.html#a67601104c2703781940505f0425ebbb2',1,'AzureIoTMQTTDeserializedInfo_t']]],
+  ['uspasswordlength_445',['usPasswordLength',['../struct_azure_io_t_m_q_t_t_connect_info__t.html#afcd1ef6d65ccaf9e4f07edd861cade20',1,'AzureIoTMQTTConnectInfo_t']]],
+  ['usrequestidlength_446',['usRequestIDLength',['../struct_azure_io_t_hub_client_command_request__t.html#a8522244267a00a10bce84b5e08679a76',1,'AzureIoTHubClientCommandRequest_t']]],
+  ['ustopicfilterlength_447',['usTopicFilterLength',['../struct_azure_io_t_m_q_t_t_subscribe_info__t.html#a22d27d1aef9fff01f604d765d495fdc1',1,'AzureIoTMQTTSubscribeInfo_t']]],
+  ['ustopicnamelength_448',['usTopicNameLength',['../struct_azure_io_t_m_q_t_t_publish_info__t.html#ad3cfdbc39141b55c0e1b716a4af0d1f1',1,'AzureIoTMQTTPublishInfo_t']]],
+  ['ususernamelength_449',['usUserNameLength',['../struct_azure_io_t_m_q_t_t_connect_info__t.html#a365977b69f6d5e4f03697d58c437792e',1,'AzureIoTMQTTConnectInfo_t']]]
 ];

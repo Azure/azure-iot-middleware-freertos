@@ -66,40 +66,52 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><h1><a class="anchor" id="autotoc_md1"></a>
-1.1.0-beta.1 (Unreleased)</h1>
+1.2.0-beta.1 (Unreleased)</h1>
 <h1><a class="anchor" id="autotoc_md2"></a>
-1.0.0 (2021-09-28)</h1>
+1.1.0 (2022-11-15)</h1>
 <h2><a class="anchor" id="autotoc_md3"></a>
-Breaking Changes</h2>
+Features Added</h2>
 <ul>
-<li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/201">[#201]</a> Move message APIs from <code><a class="el" href="azure__iot_8h.html" title="Azure IoT FreeRTOS middleware common APIs and structs.">azure_iot.h</a></code> to new <code><a class="el" href="azure__iot__message_8h.html" title="Azure IoT FreeRTOS middleware message APIs and structs.">azure_iot_message.h</a></code>. Rename API prefix from <code>AzureIoT_Message</code> to <code>AzureIoTMessage_</code>.</li>
+<li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/281">[#281]</a> Add Azure Device Update for IoT Hub, enabling Over-the-Air (OTA) updates for embedded devices.</li>
 </ul>
 <h2><a class="anchor" id="autotoc_md4"></a>
 Other Changes and Improvements</h2>
 <ul>
-<li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/203">[#203]</a> Bumped embedded submodule version to <code>1.2.0</code>.</li>
+<li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/220">[#220]</a> DPS state machine fixes.</li>
 </ul>
 <h1><a class="anchor" id="autotoc_md5"></a>
-1.0.0-preview.2 (2021-08-27)</h1>
+1.0.0 (2021-09-28)</h1>
 <h2><a class="anchor" id="autotoc_md6"></a>
+Breaking Changes</h2>
+<ul>
+<li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/201">[#201]</a> Move message APIs from <code><a class="el" href="azure__iot_8h.html" title="Azure IoT FreeRTOS middleware common APIs and structs.">azure_iot.h</a></code> to new <code><a class="el" href="azure__iot__message_8h.html" title="Azure IoT FreeRTOS middleware message APIs and structs.">azure_iot_message.h</a></code>. Rename API prefix from <code>AzureIoT_Message</code> to <code>AzureIoTMessage_</code>.</li>
+</ul>
+<h2><a class="anchor" id="autotoc_md7"></a>
+Other Changes and Improvements</h2>
+<ul>
+<li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/203">[#203]</a> Bumped embedded submodule version to <code>1.2.0</code>.</li>
+</ul>
+<h1><a class="anchor" id="autotoc_md8"></a>
+1.0.0-preview.2 (2021-08-27)</h1>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Breaking Changes</h2>
 <ul>
 <li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/170">[#170]</a> Updated name of <code>AzureIoTHubClient_GetProperties()</code> API to <code><a class="el" href="azure__iot__hub__client_8h.html#af622fee3bc159eda4ae5aa21074e2d5f" title="Request to get the device property document.">AzureIoTHubClient_RequestPropertiesAsync()</a></code>.</li>
 <li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/170">[#170]</a> Updated <code>AzureIoTHubMessageType_t</code> enum value name from <code>eAzureIoTHubPropertiesGetMessage</code> to <code>eAzureIoTHubPropertiesRequestedMessage</code>.</li>
 <li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/171">[#171]</a> Moved <code>AzureIoT_Base64HMACCalculate()</code> from <code><a class="el" href="azure__iot_8h.html" title="Azure IoT FreeRTOS middleware common APIs and structs.">azure_iot.h</a></code> to <code>azure_iot_private.h</code>.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Bug Fixes</h2>
 <ul>
 <li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/166">[#166]</a> Fix reported property publish topic creation with correct embedded API.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md8"></a>
+<h2><a class="anchor" id="autotoc_md11"></a>
 Other Changes and Improvements</h2>
 <ul>
 <li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/163">[#163]</a> Bumped embedded submodule version to <code>1.2.0-beta.1</code>.</li>
 <li><a href="https://github.com/Azure/azure-iot-middleware-freertos/pull/167">[#167]</a> Embedded return values are now translated to middleware return values to improve debugability.</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md9"></a>
+<h1><a class="anchor" id="autotoc_md12"></a>
 1.0.0-preview.1 (2021-07-13)</h1>
 <p>This release marks the public preview availability for the Azure IoT middleware for FreeRTOS.</p>
 <ul>
