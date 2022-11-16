@@ -14,11 +14,35 @@
 
 #include "azure_iot_result.h"
 
+/**
+ * @brief Calculate a SHA256 hash.
+ * 
+ * @param pucInputPtr The input to calculate the SHA over.
+ * @param ulInputSize The size of \p pucInputPtr.
+ * @param pucOutputPtr The buffer into which the calculation will be placed.
+ * @param ulOutputSize The length of \p pucOutputPtr.
+ * @return AzureIoTResult_t
+ */
 AzureIoTResult_t AzureIoTCrypto_SHA256Calculate( const char * pucInputPtr,
                                                  uint64_t ulInputSize,
                                                  const char * pucOutputPtr,
                                                  uint64_t ulOutputSize );
 
+/**
+ * @brief Verify an RS256 signed payload.
+ * 
+ * @param[in] pucInputPtr The input to verify.
+ * @param[in] ulInputSize The length of \p pucInputPtr.
+ * @param[in] pucSignaturePtr The signature of the \p pucInputPtr payload.
+ * @param[in] ulSignatureSize The length of \p pucSignaturePtr.
+ * @param[in] pucN The pointer to the key modulus.
+ * @param[in] ullNSize The length of \p pucN.
+ * @param[in] pucE The pointer to the key exponent.
+ * @param[in] ullESize The length of \p pucE.
+ * @param[in] pucBufferPtr The buffer which will be used to make the calculation.
+ * @param[in] ulBufferSize The size of \p pucBufferPtr.
+ * @return AzureIoTResult_t
+ */
 AzureIoTResult_t AzureIoTCrypto_RS256Verify( const char * pucInputPtr,
                                              uint64_t ulInputSize,
                                              const char * pucSignaturePtr,
