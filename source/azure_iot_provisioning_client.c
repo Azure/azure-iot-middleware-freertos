@@ -314,7 +314,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
                                                             xCustomPayloadProperty, NULL,
                                                             ( uint8_t * ) ( pxAzureProvClient->_internal.pucScratchBuffer +
                                                                             xMQTTTopicLength ),
-                                                            ( size_t ) xMQTTPayloadLength, ( size_t * ) &xMQTTPayloadLength );
+                                                            ( size_t ) xMQTTPayloadLength, &xMQTTPayloadLength );
 
         if( az_result_failed( xCoreResult ) )
         {
