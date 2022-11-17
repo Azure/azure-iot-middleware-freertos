@@ -63,6 +63,9 @@ dkms.conf
 # CMake build directory
 build/
 
+# Local FreeRTOS download
+libraries/FreeRTOS
+
 # Doxygen build directory
 /doc
 
