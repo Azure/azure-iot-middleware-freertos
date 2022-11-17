@@ -271,7 +271,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
     AzureIoTResult_t xResult;
     AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
     size_t xMQTTTopicLength;
-    uint32_t xMQTTPayloadLength = 0;
+    size_t xMQTTPayloadLength = 0;
     uint16_t usPublishPacketIdentifier;
     az_result xCoreResult;
     az_span xCustomPayloadProperty = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucRegistrationPayload,
