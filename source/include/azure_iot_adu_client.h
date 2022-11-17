@@ -3,7 +3,7 @@
  *
  * @brief Definition for the Azure IoT ADU Client.
  * 
- * @warning Below is a limitation of features compared to service capabilities:
+ * @warning Below is a limitation of features compared to ADU service capabilities:
  * - Proxy updates are not supported: https://learn.microsoft.com/azure/iot-hub-device-update/device-update-proxy-updates
  * - Delta updates are not supported: https://learn.microsoft.com/azure/iot-hub-device-update/understand-device-update#flexible-features-for-updating-devices
  *
