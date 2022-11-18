@@ -605,45 +605,45 @@ static void testAzureIoTJSONWriter_InvalidWrite_Failure( void ** ppvState )
     /*Fail PropertyName value api's (not enough space in buffer) */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
                                                              ucProperty,
-                                                             strlen( ucProperty ) ), eAzureIoTErrorFailed );
+                                                             strlen( ucProperty ) ), eAzureIoTErrorOutOfMemory );
 
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithInt32Value( &xWriter,
                                                                        "property",
                                                                        strlen( "property" ),
-                                                                       lInt32Value ), eAzureIoTErrorFailed );
+                                                                       lInt32Value ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithDoubleValue( &xWriter,
                                                                         "property",
                                                                         strlen( "property" ),
-                                                                        42.42, 2 ), eAzureIoTErrorFailed );
+                                                                        42.42, 2 ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithBoolValue( &xWriter,
                                                                       "property",
                                                                       strlen( "property" ),
-                                                                      true ), eAzureIoTErrorFailed );
+                                                                      true ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyWithStringValue( &xWriter,
                                                                         "property",
                                                                         strlen( "property" ),
                                                                         "value",
-                                                                        strlen( "value" ) ), eAzureIoTErrorFailed );
+                                                                        strlen( "value" ) ), eAzureIoTErrorOutOfMemory );
     /*Add PropertyName */
     assert_int_equal( AzureIoTJSONWriter_AppendPropertyName( &xWriter,
                                                              "f",
                                                              strlen( "f" ) ), eAzureIoTSuccess );
 
     /* Fail value api's (not enough space in buffer) */
-    assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter, "value_two", strlen( "value_two" ) ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendString( &xWriter, "value_two", strlen( "value_two" ) ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendJSONText( &xWriter,
                                                          ucTestJSONInt32,
-                                                         strlen( ucTestJSONInt32 ) ), eAzureIoTErrorFailed );
+                                                         strlen( ucTestJSONInt32 ) ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendBool( &xWriter,
-                                                     true ), eAzureIoTErrorFailed );
+                                                     true ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendInt32( &xWriter,
-                                                      42 ), eAzureIoTErrorFailed );
+                                                      42 ), eAzureIoTErrorOutOfMemory );
     assert_int_equal( AzureIoTJSONWriter_AppendDouble( &xWriter,
-                                                       42.42, 2 ), eAzureIoTErrorFailed );
-    assert_int_equal( AzureIoTJSONWriter_AppendNull( &xWriter ), eAzureIoTErrorFailed );
+                                                       42.42, 2 ), eAzureIoTErrorOutOfMemory );
+    assert_int_equal( AzureIoTJSONWriter_AppendNull( &xWriter ), eAzureIoTErrorOutOfMemory );
 
-    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTErrorFailed );
-    assert_int_equal( AzureIoTJSONWriter_AppendBeginArray( &xWriter ), eAzureIoTErrorFailed );
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginObject( &xWriter ), eAzureIoTErrorOutOfMemory );
+    assert_int_equal( AzureIoTJSONWriter_AppendBeginArray( &xWriter ), eAzureIoTErrorOutOfMemory );
 }
 
 uint32_t ulGetAllTests()
