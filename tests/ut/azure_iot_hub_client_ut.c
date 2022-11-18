@@ -524,7 +524,7 @@ static void testAzureIoTHubClient_SendTelemetry_BigTopicFailure( void ** ppvStat
                                                        &properties,
                                                        eAzureIoTHubMessageQoS0,
                                                        NULL ),
-                      eAzureIoTErrorFailed );
+                      eAzureIoTErrorOutOfMemory );
 }
 /*-----------------------------------------------------------*/
 
