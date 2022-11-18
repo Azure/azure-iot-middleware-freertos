@@ -42,7 +42,7 @@ async function iothubRegistryCleanup(hubConnectionString:string, registryPrefix:
         console.log("Deleting device: " + des.deviceId)
       })
   
-      await registry.removeDevices(expiredDevicesDescription, true);
+      // await registry.removeDevices(expiredDevicesDescription, true);
     }
 
 }

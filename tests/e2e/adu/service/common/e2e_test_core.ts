@@ -129,9 +129,9 @@ function createTestDevice(hubConnectionString: string, testDeviceNamePrefix: str
 // Removes device of given name from IoTHub
 //
 function deleteDevice(hubConnectionString:string, testDeviceName:string, resultCallback:any) {
-    console.log(`About to delete device <${testDeviceName}>`)
-    let registry = iothubRegistry.fromConnectionString(hubConnectionString)
-    registry.delete(testDeviceName, resultCallback)
+    console.log(`Skipping delete of device <${testDeviceName}>`)
+    // let registry = iothubRegistry.fromConnectionString(hubConnectionString)
+    // registry.delete(testDeviceName, resultCallback)
 }
 
 //
