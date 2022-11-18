@@ -71,6 +71,9 @@ AzureIoTResult_t AzureIoT_TranslateCoreError( az_result xCoreError )
             xResult = eAzureIoTErrorUnexpectedChar;
             break;
 
+        case AZ_ERROR_NOT_ENOUGH_SPACE:
+            xResult = eAzureIoTErrorOutOfMemory;
+
         /* JSON errors */
         case AZ_ERROR_JSON_INVALID_STATE:
             xResult = eAzureIoTErrorJSONInvalidState;
