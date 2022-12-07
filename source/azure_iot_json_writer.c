@@ -33,7 +33,7 @@ AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
 
         if( az_result_failed( xCoreResult = az_json_writer_init( &pxWriter->_internal.xCoreWriter, xJSONSpan, NULL ) ) )
         {
-            AZLogError( ( "Could not initialize the JSON reader: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not initialize the JSON reader: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -66,7 +66,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWr
         if( az_result_failed( xCoreResult = az_json_writer_append_property_name( &pxWriter->_internal.xCoreWriter, xPropertyNameSpan ) ) ||
             az_result_failed( xCoreResult = az_json_writer_append_int32( &pxWriter->_internal.xCoreWriter, lValue ) ) )
         {
-            AZLogError( ( "Could not append property and int32: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append property and int32: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -100,7 +100,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONW
         if( az_result_failed( xCoreResult = az_json_writer_append_property_name( &pxWriter->_internal.xCoreWriter, xPropertyNameSpan ) ) ||
             az_result_failed( xCoreResult = az_json_writer_append_double( &pxWriter->_internal.xCoreWriter, xValue, ( int32_t ) usFractionalDigits ) ) )
         {
-            AZLogError( ( "Could not append property and double: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append property and double: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -133,7 +133,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWri
         if( az_result_failed( xCoreResult = az_json_writer_append_property_name( &pxWriter->_internal.xCoreWriter, xPropertyNameSpan ) ) ||
             az_result_failed( xCoreResult = az_json_writer_append_bool( &pxWriter->_internal.xCoreWriter, xValue ) ) )
         {
-            AZLogError( ( "Could not append property and bool: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append property and bool: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -170,7 +170,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithStringValue( AzureIoTJSONW
         if( az_result_failed( xCoreResult = az_json_writer_append_property_name( &pxWriter->_internal.xCoreWriter, xPropertyNameSpan ) ) ||
             az_result_failed( xCoreResult = az_json_writer_append_string( &pxWriter->_internal.xCoreWriter, xValueSpan ) ) )
         {
-            AZLogError( ( "Could not append property and string: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append property and string: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -212,7 +212,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWrite
 
         if( az_result_failed( xCoreResult = az_json_writer_append_string( &pxWriter->_internal.xCoreWriter, xValueSpan ) ) )
         {
-            AZLogError( ( "Could not append string: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append string: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -243,7 +243,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWri
 
         if( az_result_failed( xCoreResult = az_json_writer_append_json_text( &pxWriter->_internal.xCoreWriter, xJSONSpan ) ) )
         {
-            AZLogError( ( "Could not append JSON text: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append JSON text: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -274,7 +274,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * p
 
         if( az_result_failed( xCoreResult = az_json_writer_append_property_name( &pxWriter->_internal.xCoreWriter, xPropertyNameSpan ) ) )
         {
-            AZLogError( ( "Could not append property name: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append property name: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -301,7 +301,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_bool( &pxWriter->_internal.xCoreWriter, xValue ) ) )
         {
-            AZLogError( ( "Could not append bool: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append bool: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -328,7 +328,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_int32( &pxWriter->_internal.xCoreWriter, lValue ) ) )
         {
-            AZLogError( ( "Could not append int32: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append int32: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -356,7 +356,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWrite
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_double( &pxWriter->_internal.xCoreWriter, xValue, usFractionalDigits ) ) )
         {
-            AZLogError( ( "Could not append double: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append double: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -382,7 +382,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendNull( AzureIoTJSONWriter_t * pxWriter 
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_null( &pxWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not append NULL: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append NULL: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -408,7 +408,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBeginObject( AzureIoTJSONWriter_t * px
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_begin_object( &pxWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not append begin object: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append begin object: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -434,7 +434,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBeginArray( AzureIoTJSONWriter_t * pxW
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_begin_array( &pxWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not append begin array: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append begin array: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -460,7 +460,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter_t * pxWr
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_end_object( &pxWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not append end object: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append end object: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -486,7 +486,7 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendEndArray( AzureIoTJSONWriter_t * pxWri
     {
         if( az_result_failed( xCoreResult = az_json_writer_append_end_array( &pxWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not append end array: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not append end array: core error=0x%08x", ( unsigned int ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else

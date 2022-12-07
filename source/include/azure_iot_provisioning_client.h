@@ -15,7 +15,7 @@
 #ifndef AZURE_IOT_PROVISIONING_CLIENT_H
 #define AZURE_IOT_PROVISIONING_CLIENT_H
 
-#include "FreeRTOS.h"
+#include "freertos/FreeRTOS.h"
 
 #include "azure_iot.h"
 
