@@ -10,8 +10,8 @@
 #include "azure_iot_provisioning_client.h"
 
 /* Kernel includes. */
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 /* azure iot includes. */
 #include "azure_iot_mqtt.h"

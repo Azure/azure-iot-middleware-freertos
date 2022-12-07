@@ -5,7 +5,7 @@
 
 #include "azure_iot.h"
 /* Kernel includes. */
-#include "freertos/FreeRTOS.h"
+#include "FreeRTOS.h"
 
 #include "azure_iot_private.h"
 #include "azure_iot_json_writer.h"

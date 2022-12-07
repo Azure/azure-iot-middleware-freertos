@@ -9,8 +9,8 @@
 #include "azure_iot_hub_client.h"
 
 /* Kernel includes. */
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+#include "FreeRTOS.h"
+#include "task.h"
 
 #include "azure_iot_mqtt.h"
 #include "azure_iot_private.h"

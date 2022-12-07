@@ -28,7 +28,7 @@
  * defined in azure_iot_mqtt_config.h file. */
 #include "azure_iot_config_defaults.h"
 
-#include "freertos/FreeRTOS.h"
+#include "FreeRTOS.h"
 
 #include "azure_iot_result.h"
 
