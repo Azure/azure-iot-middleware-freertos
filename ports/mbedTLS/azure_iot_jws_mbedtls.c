@@ -213,7 +213,12 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
     /* The signature is encrypted using the input key. We need to decrypt the */
     /* signature which gives us the SHA256 inside a PKCS7 structure. We then compare */
     /* that to the SHA256 of the input. */
+#if MBEDTLS_VERSION_NUMBER >= 0x03000000
     mbedtls_rsa_init( &ctx );
+#else
+    mbedtls_rsa_init( &ctx, MBEDTLS_RSA_PKCS_V15, 0 );
+#endif
+
 
     lMbedTLSResult = mbedtls_rsa_import_raw( &ctx,
                                              pucN, ulNLength,
@@ -248,7 +253,11 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
     }
 
     /* RSA */
+#if MBEDTLS_VERSION_NUMBER >= 0x03000000
     lMbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, &ulDecryptedLength, pucSignature, pucBuffer, azureiotjwsRSA3072_SIZE );
+#else
+    lMbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, &ulDecryptedLength, pucSignature, pucBuffer, azureiotjwsRSA3072_SIZE );
+#endif
 
     if( lMbedTLSResult != 0 )
     {
