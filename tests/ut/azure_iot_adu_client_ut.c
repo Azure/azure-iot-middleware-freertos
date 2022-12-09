@@ -30,12 +30,12 @@
 static const uint8_t ucHostname[] = "unittest.azure-devices.net";
 static const uint8_t ucDeviceId[] = "testiothub";
 static uint8_t ucComponentName[] = "deviceUpdate";
-static uint8_t ucSendStatePayload[] = "{\"deviceUpdate\":{\"__t\":\"c\",\"agent\":{\"deviceProperties\":{\"manufacturer\":\"Contoso\",\"model\":\"Foobar\",\"interfaceId\":\"dtmi:azure:iot:deviceUpdate;1\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\"compatPropertyNames\":\"manufacturer,model\",\"state\":0,\"installedUpdateId\":\"{\\\"provider\\\":\\\"Contoso\\\",\\\"name\\\":\\\"Foobar\\\",\\\"version\\\":\\\"1.0\\\"}\"}}}";
+static uint8_t ucSendStatePayload[] = "{\"deviceUpdate\":{\"__t\":\"c\",\"agent\":{\"deviceProperties\":{\"manufacturer\":\"Contoso\",\"model\":\"Foobar\",\"contractModelId\":\"dtmi:azure:iot:deviceUpdateContractModel;2\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\"compatPropertyNames\":\"manufacturer,model\",\"state\":0,\"installedUpdateId\":\"{\\\"provider\\\":\\\"Contoso\\\",\\\"name\\\":\\\"Foobar\\\",\\\"version\\\":\\\"1.0\\\"}\"}}}";
 static uint8_t ucSendStateLongPayload[] = "{\"deviceUpdate\":{\"__t\":\"c\",\"agent\":{\
 \"deviceProperties\":{\"manufacturer\":\"Contoso\",\"model\":\"Foobar\",\
 \"" testDEVICE_CUSTOM_PROPERTY_NAME_1 "\":\"" testDEVICE_CUSTOM_PROPERTY_VALUE_1 "\",\
 \"" testDEVICE_CUSTOM_PROPERTY_NAME_2 "\":\"" testDEVICE_CUSTOM_PROPERTY_VALUE_2 "\",\
-\"interfaceId\":\"dtmi:azure:iot:deviceUpdate;1\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\
+\"contractModelId\":\"dtmi:azure:iot:deviceUpdateContractModel;2\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\
 \"compatPropertyNames\":\"manufacturer,model\",\
 \"lastInstallResult\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\",\"step_0\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\"}},\
 \"state\":0,\
@@ -45,7 +45,7 @@ static uint8_t ucSendStateLongPayloadWithRetry[] = "{\"deviceUpdate\":{\"__t\":\
 \"deviceProperties\":{\"manufacturer\":\"Contoso\",\"model\":\"Foobar\",\
 \"" testDEVICE_CUSTOM_PROPERTY_NAME_1 "\":\"" testDEVICE_CUSTOM_PROPERTY_VALUE_1 "\",\
 \"" testDEVICE_CUSTOM_PROPERTY_NAME_2 "\":\"" testDEVICE_CUSTOM_PROPERTY_VALUE_2 "\",\
-\"interfaceId\":\"dtmi:azure:iot:deviceUpdate;1\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\
+\"contractModelId\":\"dtmi:azure:iot:deviceUpdateContractModel;2\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\
 \"compatPropertyNames\":\"manufacturer,model\",\
 \"lastInstallResult\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\",\"step_0\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\"}},\
 \"state\":0,\

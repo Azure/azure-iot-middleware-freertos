@@ -22,14 +22,31 @@ The e2e tests for Azure IoT Convenience layer use a different approach, splittin
 
   * [Fetch FreeRTOS](../../.github/scripts/fetch_freertos.sh): You will have to set the full path to this directory in the script later.
 
-  * Send environment variables and execute [run.sh](./iot/run.sh) script.
+  * Send environment variables and execute [run.sh](./iot/run.sh) script. Instructions to find the dps connection string can be found [here](https://learn.microsoft.com/cli/azure/iot/dps/connection-string?view=azure-cli-latest).
+  * Note: If you're running the ADU E2Es on your own hub, the first time you'll have to run 
+    ``` sh
+    cd tests/e2e/adu/service
+    npm install
+    npm run build
+    npm run cleanup
+    sudo npm run adu 
+    ```
+    (and leave `npm run adu` running) before you run the below bash script (in the repo root) so that the ADU group is created and there is a valid (connected) device for the update to target. After the first full runthrough, this shouldn't be required. You'll also need to modify the parameters sent to `./create_and_import_manifest.ps1` in ./adu/run.sh
 
+  For IoT E2Es:
   ``` sh
   sudo bash -c 'export IOTHUB_CONNECTION_STRING="<iothub_connection_string>";
    export IOT_PROVISIONING_CONNECTION_STRING="<dps_connection_string>";
    export IOT_PROVISIONING_SCOPE_ID="<dps_id_scope>";
    tests/e2e/iot/run.sh rtosveth1 <PATH TO FREERTOS>'
   ```
+  For ADU E2Es:
+  ``` sh
+  sudo bash -c 'export ADU_AAD_APPLICATION_SECRET="<adu_aad_application_secret>";
+   export ADU_IOTHUB_CONNECTION_STRING="<adu_iothub_connection_string>";
+   tests/e2e/adu/run.sh rtosveth1 <PATH TO FREERTOS>'
+  ```
+  
 
   * Note: if an error pops up stating that it was unable to find .js files, the transpile may have failed, check your npm installs.
 
