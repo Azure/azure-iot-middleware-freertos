@@ -14,6 +14,7 @@ sudo apt install -y gcc-multilib g++-multilib ninja-build libcmocka-dev
 # az cli for adu
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az upgrade
+az config set extension.use_dynamic_install=yes_without_prompt
 
 # pwsh for adu
 # Update the list of packages
