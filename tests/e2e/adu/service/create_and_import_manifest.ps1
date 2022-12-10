@@ -157,6 +157,7 @@ $installStep | Where-Object { $_.type -eq 'inline' } | ForEach-Object {
 }
 
 # Create import manifest and upload to blob
+az config set extension.use_dynamic_install=yes_without_prompt
 $importMan = az iot du update init v5 --update-provider $updateId.Provider --update-name $updateId.Name --update-version $updateId.Version --compat deviceModel=Linux-E2E deviceManufacturer=PC --step handler=microsoft/swupdate:1 properties='{"installedCriteria":"1.1"}' --file path=../e2e_build/azure_iot_e2e_adu_tests_v1.1
 $importManJsonFile = New-TemporaryFile
 $importMan | Out-File $importManJsonFile -Encoding utf8
