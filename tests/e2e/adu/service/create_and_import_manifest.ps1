@@ -130,35 +130,19 @@ $container = Get-AzStorageContainer -Name $AzureBlobContainerName -Context $acco
 
 # Create new update for v1.1
 $updateId = New-AduUpdateId -Provider ADU-E2E-Tests -Name Linux-E2E-Update -Version 1.1
-$installStep = New-AduInstallationStep -Handler 'microsoft/swupdate:1'-HandlerProperties @{ installedCriteria = '1.1' } -Files '..\e2e_build\azure_iot_e2e_adu_tests_v1.1'
+$fileName = "azure_iot_e2e_adu_tests_v1.1"
 
 Write-Host("Uploading update file(s) to Azure Blob Storage.")
 $updateIdStr = "$($updateId.Provider).$($updateId.Name).$($updateId.Version)"
-$fileMetaList = @()
 
 # Upload update to blob
-$installStep | Where-Object { $_.type -eq 'inline' } | ForEach-Object {
-    $_.files | ForEach-Object {
-        $filename = Split-Path -Leaf (Resolve-Path $_)
-
-        if ($fileMetaList.filename -notcontains $filename)
-        {
-            # Place files within updateId subdirectory in case there are filenames conflict.
-            $blobName = "$updateIdStr/$filename"
-
-            $url = Copy-AduFileToAzBlobContainer -FilePath $_ -BlobName $blobName -BlobContainer $container -ErrorAction Stop
-            $fileMeta = New-Object PSObject | Select-Object filename, url
-            $fileMeta.filename = $filename
-            $fileMeta.url = $url
-
-            $fileMetaList += $fileMeta
-        }
-    }
-}
+# Place files within updateId subdirectory in case there are filenames conflict.
+$blobName = "$updateIdStr/$fileName"
+$importFileUrl = Copy-AduFileToAzBlobContainer -FilePath "..\e2e_build\$fileName" -BlobName $blobName -BlobContainer $container -ErrorAction Stop
 
 # Create import manifest and upload to blob
 az config set extension.use_dynamic_install=yes_without_prompt
-$importMan = az iot du update init v5 --update-provider $updateId.Provider --update-name $updateId.Name --update-version $updateId.Version --compat deviceModel=Linux-E2E deviceManufacturer=PC --step handler=microsoft/swupdate:1 properties='{"installedCriteria":"1.1"}' --file path=../e2e_build/azure_iot_e2e_adu_tests_v1.1
+$importMan = az iot du update init v5 --update-provider $updateId.Provider --update-name $updateId.Name --update-version $updateId.Version --compat deviceModel=Linux-E2E deviceManufacturer=PC --step handler=microsoft/swupdate:1 properties='{"installedCriteria":"1.1"}' --file path=../e2e_build/$fileName
 $importManJsonFile = New-TemporaryFile
 $importMan | Out-File $importManJsonFile -Encoding utf8
 
@@ -179,7 +163,12 @@ $importManMeta = [ordered] @{
 
 $updateInput = [ordered] @{
     importManifest = $importManMeta
-    files = $fileMetaList
+    files = @(
+      @{
+        filename = $fileName
+        url = $importFileUrl
+      }
+    )
 }
 
 Remove-Item $importManJsonFile

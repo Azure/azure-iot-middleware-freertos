@@ -31,7 +31,7 @@ The e2e tests for Azure IoT Convenience layer use a different approach, splittin
     npm run cleanup
     sudo npm run adu 
     ```
-    (and leave `npm run adu` running) before you run the below bash script (in the repo root) so that the ADU group is created and there is a valid (connected) device for the update to target. After the first full runthrough, this shouldn't be required. You'll also need to modify the parameters sent to `./create_and_import_manifest.ps1` in ./adu/run.sh
+    (and leave `npm run adu` running) before you run the below bash script (in the repo root). The ADU group is created once the first device with that group tag connects to the IoT Hub. After the first full runthrough, this shouldn't be required. You'll also need to modify the parameters sent to `./create_and_import_manifest.ps1` in ./adu/run.sh
 
   For IoT E2Es:
   ``` sh
