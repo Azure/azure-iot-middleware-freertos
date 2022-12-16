@@ -178,7 +178,7 @@ static AzureIoTResult_t prvJWS_SHA256Calculate( const uint8_t * pucInput,
  * @param pucE The exponent used for the key.
  * @param ulELength The length of \p pucE.
  * @param pucBuffer The buffer used as scratch space to make the calculations. It should be at least
- * `azureiotjwsRSA3072_SIZE` + `azureiotjwsSHA256_SIZE` in size.
+ * `azureiotjwsSHA256_SIZE` in size.
  * @param ulBufferLength The length of \p pucBuffer.
  * @return uint32_t The result of the operation.
  * @retval 0 if successful.
@@ -197,7 +197,6 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 {
     AzureIoTResult_t xResult;
     int32_t lMbedTLSResult;
-    uint8_t * pucShaBuffer;
     size_t ulDecryptedLength;
     mbedtls_rsa_context ctx;
     int shaMatchResult;
@@ -208,8 +207,6 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
         return eAzureIoTErrorOutOfMemory;
     }
 
-    pucShaBuffer = pucBuffer + azureiotjwsRSA3072_SIZE;
-
     /* The signature is encrypted using the input key. We need to decrypt the */
     /* signature which gives us the SHA256 inside a PKCS7 structure. We then compare */
     /* that to the SHA256 of the input. */
@@ -218,7 +215,6 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 #else
     mbedtls_rsa_init( &ctx, MBEDTLS_RSA_PKCS_V15, 0 );
 #endif
-
 
     lMbedTLSResult = mbedtls_rsa_import_raw( &ctx,
                                              pucN, ulNLength,
@@ -253,23 +249,8 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
     }
 
     /* RSA */
-#if MBEDTLS_VERSION_NUMBER >= 0x03000000
-    lMbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, &ulDecryptedLength, pucSignature, pucBuffer, azureiotjwsRSA3072_SIZE );
-#else
-    lMbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, &ulDecryptedLength, pucSignature, pucBuffer, azureiotjwsRSA3072_SIZE );
-#endif
-
-    if( lMbedTLSResult != 0 )
-    {
-        AZLogError( ( "[JWS] mbedtls_rsa_pkcs1_decrypt res: %i", ( int ) lMbedTLSResult ) );
-        mbedtls_rsa_free( &ctx );
-        return eAzureIoTErrorFailed;
-    }
-
-    mbedtls_rsa_free( &ctx );
-
     xResult = prvJWS_SHA256Calculate( pucInput, ulInputLength,
-                                      pucShaBuffer );
+                                      pucBuffer );
 
     if( xResult != eAzureIoTSuccess )
     {
@@ -277,18 +258,23 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
         return xResult;
     }
 
-    /* TODO: remove this once we have a valid PKCS7 parser. */
-    shaMatchResult = memcmp( pucBuffer + azureiotjwsPKCS7_PAYLOAD_OFFSET, pucShaBuffer, azureiotjwsSHA256_SIZE );
+#if MBEDTLS_VERSION_NUMBER >= 0x03000000
+    lMbedTLSResult = mbedtls_rsa_pkcs1_verify(&ctx, MBEDTLS_MD_SHA256, azureiotjwsSHA256_SIZE, pucBuffer, pucSignature);
+#else
+    lMbedTLSResult = mbedtls_rsa_pkcs1_verify(&ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, MBEDTLS_MD_SHA256, azureiotjwsSHA256_SIZE, pucBuffer, pucSignature);
+#endif
 
-    if( shaMatchResult != 0 )
+    if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] SHA of JWK does NOT match" ) );
+        AZLogError( ( "[JWS] SHA of JWK does NOT match (0x%08x)", -1 * lMbedTLSResult ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
     {
         xResult = eAzureIoTSuccess;
     }
+
+    mbedtls_rsa_free( &ctx );
 
     return xResult;
 }
