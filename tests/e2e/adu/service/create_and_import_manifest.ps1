@@ -215,7 +215,7 @@ $response = Invoke-WebRequest -Uri $deploymentUri -Method PUT -Headers $authHead
 Write-Host($response)
 
 # Get the status of the deployment
-$deploymenetStatusUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$deploymentId/status?api-version=2022-10-01"
-$statusResponse = Invoke-WebRequest -Uri $deploymenetStatusUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+$deploymentStatusUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$deploymentId/status?api-version=2022-10-01"
+$statusResponse = Invoke-WebRequest -Uri $deploymentStatusUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 
 Write-Host($statusResponse)
