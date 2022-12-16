@@ -85,7 +85,7 @@ static uint16_t usReceivedTelemetryPubackID;
 #define e2eADU_UPDATE_PROVIDER        "ADU-E2E-Tests"
 #define e2eADU_UPDATE_NAME            "Linux-E2E-Update"
 #define e2eADU_UPDATE_VERSION         "1.0"
-#define e2eADU_UPDATE_VERSION_NEW     "1.1"
+#define e2eADU_UPDATE_VERSION_NEW     "1.2"
 #define e2eADU_UPDATE_ID              "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"" e2eADU_UPDATE_NAME "\",\"version\":\"" e2eADU_UPDATE_VERSION "\"}"
 #define e2eADU_UPDATE_ID_NEW          "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"" e2eADU_UPDATE_NAME "\",\"version\":\"" e2eADU_UPDATE_VERSION_NEW "\"}"
 

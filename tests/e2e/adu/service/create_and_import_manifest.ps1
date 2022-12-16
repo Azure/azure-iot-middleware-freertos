@@ -108,7 +108,7 @@ foreach ($deployment in $parsedJsonResponse.value)
   $deleteDeploymentResponse = Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 }
 
-Write-Host("Deleting previous 1.1 update")
+Write-Host("Deleting previous 1.2 update")
 $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$UpdateName/versions/$UpdateVersion/?api-version=2022-10-01"
 $deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 $operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
@@ -128,9 +128,9 @@ Set-AzContext $subscription -ErrorAction Stop | Out-Null
 $account = Get-AzStorageAccount -ResourceGroupName $AzureResourceGroupName -Name $AzureStorageAccountName -ErrorAction Stop
 $container = Get-AzStorageContainer -Name $AzureBlobContainerName -Context $account.Context -ErrorAction Stop
 
-# Create new update for v1.1
-$updateId = New-AduUpdateId -Provider ADU-E2E-Tests -Name Linux-E2E-Update -Version 1.1
-$fileName = "azure_iot_e2e_adu_tests_v1.1"
+# Create new update for v1.2
+$updateId = New-AduUpdateId -Provider ADU-E2E-Tests -Name Linux-E2E-Update -Version 1.2
+$fileName = "azure_iot_e2e_adu_tests_v1.2"
 
 Write-Host("Uploading update file(s) to Azure Blob Storage.")
 $updateIdStr = "$($updateId.Provider).$($updateId.Name).$($updateId.Version)"
@@ -142,7 +142,7 @@ $importFileUrl = Copy-AduFileToAzBlobContainer -FilePath "..\e2e_build\$fileName
 
 # Create import manifest and upload to blob
 az config set extension.use_dynamic_install=yes_without_prompt
-$importMan = az iot du update init v5 --update-provider $updateId.Provider --update-name $updateId.Name --update-version $updateId.Version --compat deviceModel=Linux-E2E deviceManufacturer=PC --step handler=microsoft/swupdate:1 properties='{"installedCriteria":"1.1"}' --file path=../e2e_build/$fileName
+$importMan = az iot du update init v5 --update-provider $updateId.Provider --update-name $updateId.Name --update-version $updateId.Version --compat deviceModel=Linux-E2E deviceManufacturer=PC --step handler=microsoft/swupdate:1 properties='{"installedCriteria":"1.2"}' --file path=../e2e_build/$fileName
 $importManJsonFile = New-TemporaryFile
 $importMan | Out-File $importManJsonFile -Encoding utf8
 
