@@ -197,9 +197,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 {
     AzureIoTResult_t xResult;
     int32_t lMbedTLSResult;
-    size_t ulDecryptedLength;
     mbedtls_rsa_context ctx;
-    int shaMatchResult;
 
     if( ulBufferLength < azureiotjwsSHA_CALCULATION_SCRATCH_SIZE )
     {
@@ -266,7 +264,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] SHA of JWK does NOT match (0x%08x)", -1 * lMbedTLSResult ) );
+        AZLogError( ( "[JWS] SHA of JWK does NOT match (0x%08x)", ( int ) ( -1 * lMbedTLSResult ) ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
