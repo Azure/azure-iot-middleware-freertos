@@ -32,6 +32,9 @@ dir=`dirname $filepath`
 test_root_dir=$dir/../..
 test_freertos_src_path=${2:-""}
 test_ethernet_if=${1:-""}
+UpdateNamePrefix="Linux-E2E-Update"
+UpdateName=$UpdateNamePrefix-$RANDOM
+export e2eADU_UPDATE_NAME=$UpdateName
 
 [ -n "$test_ethernet_if" ] || die "\$1=ethernet interface need to be passed; like rtosveth1"
 [ -n "$test_freertos_src_path" ] || die "\$2=FreeRTOS source path not set"
@@ -79,7 +82,8 @@ pwsh -File ./create_and_import_manifest.ps1 -AccountEndpoint "iotsdk-c-productio
 -AzureBlobContainerName "adu-e2e" \
 -GroupID "linux-e2e-group" \
 -UpdateProvider "ADU-E2E-Tests" \
--UpdateName "Linux-E2E-Update"
+-UpdateNamePrefix $UpdateNamePrefix \
+-UpdateName $UpdateName
 
 popd # service
 

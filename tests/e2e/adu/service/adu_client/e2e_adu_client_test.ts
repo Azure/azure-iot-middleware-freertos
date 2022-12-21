@@ -171,7 +171,7 @@ describe("mainTest", () => {
         console.log(twin)
         var twinObject = JSON.parse(twin);
         assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.state, aduDeviceStateIdle);
-        assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.installedUpdateId, "{\"provider\":\"ADU-E2E-Tests\",\"name\":\"Linux-E2E-Update\",\"version\":\"1.2\"}")
+        assert.strictEqual(twinObject.reported.deviceUpdate?.agent?.installedUpdateId, `{\"provider\":\"ADU-E2E-Tests\",\"name\":\"${process.env.e2eADU_UPDATE_NAME}\",\"version\":\"1.2\"}`)
     })
 
 })

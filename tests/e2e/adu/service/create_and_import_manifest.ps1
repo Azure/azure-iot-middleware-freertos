@@ -65,6 +65,11 @@ Param(
     [ValidateNotNullOrEmpty()]
     [string] $UpdateProvider,
 
+    # Update name prefix
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [string] $UpdateNamePrefix,
+
     # Update name
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
@@ -93,31 +98,42 @@ $AuthorizationToken = Get-MsalToken `
             -ErrorAction Stop
 
 Write-Host("Get previous deployments")
-$getUpdatesUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/?api-version=2022-10-01"
+$getDeploymentsUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/?api-version=2022-10-01"
 $authHeaders = @{'Authorization' = "Bearer $($AuthorizationToken.AccessToken)"}
 $authHeaders.Add('Content-Type', 'application/json')
-$getResponse = Invoke-WebRequest -Uri $getUpdatesUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
-Write-Host($getResponse)
+$getDeploymentsResponse = Invoke-WebRequest -Uri $getDeploymentsUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+Write-Host($getDeploymentsResponse)
 
-$parsedJsonResponse = $getResponse | ConvertFrom-Json
+$parsedJsonDeploymentsResponse = $getDeploymentsResponse | ConvertFrom-Json
 
-foreach ($deployment in $parsedJsonResponse.value)
+foreach ($deployment in $parsedJsonDeploymentsResponse.value)
 {
   Write-Host("Deleting previous deployment: $($deployment.deploymentId)")
   $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2022-10-01"
   $deleteDeploymentResponse = Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 }
 
-Write-Host("Deleting previous 1.2 update")
-$deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$UpdateName/versions/$UpdateVersion/?api-version=2022-10-01"
-$deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
-$operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
-Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
-                        -InstanceId $InstanceId `
-                        -AuthorizationToken $AuthorizationToken.AccessToken `
-                        -OperationId $operationId `
-                        -Timeout (New-TimeSpan -Minutes 2) `
-                        -Verbose:$VerbosePreference
+$getUpdatesUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/updates?api-version=2022-10-01"
+$getUpdatesResponse = Invoke-WebRequest -Uri $getUpdatesUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+Write-Host($getUpdatesResponse)
+
+$parsedJsonUpdatesResponse = $getUpdatesResponse | ConvertFrom-Json
+
+foreach ($update in $parsedJsonUpdatesResponse.value)
+{
+  if ($update.updateId.name.Contains($UpdateNamePrefix) -And $update.updateId.version.equals($UpdateVersion) -And $update.updateId.provider.equals($UpdateProvider)) {
+    Write-Host("Deleting previous 1.2 update: $($update.updateId)")
+    $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$($update.updateId.name)/versions/$UpdateVersion/?api-version=2022-10-01"
+    $deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+    $operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
+    Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
+                            -InstanceId $InstanceId `
+                            -AuthorizationToken $AuthorizationToken.AccessToken `
+                            -OperationId $operationId `
+                            -Timeout (New-TimeSpan -Minutes 2) `
+                            -Verbose:$VerbosePreference
+  }
+}
 
 # Set up Azure Account using the passed AAD secret for blob storage
 $accountSecret = ConvertTo-SecureString -String $AzureAdApplicationSecret -AsPlainText -Force
@@ -129,11 +145,11 @@ $account = Get-AzStorageAccount -ResourceGroupName $AzureResourceGroupName -Name
 $container = Get-AzStorageContainer -Name $AzureBlobContainerName -Context $account.Context -ErrorAction Stop
 
 # Create new update for v1.2
-$updateId = New-AduUpdateId -Provider ADU-E2E-Tests -Name Linux-E2E-Update -Version 1.2
+$updateId = New-AduUpdateId -Provider $UpdateProvider -Name $UpdateName -Version $UpdateVersion
 $fileName = "azure_iot_e2e_adu_tests_v1.2"
 
 Write-Host("Uploading update file(s) to Azure Blob Storage.")
-$updateIdStr = "$($updateId.Provider).$($updateId.Name).$($updateId.Version)"
+$updateIdStr = "$($updateId.Provider).$($UpdateNamePrefix).$($updateId.Version)"
 
 # Upload update to blob
 # Place files within updateId subdirectory in case there are filenames conflict.
@@ -187,6 +203,32 @@ Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
                         -Timeout (New-TimeSpan -Minutes 5) `
                         -Verbose:$VerbosePreference
 
+# Check that update is linked to group
+Write-Host("Waiting for group to have the update")
+$checkForAvailableUpdateUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/management/groups/$GroupID/bestUpdates?api-version=2022-10-01"
+$counter = 0
+# 5 minute timeout
+while($counter -lt 100)
+{
+  $checkForAvailableUpdateResponse = Invoke-WebRequest -Uri $checkForAvailableUpdateUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+  Write-Host($checkForAvailableUpdateResponse)
+  $parsedAvailableUpdatesResponse = $checkForAvailableUpdateResponse | ConvertFrom-Json
+  foreach ($update in $parsedAvailableUpdatesResponse.value)
+  {
+    if ($update.update.updateId.name.equals($updateId.Name))
+    {
+      # update is now linked, so break the while loop condition
+      $counter = 150
+      break
+    }
+  }
+  if($counter -lt 100) {
+    $counter++
+    Write-Host("Update not linked yet, trying again...")
+    Start-Sleep -Seconds 3
+  }
+}
+
 
 # Deploy the update to the device group
 $currentTime = [DateTime]::UtcNow.ToString('u')
@@ -199,7 +241,7 @@ $payload = @"
   "update": {
     "updateId": {
       "provider": "$UpdateProvider",
-      "name": "$UpdateName",
+      "name": "$($updateId.Name)",
       "version": "$UpdateVersion"
     }
   },
