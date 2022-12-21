@@ -121,9 +121,9 @@ $parsedJsonUpdatesResponse = $getUpdatesResponse | ConvertFrom-Json
 
 foreach ($update in $parsedJsonUpdatesResponse.value)
 {
-  if ($update.updateId.name.Contains($UpdateNamePrefix) -And $update.updateId.version.equals($UpdateVersion) -And $update.updateId.provider.equals($UpdateProvider)) {
-    Write-Host("Deleting previous 1.2 update: $($update.updateId)")
-    $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$($update.updateId.name)/versions/$UpdateVersion/?api-version=2022-10-01"
+  if ($update.updateId.name.Contains($UpdateNamePrefix) -And $update.updateId.provider.equals($UpdateProvider)) {
+    Write-Host("Deleting previous update: $($update.updateId)")
+    $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$($update.updateId.name)/versions/${$update.updateId.version}/?api-version=2022-10-01"
     $deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
     $operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
     Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
