@@ -757,10 +757,11 @@ static uint32_t prvE2ETestVerifyADUUpdateExecute( E2E_TEST_COMMAND_HANDLE xCMD,
                                                   AzureIoTADUClient_t * pxAzureIoTAduClient )
 {
     uint8_t * provider = "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"";
-    uint8_t * updateName_New = getenv("e2eADU_UPDATE_NAME");
+    uint8_t * updateName_New = getenv( "e2eADU_UPDATE_NAME" );
     uint8_t * version = "\",\"version\":\"" e2eADU_UPDATE_VERSION_NEW "\"}";
-    uint8_t e2eADU_UPDATE_ID_NEW[strlen(provider) + strlen(updateName_New) + strlen(version)];
-    sprintf(e2eADU_UPDATE_ID_NEW, "%s%s%s", provider, updateName_New, version);
+    uint8_t e2eADU_UPDATE_ID_NEW[ strlen( provider ) + strlen( updateName_New ) + strlen( version ) ];
+
+    sprintf( e2eADU_UPDATE_ID_NEW, "%s%s%s", provider, updateName_New, version );
 
     AzureIoTADUClientDeviceProperties_t xADUDevicePropertiesNew =
     {
