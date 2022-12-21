@@ -264,7 +264,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] SHA of JWK does NOT match (%08x)", ( uint16_t )lMbedTLSResult ) );
+        AZLogError( ( "[JWS] SHA of JWK does NOT match (%08x)", ( uint16_t ) lMbedTLSResult ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
