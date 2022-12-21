@@ -223,7 +223,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] mbedtls_rsa_import_raw res: %li", ( int32_t ) lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_import_raw res: %08x", ( uint16_t ) lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -232,7 +232,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] mbedtls_rsa_complete res: %li", ( int32_t ) lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_complete res: %08x", ( uint16_t ) lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -241,7 +241,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] mbedtls_rsa_check_pubkey res: %li", ( int32_t ) lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_check_pubkey res: %08x", ( uint16_t ) lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -264,7 +264,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] SHA of JWK does NOT match (%li)", ( int32_t )lMbedTLSResult ) );
+        AZLogError( ( "[JWS] SHA of JWK does NOT match (%08x)", ( uint16_t )lMbedTLSResult ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
