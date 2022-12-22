@@ -34,7 +34,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginComponent( AzureIoTHubC
                 xCoreResult = az_iot_hub_client_properties_writer_begin_component( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                    &pxJSONWriter->_internal.xCoreWriter, xComponentSpan ) ) )
         {
-            AZLogError( ( "Could not begin component: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not begin component: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -63,7 +63,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndComponent( AzureIoTHubCli
                 xCoreResult = az_iot_hub_client_properties_writer_end_component( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                  &pxJSONWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not end component: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not end component: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -109,7 +109,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderBeginResponseStatus( AzureIo
                                                                                          lAckCode, lAckVersion,
                                                                                          xAckDescription ) ) )
         {
-            AZLogError( ( "Could not begin response: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not begin response: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -138,7 +138,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_BuilderEndResponseStatus( AzureIoTH
                 xCoreResult = az_iot_hub_client_properties_writer_end_response_status( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                        &pxJSONWriter->_internal.xCoreWriter ) ) )
         {
-            AZLogError( ( "Could not end response: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not end response: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -177,7 +177,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetPropertiesVersion( AzureIoTHubCl
                 xCoreResult = az_iot_hub_client_properties_get_properties_version( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                                    &pxJSONReader->_internal.xCoreReader, xCoreMessageType, ( int32_t * ) pulVersion ) ) )
         {
-            AZLogError( ( "Could not get property version: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Could not get property version: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -228,7 +228,7 @@ AzureIoTResult_t AzureIoTHubClientProperties_GetNextComponentProperty( AzureIoTH
             }
             else
             {
-                AZLogError( ( "Could not get next component property: core error=0x%08x", xCoreResult ) );
+                AZLogError( ( "Could not get next component property: core error=0x%08x", ( uint16_t ) xCoreResult ) );
                 xResult = AzureIoT_TranslateCoreError( xCoreResult );
             }
         }
