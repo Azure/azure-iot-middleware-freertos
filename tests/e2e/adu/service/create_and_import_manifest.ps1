@@ -123,7 +123,8 @@ foreach ($update in $parsedJsonUpdatesResponse.value)
 {
   if ($update.updateId.name.Contains($UpdateNamePrefix) -And $update.updateId.provider.equals($UpdateProvider)) {
     Write-Host("Deleting previous update: $($update.updateId)")
-    $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$($update.updateId.name)/versions/${$update.updateId.version}/?api-version=2022-10-01"
+    $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$($update.updateId.name)/versions/$($update.updateId.version)/?api-version=2022-10-01"
+    Write-Host($deleteUpdateUri)
     $deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
     $operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
     Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
