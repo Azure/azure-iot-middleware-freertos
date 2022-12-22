@@ -85,7 +85,7 @@ static uint16_t usReceivedTelemetryPubackID;
 #define e2eADU_UPDATE_PROVIDER        "ADU-E2E-Tests"
 #define e2eADU_UPDATE_NAME            "Linux-E2E-Update"
 #define e2eADU_UPDATE_VERSION         "1.0"
-#define e2eADU_UPDATE_VERSION_NEW     "1.2"
+#define e2eADU_UPDATE_VERSION_NEW     "1.1"
 #define e2eADU_UPDATE_ID              "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"" e2eADU_UPDATE_NAME "\",\"version\":\"" e2eADU_UPDATE_VERSION "\"}"
 
 static AzureIoTADUClientDeviceProperties_t xADUDeviceProperties =
@@ -756,12 +756,12 @@ static uint32_t prvE2ETestVerifyADUUpdateExecute( E2E_TEST_COMMAND_HANDLE xCMD,
                                                   AzureIoTHubClient_t * pxAzureIoTHubClient,
                                                   AzureIoTADUClient_t * pxAzureIoTAduClient )
 {
-    uint8_t * provider = "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"";
-    uint8_t * updateName_New = getenv( "e2eADU_UPDATE_NAME" );
-    uint8_t * version = "\",\"version\":\"" e2eADU_UPDATE_VERSION_NEW "\"}";
-    uint8_t e2eADU_UPDATE_ID_NEW[ strlen( provider ) + strlen( updateName_New ) + strlen( version ) ];
+    uint8_t * ucProvider = "{\"provider\":\"" e2eADU_UPDATE_PROVIDER "\",\"name\":\"";
+    uint8_t * ucUpdateName_New = getenv( "e2eADU_UPDATE_NAME" );
+    uint8_t * ucVersion = "\",\"version\":\"" e2eADU_UPDATE_VERSION_NEW "\"}";
+    uint8_t ucE2eADU_UPDATE_ID_NEW[ strlen( ucProvider ) + strlen( ucUpdateName_New ) + strlen( ucVersion ) ];
 
-    sprintf( e2eADU_UPDATE_ID_NEW, "%s%s%s", provider, updateName_New, version );
+    sprintf( ucE2eADU_UPDATE_ID_NEW, "%s%s%s", ucProvider, ucUpdateName_New, ucVersion );
 
     AzureIoTADUClientDeviceProperties_t xADUDevicePropertiesNew =
     {
@@ -769,8 +769,8 @@ static uint32_t prvE2ETestVerifyADUUpdateExecute( E2E_TEST_COMMAND_HANDLE xCMD,
         .ulManufacturerLength                     = sizeof( e2eADU_DEVICE_MANUFACTURER ) - 1,
         .ucModel                                  = ( const uint8_t * ) e2eADU_DEVICE_MODEL,
         .ulModelLength                            = sizeof( e2eADU_DEVICE_MODEL ) - 1,
-        .ucCurrentUpdateId                        = ( const uint8_t * ) e2eADU_UPDATE_ID_NEW,
-        .ulCurrentUpdateIdLength                  = sizeof( e2eADU_UPDATE_ID_NEW ),
+        .ucCurrentUpdateId                        = ( const uint8_t * ) ucE2eADU_UPDATE_ID_NEW,
+        .ulCurrentUpdateIdLength                  = sizeof( ucE2eADU_UPDATE_ID_NEW ),
         .ucDeliveryOptimizationAgentVersion       = NULL,
         .ulDeliveryOptimizationAgentVersionLength = 0
     };

@@ -54,7 +54,7 @@ sed -i "s/#define configNETWORK_INTERFACE_TO_USE.*/#define configNETWORK_INTERFA
 # Build and create new update image
 echo -e "::group::Build update image"
 pushd $dir/device; cmake -Bbuild -DCMAKE_BUILD_TYPE=MinSizeRel -DFREERTOS_DIRECTORY=$test_freertos_src_path -DUSE_COREHTTP=ON ../ ; cmake --build build
-cp ./build/azure_iot_e2e_adu_tests $dir/e2e_build/azure_iot_e2e_adu_tests_v1.2
+cp ./build/azure_iot_e2e_adu_tests $dir/e2e_build/azure_iot_e2e_adu_tests_v1.1
 popd
 
 echo -e "::group::Clone ADU repo for scripts"
@@ -72,7 +72,7 @@ pushd service
 echo -e "::group::Create, upload, deploy update manifest and payload"
 pwsh -File ./create_and_import_manifest.ps1 -AccountEndpoint "iotsdk-c-production-adu.api.adu.microsoft.com" \
 -InstanceId "iotsdk-c-production-adu" \
--UpdateVersion "1.2" \
+-UpdateVersion "1.1" \
 -AzureAdClientId "321e2686-c228-4c8d-ac77-d19674cb62b5" \
 -AzureAdTenantId "72f988bf-86f1-41af-91ab-2d7cd011db47" \
 -AzureAdApplicationSecret $ADU_AAD_APPLICATION_SECRET \
