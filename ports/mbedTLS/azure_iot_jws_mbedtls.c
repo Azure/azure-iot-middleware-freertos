@@ -178,7 +178,7 @@ static AzureIoTResult_t prvJWS_SHA256Calculate( const uint8_t * pucInput,
  * @param pucE The exponent used for the key.
  * @param ulELength The length of \p pucE.
  * @param pucBuffer The buffer used as scratch space to make the calculations. It should be at least
- * `azureiotjwsRSA3072_SIZE` + `azureiotjwsSHA256_SIZE` in size.
+ * `azureiotjwsSHA256_SIZE` in size.
  * @param ulBufferLength The length of \p pucBuffer.
  * @return uint32_t The result of the operation.
  * @retval 0 if successful.
@@ -197,10 +197,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 {
     AzureIoTResult_t xResult;
     int32_t lMbedTLSResult;
-    uint8_t * pucShaBuffer;
-    size_t ulDecryptedLength;
     mbedtls_rsa_context ctx;
-    int shaMatchResult;
 
     if( ulBufferLength < azureiotjwsSHA_CALCULATION_SCRATCH_SIZE )
     {
@@ -208,12 +205,14 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
         return eAzureIoTErrorOutOfMemory;
     }
 
-    pucShaBuffer = pucBuffer + azureiotjwsRSA3072_SIZE;
-
     /* The signature is encrypted using the input key. We need to decrypt the */
     /* signature which gives us the SHA256 inside a PKCS7 structure. We then compare */
     /* that to the SHA256 of the input. */
-    mbedtls_rsa_init( &ctx, MBEDTLS_RSA_PKCS_V15, 0 );
+    #if MBEDTLS_VERSION_NUMBER >= 0x03000000
+        mbedtls_rsa_init( &ctx );
+    #else
+        mbedtls_rsa_init( &ctx, MBEDTLS_RSA_PKCS_V15, 0 );
+    #endif
 
     lMbedTLSResult = mbedtls_rsa_import_raw( &ctx,
                                              pucN, ulNLength,
@@ -224,7 +223,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] mbedtls_rsa_import_raw res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_import_raw res: %08x", ( uint16_t ) lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -233,7 +232,7 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] mbedtls_rsa_complete res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_complete res: %08x", ( uint16_t ) lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
@@ -242,25 +241,14 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
 
     if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] mbedtls_rsa_check_pubkey res: %i", lMbedTLSResult ) );
+        AZLogError( ( "[JWS] mbedtls_rsa_check_pubkey res: %08x", ( uint16_t ) lMbedTLSResult ) );
         mbedtls_rsa_free( &ctx );
         return eAzureIoTErrorFailed;
     }
 
     /* RSA */
-    lMbedTLSResult = mbedtls_rsa_pkcs1_decrypt( &ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, &ulDecryptedLength, pucSignature, pucBuffer, azureiotjwsRSA3072_SIZE );
-
-    if( lMbedTLSResult != 0 )
-    {
-        AZLogError( ( "[JWS] mbedtls_rsa_pkcs1_decrypt res: %i", lMbedTLSResult ) );
-        mbedtls_rsa_free( &ctx );
-        return eAzureIoTErrorFailed;
-    }
-
-    mbedtls_rsa_free( &ctx );
-
     xResult = prvJWS_SHA256Calculate( pucInput, ulInputLength,
-                                      pucShaBuffer );
+                                      pucBuffer );
 
     if( xResult != eAzureIoTSuccess )
     {
@@ -268,18 +256,23 @@ static AzureIoTResult_t prvJWS_RS256Verify( uint8_t * pucInput,
         return xResult;
     }
 
-    /* TODO: remove this once we have a valid PKCS7 parser. */
-    shaMatchResult = memcmp( pucBuffer + azureiotjwsPKCS7_PAYLOAD_OFFSET, pucShaBuffer, azureiotjwsSHA256_SIZE );
+    #if MBEDTLS_VERSION_NUMBER >= 0x03000000
+        lMbedTLSResult = mbedtls_rsa_pkcs1_verify( &ctx, MBEDTLS_MD_SHA256, azureiotjwsSHA256_SIZE, pucBuffer, pucSignature );
+    #else
+        lMbedTLSResult = mbedtls_rsa_pkcs1_verify( &ctx, NULL, NULL, MBEDTLS_RSA_PUBLIC, MBEDTLS_MD_SHA256, azureiotjwsSHA256_SIZE, pucBuffer, pucSignature );
+    #endif
 
-    if( shaMatchResult != 0 )
+    if( lMbedTLSResult != 0 )
     {
-        AZLogError( ( "[JWS] SHA of JWK does NOT match" ) );
+        AZLogError( ( "[JWS] SHA of JWK does NOT match (%08x)", ( uint16_t ) lMbedTLSResult ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
     {
         xResult = eAzureIoTSuccess;
     }
+
+    mbedtls_rsa_free( &ctx );
 
     return xResult;
 }
@@ -318,7 +311,7 @@ static AzureIoTResult_t prvFindSJWKValue( AzureIoTJSONReader_t * pxPayload,
 
     if( xJSONTokenType != eAzureIoTJSONTokenSTRING )
     {
-        AZLogError( ( "[JWS] JSON token type wrong | type: %08x", xJSONTokenType ) );
+        AZLogError( ( "[JWS] JSON token type wrong | type: 0x%08x", xJSONTokenType ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -486,7 +479,7 @@ static AzureIoTResult_t prvBase64DecodeJWK( prvJWSValidationContext_t * pxManife
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -502,7 +495,7 @@ static AzureIoTResult_t prvBase64DecodeJWK( prvJWSValidationContext_t * pxManife
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -518,7 +511,7 @@ static AzureIoTResult_t prvBase64DecodeJWK( prvJWSValidationContext_t * pxManife
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -541,7 +534,7 @@ static AzureIoTResult_t prvBase64DecodeSigningKey( prvJWSValidationContext_t * p
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -557,7 +550,7 @@ static AzureIoTResult_t prvBase64DecodeSigningKey( prvJWSValidationContext_t * p
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -580,7 +573,7 @@ static AzureIoTResult_t prvBase64DecodeJWSHeaderAndPayload( prvJWSValidationCont
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -596,7 +589,7 @@ static AzureIoTResult_t prvBase64DecodeJWSHeaderAndPayload( prvJWSValidationCont
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -673,7 +666,7 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -685,7 +678,7 @@ static AzureIoTResult_t prvVerifySHAMatch( prvJWSValidationContext_t * pxManifes
 
     if( pxManifestContext->outParsedManifestShaSize != azureiotjwsSHA256_SIZE )
     {
-        AZLogError( ( "[JWS] Base64 decoded SHA256 is not the correct length | expected: %i | actual: %i", azureiotjwsSHA256_SIZE, pxManifestContext->outParsedManifestShaSize ) );
+        AZLogError( ( "[JWS] Base64 decoded SHA256 is not the correct length | expected: %i | actual: %i", azureiotjwsSHA256_SIZE, ( int16_t ) pxManifestContext->outParsedManifestShaSize ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -745,7 +738,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "[JWS] az_base64_url_decode failed: result %i", xCoreResult ) );
+        AZLogError( ( "[JWS] az_base64_url_decode failed: result 0x%08x", ( uint16_t ) xCoreResult ) );
 
         if( xCoreResult == AZ_ERROR_NOT_ENOUGH_SPACE )
         {
@@ -866,7 +859,7 @@ AzureIoTResult_t AzureIoTJWS_ManifestAuthenticate( const uint8_t * pucManifest,
     {
         AZLogError( ( "[JWS] Algorithm not supported | expected %.*s | actual %.*s",
                       sizeof( jws_alg_rs256 ) - 1, jws_alg_rs256,
-                      az_span_size( xManifestContext.xAlgSpan ), az_span_ptr( xManifestContext.xAlgSpan ) ) );
+                      ( int16_t ) az_span_size( xManifestContext.xAlgSpan ), az_span_ptr( xManifestContext.xAlgSpan ) ) );
         return eAzureIoTErrorFailed;
     }
 
