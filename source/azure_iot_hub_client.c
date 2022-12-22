@@ -124,7 +124,7 @@ static void prvMQTTProcessSuback( AzureIoTHubClient_t * pxAzureIoTHubClient,
         {
             /* We assume success since IoT Hub would disconnect if there was a problem subscribing. */
             pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK;
-            AZLogInfo( ( "Suback receive context found: 0x%08x", ulIndex ) );
+            AZLogInfo( ( "Suback receive context found: 0x%08x", ( uint16_t ) ulIndex ) );
             break;
         }
     }
@@ -356,7 +356,7 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
                 else
                 {
                     /* Failed to parse the message */
-                    AZLogError( ( "Request ID parsing failed: core error=0x%08x", xCoreResult ) );
+                    AZLogError( ( "Request ID parsing failed: core error=0x%08x", ( uint16_t ) xCoreResult ) );
                     xResult = AzureIoT_TranslateCoreError( xCoreResult );
                 }
             }
@@ -529,7 +529,7 @@ static uint32_t prvIoTHubClientGetToken( AzureIoTHubClient_t * pxAzureIoTHubClie
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "AzureIoTHubClient failed to get signature: core error=0x%08x", xCoreResult ) );
+        AZLogError( ( "AzureIoTHubClient failed to get signature: core error=0x%08x", ( uint16_t ) xCoreResult ) );
         return AzureIoT_TranslateCoreError( xCoreResult );
     }
 
@@ -570,7 +570,7 @@ static uint32_t prvIoTHubClientGetToken( AzureIoTHubClient_t * pxAzureIoTHubClie
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "AzureIoTHubClient failed to generate token: core error=0x%08x", xCoreResult ) );
+        AZLogError( ( "AzureIoTHubClient failed to generate token: core error=0x%08x", ( uint16_t ) xCoreResult ) );
         return AzureIoT_TranslateCoreError( xCoreResult );
     }
 
@@ -672,7 +672,7 @@ AzureIoTResult_t AzureIoTHubClient_Init( AzureIoTHubClient_t * pxAzureIoTHubClie
         if( az_result_failed( xCoreResult = az_iot_hub_client_init( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
                                                                     xHostnameSpan, xDeviceIDSpan, &xHubOptions ) ) )
         {
-            AZLogError( ( "Failed to initialize az_iot_hub_client_init: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Failed to initialize az_iot_hub_client_init: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         /* Initialize AzureIoTMQTT library. */
@@ -760,7 +760,7 @@ AzureIoTResult_t AzureIoTHubClient_Connect( AzureIoTHubClient_t * pxAzureIoTHubC
                                                                              ( char * ) xConnectInfo.pcUserName, azureiotconfigUSERNAME_MAX,
                                                                              &xMQTTUserNameLength ) ) )
         {
-            AZLogError( ( "Failed to get username: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Failed to get username: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         /* Check if token refresh is set, then generate password */
@@ -863,7 +863,7 @@ AzureIoTResult_t AzureIoTHubClient_SendTelemetry( AzureIoTHubClient_t * pxAzureI
                                                                               pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
                                                                               &xTelemetryTopicLength ) ) )
     {
-        AZLogError( ( "Failed to get telemetry topic: core error=0x%08x", xCoreResult ) );
+        AZLogError( ( "Failed to get telemetry topic: core error=0x%08x", ( uint16_t ) xCoreResult ) );
         xResult = AzureIoT_TranslateCoreError( xCoreResult );
     }
     else
@@ -918,7 +918,7 @@ AzureIoTResult_t AzureIoTHubClient_ProcessLoop( AzureIoTHubClient_t * pxAzureIoT
                                                        ulTimeoutMilliseconds ) ) != eAzureIoTMQTTSuccess )
     {
         AZLogError( ( "AzureIoTMQTT_ProcessLoop failed: ProcessLoopDuration=%u, MQTT error=0x%08x",
-                      ulTimeoutMilliseconds, xMQTTResult ) );
+                      ( uint16_t ) ulTimeoutMilliseconds, ( uint16_t ) xMQTTResult ) );
         xResult = eAzureIoTErrorFailed;
     }
     else
@@ -1157,7 +1157,7 @@ AzureIoTResult_t AzureIoTHubClient_SendCommandResponse( AzureIoTHubClient_t * px
                                                                            pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
                                                                            &xTopicLength ) ) )
         {
-            AZLogError( ( "Failed to get command response topic: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Failed to get command response topic: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -1338,7 +1338,7 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
                                                                                   pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
                                                                                   &xTopicLength ) ) )
         {
-            AZLogError( ( "Failed to get property patch topic: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Failed to get property patch topic: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
@@ -1402,7 +1402,7 @@ AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t *
                                                                                   pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
                                                                                   &xTopicLength ) ) )
         {
-            AZLogError( ( "Failed to get property document topic: core error=0x%08x", xCoreResult ) );
+            AZLogError( ( "Failed to get property document topic: core error=0x%08x", ( uint16_t ) xCoreResult ) );
             xResult = AzureIoT_TranslateCoreError( xCoreResult );
         }
         else
