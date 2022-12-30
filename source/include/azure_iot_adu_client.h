@@ -1,3 +1,6 @@
+/* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT License. */
+
 /**
  * @file azure_iot_adu_client.h
  *
