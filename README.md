@@ -54,6 +54,11 @@ For a video deep dive into this repo and the samples, please see the Microsoft D
 
 We have published doxygen-generated documentation for all of our APIs. [Please see the link here to review how to use the APIs.](https://azure.github.io/azure-iot-middleware-freertos/)
 
+
+### Azure Device Update
+
+For details on using this library for over-the-air updates, please refer to this document: [How to use the ADU Agent Client in Azure IoT Middleware for FreeRTOS](./docs/how_to_use_adu_client.md).
+
 ## Repo Structure
 
 This repo is built for integration into your project. As mentioned above, if you would like to try out our samples, please clone that repo to get started. Otherwise, this repo will allow you to integrate the Azure IoT middleware for FreeRTOS into your embedded project. To see how that integration works, please see our below sections for [building](#building).
