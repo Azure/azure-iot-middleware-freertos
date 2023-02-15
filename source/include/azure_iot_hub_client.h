@@ -409,7 +409,7 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCloudToDeviceMessage( AzureIoTHubC
 
 /**
  * @brief Subscribe to Azure IoT Hub Direct Methods.
- * @remark Azure IoT Direct methods may also be referred to as Commands. 
+ * @remark Azure IoT Direct methods may also be referred to as Commands.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] xCommandCallback The #AzureIoTHubClientCommandCallback_t to invoke when command messages arrive.
@@ -424,7 +424,7 @@ AzureIoTResult_t AzureIoTHubClient_SubscribeCommand( AzureIoTHubClient_t * pxAzu
 
 /**
  * @brief Unsubscribe from Azure IoT Hub Direct Methods.
- * @remark Azure IoT Direct methods may also be referred to as Commands. 
+ * @remark Azure IoT Direct methods may also be referred to as Commands.
  *
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @return An #AzureIoTResult_t with the result of the operation.
