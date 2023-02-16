@@ -1,0 +1,52 @@
+name: Bug Report
+description: File a bug report
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting this issue.
+  - type: checkboxes
+    attributes:
+      label: Is there an existing issue for this?
+      description: Please search to see if an issue already exists for the bug you encountered.
+      options:
+      - label: I have searched the existing issues
+        required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: What version of our software are you running? Please provide a tag or commit hash.
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the issue
+      description: Please explain in details the issue observed.
+    validations:
+      required: true
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What would be the expected code behavior if not affected by this issue?
+  - type: textarea
+    id: repro-steps
+    attributes:
+      label: Steps to reproduce the issue
+      description: Provide specific and complete steps to reproduce the issue.
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://github.com/Azure/azure-iot-middleware-freertos/blob/main/CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
