@@ -15,7 +15,7 @@ body:
       options:
       - label: I have searched the existing issues
         required: true
-  - type: textarea
+  - type: input
     id: version
     attributes:
       label: Version
