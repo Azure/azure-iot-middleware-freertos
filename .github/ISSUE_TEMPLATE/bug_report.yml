@@ -27,8 +27,6 @@ body:
     attributes:
       label: Description of the issue
       description: Please explain in details the issue observed.
-      placeholder:
-      value:
     validations:
       required: true
   - type: textarea
