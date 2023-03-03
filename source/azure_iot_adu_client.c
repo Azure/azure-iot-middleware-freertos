@@ -63,7 +63,7 @@ AzureIoTResult_t AzureIoTADUClient_Init( AzureIoTADUClient_t * pxAzureIoTADUClie
 
     if( az_result_failed( xCoreResult = az_iot_adu_client_init( &pxAzureIoTADUClient->_internal.xADUClient, &xADUOptions ) ) )
     {
-        AZLogError( ( "Failed to initialize az_iot_adu_client_init: core error=0x%08x", xCoreResult ) );
+        AZLogError( ( "Failed to initialize az_iot_adu_client_init: core error=0x%08x", ( uint16_t ) xCoreResult ) );
         return AzureIoT_TranslateCoreError( xCoreResult );
     }
 
@@ -236,7 +236,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
 
             if( az_result_failed( xAzResult ) )
             {
-                AZLogError( ( "az_json_reader_init failed: 0x%08x", xAzResult ) );
+                AZLogError( ( "az_json_reader_init failed: 0x%08x", ( uint16_t ) xAzResult ) );
                 return AzureIoT_TranslateCoreError( xAzResult );
             }
 
@@ -247,7 +247,7 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
 
             if( az_result_failed( xAzResult ) )
             {
-                AZLogError( ( "az_iot_adu_client_parse_update_manifest failed: 0x%08x", xAzResult ) );
+                AZLogError( ( "az_iot_adu_client_parse_update_manifest failed: 0x%08x", ( uint16_t ) xAzResult ) );
                 return AzureIoT_TranslateCoreError( xAzResult );
             }
         }
@@ -290,7 +290,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "az_json_writer_init failed: 0x%08x", xCoreResult ) );
+        AZLogError( ( "az_json_writer_init failed: 0x%08x", ( uint16_t ) xCoreResult ) );
         return AzureIoT_TranslateCoreError( xCoreResult );
     }
 
@@ -302,7 +302,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
 
     if( az_result_failed( xCoreResult ) )
     {
-        AZLogError( ( "az_iot_adu_client_get_service_properties_response failed: 0x%08x (%d)", xCoreResult, ulWritablePropertyResponseBufferSize ) );
+        AZLogError( ( "az_iot_adu_client_get_service_properties_response failed: 0x%08x (%d)", ( uint16_t ) xCoreResult, ( int16_t ) ulWritablePropertyResponseBufferSize ) );
         return AzureIoT_TranslateCoreError( xCoreResult );
     }
 
@@ -316,7 +316,7 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
 
     if( xResult != eAzureIoTSuccess )
     {
-        AZLogError( ( "[ADU] Failed sending ADU writable properties response: 0x%08x", xResult ) );
+        AZLogError( ( "[ADU] Failed sending ADU writable properties response: 0x%08x", ( uint16_t ) xResult ) );
         return eAzureIoTErrorPublishFailed;
     }
 
@@ -463,7 +463,7 @@ AzureIoTResult_t AzureIoTADUClient_SendAgentState( AzureIoTADUClient_t * pxAzure
 
     if( az_result_failed( xAzResult ) )
     {
-        AZLogError( ( "az_json_writer_init failed: 0x%08x", xAzResult ) );
+        AZLogError( ( "az_json_writer_init failed: 0x%08x", ( uint16_t ) xAzResult ) );
         return AzureIoT_TranslateCoreError( xAzResult );
     }
 
@@ -477,7 +477,7 @@ AzureIoTResult_t AzureIoTADUClient_SendAgentState( AzureIoTADUClient_t * pxAzure
 
     if( az_result_failed( xAzResult ) )
     {
-        AZLogError( ( "az_iot_adu_client_get_agent_state_payload failed: 0x%08x", xAzResult ) );
+        AZLogError( ( "az_iot_adu_client_get_agent_state_payload failed: 0x%08x", ( uint16_t ) xAzResult ) );
         return AzureIoT_TranslateCoreError( xAzResult );
     }
 

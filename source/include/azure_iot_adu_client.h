@@ -1,7 +1,14 @@
+/* Copyright (c) Microsoft Corporation.
+ * Licensed under the MIT License. */
+
 /**
  * @file azure_iot_adu_client.h
  *
  * @brief Definition for the Azure IoT ADU Client.
+ *
+ * @warning Below is a limitation of features compared to ADU service capabilities:
+ * - Proxy updates are not supported: https://learn.microsoft.com/azure/iot-hub-device-update/device-update-proxy-updates
+ * - Delta updates are not supported: https://learn.microsoft.com/azure/iot-hub-device-update/understand-device-update#flexible-features-for-updating-devices
  *
  */
 #ifndef AZURE_IOT_ADU_CLIENT_H
@@ -20,6 +27,10 @@
  * This may be used in the #AzureIoTHubClientOptions_t as the `pucModelID`.
  */
 extern const uint8_t * AzureIoTADUModelID;
+
+/**
+ * @brief The length of #AzureIoTADUModelID
+ */
 extern const uint32_t AzureIoTADUModelIDLength;
 
 /**
@@ -43,7 +54,8 @@ typedef struct AzureIoTADUDeviceCustomProperties
 
 /**
  * @brief ADU Device Properties.
- * @link https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
+ *
+ * https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
  *
  * @note AzureIoTADUClient_DevicePropertiesInit() should be called first to initialize this struct.
  */
@@ -82,7 +94,8 @@ typedef enum AzureIoTADUAction
  *      "id": "someguid",
  *      "retryTimestamp": "2020-04-22T12:12:12.0000000+00:00"
  *  }
- * @link https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
+ *
+ * https://docs.microsoft.com/en-us/azure/iot-hub-device-update/understand-device-update#device-update-agent
  */
 typedef struct AzureIoTADUClientWorkflow
 {
@@ -127,7 +140,8 @@ typedef struct AzureIoTADUClientInstallResult
 /**
  * @brief States of the ADU agent
  * @remark State is reported in response to an update request Action.
- * @link https://docs.microsoft.com/en-us/azure/iot-hub-device-update/device-update-plug-and-play#state
+ *
+ * https://docs.microsoft.com/en-us/azure/iot-hub-device-update/device-update-plug-and-play#state
  *
  */
 typedef enum AzureIoTADUAgentState
@@ -287,7 +301,7 @@ typedef struct AzureIoTADUClient
     struct
     {
         az_iot_adu_client xADUClient;
-    } _internal;
+    } _internal; /**< Internal */
 } AzureIoTADUClient_t;
 
 /**
@@ -301,8 +315,8 @@ AzureIoTResult_t AzureIoTADUClient_OptionsInit( AzureIoTADUClientOptions_t * pxA
 /**
  * @brief Initialize the Azure IoT ADU Client.
  *
- * @param pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
- * @param pxADUClientOptions The #AzureIoTADUClientOptions_t for the IoT ADU client instance.
+ * @param[in] pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
+ * @param[in] pxADUClientOptions The #AzureIoTADUClientOptions_t for the IoT ADU client instance.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTADUClient_Init( AzureIoTADUClient_t * pxAzureIoTADUClient,
@@ -324,9 +338,8 @@ AzureIoTResult_t AzureIoTADUClient_DevicePropertiesInit( AzureIoTADUClientDevice
  *       processed into the AzureIoTADUClient.
  *
  * @param[in] pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
- * @param[in] pucComponentName Name of writable properties component to be
- *                             checked.
- * @param[in] ulComponentNameLength Length of `pucComponentName`.
+ * @param[in] pucComponentName Name of writable properties component to be checked.
+ * @param[in] ulComponentNameLength Length of \p pucComponentName.
  * @return A boolean value indicating if the writable properties component
  *         is from ADU service.
  */
@@ -340,10 +353,9 @@ bool AzureIoTADUClient_IsADUComponent( AzureIoTADUClient_t * pxAzureIoTADUClient
  * The JSON reader returned to the caller from AzureIoTHubClientProperties_GetNextComponentProperty()
  * should be passed to this API.
  *
- * @param pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
- * @param pxReader The initialized JSON reader positioned at the beginning of the ADU subcomponent
- * property.
- * @param pxAduUpdateRequest The #AzureIoTADUUpdateRequest_t into which the properties will be parsed.
+ * @param[in] pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
+ * @param[in,out] pxReader The initialized JSON reader positioned at the beginning of the ADU subcomponent property.
+ * @param[out] pxAduUpdateRequest The #AzureIoTADUUpdateRequest_t into which the properties will be parsed.
  * @return AzureIoTResult_t An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIoTADUClient,
@@ -365,12 +377,9 @@ AzureIoTResult_t AzureIoTADUClient_ParseRequest( AzureIoTADUClient_t * pxAzureIo
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] xRequestDecision  The #AzureIoTADURequestDecision_t for this response.
  * @param[in] ulPropertyVersion Version of the writable properties.
- * @param[in] pucWritablePropertyResponseBuffer
- *              An pointer to the memory buffer where to
- *              write the resulting Azure Plug-and-Play properties acknowledgement
- *              payload.
- * @param[in] ulWritablePropertyResponseBufferSize
- *              Size of `pucWritablePropertyResponseBuffer.
+ * @param[out] pucWritablePropertyResponseBuffer A pointer to the memory buffer where to write
+ * the resulting Azure Plug-and-Play properties acknowledgement payload.
+ * @param[in] ulWritablePropertyResponseBufferSize Size of \p pucWritablePropertyResponseBuffer.
  * @param[in] pulRequestId Pointer to request id to use for the operation.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
@@ -387,15 +396,15 @@ AzureIoTResult_t AzureIoTADUClient_SendResponse( AzureIoTADUClient_t * pxAzureIo
  *
  * @param[in] pxAzureIoTADUClient The #AzureIoTADUClient_t * to use for this call.
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
- * @param pxDeviceProperties The device information which will be used to generate the payload.
- * @param pxAduUpdateRequest The current #AzureIoTADUUpdateRequest_t. This can be `NULL` if there isn't currently
+ * @param[in] pxDeviceProperties The device information which will be used to generate the payload.
+ * @param[in] pxAduUpdateRequest The current #AzureIoTADUUpdateRequest_t. This can be `NULL` if there isn't currently
  * an update request.
- * @param xAgentState The current #AzureIoTADUAgentState_t.
- * @param pxUpdateResults The current #AzureIoTADUClientInstallResult_t. This can be `NULL` if there aren't any
+ * @param[in] xAgentState The current #AzureIoTADUAgentState_t.
+ * @param[in] pxUpdateResults The current #AzureIoTADUClientInstallResult_t. This can be `NULL` if there aren't any
  * results from an update.
- * @param pucBuffer The buffer into which the generated payload will be placed.
- * @param ulBufferSize The length of \p pucBuffer.
- * @param pulRequestId An optional request id to be used for the publish. This can be `NULL`.
+ * @param[out] pucBuffer The buffer into which the generated payload will be placed.
+ * @param[in] ulBufferSize The length of \p pucBuffer.
+ * @param[in] pulRequestId An optional request id to be used for the publish. This can be `NULL`.
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTADUClient_SendAgentState( AzureIoTADUClient_t * pxAzureIoTADUClient,

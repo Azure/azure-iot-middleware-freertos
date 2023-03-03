@@ -53,6 +53,12 @@ AzureIoTResult_t AzureIoTJSONWriter_Init( AzureIoTJSONWriter_t * pxWriter,
 /**
  * @brief Appends the UTF-8 property name and value where value is int32
  *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
+ *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
@@ -69,6 +75,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithInt32Value( AzureIoTJSONWr
 
 /**
  * @brief Appends the UTF-8 property name and value where value is double
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
@@ -89,6 +101,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithDoubleValue( AzureIoTJSONW
 /**
  * @brief Appends the UTF-8 property name and value where value is boolean
  *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
+ *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
  * escaped before writing.
@@ -105,6 +123,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyWithBoolValue( AzureIoTJSONWri
 
 /**
  * @brief Appends the UTF-8 property name and value where value is string
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] pucPropertyName The UTF-8 encoded property name of the JSON value to be written. The name is
@@ -135,6 +159,12 @@ int32_t AzureIoTJSONWriter_GetBytesUsed( AzureIoTJSONWriter_t * pxWriter );
 /**
  * @brief Appends the UTF-8 text value (as a JSON string) into the buffer.
  *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
+ *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] pucValue Pointer of UCHAR buffer that contains UTF-8 encoded value to be written as a JSON string.
  * The value is escaped before writing.
@@ -151,11 +181,11 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWrite
  * @brief Appends an existing UTF-8 encoded JSON text into the buffer, useful for appending nested
  * JSON.
  *
- * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] pucJSON A pointer to single, possibly nested, valid, UTF-8 encoded, JSON value to be written as
- * is, without any formatting or spacing changes. No modifications are made to this text, including
- * escaping.
- * @param[in] ulJSONLen Length of `pucJSON`.
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @remarks A single, possibly nested, JSON value is one that starts and ends with {} or [] or is a
  * single primitive token. The JSON cannot start with an end object or array, or a property name, or
@@ -163,6 +193,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendString( AzureIoTJSONWriter_t * pxWrite
  *
  * @remarks The function validates that the provided JSON to be appended is valid and properly
  * escaped, and fails otherwise.
+ *
+ * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
+ * @param[in] pucJSON A pointer to single, possibly nested, valid, UTF-8 encoded, JSON value to be written as
+ * is, without any formatting or spacing changes. No modifications are made to this text, including
+ * escaping.
+ * @param[in] ulJSONLen Length of `pucJSON`.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
  * @retval eAzureIoTSuccess The provided json_text was appended successfully.
@@ -174,6 +210,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendJSONText( AzureIoTJSONWriter_t * pxWri
 /**
  * @brief Appends the UTF-8 property name (as a JSON string) which is the first part of a name/value
  * pair of a JSON object.
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] pusValue The UTF-8 encoded property name of the JSON value to be written. The name is
@@ -190,6 +232,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendPropertyName( AzureIoTJSONWriter_t * p
 /**
  * @brief Appends a boolean value (as a JSON literal `true` or `false`).
  *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
+ *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] xValue The value to be written as a JSON literal `true` or `false`.
  *
@@ -201,6 +249,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBool( AzureIoTJSONWriter_t * pxWriter,
 
 /**
  * @brief Appends an `int32_t` number value.
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  * @param[in] lValue The value to be written as a JSON number.
@@ -214,13 +268,11 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter
 /**
  * @brief Appends a `double` number value.
  *
- * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
- * @param[in] xValue The value to be written as a JSON number.
- * @param[in] usFractionalDigits The number of digits of the \p value to write after the decimal
- * point and truncate the rest.
- *
- * @return An #AzureIoTResult_t value indicating the result of the operation.
- * @retval eAzureIoTSuccess The number was appended successfully.
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @remark Only finite double values are supported. Values such as `NAN` and `INFINITY` are not
  * allowed and would lead to invalid JSON being written.
@@ -230,6 +282,15 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendInt32( AzureIoTJSONWriter_t * pxWriter
  *
  * @remark The \p usFractionalDigits must be between 0 and 15 (inclusive). Any value passed in that
  * is larger will be clamped down to 15.
+ *
+ * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
+ * @param[in] xValue The value to be written as a JSON number.
+ * @param[in] usFractionalDigits The number of digits of the \p value to write after the decimal
+ * point and truncate the rest.
+ *
+ * @return An #AzureIoTResult_t value indicating the result of the operation.
+ * @retval eAzureIoTSuccess The number was appended successfully.
+ *
  */
 AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWriter,
                                                   double xValue,
@@ -237,6 +298,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendDouble( AzureIoTJSONWriter_t * pxWrite
 
 /**
  * @brief Appends the JSON literal `null`.
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
@@ -248,6 +315,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendNull( AzureIoTJSONWriter_t * pxWriter 
 /**
  * @brief Appends the beginning of a JSON object (i.e. `{`).
  *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
+ *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
@@ -257,6 +330,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBeginObject( AzureIoTJSONWriter_t * px
 
 /**
  * @brief Appends the beginning of a JSON array (i.e. `[`).
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
@@ -268,6 +347,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendBeginArray( AzureIoTJSONWriter_t * pxW
 /**
  * @brief Appends the end of the current JSON object (i.e. `}`).
  *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
+ *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *
  * @return An #AzureIoTResult_t value indicating the result of the operation.
@@ -277,6 +362,12 @@ AzureIoTResult_t AzureIoTJSONWriter_AppendEndObject( AzureIoTJSONWriter_t * pxWr
 
 /**
  * @brief Appends the end of the current JSON array (i.e. `]`).
+ *
+ * @note If you receive an #eAzureIoTErrorOutOfMemory result while appending data for which there is
+ * sufficient space, note that the JSON writer requires at least 64 bytes of slack within the
+ * output buffer, above the theoretical minimal space needed. The JSON writer pessimistically
+ * requires this extra space because it tries to write formatted text in chunks rather than one
+ * character at a time, whenever the input data is dynamic in size.
  *
  * @param[in] pxWriter A pointer to an #AzureIoTJSONWriter_t.
  *

@@ -36,7 +36,7 @@ static void prvAzureIoTLogListener( az_log_classification xClassification,
     /* In case logs are stripped out, suppress unused parameter error. */
     ( void ) xMessage;
 
-    AZLogInfo( ( "%.*s", az_span_size( xMessage ), az_span_ptr( xMessage ) ) );
+    AZLogInfo( ( "%.*s", ( int16_t ) az_span_size( xMessage ), az_span_ptr( xMessage ) ) );
 }
 /*-----------------------------------------------------------*/
 
@@ -69,6 +69,10 @@ AzureIoTResult_t AzureIoT_TranslateCoreError( az_result xCoreError )
 
         case AZ_ERROR_UNEXPECTED_CHAR:
             xResult = eAzureIoTErrorUnexpectedChar;
+            break;
+
+        case AZ_ERROR_NOT_ENOUGH_SPACE:
+            xResult = eAzureIoTErrorOutOfMemory;
             break;
 
         /* JSON errors */
@@ -147,7 +151,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
 
     if( az_result_failed( xCoreResult = az_base64_decode( xOutputDecodedKeySpan, xEncodedKeySpan, &lDecodedKeyLength ) ) )
     {
-        AZLogError( ( "az_base64_decode failed: core error=0x%08x", xCoreResult ) );
+        AZLogError( ( "az_base64_decode failed: core error=0x%08x", ( uint16_t ) xCoreResult ) );
         return eAzureIoTErrorFailed;
     }
 
@@ -174,7 +178,7 @@ AzureIoTResult_t AzureIoT_Base64HMACCalculate( AzureIoTGetHMACFunc_t xAzureIoTHM
 
     if( az_result_failed( xCoreResult = az_base64_encode( xOutputEncodedHashSpan, xHashSpan, &lEncodedLength ) ) )
     {
-        AZLogError( ( "az_base64_decode failed: core error=0x%08x", xCoreResult ) );
+        AZLogError( ( "az_base64_decode failed: core error=0x%08x", ( uint16_t ) xCoreResult ) );
         return eAzureIoTErrorFailed;
     }
 

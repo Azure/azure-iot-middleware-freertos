@@ -65,6 +65,11 @@ Param(
     [ValidateNotNullOrEmpty()]
     [string] $UpdateProvider,
 
+    # Update name prefix
+    [Parameter(Mandatory=$true)]
+    [ValidateNotNullOrEmpty()]
+    [string] $UpdateNamePrefix,
+
     # Update name
     [Parameter(Mandatory=$true)]
     [ValidateNotNullOrEmpty()]
@@ -79,7 +84,7 @@ Install-Module MSAL.PS -Force
 Install-Module Az.Accounts -Force
 Install-Module Az.Storage -Force
 Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduUpdate.psm1 -ErrorAction Stop -Force
-Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduImportUpdate.psm1 -ErrorAction Stop -Force
+Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduAzStorageBlobHelper.psm1 -ErrorAction Stop -Force
 Import-Module ../e2e_build/iot-hub-device-update/tools/AduCmdlets/AduRestApi.psm1 -ErrorAction Stop -Force
 
 Write-Host("Get auth token for ADU operations")
@@ -93,31 +98,43 @@ $AuthorizationToken = Get-MsalToken `
             -ErrorAction Stop
 
 Write-Host("Get previous deployments")
-$getUpdatesUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/?api-version=2021-06-01-preview"
+$getDeploymentsUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/?api-version=2022-10-01"
 $authHeaders = @{'Authorization' = "Bearer $($AuthorizationToken.AccessToken)"}
 $authHeaders.Add('Content-Type', 'application/json')
-$getResponse = Invoke-WebRequest -Uri $getUpdatesUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
-Write-Host($getResponse)
+$getDeploymentsResponse = Invoke-WebRequest -Uri $getDeploymentsUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+Write-Host($getDeploymentsResponse)
 
-$parsedJsonResponse = $getResponse | ConvertFrom-Json
+$parsedJsonDeploymentsResponse = $getDeploymentsResponse | ConvertFrom-Json
 
-foreach ($deployment in $parsedJsonResponse.value)
+foreach ($deployment in $parsedJsonDeploymentsResponse.value)
 {
   Write-Host("Deleting previous deployment: $($deployment.deploymentId)")
-  $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2021-06-01-preview"
+  $deleteDeploymentUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$($deployment.deploymentId)/?api-version=2022-10-01"
   $deleteDeploymentResponse = Invoke-WebRequest -Uri $deleteDeploymentUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 }
 
-Write-Host("Deleting previous 1.1 update")
-$deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$UpdateName/versions/$UpdateVersion/?api-version=2021-06-01-preview"
-$deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
-$operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
-Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
-                        -InstanceId $InstanceId `
-                        -AuthorizationToken $AuthorizationToken.AccessToken `
-                        -OperationId $operationId `
-                        -Timeout (New-TimeSpan -Minutes 2) `
-                        -Verbose:$VerbosePreference
+$getUpdatesUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/updates?api-version=2022-10-01"
+$getUpdatesResponse = Invoke-WebRequest -Uri $getUpdatesUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+Write-Host($getUpdatesResponse)
+
+$parsedJsonUpdatesResponse = $getUpdatesResponse | ConvertFrom-Json
+
+foreach ($update in $parsedJsonUpdatesResponse.value)
+{
+  if ($update.updateId.name.Contains($UpdateNamePrefix) -And $update.updateId.provider.equals($UpdateProvider)) {
+    Write-Host("Deleting previous update: $($update.updateId)")
+    $deleteUpdateUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/updates/providers/$UpdateProvider/names/$($update.updateId.name)/versions/$($update.updateId.version)/?api-version=2022-10-01"
+    Write-Host($deleteUpdateUri)
+    $deleteUpdateResponse = Invoke-WebRequest -Uri $deleteUpdateUri -Method DELETE -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+    $operationId = $deleteUpdateResponse.Headers["Operation-Location"].Split('/')[-1].Split('?')[0]
+    Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
+                            -InstanceId $InstanceId `
+                            -AuthorizationToken $AuthorizationToken.AccessToken `
+                            -OperationId $operationId `
+                            -Timeout (New-TimeSpan -Minutes 2) `
+                            -Verbose:$VerbosePreference
+  }
+}
 
 # Set up Azure Account using the passed AAD secret for blob storage
 $accountSecret = ConvertTo-SecureString -String $AzureAdApplicationSecret -AsPlainText -Force
@@ -129,27 +146,51 @@ $account = Get-AzStorageAccount -ResourceGroupName $AzureResourceGroupName -Name
 $container = Get-AzStorageContainer -Name $AzureBlobContainerName -Context $account.Context -ErrorAction Stop
 
 # Create new update for v1.1
-$updateId = New-AduUpdateId -Provider ADU-E2E-Tests -Name Linux-E2E-Update -Version 1.1
-$compat = New-AduUpdateCompatibility -Properties @{ deviceManufacturer = 'PC'; deviceModel = 'Linux-E2E' }
-$installStep = New-AduInstallationStep -Handler 'microsoft/swupdate:1'-HandlerProperties @{ installedCriteria = '1.1' } -Files '..\e2e_build\azure_iot_e2e_adu_tests_v1.1'
-$updateInput = New-AduImportUpdateInput -UpdateId $updateId `
-                                         -Compatibility $compat `
-                                         -InstallationSteps $installStep `
-                                         -BlobContainer $container `
-                                         -ErrorAction Stop `
-                                         -Verbose:$VerbosePreference
+$updateId = New-AduUpdateId -Provider $UpdateProvider -Name $UpdateName -Version $UpdateVersion
+$fileName = "azure_iot_e2e_adu_tests_v1.1"
 
-# Get a MSAL token for blob upload
-$secureStringAuth = ConvertTo-SecureString $AzureAdApplicationSecret -AsPlainText -Force
-$AuthorizationToken = Get-MsalToken `
-            -ClientId $AzureAdClientId `
-            -TenantId $AzureAdTenantId `
-            -Scope 'https://api.adu.microsoft.com/.default' `
-            -Authority "https://login.microsoftonline.com/$AzureAdTenantId/v2.0" `
-            -ClientSecret $secureStringAuth `
-            -ErrorAction Stop
+Write-Host("Uploading update file(s) to Azure Blob Storage.")
+$updateIdStr = "$($updateId.Provider).$($UpdateNamePrefix).$($updateId.Version)"
 
-# Import update into blob storage for deployment
+# Upload update to blob
+# Place files within updateId subdirectory in case there are filenames conflict.
+$blobName = "$updateIdStr/$fileName"
+$importFileUrl = Copy-AduFileToAzBlobContainer -FilePath "..\e2e_build\$fileName" -BlobName $blobName -BlobContainer $container -ErrorAction Stop
+
+# Create import manifest and upload to blob
+az config set extension.use_dynamic_install=yes_without_prompt
+$importMan = az iot du update init v5 --update-provider $updateId.Provider --update-name $updateId.Name --update-version $updateId.Version --compat deviceModel=Linux-E2E deviceManufacturer=PC --step handler=microsoft/swupdate:1 properties='{"installedCriteria":"1.1"}' --file path=../e2e_build/$fileName
+$importManJsonFile = New-TemporaryFile
+$importMan | Out-File $importManJsonFile -Encoding utf8
+
+Get-Content $importManJsonFile | Write-Verbose
+
+$importManJsonFile = Get-Item $importManJsonFile # refresh file properties
+$importManJsonHash = Get-AduFileHashes -FilePath $importManJsonFile -ErrorAction Stop
+
+$importManUrl = Copy-AduFileToAzBlobContainer -FilePath $importManJsonFile -BlobName "$updateIdStr/importmanifest.json" -BlobContainer $container -ErrorAction Stop
+
+Write-Host("Preparing Import Update API request body.")
+
+$importManMeta = [ordered] @{
+    url = $importManUrl
+    sizeInBytes = $importManJsonFile.Length
+    hashes = $importManJsonHash
+}
+
+$updateInput = [ordered] @{
+    importManifest = $importManMeta
+    files = @(
+      @{
+        filename = $fileName
+        url = $importFileUrl
+      }
+    )
+}
+
+Remove-Item $importManJsonFile
+
+# Import update into ADU for deployment
 Write-Host("Starting import")
 $operationId = Start-AduImportUpdate -AccountEndpoint $AccountEndpoint `
                                      -InstanceId $InstanceId `
@@ -163,19 +204,47 @@ Wait-AduUpdateOperation -AccountEndpoint $AccountEndpoint `
                         -Timeout (New-TimeSpan -Minutes 5) `
                         -Verbose:$VerbosePreference
 
+# Check that update is linked to group
+Write-Host("Waiting for group to have the update")
+$checkForAvailableUpdateUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/management/groups/$GroupID/bestUpdates?api-version=2022-10-01"
+$counter = 0
+# 5 minute timeout
+while($counter -lt 100)
+{
+  $checkForAvailableUpdateResponse = Invoke-WebRequest -Uri $checkForAvailableUpdateUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+  Write-Host($checkForAvailableUpdateResponse)
+  $parsedAvailableUpdatesResponse = $checkForAvailableUpdateResponse | ConvertFrom-Json
+  foreach ($update in $parsedAvailableUpdatesResponse.value)
+  {
+    if ($update.update.updateId.name.equals($updateId.Name))
+    {
+      # update is now linked, so break the while loop condition
+      $counter = 150
+      break
+    }
+  }
+  if($counter -lt 100) {
+    $counter++
+    Write-Host("Update not linked yet, trying again...")
+    Start-Sleep -Seconds 3
+  }
+}
+
 
 # Deploy the update to the device group
 $currentTime = [DateTime]::UtcNow.ToString('u')
 $deploymentId = [guid]::NewGuid().toString()
-$deploymentUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/management/groups/$GroupID/deployments/$deploymentId/?api-version=2021-06-01-preview"
+$deploymentUri = "https://$AccountEndpoint/deviceUpdate/$InstanceId/management/groups/$GroupID/deployments/$deploymentId/?api-version=2022-10-01"
 $payload = @"
 {
   "deploymentId": "$deploymentId",
   "startDateTime": "$currentTime",
-  "updateId": {
-    "provider": "$UpdateProvider",
-    "name": "$UpdateName",
-    "version": "$UpdateVersion"
+  "update": {
+    "updateId": {
+      "provider": "$UpdateProvider",
+      "name": "$($updateId.Name)",
+      "version": "$UpdateVersion"
+    }
   },
   "groupId": "$GroupID"
 }
@@ -189,7 +258,7 @@ $response = Invoke-WebRequest -Uri $deploymentUri -Method PUT -Headers $authHead
 Write-Host($response)
 
 # Get the status of the deployment
-$deploymenetStatusUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$deploymentId/status?api-version=2021-06-01-preview"
-$statusResponse = Invoke-WebRequest -Uri $deploymenetStatusUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
+$deploymentStatusUri = "https://$AccountEndpoint/deviceupdate/$InstanceId/management/groups/$groupId/deployments/$deploymentId/status?api-version=2022-10-01"
+$statusResponse = Invoke-WebRequest -Uri $deploymentStatusUri -Method GET -Headers $authHeaders -UseBasicParsing -Verbose:$VerbosePreference
 
 Write-Host($statusResponse)

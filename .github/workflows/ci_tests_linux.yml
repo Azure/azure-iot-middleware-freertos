@@ -17,6 +17,8 @@ jobs:
     steps:
       # Same repo
       - uses: actions/checkout@v2
+        with:
+          submodules: recursive
         if: >-
           ( github.event_name == 'pull_request' ) &&
           ( github.event.pull_request.head.repo.fork == false )
@@ -36,17 +38,6 @@ jobs:
           echo -e '::error There are files which do not adhere to the coding style. \
           Please see directions to fix this here: https://github.com/Azure/azure-iot-middleware-freertos#code-style' \
           && exit 1 )
-        if: >-
-          (
-            github.event_name == 'pull_request' &&
-            github.event.pull_request.head.repo.fork == false
-          ) || (
-            github.event_name == 'pull_request_target' &&
-            github.event.pull_request.head.repo.fork == true
-          )
-
-      - name: Submodules Init
-        uses: snickerbockers/submodules-init@v4
         if: >-
           (
             github.event_name == 'pull_request' &&

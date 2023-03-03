@@ -138,7 +138,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
 
     if( xHttpLibraryStatus != HTTPSuccess )
     {
-        SdkLog( ( "[HTTP] ERROR: %d\n", xHttpLibraryStatus ) );
+        SdkLog( ( "[HTTP] ERROR: %d\r\n", xHttpLibraryStatus ) );
         return prvTranslateToAzureIoTHTTPResult( xHttpLibraryStatus );
     }
 
@@ -147,12 +147,12 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
         if( xHTTPHandle->xResponse.statusCode == 200 )
         {
             /* Handle a response Status-Code of 200 OK. */
-            SdkLog( ( "[HTTP] Success 200\n" ) );
+            SdkLog( ( "[HTTP] Success 200\r\n" ) );
         }
         else if( xHTTPHandle->xResponse.statusCode == 206 )
         {
             /* Handle a response Status-Code of 200 OK. */
-            SdkLog( ( "[HTTP] [Status 206] Received range %i to %i\n", ( int ) lRangeStart, ( int ) lRangeStart + xHTTPHandle->xResponse.bodyLen ) );
+            SdkLog( ( "[HTTP] [Status 206] Received range %i to %i\r\n", ( int ) lRangeStart, ( int ) lRangeStart + xHTTPHandle->xResponse.bodyLen ) );
 
             *ppucOutData = ( char * ) xHTTPHandle->xResponse.pBody;
             *pulOutDataLength = ( uint32_t ) xHTTPHandle->xResponse.bodyLen;
@@ -160,7 +160,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
         else
         {
             /* Handle an error */
-            SdkLog( ( "[HTTP] Failed %d\n.", xHTTPHandle->xResponse.statusCode ) );
+            SdkLog( ( "[HTTP] Failed %d\r\n.", xHTTPHandle->xResponse.statusCode ) );
             xHttpLibraryStatus = 1;
         }
     }
@@ -227,13 +227,13 @@ int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle,
         if( xHTTPHandle->xResponse.statusCode == 200 )
         {
             /* Handle a response Status-Code of 200 OK. */
-            SdkLog( ( "[HTTP] Size Request Success 200\n" ) );
+            SdkLog( ( "[HTTP] Size Request Success 200\r\n" ) );
             return ( int32_t ) xHTTPHandle->xResponse.contentLength;
         }
         else
         {
             /* Handle an error */
-            SdkLog( ( "[HTTP] Size Request Failed %d.\n", xHTTPHandle->xResponse.statusCode ) );
+            SdkLog( ( "[HTTP] Size Request Failed %d.\r\n", xHTTPHandle->xResponse.statusCode ) );
             return -1;
         }
     }
