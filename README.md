@@ -41,7 +41,7 @@ To keep this repo simple without board specific dependencies, we have a separate
 - STM32L475 (Azure IoT Hub, Azure Device Update)
 - STM32L4+
 - STM32H745
-- NXP RT1060
+- NXP RT1060 (Azure IoT Hub, Azure Device Update)
 - ESPRESSIF ESP32 (Azure IoT Hub, Azure Device Update)
 - Linux (Azure IoT Hub, Azure Device Update)
 - Windows
