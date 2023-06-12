@@ -9,15 +9,13 @@ set -o pipefail # Exit if pipe failed.
 
 sudo dpkg --add-architecture i386
 sudo apt update
-sudo apt install -y gcc-multilib g++-multilib ninja-build gcovr libpcap-dev:i386 ethtool isc-dhcp-server libcmocka-dev:i386 unifdef gcc-arm-none-eabi dos2unix valgrind npm
-sudo apt install -y gcc-multilib g++-multilib ninja-build libcmocka-dev
+sudo apt install -y gcc-multilib g++-multilib ninja-build gcovr libpcap-dev:i386 libgcc-s1:i386 ethtool isc-dhcp-server libcmocka-dev:i386 unifdef gcc-arm-none-eabi dos2unix valgrind npm
+sudo apt install -y libcmocka-dev
 # az cli for adu
 curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 az upgrade
 
 # pwsh for adu
-# Update the list of packages
-sudo apt-get update
 # Install pre-requisite packages.
 sudo apt-get install -y wget apt-transport-https software-properties-common
 # Download the Microsoft repository GPG keys
