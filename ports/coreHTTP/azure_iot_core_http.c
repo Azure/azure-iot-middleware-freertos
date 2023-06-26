@@ -104,7 +104,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Init( AzureIoTHTTPHandle_t xHTTPHandle,
 
     xHTTPHandle->pxHTTPTransport = pxHTTPTransport;
 
-    HTTPClient_InitializeRequestHeaders( &xHTTPHandle->xRequestHeaders, &xHTTPHandle->xRequestInfo );
+    xHttpLibraryStatus = HTTPClient_InitializeRequestHeaders( &xHTTPHandle->xRequestHeaders, &xHTTPHandle->xRequestInfo );
 
     return prvTranslateToAzureIoTHTTPResult( xHttpLibraryStatus );
 }
@@ -201,7 +201,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_RequestSizeInit( AzureIoTHTTPHandle_t xHTTPHan
 
     xHTTPHandle->pxHTTPTransport = pxHTTPTransport;
 
-    HTTPClient_InitializeRequestHeaders( &xHTTPHandle->xRequestHeaders, &xHTTPHandle->xRequestInfo );
+    xHttpLibraryStatus = HTTPClient_InitializeRequestHeaders( &xHTTPHandle->xRequestHeaders, &xHTTPHandle->xRequestInfo );
 
     return prvTranslateToAzureIoTHTTPResult( xHttpLibraryStatus );
 }
