@@ -83,6 +83,7 @@ For a device application to be recognized as an ADU Agent (and thus be able to b
 1. Next the device application must validate the `ADU update manifest`.
 
     The validation is done using function `AzureIoTJWS_ManifestAuthenticate` and the [Azure Device Update certificate root keys](https://learn.microsoft.com/azure/iot-hub-device-update/device-update-security#root-keys). An example of the usage of `AzureIoTJWS_ManifestAuthenticate` can be found in [sample_azure_iot_pnp_simulated_data.c](https://github.com/Azure-Samples/iot-middleware-freertos-samples/blob/main/demos/sample_azure_iot_adu/sample_azure_iot_pnp_simulated_data.c#L502).
+    The current ADU certificate root keys can be found [here](https://github.com/Azure/iot-hub-device-update/blob/main/src/utils/crypto_utils/src/root_key_util.c#L37).
 
 1. Once validated, send a response to ADU Service accepting or rejecting the update request.
 
