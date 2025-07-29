@@ -64,6 +64,8 @@ typedef struct AzureIoTProvisioningClient
         uint32_t ulSymmetricKeyLength;
         const uint8_t * pucRegistrationPayload;
         uint32_t ulRegistrationPayloadLength;
+        const uint8_t * pucCertificateSigningRequest;
+        uint32_t ulCertificateSigningRequestLength;
 
         uint32_t ( * pxTokenRefresh )( struct AzureIoTProvisioningClient * pxAzureIoTProvisioningClient,
                                        uint64_t ullExpiryTimeSecs,
@@ -212,6 +214,43 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetExtendedCode( AzureIoTProvisionin
 AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProvisioningClient_t * pxAzureProvClient,
                                                                     const uint8_t * pucPayload,
                                                                     uint32_t ulPayloadLength );
+
+/**
+ * @brief Set the certificate signing request
+ * @details This routine sets the certificate signing request, which can be a single certificate or a concatenated chain of certificates.
+ *
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
+ * @param[in] pucCertificateSigningRequest A pointer to the certificate data.
+ * @param[in] ulCertificateSigningRequestLength Length of `CertificateSigningRequest`. Does not include the `NULL` terminator.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */                                                                 
+AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                                    const uint8_t * pucCertificateSigningRequest,
+                                                                    uint32_t ulCertificateSigningRequestLength );
+
+/**
+ * @brief After a registration has been completed, get the number of certificates issued for the certificate signing request.
+ *
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
+ * @param[out] pulSignedCertificateChainLength The pointer to the `uint32_t` which will be populated with the number of issued certificates.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificateChainLength( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                             uint32_t * pulSignedCertificateChainLength );
+
+/**
+ * @brief After a registration has been completed, get the certificates issued for the certificate signing request.
+ *
+ * @param[in] pxAzureProvClient The #AzureIoTProvisioningClient_t * to use for this call.
+ * @param[out] ulCertificatePositionNumber The index of the certificate in the issued chain (e.g., 0 for root, 1 for intermediate, 2 for leaf). Must be within the length obtained with `AzureIoTProvisioningClient_GetIssuedCertificateChainLength`.
+ * @param[out] pucIssuedCertificate The pointer to a buffer which will be populated with the issued certificate information.
+ * @param[out] pulIssuedCertificateLength The pointer to the `uint32_t` which will be populated with the length of `pucIssuedCertificate`. Must be pre-set by the caller with the total size of the `pucIssuedCertificate` buffer.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificate( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                             uint32_t ulCertificatePositionNumber,
+                                                             uint8_t * pucIssuedCertificate,
+                                                             uint32_t * pulIssuedCertificateLength );
 
 #include "azure/core/_az_cfg_suffix.h"
 

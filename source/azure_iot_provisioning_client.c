@@ -21,6 +21,7 @@
 /* Azure SDK for Embedded C includes */
 #include "azure/az_iot.h"
 #include "azure/core/az_version.h"
+#include "azure/core/az_span.h"
 
 #ifndef azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC
     #define azureiotprovisioningDEFAULT_TOKEN_TIMEOUT_IN_SEC    azureiotconfigDEFAULT_TOKEN_TIMEOUT_IN_SEC
@@ -276,6 +277,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
     az_result xCoreResult;
     az_span xCustomPayloadProperty = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucRegistrationPayload,
                                                      ( int32_t ) pxAzureProvClient->_internal.ulRegistrationPayloadLength );
+    az_iot_provisioning_client_payload_options xRegisterOptions = az_iot_provisioning_client_payload_options_default();
 
     /* Check the state.  */
     if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_REQUEST )
@@ -308,10 +310,15 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
             return;
         }
 
+        if ( pxAzureProvClient->_internal.ulCertificateSigningRequestLength > 0 )
+        {
+            xRegisterOptions.certificate_signing_request = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucCertificateSigningRequest, ( int32_t ) pxAzureProvClient->_internal.ulCertificateSigningRequestLength);
+        }
+
         xMQTTPayloadLength = pxAzureProvClient->_internal.ulScratchBufferLength - ( uint32_t ) xMQTTTopicLength;
         xCoreResult =
-            az_iot_provisioning_client_get_request_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
-                                                            xCustomPayloadProperty, NULL,
+            az_iot_provisioning_client_register_get_request_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
+                                                            xCustomPayloadProperty, &xRegisterOptions,
                                                             ( uint8_t * ) ( pxAzureProvClient->_internal.pucScratchBuffer +
                                                                             xMQTTTopicLength ),
                                                             ( size_t ) xMQTTPayloadLength, &xMQTTPayloadLength );
@@ -1008,6 +1015,115 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProv
         pxAzureProvClient->_internal.pucRegistrationPayload = pucPayload;
         pxAzureProvClient->_internal.ulRegistrationPayloadLength = ulPayloadLength;
         xResult = eAzureIoTSuccess;
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                                    const uint8_t * pucCertificateSigningRequest,
+                                                                    uint32_t ulCertificateSigningRequestLength )
+{
+    AzureIoTResult_t xResult;
+
+    if( ( pxAzureProvClient == NULL ) ||
+        ( pucCertificateSigningRequest == NULL ) || ( ulCertificateSigningRequestLength == 0 ) )
+    {
+        AZLogError( ( "AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_INIT )
+    {
+        AZLogError( ( "AzureIoTProvisioning client state is not in init" ) );
+        xResult = eAzureIoTErrorFailed;
+    }
+    else
+    {
+        pxAzureProvClient->_internal.pucCertificateSigningRequest = pucCertificateSigningRequest;
+        pxAzureProvClient->_internal.ulCertificateSigningRequestLength = ulCertificateSigningRequestLength;
+        xResult = eAzureIoTSuccess;
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificateChainLength( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                             uint32_t * pulSignedCertificateChainLength )
+{
+    AzureIoTResult_t xResult;
+
+    if( ( pxAzureProvClient == NULL ) || ( pulSignedCertificateChainLength == NULL ) )
+    {
+        AZLogError( ( "AzureIoTProvisioningClient_GetIssuedCertificateChainLength failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_COMPLETE )
+    {
+        AZLogError( ( "AzureIoTProvisioning client state is not in complete state" ) );
+        xResult = eAzureIoTErrorFailed;
+    }
+    else if( pxAzureProvClient->_internal.ulLastOperationResult )
+    {
+        xResult = pxAzureProvClient->_internal.ulLastOperationResult;
+    }
+    else
+    {
+        *pulSignedCertificateChainLength = pxAzureProvClient->_internal.xRegisterResponse.registration_state.issued_certificate_chain_count;
+
+        xResult = eAzureIoTSuccess;
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificate( AzureIoTProvisioningClient_t * pxAzureProvClient,
+                                                             uint32_t ulCertificatePositionNumber,
+                                                             uint8_t * pucIssuedCertificate,
+                                                             uint32_t * pulIssuedCertificateLength )
+{
+    AzureIoTResult_t xResult;
+    uint32_t ulCertificateLength;
+    az_span * pxCertificate;
+
+    if( ( pxAzureProvClient == NULL ) ||
+        ( pucIssuedCertificate == NULL ) || ( pulIssuedCertificateLength == NULL ) )
+    {
+        AZLogError( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_COMPLETE )
+    {
+        AZLogError( ( "AzureIoTProvisioning client state is not in complete state" ) );
+        xResult = eAzureIoTErrorFailed;
+    }
+    else if( pxAzureProvClient->_internal.ulLastOperationResult )
+    {
+        xResult = pxAzureProvClient->_internal.ulLastOperationResult;
+    }
+    else if( ulCertificatePositionNumber >= pxAzureProvClient->_internal.xRegisterResponse.registration_state.issued_certificate_chain_count )
+    {
+        AZLogError( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: ulCertificatePositionNumber is out-of-bounds" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else
+    {
+        pxCertificate = &pxAzureProvClient->_internal.xRegisterResponse.registration_state.issued_certificate_chain[ulCertificatePositionNumber];
+        ulCertificateLength = ( uint32_t ) az_span_size( *pxCertificate );
+
+        if( ( *pulIssuedCertificateLength < ulCertificateLength ) )
+        {
+            AZLogWarn( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: memory buffer passed is not enough to store certificate info" ) );
+            xResult = eAzureIoTErrorFailed;
+        }
+        else
+        {
+            memcpy( pucIssuedCertificate, az_span_ptr( *pxCertificate ), ulCertificateLength );
+            *pulIssuedCertificateLength = ulCertificateLength;
+            xResult = eAzureIoTSuccess;
+        }
     }
 
     return xResult;
