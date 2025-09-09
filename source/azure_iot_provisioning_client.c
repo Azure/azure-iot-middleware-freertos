@@ -1115,7 +1115,7 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificate( AzureIoTProvis
 
         if( ( *pulIssuedCertificateLength < ulCertificateLength ) )
         {
-            AZLogWarn( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: memory buffer passed is not enough to store certificate info" ) );
+            AZLogWarn( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: memory buffer passed (%d) is not enough to store certificate info (%d)", *pulIssuedCertificateLength,  ulCertificateLength ) );
             xResult = eAzureIoTErrorFailed;
         }
         else
