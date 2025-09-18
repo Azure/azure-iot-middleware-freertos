@@ -137,6 +137,10 @@ extern void vLoggingPrintf( const char * pcFormatString,
 #define SINGLE_PARENTHESIS_LOGD( x, ... )    vLoggingPrintf( x, ## __VA_ARGS__ )
 #define LogDebug( message )                  SINGLE_PARENTHESIS_LOGD message
 
+#ifndef SdkLog
+    #define SdkLog( x, ... )                 vLoggingPrintf( x, ## __VA_ARGS__ )
+#endif
+
 /* *INDENT-OFF* */
 #ifdef __cplusplus
     }
