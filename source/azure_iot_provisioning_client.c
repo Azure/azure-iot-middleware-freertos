@@ -310,7 +310,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
 
         xMQTTPayloadLength = pxAzureProvClient->_internal.ulScratchBufferLength - ( uint32_t ) xMQTTTopicLength;
         xCoreResult =
-            az_iot_provisioning_client_get_request_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
+            az_iot_provisioning_client_register_get_request_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
                                                             xCustomPayloadProperty, NULL,
                                                             ( uint8_t * ) ( pxAzureProvClient->_internal.pucScratchBuffer +
                                                                             xMQTTTopicLength ),
