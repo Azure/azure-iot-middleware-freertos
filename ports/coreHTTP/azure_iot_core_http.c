@@ -138,7 +138,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
 
     if( xHttpLibraryStatus != HTTPSuccess )
     {
-        SdkLog( ( "[HTTP] ERROR: %d\r\n", xHttpLibraryStatus ) );
+        SdkLog( ( "[HTTP] ERROR: %d\r\n", ( int ) xHttpLibraryStatus ) );
         return prvTranslateToAzureIoTHTTPResult( xHttpLibraryStatus );
     }
 
@@ -160,7 +160,7 @@ AzureIoTHTTPResult_t AzureIoTHTTP_Request( AzureIoTHTTPHandle_t xHTTPHandle,
         else
         {
             /* Handle an error */
-            SdkLog( ( "[HTTP] Failed %d\r\n.", xHTTPHandle->xResponse.statusCode ) );
+            SdkLog( ( "[HTTP] Failed %d\r\n.", ( int ) xHTTPHandle->xResponse.statusCode ) );
             xHttpLibraryStatus = 1;
         }
     }
@@ -233,7 +233,7 @@ int32_t AzureIoTHTTP_RequestSize( AzureIoTHTTPHandle_t xHTTPHandle,
         else
         {
             /* Handle an error */
-            SdkLog( ( "[HTTP] Size Request Failed %d.\r\n", xHTTPHandle->xResponse.statusCode ) );
+            SdkLog( ( "[HTTP] Size Request Failed %d.\r\n", ( int ) xHTTPHandle->xResponse.statusCode ) );
             return -1;
         }
     }
