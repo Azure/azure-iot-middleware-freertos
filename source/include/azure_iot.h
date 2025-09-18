@@ -73,7 +73,7 @@ typedef uint32_t ( * AzureIoTGetHMACFunc_t )( const uint8_t * pucKey,
  * @note This should be called once per process.
  *
  */
-AzureIoTResult_t AzureIoT_Init(void);
+AzureIoTResult_t AzureIoT_Init( void );
 
 /**
  * @brief Deinitialize Azure IoT middleware.
@@ -81,7 +81,7 @@ AzureIoTResult_t AzureIoT_Init(void);
  * @note This should be called once per process.
  *
  */
-void AzureIoT_Deinit(void);
+void AzureIoT_Deinit( void );
 
 #include "azure/core/_az_cfg_suffix.h"
 
