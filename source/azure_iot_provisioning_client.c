@@ -276,6 +276,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
     az_result xCoreResult;
     az_span xCustomPayloadProperty = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucRegistrationPayload,
                                                      ( int32_t ) pxAzureProvClient->_internal.ulRegistrationPayloadLength );
+    az_iot_provisioning_client_payload_options xRegisterOptions = az_iot_provisioning_client_payload_options_default();
 
     /* Check the state.  */
     if( pxAzureProvClient->_internal.ulWorkflowState != azureiotprovisioningWF_STATE_REQUEST )
@@ -311,7 +312,7 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
         xMQTTPayloadLength = pxAzureProvClient->_internal.ulScratchBufferLength - ( uint32_t ) xMQTTTopicLength;
         xCoreResult =
             az_iot_provisioning_client_register_get_request_payload( &pxAzureProvClient->_internal.xProvisioningClientCore,
-                                                                     xCustomPayloadProperty, NULL,
+                                                                     xCustomPayloadProperty, &xRegisterOptions,
                                                                      ( uint8_t * ) ( pxAzureProvClient->_internal.pucScratchBuffer +
                                                                                      xMQTTTopicLength ),
                                                                      ( size_t ) xMQTTPayloadLength, &xMQTTPayloadLength );
