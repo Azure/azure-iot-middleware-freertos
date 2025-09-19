@@ -1,6 +1,8 @@
 /* Copyright (c) Microsoft Corporation.
  * Licensed under the MIT License. */
 
+#include <time.h>
+
 #include "e2e_device_process_commands.h"
 
 #include "azure_iot_json_writer.h"
