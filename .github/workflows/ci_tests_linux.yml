@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     # Only allow build to start when label 'Run CI' added for forked
     # based PR
     if: ( github.event.pull_request.head.repo.fork == false ) ||
