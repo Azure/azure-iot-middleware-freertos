@@ -37,7 +37,7 @@ static uint8_t ucSendStateLongPayload[] = "{\"deviceUpdate\":{\"__t\":\"c\",\"ag
 \"" testDEVICE_CUSTOM_PROPERTY_NAME_2 "\":\"" testDEVICE_CUSTOM_PROPERTY_VALUE_2 "\",\
 \"contractModelId\":\"dtmi:azure:iot:deviceUpdateContractModel;2\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\
 \"compatPropertyNames\":\"manufacturer,model\",\
-\"lastInstallResult\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\",\"step_0\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\"}},\
+\"lastInstallResult\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\",\"stepResults\":{\"step_0\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\"}}},\
 \"state\":0,\
 \"workflow\":{\"action\":3,\"id\":\"51552a54-765e-419f-892a-c822549b6f38\"},\
 \"installedUpdateId\":\"{\\\"provider\\\":\\\"Contoso\\\",\\\"name\\\":\\\"Foobar\\\",\\\"version\\\":\\\"1.0\\\"}\"}}}";
@@ -47,7 +47,7 @@ static uint8_t ucSendStateLongPayloadWithRetry[] = "{\"deviceUpdate\":{\"__t\":\
 \"" testDEVICE_CUSTOM_PROPERTY_NAME_2 "\":\"" testDEVICE_CUSTOM_PROPERTY_VALUE_2 "\",\
 \"contractModelId\":\"dtmi:azure:iot:deviceUpdateContractModel;2\",\"aduVer\":\"DU;agent/1.0.0\",\"doVer\":\"" testDO_VERSION "\"},\
 \"compatPropertyNames\":\"manufacturer,model\",\
-\"lastInstallResult\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\",\"step_0\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\"}},\
+\"lastInstallResult\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\",\"stepResults\":{\"step_0\":{\"resultCode\":0,\"extendedResultCode\":1234,\"resultDetails\":\"Ok\"}}},\
 \"state\":0,\
 \"workflow\":{\"action\":3,\"id\":\"51552a54-765e-419f-892a-c822549b6f38\",\"retryTimestamp\":\"2022-01-26T11:33:29.9680598Z\"},\
 \"installedUpdateId\":\"{\\\"provider\\\":\\\"Contoso\\\",\\\"name\\\":\\\"Foobar\\\",\\\"version\\\":\\\"1.0\\\"}\"}}}";
