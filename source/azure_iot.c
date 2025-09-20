@@ -97,7 +97,7 @@ AzureIoTResult_t AzureIoT_TranslateCoreError( az_result xCoreError )
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTResult_t AzureIoT_Init()
+AzureIoTResult_t AzureIoT_Init( void )
 {
     #ifdef AZLogInfo
         az_log_set_message_callback( prvAzureIoTLogListener );
@@ -109,7 +109,7 @@ AzureIoTResult_t AzureIoT_Init()
 }
 /*-----------------------------------------------------------*/
 
-void AzureIoT_Deinit()
+void AzureIoT_Deinit( void )
 {
 }
 /*-----------------------------------------------------------*/
