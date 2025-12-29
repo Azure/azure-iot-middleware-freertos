@@ -18,8 +18,10 @@ az upgrade
 # pwsh for adu
 # Install pre-requisite packages.
 sudo apt-get install -y wget apt-transport-https software-properties-common
+# Remove any existing file
+rm -f packages-microsoft-prod.deb
 # Download the Microsoft repository GPG keys
-wget -q "https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb"
+wget -q "https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb" -O packages-microsoft-prod.deb
 # Register the Microsoft repository GPG keys
 sudo dpkg -i packages-microsoft-prod.deb
 # Update the list of packages after we added packages.microsoft.com
