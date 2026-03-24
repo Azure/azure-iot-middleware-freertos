@@ -176,7 +176,9 @@ typedef struct AzureIoTHubClientCertificateSigningResponse
  */
 typedef struct AzureIoTHubClientCertificateSigningRequestOptions
 {
-    const uint8_t * pucReplace;   /**< Optional replace field ("*" or a specific request ID to replace). */
+    const uint8_t * pucReplace;   /**< Optional replace field. Use "*" to replace any active request, or pass
+                                      a prior request ID (see #AzureIoTHubClient_SendCertificateSigningRequest
+                                      pucRequestID) to replace a specific one. */
     uint16_t usReplaceLength;     /**< The length of the replace field. */
 } AzureIoTHubClientCertificateSigningRequestOptions_t;
 
@@ -576,8 +578,13 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCertificateSigningResponse( AzureI
  * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
  * @param[in] pucCSR The pointer to the base64-encoded PKCS#10 CSR (without PEM headers).
  * @param[in] ulCSRLength The length of the CSR.
- * @param[in] pucRequestID The pointer to the request ID string.
- * @param[in] usRequestIDLength The length of the request ID.
+ * @param[in] pucRequestID The pointer to the request ID string. Must be 4 to 36 ASCII characters
+ *                         inclusive, containing only alphanumerics and dashes. Must not begin or
+ *                         end with a dash. A UUID/GUID (e.g. "550e8400-e29b-41d4-a716-446655440000")
+ *                         is a suitable choice for production applications. Store this request ID durably;
+ *                         on reconnect or retry, pass it as #AzureIoTHubClientCertificateSigningRequestOptions_t::pucReplace
+ *                         to replace the prior in-progress operation.
+ * @param[in] usRequestIDLength The length of the request ID (4 to 36 inclusive).
  * @param[in] pucPayloadBuffer The buffer to use for building the JSON request payload.
  * @param[in] ulPayloadBufferLength The length of the payload buffer.
  * @param[in] pxOptions __[nullable]__ Optional #AzureIoTHubClientCertificateSigningRequestOptions_t for extra options (e.g., replace).
