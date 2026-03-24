@@ -1586,7 +1586,7 @@ AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubCli
                                                                     uint16_t usRequestIDLength,
                                                                     uint8_t * pucPayloadBuffer,
                                                                     uint32_t ulPayloadBufferLength,
-                                                                    AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions )
+                                                                    const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
