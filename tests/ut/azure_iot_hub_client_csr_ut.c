@@ -302,8 +302,8 @@ static void testAzureIoTHubClient_SendCSR_InvalidArgFailure( void ** ppvState )
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail when CSR is NULL */
@@ -311,8 +311,8 @@ static void testAzureIoTHubClient_SendCSR_InvalidArgFailure( void ** ppvState )
                                                                         NULL, 0,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail when request ID is NULL */
@@ -320,8 +320,8 @@ static void testAzureIoTHubClient_SendCSR_InvalidArgFailure( void ** ppvState )
                                                                         ( const uint8_t * ) testCSR_DATA,
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         NULL, 0,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail when payload buffer is NULL */
@@ -330,8 +330,8 @@ static void testAzureIoTHubClient_SendCSR_InvalidArgFailure( void ** ppvState )
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL, 0,
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        NULL, 0 ),
                       eAzureIoTErrorInvalidArgument );
 }
 /*-----------------------------------------------------------*/
@@ -350,8 +350,8 @@ static void testAzureIoTHubClient_SendCSR_NotSubscribedFailure( void ** ppvState
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorTopicNotSubscribed );
 }
 /*-----------------------------------------------------------*/
@@ -371,8 +371,8 @@ static void testAzureIoTHubClient_SendCSR_PublishFailure( void ** ppvState )
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorPublishFailed );
 }
 /*-----------------------------------------------------------*/
@@ -393,8 +393,8 @@ static void testAzureIoTHubClient_SendCSR_Success( void ** ppvState )
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -522,8 +522,8 @@ static void testAzureIoTHubClient_SendCSR_WithReplaceOption_Success( void ** ppv
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        &xOptions ),
+                                                                        &xOptions,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -548,8 +548,8 @@ static void testAzureIoTHubClient_SendCSR_AfterUnsubscribe_Failure( void ** ppvS
                                                                         sizeof( testCSR_DATA ) - 1,
                                                                         ( const uint8_t * ) testCSR_REQUEST_ID,
                                                                         sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ),
-                                                                        NULL ),
+                                                                        NULL,
+                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorTopicNotSubscribed );
 }
 /*-----------------------------------------------------------*/

@@ -67,7 +67,7 @@ typedef enum AzureIoTHubMessageType
     eAzureIoTHubPropertiesRequestedMessage,        /**< The message is a response from a property request (payload contains the property document). */
     eAzureIoTHubPropertiesReportedResponseMessage, /**< The message is a reported property status response. */
     eAzureIoTHubPropertiesWritablePropertyMessage, /**< The message is a writable property message (incoming from the service). */
-    eAzureIoTHubCertificateSigningMessage,         /**< The message is a certificate signing response. */
+    eAzureIoTHubCertificateSigningResponseMessage, /**< The message is a certificate signing response. */
 } AzureIoTHubMessageType_t;
 
 /**
@@ -585,9 +585,9 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCertificateSigningResponse( AzureI
  *                         on reconnect or retry, pass it as #AzureIoTHubClientCertificateSigningRequestOptions_t::pucReplace
  *                         to replace the prior in-progress operation.
  * @param[in] usRequestIDLength The length of the request ID (4 to 36 inclusive).
+ * @param[in] pxOptions __[nullable]__ Optional #AzureIoTHubClientCertificateSigningRequestOptions_t for extra options (e.g., replace).
  * @param[in] pucPayloadBuffer The buffer to use for building the JSON request payload.
  * @param[in] ulPayloadBufferLength The length of the payload buffer.
- * @param[in] pxOptions __[nullable]__ Optional #AzureIoTHubClientCertificateSigningRequestOptions_t for extra options (e.g., replace).
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubClient_t * pxAzureIoTHubClient,
@@ -595,9 +595,9 @@ AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubCli
                                                                     uint32_t ulCSRLength,
                                                                     const uint8_t * pucRequestID,
                                                                     uint16_t usRequestIDLength,
+                                                                    const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions,
                                                                     uint8_t * pucPayloadBuffer,
-                                                                    uint32_t ulPayloadBufferLength,
-                                                                    const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions );
+                                                                    uint32_t ulPayloadBufferLength );
 
 #include "azure/core/_az_cfg_suffix.h"
 
