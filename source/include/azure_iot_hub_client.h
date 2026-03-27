@@ -32,7 +32,7 @@
 /**
  * @brief Total number of features which could be subscribed to.
  */
-#define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 3 )
+#define azureiothubSUBSCRIBE_FEATURE_COUNT    ( 4 )
 
 /**
  * @brief Macro which should be used to create an array of #AzureIoTHubClientComponent_t
@@ -67,6 +67,7 @@ typedef enum AzureIoTHubMessageType
     eAzureIoTHubPropertiesRequestedMessage,        /**< The message is a response from a property request (payload contains the property document). */
     eAzureIoTHubPropertiesReportedResponseMessage, /**< The message is a reported property status response. */
     eAzureIoTHubPropertiesWritablePropertyMessage, /**< The message is a writable property message (incoming from the service). */
+    eAzureIoTHubCertificateSigningResponseMessage, /**< The message is a certificate signing response. */
 } AzureIoTHubMessageType_t;
 
 /**
@@ -145,6 +146,43 @@ typedef struct AzureIoTHubClientPropertiesResponse
 } AzureIoTHubClientPropertiesResponse_t;
 
 /**
+ * @brief Response type for certificate signing operations.
+ */
+typedef enum AzureIoTHubClientCertificateSigningResponseType
+{
+    eAzureIoTHubClientCertificateSigningResponseAccepted = 1,  /**< 202 - CSR accepted, pending issuance. */
+    eAzureIoTHubClientCertificateSigningResponseCompleted = 2, /**< 200 - Certificate issued successfully. */
+    eAzureIoTHubClientCertificateSigningResponseError = 3,     /**< 4xx/5xx - Error response. */
+} AzureIoTHubClientCertificateSigningResponseType_t;
+
+/**
+ * @brief IoT Hub Certificate Signing Response struct.
+ */
+typedef struct AzureIoTHubClientCertificateSigningResponse
+{
+    AzureIoTHubClientCertificateSigningResponseType_t xResponseType; /**< The type of response (accepted, completed, or error). */
+
+    AzureIoTHubMessageStatus_t xMessageStatus;                      /**< The HTTP-like status code (200, 202, 4xx, 5xx). */
+
+    const void * pvMessagePayload;                                   /**< The pointer to the response payload. */
+    uint32_t ulPayloadLength;                                        /**< The length of the response payload. */
+
+    const uint8_t * pucRequestID;                                    /**< The pointer to the request ID. */
+    uint16_t usRequestIDLength;                                      /**< The length of the request ID. */
+} AzureIoTHubClientCertificateSigningResponse_t;
+
+/**
+ * @brief Options for certificate signing requests.
+ */
+typedef struct AzureIoTHubClientCertificateSigningRequestOptions
+{
+    const uint8_t * pucReplace;   /**< Optional replace field. Use "*" to replace any active request, or pass
+                                      a prior request ID (see #AzureIoTHubClient_SendCertificateSigningRequest
+                                      pucRequestID) to replace a specific one. */
+    uint16_t usReplaceLength;     /**< The length of the replace field. */
+} AzureIoTHubClientCertificateSigningRequestOptions_t;
+
+/**
  * @brief Cloud message callback to be invoked when a cloud message is received in the call to AzureIoTHubClient_ProcessLoop().
  *
  * @param[in] pxMessage The #AzureIoTHubClientCloudToDeviceMessageRequest_t associated with the message.
@@ -173,6 +211,16 @@ typedef void ( * AzureIoTHubClientPropertiesCallback_t ) ( AzureIoTHubClientProp
                                                            void * pvContext );
 
 /**
+ * @brief Certificate signing callback to be invoked when a certificate signing response is received
+ *        in the call to AzureIoTHubClient_ProcessLoop().
+ *
+ * @param[in] pxResponse The #AzureIoTHubClientCertificateSigningResponse_t associated with the message.
+ * @param[in] pvContext The context passed back to the caller.
+ */
+typedef void ( * AzureIoTHubClientCertificateSigningCallback_t ) ( AzureIoTHubClientCertificateSigningResponse_t * pxResponse,
+                                                                    void * pvContext );
+
+/**
  * @brief Receive context to be used internally for the processing of messages.
  *
  * @warning Used internally.
@@ -193,6 +241,7 @@ typedef struct AzureIoTHubClientReceiveContext
             AzureIoTHubClientCloudToDeviceMessageCallback_t xCloudToDeviceMessageCallback;
             AzureIoTHubClientCommandCallback_t xCommandCallback;
             AzureIoTHubClientPropertiesCallback_t xPropertiesCallback;
+            AzureIoTHubClientCertificateSigningCallback_t xCertificateSigningCallback;
         } callbacks;
     } _internal; /**< @brief Internal to the SDK */
 } AzureIoTHubClientReceiveContext_t;
@@ -498,6 +547,57 @@ AzureIoTResult_t AzureIoTHubClient_SendPropertiesReported( AzureIoTHubClient_t *
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t * pxAzureIoTHubClient );
+
+/**
+ * @brief Subscribe to certificate signing responses.
+ *
+ * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
+ * @param[in] xCSRCallback The #AzureIoTHubClientCertificateSigningCallback_t to invoke when certificate signing responses arrive.
+ * @param[in] prvCallbackContext A pointer to a context to pass to the callback.
+ * @param[in] ulTimeoutMilliseconds Timeout in milliseconds for Subscribe operation to complete.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTHubClient_SubscribeCertificateSigningResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                         AzureIoTHubClientCertificateSigningCallback_t xCSRCallback,
+                                                                         void * prvCallbackContext,
+                                                                         uint32_t ulTimeoutMilliseconds );
+
+/**
+ * @brief Unsubscribe from certificate signing responses.
+ *
+ * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTHubClient_UnsubscribeCertificateSigningResponse( AzureIoTHubClient_t * pxAzureIoTHubClient );
+
+/**
+ * @brief Send a certificate signing request to IoT Hub.
+ *
+ * @note AzureIoTHubClient_SubscribeCertificateSigningResponse() must be called before calling this function.
+ *
+ * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
+ * @param[in] pucCSR The pointer to the base64-encoded PKCS#10 CSR (without PEM headers).
+ * @param[in] ulCSRLength The length of the CSR.
+ * @param[in] pucRequestID The pointer to the request ID string. Must be 4 to 36 ASCII characters
+ *                         inclusive, containing only alphanumerics and dashes. Must not begin or
+ *                         end with a dash. A UUID/GUID (e.g. "550e8400-e29b-41d4-a716-446655440000")
+ *                         is a suitable choice for production applications. Store this request ID durably;
+ *                         on reconnect or retry, pass it as #AzureIoTHubClientCertificateSigningRequestOptions_t::pucReplace
+ *                         to replace the prior in-progress operation.
+ * @param[in] usRequestIDLength The length of the request ID (4 to 36 inclusive).
+ * @param[in] pxOptions __[nullable]__ Optional #AzureIoTHubClientCertificateSigningRequestOptions_t for extra options (e.g., replace).
+ * @param[in] pucPayloadBuffer The buffer to use for building the JSON request payload.
+ * @param[in] ulPayloadBufferLength The length of the payload buffer.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                    const uint8_t * pucCSR,
+                                                                    uint32_t ulCSRLength,
+                                                                    const uint8_t * pucRequestID,
+                                                                    uint16_t usRequestIDLength,
+                                                                    const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions,
+                                                                    uint8_t * pucPayloadBuffer,
+                                                                    uint32_t ulPayloadBufferLength );
 
 #include "azure/core/_az_cfg_suffix.h"
 

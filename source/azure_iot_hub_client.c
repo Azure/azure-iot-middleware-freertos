@@ -50,6 +50,7 @@
 #define azureiothubRECEIVE_CONTEXT_INDEX_C2D           ( 0 )
 #define azureiothubRECEIVE_CONTEXT_INDEX_COMMANDS      ( 1 )
 #define azureiothubRECEIVE_CONTEXT_INDEX_PROPERTIES    ( 2 )
+#define azureiothubRECEIVE_CONTEXT_INDEX_CSR           ( 3 )
 
 #define azureiothubCOMMAND_EMPTY_RESPONSE              "{}"
 
@@ -374,6 +375,61 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
                 AZLogDebug( ( "Returning from property callback" ) );
             }
         }
+    }
+
+    return ( uint32_t ) xResult;
+}
+/*-----------------------------------------------------------*/
+
+/**
+ *
+ * Check/Process messages for incoming certificate signing responses.
+ *
+ * */
+static uint32_t prvAzureIoTHubClientCSRProcess( AzureIoTHubClientReceiveContext_t * pxContext,
+                                                 AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                 void * pvPublishInfo )
+{
+    AzureIoTResult_t xResult;
+    AzureIoTHubClientCertificateSigningResponse_t xCSRResponse = { 0 };
+    AzureIoTMQTTPublishInfo_t * xMQTTPublishInfo = ( AzureIoTMQTTPublishInfo_t * ) pvPublishInfo;
+    az_result xCoreResult;
+    az_iot_hub_client_certificate_signing_response_info xOutResponseInfo;
+    az_span xTopicSpan = az_span_create( ( uint8_t * ) xMQTTPublishInfo->pcTopicName, xMQTTPublishInfo->usTopicNameLength );
+
+    /* Failed means no topic match. This means the message is not for certificate signing. */
+    xCoreResult = az_iot_hub_client_certificate_signing_request_parse_received_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                      xTopicSpan, &xOutResponseInfo );
+
+    if( az_result_failed( xCoreResult ) )
+    {
+        xResult = AzureIoT_TranslateCoreError( xCoreResult );
+    }
+    else
+    {
+        AZLogDebug( ( "Certificate signing response topic: %.*s  with payload : %.*s",
+                      xMQTTPublishInfo->usTopicNameLength,
+                      xMQTTPublishInfo->pcTopicName,
+                      xMQTTPublishInfo->xPayloadLength,
+                      ( const char * ) xMQTTPublishInfo->pvPayload ) );
+
+        if( pxContext->_internal.callbacks.xCertificateSigningCallback )
+        {
+            xCSRResponse.xResponseType =
+                ( AzureIoTHubClientCertificateSigningResponseType_t ) xOutResponseInfo.response_type;
+            xCSRResponse.xMessageStatus = ( AzureIoTHubMessageStatus_t ) xOutResponseInfo.status_code;
+            xCSRResponse.pvMessagePayload = xMQTTPublishInfo->pvPayload;
+            xCSRResponse.ulPayloadLength = ( uint32_t ) xMQTTPublishInfo->xPayloadLength;
+            xCSRResponse.pucRequestID = az_span_ptr( xOutResponseInfo.request_id );
+            xCSRResponse.usRequestIDLength = ( uint16_t ) az_span_size( xOutResponseInfo.request_id );
+
+            AZLogDebug( ( "Invoking certificate signing callback" ) );
+            pxContext->_internal.callbacks.xCertificateSigningCallback( &xCSRResponse,
+                                                                        pxContext->_internal.pvCallbackContext );
+            AZLogDebug( ( "Returned from certificate signing callback" ) );
+        }
+
+        xResult = eAzureIoTSuccess;
     }
 
     return ( uint32_t ) xResult;
@@ -1415,6 +1471,195 @@ AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t *
                                                       &xMQTTPublishInfo, 0 ) ) != eAzureIoTMQTTSuccess )
             {
                 AZLogError( ( "Failed to Publish get properties message: MQTT error=0x%08x", xMQTTResult ) );
+                xResult = eAzureIoTErrorPublishFailed;
+            }
+            else
+            {
+                xResult = eAzureIoTSuccess;
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTHubClient_SubscribeCertificateSigningResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                         AzureIoTHubClientCertificateSigningCallback_t xCallback,
+                                                                         void * prvCallbackContext,
+                                                                         uint32_t ulTimeoutMilliseconds )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( xCallback == NULL ) )
+    {
+        AZLogError( ( "AzureIoTHubClient_SubscribeCertificateSigningResponse failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_CSR ];
+        xMqttSubscription.xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription.pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_SUBSCRIBE_TOPIC;
+        xMqttSubscription.usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to subscribe to the MQTT topic: %s", AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Subscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                    &xMqttSubscription, 1, usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Certificate signing subscribe failed: MQTT error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTErrorSubscribeFailed;
+        }
+        else
+        {
+            pxContext->_internal.usState = azureiothubTOPIC_SUBSCRIBE_STATE_SUB;
+            pxContext->_internal.usMqttSubPacketID = usSubscribePacketIdentifier;
+            pxContext->_internal.pxProcessFunction = prvAzureIoTHubClientCSRProcess;
+            pxContext->_internal.callbacks.xCertificateSigningCallback = xCallback;
+            pxContext->_internal.pvCallbackContext = prvCallbackContext;
+
+            if( ( xResult = prvWaitForSubAck( pxAzureIoTHubClient, pxContext,
+                                              ulTimeoutMilliseconds ) ) != eAzureIoTSuccess )
+            {
+                AZLogError( ( "Wait for certificate signing sub ack failed : error=0x%08x", xResult ) );
+                memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTHubClient_UnsubscribeCertificateSigningResponse( AzureIoTHubClient_t * pxAzureIoTHubClient )
+{
+    AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTResult_t xResult;
+    uint16_t usSubscribePacketIdentifier;
+    AzureIoTHubClientReceiveContext_t * pxContext;
+
+    if( pxAzureIoTHubClient == NULL )
+    {
+        AZLogError( ( "AzureIoTHubClient_UnsubscribeCertificateSigningResponse failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else
+    {
+        pxContext = &pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_CSR ];
+        xMqttSubscription.xQoS = eAzureIoTMQTTQoS0;
+        xMqttSubscription.pcTopicFilter = ( const uint8_t * ) AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_SUBSCRIBE_TOPIC;
+        xMqttSubscription.usTopicFilterLength = ( uint16_t ) sizeof( AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_SUBSCRIBE_TOPIC ) - 1;
+        usSubscribePacketIdentifier = AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) );
+
+        AZLogDebug( ( "Attempting to unsubscribe from the MQTT topic: %s", AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_SUBSCRIBE_TOPIC ) );
+
+        if( ( xMQTTResult = AzureIoTMQTT_Unsubscribe( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMqttSubscription, 1,
+                                                      usSubscribePacketIdentifier ) ) != eAzureIoTMQTTSuccess )
+        {
+            AZLogError( ( "Certificate signing unsubscribe failed: MQTT error=0x%08x", xMQTTResult ) );
+            xResult = eAzureIoTErrorUnsubscribeFailed;
+        }
+        else
+        {
+            memset( pxContext, 0, sizeof( AzureIoTHubClientReceiveContext_t ) );
+            xResult = eAzureIoTSuccess;
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                    const uint8_t * pucCSR,
+                                                                    uint32_t ulCSRLength,
+                                                                    const uint8_t * pucRequestID,
+                                                                    uint16_t usRequestIDLength,
+                                                                    const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions,
+                                                                    uint8_t * pucPayloadBuffer,
+                                                                    uint32_t ulPayloadBufferLength )
+{
+    AzureIoTMQTTResult_t xMQTTResult;
+    AzureIoTResult_t xResult;
+    AzureIoTMQTTPublishInfo_t xMQTTPublishInfo = { 0 };
+    az_iot_hub_client_certificate_signing_request xCSRRequest;
+    az_span xRequestID;
+    size_t xTopicLength;
+    size_t xPayloadLength;
+    az_result xCoreResult;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( pucCSR == NULL ) || ( ulCSRLength == 0 ) ||
+        ( pucRequestID == NULL ) || ( usRequestIDLength == 0 ) ||
+        ( pucPayloadBuffer == NULL ) || ( ulPayloadBufferLength == 0 ) )
+    {
+        AZLogError( ( "AzureIoTHubClient_SendCertificateSigningRequest failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else if( pxAzureIoTHubClient->_internal.xReceiveContext[ azureiothubRECEIVE_CONTEXT_INDEX_CSR ]._internal.usState !=
+             azureiothubTOPIC_SUBSCRIBE_STATE_SUBACK )
+    {
+        AZLogError( ( "AzureIoTHubClient_SendCertificateSigningRequest failed: CSR topic not subscribed" ) );
+        xResult = eAzureIoTErrorTopicNotSubscribed;
+    }
+    else
+    {
+        xRequestID = az_span_create( ( uint8_t * ) pucRequestID, ( int32_t ) usRequestIDLength );
+        xCSRRequest.csr = az_span_create( ( uint8_t * ) pucCSR, ( int32_t ) ulCSRLength );
+
+        if( ( pxOptions != NULL ) && ( pxOptions->pucReplace != NULL ) && ( pxOptions->usReplaceLength > 0 ) )
+        {
+            xCSRRequest.replace = az_span_create( ( uint8_t * ) pxOptions->pucReplace, ( int32_t ) pxOptions->usReplaceLength );
+        }
+        else
+        {
+            xCSRRequest.replace = AZ_SPAN_EMPTY;
+        }
+
+        if( az_result_failed(
+                xCoreResult =
+                    az_iot_hub_client_certificate_signing_request_get_publish_topic( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                     xRequestID,
+                                                                                     ( char * ) pxAzureIoTHubClient->_internal.pucWorkingBuffer,
+                                                                                     pxAzureIoTHubClient->_internal.ulWorkingBufferLength,
+                                                                                     &xTopicLength ) ) )
+        {
+            AZLogError( ( "Failed to get CSR publish topic: core error=0x%08x", ( uint16_t ) xCoreResult ) );
+            xResult = AzureIoT_TranslateCoreError( xCoreResult );
+        }
+        else if( az_result_failed(
+                     xCoreResult =
+                         az_iot_hub_client_certificate_signing_request_get_request_payload( &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                                                                                            &xCSRRequest,
+                                                                                            pucPayloadBuffer,
+                                                                                            ulPayloadBufferLength,
+                                                                                            &xPayloadLength ) ) )
+        {
+            AZLogError( ( "Failed to get CSR request payload: core error=0x%08x", ( uint16_t ) xCoreResult ) );
+            xResult = AzureIoT_TranslateCoreError( xCoreResult );
+        }
+        else
+        {
+            xMQTTPublishInfo.xQOS = eAzureIoTMQTTQoS1;
+            xMQTTPublishInfo.pcTopicName = pxAzureIoTHubClient->_internal.pucWorkingBuffer;
+            xMQTTPublishInfo.usTopicNameLength = ( uint16_t ) xTopicLength;
+            xMQTTPublishInfo.pvPayload = ( const void * ) pucPayloadBuffer;
+            xMQTTPublishInfo.xPayloadLength = xPayloadLength;
+
+            if( ( xMQTTResult = AzureIoTMQTT_Publish( &( pxAzureIoTHubClient->_internal.xMQTTContext ),
+                                                      &xMQTTPublishInfo,
+                                                      AzureIoTMQTT_GetPacketId( &( pxAzureIoTHubClient->_internal.xMQTTContext ) ) ) ) != eAzureIoTMQTTSuccess )
+            {
+                AZLogError( ( "Failed to Publish CSR message: MQTT error=0x%08x", xMQTTResult ) );
                 xResult = eAzureIoTErrorPublishFailed;
             }
             else
