@@ -311,6 +311,8 @@ struct AzureIoTHubClient
         uint32_t ulCurrentPropertyRequestID;
 
         AzureIoTHubClientReceiveContext_t xReceiveContext[ azureiothubSUBSCRIBE_FEATURE_COUNT ];
+
+        az_iot_hub_client_certificate_signing_completed_response xCSRCompletedResponse;
     }
     _internal; /**< @brief Internal to the SDK */
 };
@@ -598,6 +600,43 @@ AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubCli
                                                                     const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions,
                                                                     uint8_t * pucPayloadBuffer,
                                                                     uint32_t ulPayloadBufferLength );
+
+/**
+ * @brief Get the number of certificates in the issued certificate chain from the last CSR response.
+ *
+ * @note Must be called after receiving a 200 Completed CSR response and before the
+ *       next AzureIoTHubClient_ProcessLoop() call (the internal spans reference the MQTT buffer).
+ *
+ * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
+ * @param[out] pulIssuedCertificateChainLength The pointer to the `uint32_t` which will be populated
+ *             with the number of issued certificates.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificateChainLength(
+    AzureIoTHubClient_t * pxAzureIoTHubClient,
+    uint32_t * pulIssuedCertificateChainLength );
+
+/**
+ * @brief Get a certificate from the issued certificate chain at the given position.
+ *
+ * @note The certificate data is base64-encoded DER (not PEM). The caller is
+ *       responsible for any conversion (e.g., wrapping with PEM headers).
+ * @note Must be called after receiving a 200 Completed CSR response and before the
+ *       next AzureIoTHubClient_ProcessLoop() call.
+ *
+ * @param[in] pxAzureIoTHubClient The #AzureIoTHubClient_t * to use for this call.
+ * @param[in] ulCertificatePositionNumber The index of the certificate in the issued chain.
+ * @param[out] pucIssuedCertificate The pointer to a buffer which will be populated with the
+ *             issued certificate data.
+ * @param[in,out] pulIssuedCertificateLength On input, the size of \p pucIssuedCertificate buffer.
+ *                On output, the length of the certificate data written.
+ * @return An #AzureIoTResult_t with the result of the operation.
+ */
+AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificate(
+    AzureIoTHubClient_t * pxAzureIoTHubClient,
+    uint32_t ulCertificatePositionNumber,
+    uint8_t * pucIssuedCertificate,
+    uint32_t * pulIssuedCertificateLength );
 
 #include "azure/core/_az_cfg_suffix.h"
 

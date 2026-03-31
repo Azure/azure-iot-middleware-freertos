@@ -19,7 +19,7 @@
 #define testCSR_COMPLETED_MESSAGE_TOPIC             "$iothub/credentials/res/200/?$rid=1"
 #define testCSR_ERROR_MESSAGE_TOPIC                 "$iothub/credentials/res/400/?$rid=1"
 #define testCSR_ACCEPTED_PAYLOAD                    "{\"correlationId\":\"test-corr-id\",\"operationExpires\":\"2025-06-09T17:31:31.426Z\"}"
-#define testCSR_COMPLETED_PAYLOAD                   "test-certificate-data"
+#define testCSR_COMPLETED_PAYLOAD                   "[\"ROOT CERT\",\"INTERMEDIATE CERT\",\"LEAF CERT\"]"
 #define testCSR_ERROR_PAYLOAD                       "{\"errorCode\":400040,\"message\":\"Credential management operation failed\"}"
 #define testCSR_DATA                                "MIICYTCCAUkCAQAwHDEaMBgGA1wRZGAw"
 #define testCSR_REQUEST_ID                          "1"
@@ -464,6 +464,37 @@ static void testAzureIoTHubClient_CSR_ReceiveCompleted_Success( void ** ppvState
     assert_int_equal( ulReceivedPayloadLength, sizeof( testCSR_COMPLETED_PAYLOAD ) - 1 );
     assert_non_null( pucReceivedRequestID );
     assert_int_equal( usReceivedRequestIDLength, sizeof( testCSR_REQUEST_ID ) - 1 );
+
+    /* Verify accessor functions return parsed certificates */
+    uint32_t ulChainLength = 0;
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificateChainLength(
+                          &xTestIoTHubClient, &ulChainLength ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulChainLength, 3 );
+
+    uint8_t ucCertBuf[ 64 ];
+    uint32_t ulCertLen;
+
+    ulCertLen = sizeof( ucCertBuf );
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate(
+                          &xTestIoTHubClient, 0, ucCertBuf, &ulCertLen ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulCertLen, sizeof( "ROOT CERT" ) - 1 );
+    assert_memory_equal( ucCertBuf, "ROOT CERT", ulCertLen );
+
+    ulCertLen = sizeof( ucCertBuf );
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate(
+                          &xTestIoTHubClient, 1, ucCertBuf, &ulCertLen ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulCertLen, sizeof( "INTERMEDIATE CERT" ) - 1 );
+    assert_memory_equal( ucCertBuf, "INTERMEDIATE CERT", ulCertLen );
+
+    ulCertLen = sizeof( ucCertBuf );
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate(
+                          &xTestIoTHubClient, 2, ucCertBuf, &ulCertLen ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulCertLen, sizeof( "LEAF CERT" ) - 1 );
+    assert_memory_equal( ucCertBuf, "LEAF CERT", ulCertLen );
 }
 /*-----------------------------------------------------------*/
 
@@ -586,6 +617,113 @@ static void testAzureIoTHubClient_SubscribeCSR_WithContext_Success( void ** ppvS
 }
 /*-----------------------------------------------------------*/
 
+static void testAzureIoTHubClient_GetCertChainLength_InvalidArg( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    uint32_t ulLength;
+
+    ( void ) ppvState;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    /* NULL client */
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificateChainLength( NULL, &ulLength ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* NULL output */
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificateChainLength( &xTestIoTHubClient, NULL ),
+                      eAzureIoTErrorInvalidArgument );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTHubClient_GetCertChainLength_ZeroBeforeCSR( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    uint32_t ulLength = 99;
+
+    ( void ) ppvState;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificateChainLength( &xTestIoTHubClient, &ulLength ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulLength, 0 );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTHubClient_GetCert_InvalidArg( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    uint8_t ucBuf[ 64 ];
+    uint32_t ulLen = sizeof( ucBuf );
+
+    ( void ) ppvState;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    /* NULL client */
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate( NULL, 0, ucBuf, &ulLen ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* NULL certificate buffer */
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate( &xTestIoTHubClient, 0, NULL, &ulLen ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* NULL length */
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate( &xTestIoTHubClient, 0, ucBuf, NULL ),
+                      eAzureIoTErrorInvalidArgument );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTHubClient_GetCert_OutOfBounds( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    uint8_t ucBuf[ 64 ];
+    uint32_t ulLen = sizeof( ucBuf );
+
+    ( void ) ppvState;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+
+    /* No CSR response yet, count is 0, so index 0 should be out of bounds */
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate( &xTestIoTHubClient, 0, ucBuf, &ulLen ),
+                      eAzureIoTErrorInvalidArgument );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTHubClient_GetCert_BufferTooSmall( void ** ppvState )
+{
+    AzureIoTHubClient_t xTestIoTHubClient;
+    AzureIoTMQTTPublishInfo_t xPublishInfo = { 0 };
+    uint8_t ucBuf[ 2 ];
+    uint32_t ulLen;
+
+    ( void ) ppvState;
+
+    prvSetupTestIoTHubClient( &xTestIoTHubClient );
+    prvSubscribeToCSR( &xTestIoTHubClient );
+
+    /* Receive a completed response to populate certs */
+    will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
+    xPacketInfo.ucType = azureiotmqttPACKET_TYPE_PUBLISH;
+    xDeserializedInfo.usPacketIdentifier = 1;
+    xPublishInfo.pcTopicName = testCSR_COMPLETED_MESSAGE_TOPIC;
+    xPublishInfo.usTopicNameLength = sizeof( testCSR_COMPLETED_MESSAGE_TOPIC ) - 1;
+    xPublishInfo.pvPayload = ( const void * ) testCSR_COMPLETED_PAYLOAD;
+    xPublishInfo.xPayloadLength = sizeof( testCSR_COMPLETED_PAYLOAD ) - 1;
+    xDeserializedInfo.pxPublishInfo = &xPublishInfo;
+    ulReceivedCallbackFunctionId = 0;
+
+    assert_int_equal( AzureIoTHubClient_ProcessLoop( &xTestIoTHubClient, 60 ),
+                      eAzureIoTSuccess );
+
+    /* Buffer too small for "ROOT CERT" (9 bytes) */
+    ulLen = sizeof( ucBuf );
+    assert_int_equal( AzureIoTHubClient_GetIssuedCertificate( &xTestIoTHubClient, 0, ucBuf, &ulLen ),
+                      eAzureIoTErrorFailed );
+}
+/*-----------------------------------------------------------*/
+
 uint32_t ulGetAllTests()
 {
     const struct CMUnitTest tests[] =
@@ -610,6 +748,11 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTHubClient_SendCSR_WithReplaceOption_Success ),
         cmocka_unit_test( testAzureIoTHubClient_SendCSR_AfterUnsubscribe_Failure ),
         cmocka_unit_test( testAzureIoTHubClient_SubscribeCSR_WithContext_Success ),
+        cmocka_unit_test( testAzureIoTHubClient_GetCertChainLength_InvalidArg ),
+        cmocka_unit_test( testAzureIoTHubClient_GetCertChainLength_ZeroBeforeCSR ),
+        cmocka_unit_test( testAzureIoTHubClient_GetCert_InvalidArg ),
+        cmocka_unit_test( testAzureIoTHubClient_GetCert_OutOfBounds ),
+        cmocka_unit_test( testAzureIoTHubClient_GetCert_BufferTooSmall ),
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_hub_client_csr_ut", tests, NULL, NULL );

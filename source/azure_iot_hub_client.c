@@ -423,6 +423,24 @@ static uint32_t prvAzureIoTHubClientCSRProcess( AzureIoTHubClientReceiveContext_
             xCSRResponse.pucRequestID = az_span_ptr( xOutResponseInfo.request_id );
             xCSRResponse.usRequestIDLength = ( uint16_t ) az_span_size( xOutResponseInfo.request_id );
 
+            if( xOutResponseInfo.response_type == AZ_IOT_HUB_CLIENT_CERTIFICATE_SIGNING_RESPONSE_TYPE_COMPLETED )
+            {
+                az_span xPayloadSpan = az_span_create(
+                    ( uint8_t * ) xMQTTPublishInfo->pvPayload,
+                    ( int32_t ) xMQTTPublishInfo->xPayloadLength );
+
+                az_result xParseResult = az_iot_hub_client_certificate_signing_request_parse_completed_response(
+                    &pxAzureIoTHubClient->_internal.xAzureIoTHubClientCore,
+                    xPayloadSpan,
+                    &pxAzureIoTHubClient->_internal.xCSRCompletedResponse );
+
+                if( az_result_failed( xParseResult ) )
+                {
+                    AZLogError( ( "Failed to parse CSR completed response payload" ) );
+                    pxAzureIoTHubClient->_internal.xCSRCompletedResponse.issued_certificate_chain_count = 0;
+                }
+            }
+
             AZLogDebug( ( "Invoking certificate signing callback" ) );
             pxContext->_internal.callbacks.xCertificateSigningCallback( &xCSRResponse,
                                                                         pxContext->_internal.pvCallbackContext );
@@ -1666,6 +1684,74 @@ AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubCli
             {
                 xResult = eAzureIoTSuccess;
             }
+        }
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificateChainLength(
+    AzureIoTHubClient_t * pxAzureIoTHubClient,
+    uint32_t * pulIssuedCertificateChainLength )
+{
+    AzureIoTResult_t xResult;
+
+    if( ( pxAzureIoTHubClient == NULL ) || ( pulIssuedCertificateChainLength == NULL ) )
+    {
+        AZLogError( ( "AzureIoTHubClient_GetIssuedCertificateChainLength failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else
+    {
+        *pulIssuedCertificateChainLength =
+            pxAzureIoTHubClient->_internal.xCSRCompletedResponse.issued_certificate_chain_count;
+
+        xResult = eAzureIoTSuccess;
+    }
+
+    return xResult;
+}
+/*-----------------------------------------------------------*/
+
+AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificate(
+    AzureIoTHubClient_t * pxAzureIoTHubClient,
+    uint32_t ulCertificatePositionNumber,
+    uint8_t * pucIssuedCertificate,
+    uint32_t * pulIssuedCertificateLength )
+{
+    AzureIoTResult_t xResult;
+    az_span * pxCertificate;
+    uint32_t ulCertificateLength;
+
+    if( ( pxAzureIoTHubClient == NULL ) ||
+        ( pucIssuedCertificate == NULL ) || ( pulIssuedCertificateLength == NULL ) )
+    {
+        AZLogError( ( "AzureIoTHubClient_GetIssuedCertificate failed: invalid argument" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else if( ulCertificatePositionNumber >=
+             pxAzureIoTHubClient->_internal.xCSRCompletedResponse.issued_certificate_chain_count )
+    {
+        AZLogError( ( "AzureIoTHubClient_GetIssuedCertificate failed: position out of bounds" ) );
+        xResult = eAzureIoTErrorInvalidArgument;
+    }
+    else
+    {
+        pxCertificate = &pxAzureIoTHubClient->_internal.xCSRCompletedResponse
+                             .issued_certificate_chain[ ulCertificatePositionNumber ];
+        ulCertificateLength = ( uint32_t ) az_span_size( *pxCertificate );
+
+        if( *pulIssuedCertificateLength < ulCertificateLength )
+        {
+            AZLogError( ( "AzureIoTHubClient_GetIssuedCertificate failed: buffer too small" ) );
+            xResult = eAzureIoTErrorFailed;
+        }
+        else
+        {
+            memcpy( pucIssuedCertificate, az_span_ptr( *pxCertificate ), ulCertificateLength );
+            *pulIssuedCertificateLength = ulCertificateLength;
+            xResult = eAzureIoTSuccess;
         }
     }
 
