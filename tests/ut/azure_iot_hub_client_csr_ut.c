@@ -14,16 +14,16 @@
 #include "azure_iot_hub_client.h"
 /*-----------------------------------------------------------*/
 
-#define testCSR_CALLBACK_ID                         ( 4 )
-#define testCSR_ACCEPTED_MESSAGE_TOPIC              "$iothub/credentials/res/202/?$rid=1"
-#define testCSR_COMPLETED_MESSAGE_TOPIC             "$iothub/credentials/res/200/?$rid=1"
-#define testCSR_ERROR_MESSAGE_TOPIC                 "$iothub/credentials/res/400/?$rid=1"
-#define testCSR_ACCEPTED_PAYLOAD                    "{\"correlationId\":\"test-corr-id\",\"operationExpires\":\"2025-06-09T17:31:31.426Z\"}"
-#define testCSR_COMPLETED_PAYLOAD                   "[\"ROOT CERT\",\"INTERMEDIATE CERT\",\"LEAF CERT\"]"
-#define testCSR_ERROR_PAYLOAD                       "{\"errorCode\":400040,\"message\":\"Credential management operation failed\"}"
-#define testCSR_DATA                                "MIICYTCCAUkCAQAwHDEaMBgGA1wRZGAw"
-#define testCSR_REQUEST_ID                          "1"
-#define testEMPTY_JSON                              "{}"
+#define testCSR_CALLBACK_ID                ( 4 )
+#define testCSR_ACCEPTED_MESSAGE_TOPIC     "$iothub/credentials/res/202/?$rid=1"
+#define testCSR_COMPLETED_MESSAGE_TOPIC    "$iothub/credentials/res/200/?$rid=1"
+#define testCSR_ERROR_MESSAGE_TOPIC        "$iothub/credentials/res/400/?$rid=1"
+#define testCSR_ACCEPTED_PAYLOAD           "{\"correlationId\":\"test-corr-id\",\"operationExpires\":\"2025-06-09T17:31:31.426Z\"}"
+#define testCSR_COMPLETED_PAYLOAD          "[\"ROOT CERT\",\"INTERMEDIATE CERT\",\"LEAF CERT\"]"
+#define testCSR_ERROR_PAYLOAD              "{\"errorCode\":400040,\"message\":\"Credential management operation failed\"}"
+#define testCSR_DATA                       "MIICYTCCAUkCAQAwHDEaMBgGA1wRZGAw"
+#define testCSR_REQUEST_ID                 "1"
+#define testEMPTY_JSON                     "{}"
 /*-----------------------------------------------------------*/
 
 /* Data exported by cmocka port for MQTT */
@@ -86,7 +86,7 @@ static void prvSetupTestIoTHubClient( AzureIoTHubClient_t * pxTestIoTHubClient )
 /*-----------------------------------------------------------*/
 
 static void prvTestCSRCallback( AzureIoTHubClientCertificateSigningResponse_t * pxResponse,
-                                 void * pvContext )
+                                void * pvContext )
 {
     assert_true( pxResponse != NULL );
     assert_true( pvContext == NULL );
@@ -109,8 +109,8 @@ static void prvSubscribeToCSR( AzureIoTHubClient_t * pxTestIoTHubClient )
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
     ulDelayReceivePacket = 0;
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( pxTestIoTHubClient,
-                                                                              prvTestCSRCallback,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallback,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -125,14 +125,14 @@ static void testAzureIoTHubClient_SubscribeCSR_InvalidArgFailure( void ** ppvSta
 
     /* Fail subscribe when client is NULL */
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( NULL,
-                                                                              prvTestCSRCallback,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallback,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail subscribe when callback is NULL */
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                              NULL,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             NULL,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTErrorInvalidArgument );
 }
 /*-----------------------------------------------------------*/
@@ -147,8 +147,8 @@ static void testAzureIoTHubClient_SubscribeCSR_SubscribeFailure( void ** ppvStat
 
     will_return( AzureIoTMQTT_Subscribe, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                              prvTestCSRCallback,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallback,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTErrorSubscribeFailed );
 }
 /*-----------------------------------------------------------*/
@@ -164,8 +164,8 @@ static void testAzureIoTHubClient_SubscribeCSR_ReceiveFailure( void ** ppvState 
     will_return( AzureIoTMQTT_Subscribe, eAzureIoTMQTTSuccess );
     will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTRecvFailed );
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                              prvTestCSRCallback,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallback,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTErrorFailed );
 }
 /*-----------------------------------------------------------*/
@@ -183,8 +183,8 @@ static void testAzureIoTHubClient_SubscribeCSR_Success( void ** ppvState )
     xPacketInfo.ucType = azureiotmqttPACKET_TYPE_SUBACK;
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                              prvTestCSRCallback,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallback,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -203,8 +203,8 @@ static void testAzureIoTHubClient_SubscribeCSR_DelayedSuccess( void ** ppvState 
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
     ulDelayReceivePacket = 5 * azureiotconfigSUBACK_WAIT_INTERVAL_MS;
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                              prvTestCSRCallback,
-                                                                              NULL, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallback,
+                                                                             NULL, ( uint32_t ) -1 ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -225,8 +225,8 @@ static void testAzureIoTHubClient_SubscribeCSR_MultipleSuccess( void ** ppvState
         xDeserializedInfo.usPacketIdentifier = usTestPacketId;
         ulDelayReceivePacket = 0;
         assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                                  prvTestCSRCallback,
-                                                                                  NULL, ( uint32_t ) -1 ),
+                                                                                 prvTestCSRCallback,
+                                                                                 NULL, ( uint32_t ) -1 ),
                           eAzureIoTSuccess );
     }
 }
@@ -298,40 +298,40 @@ static void testAzureIoTHubClient_SendCSR_InvalidArgFailure( void ** ppvState )
 
     /* Fail when client is NULL */
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( NULL,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail when CSR is NULL */
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        NULL, 0,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       NULL, 0,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail when request ID is NULL */
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        NULL, 0,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       NULL, 0,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorInvalidArgument );
 
     /* Fail when payload buffer is NULL */
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        NULL, 0 ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       NULL, 0 ),
                       eAzureIoTErrorInvalidArgument );
 }
 /*-----------------------------------------------------------*/
@@ -346,12 +346,12 @@ static void testAzureIoTHubClient_SendCSR_NotSubscribedFailure( void ** ppvState
 
     /* Send without subscribing first */
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorTopicNotSubscribed );
 }
 /*-----------------------------------------------------------*/
@@ -367,12 +367,12 @@ static void testAzureIoTHubClient_SendCSR_PublishFailure( void ** ppvState )
 
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSendFailed );
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorPublishFailed );
 }
 /*-----------------------------------------------------------*/
@@ -389,12 +389,12 @@ static void testAzureIoTHubClient_SendCSR_Success( void ** ppvState )
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
     usSentQOS = eAzureIoTMQTTQoS1;
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -537,7 +537,7 @@ static void testAzureIoTHubClient_SendCSR_WithReplaceOption_Success( void ** ppv
     AzureIoTHubClient_t xTestIoTHubClient;
     AzureIoTHubClientCertificateSigningRequestOptions_t xOptions =
     {
-        .pucReplace    = ( const uint8_t * ) "*",
+        .pucReplace      = ( const uint8_t * ) "*",
         .usReplaceLength = sizeof( "*" ) - 1
     };
 
@@ -549,12 +549,12 @@ static void testAzureIoTHubClient_SendCSR_WithReplaceOption_Success( void ** ppv
     will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
     usSentQOS = eAzureIoTMQTTQoS1;
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        &xOptions,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       &xOptions,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/
@@ -575,12 +575,12 @@ static void testAzureIoTHubClient_SendCSR_AfterUnsubscribe_Failure( void ** ppvS
 
     /* After unsubscribing, send must fail with topic-not-subscribed */
     assert_int_equal( AzureIoTHubClient_SendCertificateSigningRequest( &xTestIoTHubClient,
-                                                                        ( const uint8_t * ) testCSR_DATA,
-                                                                        sizeof( testCSR_DATA ) - 1,
-                                                                        ( const uint8_t * ) testCSR_REQUEST_ID,
-                                                                        sizeof( testCSR_REQUEST_ID ) - 1,
-                                                                        NULL,
-                                                                        ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
+                                                                       ( const uint8_t * ) testCSR_DATA,
+                                                                       sizeof( testCSR_DATA ) - 1,
+                                                                       ( const uint8_t * ) testCSR_REQUEST_ID,
+                                                                       sizeof( testCSR_REQUEST_ID ) - 1,
+                                                                       NULL,
+                                                                       ucPayloadBuffer, sizeof( ucPayloadBuffer ) ),
                       eAzureIoTErrorTopicNotSubscribed );
 }
 /*-----------------------------------------------------------*/
@@ -611,8 +611,8 @@ static void testAzureIoTHubClient_SubscribeCSR_WithContext_Success( void ** ppvS
     xDeserializedInfo.usPacketIdentifier = usTestPacketId;
     ulDelayReceivePacket = 0;
     assert_int_equal( AzureIoTHubClient_SubscribeCertificateSigningResponse( &xTestIoTHubClient,
-                                                                              prvTestCSRCallbackWithContext,
-                                                                              &ulTestContextValue, ( uint32_t ) -1 ),
+                                                                             prvTestCSRCallbackWithContext,
+                                                                             &ulTestContextValue, ( uint32_t ) -1 ),
                       eAzureIoTSuccess );
 }
 /*-----------------------------------------------------------*/

@@ -387,8 +387,8 @@ static uint32_t prvAzureIoTHubClientPropertiesProcess( AzureIoTHubClientReceiveC
  *
  * */
 static uint32_t prvAzureIoTHubClientCSRProcess( AzureIoTHubClientReceiveContext_t * pxContext,
-                                                 AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                 void * pvPublishInfo )
+                                                AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                void * pvPublishInfo )
 {
     AzureIoTResult_t xResult;
     AzureIoTHubClientCertificateSigningResponse_t xCSRResponse = { 0 };
@@ -1503,9 +1503,9 @@ AzureIoTResult_t AzureIoTHubClient_RequestPropertiesAsync( AzureIoTHubClient_t *
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SubscribeCertificateSigningResponse( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                         AzureIoTHubClientCertificateSigningCallback_t xCallback,
-                                                                         void * prvCallbackContext,
-                                                                         uint32_t ulTimeoutMilliseconds )
+                                                                        AzureIoTHubClientCertificateSigningCallback_t xCallback,
+                                                                        void * prvCallbackContext,
+                                                                        uint32_t ulTimeoutMilliseconds )
 {
     AzureIoTMQTTSubscribeInfo_t xMqttSubscription = { 0 };
     AzureIoTMQTTResult_t xMQTTResult;
@@ -1598,13 +1598,13 @@ AzureIoTResult_t AzureIoTHubClient_UnsubscribeCertificateSigningResponse( AzureI
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubClient_t * pxAzureIoTHubClient,
-                                                                    const uint8_t * pucCSR,
-                                                                    uint32_t ulCSRLength,
-                                                                    const uint8_t * pucRequestID,
-                                                                    uint16_t usRequestIDLength,
-                                                                    const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions,
-                                                                    uint8_t * pucPayloadBuffer,
-                                                                    uint32_t ulPayloadBufferLength )
+                                                                  const uint8_t * pucCSR,
+                                                                  uint32_t ulCSRLength,
+                                                                  const uint8_t * pucRequestID,
+                                                                  uint16_t usRequestIDLength,
+                                                                  const AzureIoTHubClientCertificateSigningRequestOptions_t * pxOptions,
+                                                                  uint8_t * pucPayloadBuffer,
+                                                                  uint32_t ulPayloadBufferLength )
 {
     AzureIoTMQTTResult_t xMQTTResult;
     AzureIoTResult_t xResult;
@@ -1691,9 +1691,8 @@ AzureIoTResult_t AzureIoTHubClient_SendCertificateSigningRequest( AzureIoTHubCli
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificateChainLength(
-    AzureIoTHubClient_t * pxAzureIoTHubClient,
-    uint32_t * pulIssuedCertificateChainLength )
+AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificateChainLength( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                                    uint32_t * pulIssuedCertificateChainLength )
 {
     AzureIoTResult_t xResult;
 
@@ -1714,11 +1713,10 @@ AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificateChainLength(
 }
 /*-----------------------------------------------------------*/
 
-AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificate(
-    AzureIoTHubClient_t * pxAzureIoTHubClient,
-    uint32_t ulCertificatePositionNumber,
-    uint8_t * pucIssuedCertificate,
-    uint32_t * pulIssuedCertificateLength )
+AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificate( AzureIoTHubClient_t * pxAzureIoTHubClient,
+                                                         uint32_t ulCertificatePositionNumber,
+                                                         uint8_t * pucIssuedCertificate,
+                                                         uint32_t * pulIssuedCertificateLength )
 {
     AzureIoTResult_t xResult;
     az_span * pxCertificate;
@@ -1739,7 +1737,7 @@ AzureIoTResult_t AzureIoTHubClient_GetIssuedCertificate(
     else
     {
         pxCertificate = &pxAzureIoTHubClient->_internal.xCSRCompletedResponse
-                             .issued_certificate_chain[ ulCertificatePositionNumber ];
+                           .issued_certificate_chain[ ulCertificatePositionNumber ];
         ulCertificateLength = ( uint32_t ) az_span_size( *pxCertificate );
 
         if( *pulIssuedCertificateLength < ulCertificateLength )
