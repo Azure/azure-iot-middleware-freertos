@@ -223,10 +223,10 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProv
  * @param[in] pucCertificateSigningRequest A pointer to the certificate data.
  * @param[in] ulCertificateSigningRequestLength Length of `CertificateSigningRequest`. Does not include the `NULL` terminator.
  * @return An #AzureIoTResult_t with the result of the operation.
- */                                                                 
+ */
 AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                    const uint8_t * pucCertificateSigningRequest,
-                                                                    uint32_t ulCertificateSigningRequestLength );
+                                                                                      const uint8_t * pucCertificateSigningRequest,
+                                                                                      uint32_t ulCertificateSigningRequestLength );
 
 /**
  * @brief After a registration has been completed, get the number of certificates issued for the certificate signing request.
@@ -236,7 +236,7 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationCertificateSigningReq
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificateChainLength( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                             uint32_t * pulSignedCertificateChainLength );
+                                                                             uint32_t * pulSignedCertificateChainLength );
 
 /**
  * @brief After a registration has been completed, get the certificates issued for the certificate signing request.
@@ -248,9 +248,9 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificateChainLength( Azu
  * @return An #AzureIoTResult_t with the result of the operation.
  */
 AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificate( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                             uint32_t ulCertificatePositionNumber,
-                                                             uint8_t * pucIssuedCertificate,
-                                                             uint32_t * pulIssuedCertificateLength );
+                                                                  uint32_t ulCertificatePositionNumber,
+                                                                  uint8_t * pucIssuedCertificate,
+                                                                  uint32_t * pulIssuedCertificateLength );
 
 #include "azure/core/_az_cfg_suffix.h"
 

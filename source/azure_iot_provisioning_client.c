@@ -12,6 +12,7 @@
 /* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
+#include <inttypes.h>
 
 /* azure iot includes. */
 #include "azure_iot_mqtt.h"
@@ -310,9 +311,9 @@ static void prvProvClientRequest( AzureIoTProvisioningClient_t * pxAzureProvClie
             return;
         }
 
-        if ( pxAzureProvClient->_internal.ulCertificateSigningRequestLength > 0 )
+        if( pxAzureProvClient->_internal.ulCertificateSigningRequestLength > 0 )
         {
-            xRegisterOptions.certificate_signing_request = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucCertificateSigningRequest, ( int32_t ) pxAzureProvClient->_internal.ulCertificateSigningRequestLength);
+            xRegisterOptions.certificate_signing_request = az_span_create( ( uint8_t * ) pxAzureProvClient->_internal.pucCertificateSigningRequest, ( int32_t ) pxAzureProvClient->_internal.ulCertificateSigningRequestLength );
         }
 
         xMQTTPayloadLength = pxAzureProvClient->_internal.ulScratchBufferLength - ( uint32_t ) xMQTTTopicLength;
@@ -1022,8 +1023,8 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationPayload( AzureIoTProv
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                                    const uint8_t * pucCertificateSigningRequest,
-                                                                    uint32_t ulCertificateSigningRequestLength )
+                                                                                      const uint8_t * pucCertificateSigningRequest,
+                                                                                      uint32_t ulCertificateSigningRequestLength )
 {
     AzureIoTResult_t xResult;
 
@@ -1050,7 +1051,7 @@ AzureIoTResult_t AzureIoTProvisioningClient_SetRegistrationCertificateSigningReq
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificateChainLength( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                             uint32_t * pulSignedCertificateChainLength )
+                                                                             uint32_t * pulSignedCertificateChainLength )
 {
     AzureIoTResult_t xResult;
 
@@ -1080,9 +1081,9 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificateChainLength( Azu
 /*-----------------------------------------------------------*/
 
 AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificate( AzureIoTProvisioningClient_t * pxAzureProvClient,
-                                                             uint32_t ulCertificatePositionNumber,
-                                                             uint8_t * pucIssuedCertificate,
-                                                             uint32_t * pulIssuedCertificateLength )
+                                                                  uint32_t ulCertificatePositionNumber,
+                                                                  uint8_t * pucIssuedCertificate,
+                                                                  uint32_t * pulIssuedCertificateLength )
 {
     AzureIoTResult_t xResult;
     uint32_t ulCertificateLength;
@@ -1110,12 +1111,12 @@ AzureIoTResult_t AzureIoTProvisioningClient_GetIssuedCertificate( AzureIoTProvis
     }
     else
     {
-        pxCertificate = &pxAzureProvClient->_internal.xRegisterResponse.registration_state.issued_certificate_chain[ulCertificatePositionNumber];
+        pxCertificate = &pxAzureProvClient->_internal.xRegisterResponse.registration_state.issued_certificate_chain[ ulCertificatePositionNumber ];
         ulCertificateLength = ( uint32_t ) az_span_size( *pxCertificate );
 
         if( ( *pulIssuedCertificateLength < ulCertificateLength ) )
         {
-            AZLogWarn( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: memory buffer passed (%d) is not enough to store certificate info (%d)", *pulIssuedCertificateLength,  ulCertificateLength ) );
+            AZLogWarn( ( "AzureIoTProvisioningClient_GetIssuedCertificate failed: memory buffer passed (%" PRIu32 ") is not enough to store certificate info (%" PRIu32 ")", *pulIssuedCertificateLength, ulCertificateLength ) );
             xResult = eAzureIoTErrorFailed;
         }
         else
