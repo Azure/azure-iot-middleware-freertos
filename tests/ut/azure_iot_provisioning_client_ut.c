@@ -74,6 +74,19 @@ static const uint8_t ucInvalidHubResponse[] = "{ \
          }\
 }";
 static const uint8_t ucCustomPayload[] = "{\"modelId\":\"UnitTest\"}";
+
+/* Certificate signing request data and the certificates expected to be issued in response. */
+static const uint8_t ucCertificateSigningRequest[] = "test-csr-data";
+static const uint8_t ucIssuedCertificateRoot[] = "cert-root-pem";
+static const uint8_t ucIssuedCertificateLeaf[] = "cert-leaf-pem";
+static const uint8_t ucAssignedHubCsrResponse[] = "{ \
+    \"operationId\":\"4.002305f54fc89692.b1f11200-8776-4b5d-867b-dc21c4b59c12\",\"status\":\"assigned\",\"registrationState\": \
+         {\"registrationId\":\"reg_id\",\"createdDateTimeUtc\":\"2019-12-27T19:51:41.6630592Z\",\"assignedHub\":\"unittest.azure-iothub.com\", \
+          \"deviceId\":\"UnitTest\",\"status\":\"assigned\",\"substatus\":\"initialAssignment\",\"lastUpdatedDateTimeUtc\":\"2019-12-27T19:51:41.8579703Z\", \
+          \"issuedCertificateChain\":[\"cert-root-pem\",\"cert-leaf-pem\"], \
+          \"etag\":\"XXXXXXXXXXX=\"\
+         }\
+}";
 static uint8_t ucTopicBuffer[ 128 ];
 static uint32_t ulRequestId = 1;
 static uint64_t ullUnixTime = 0;
@@ -327,6 +340,34 @@ static void prvQuery( AzureIoTProvisioningClient_t * pxTestProvisioningClient )
 
     /* Registration response */
     prvGenerateGoodResponse( &xPublishInfo, 0 );
+    assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
+                                                           azureiotprovisioningNO_WAIT ),
+                      eAzureIoTErrorPending );
+
+    /* Process response */
+    assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
+                                                           azureiotprovisioningNO_WAIT ),
+                      eAzureIoTSuccess );
+}
+/*-----------------------------------------------------------*/
+
+static void prvQueryWithCert( AzureIoTProvisioningClient_t * pxTestProvisioningClient )
+{
+    AzureIoTMQTTPublishInfo_t xPublishInfo;
+
+    /* Publish Registration Query */
+    will_return( AzureIoTMQTT_Publish, eAzureIoTMQTTSuccess );
+    will_return( AzureIoTMQTT_ProcessLoop, eAzureIoTMQTTSuccess );
+    xPacketInfo.ucType = 0;
+    assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
+                                                           azureiotprovisioningNO_WAIT ),
+                      eAzureIoTErrorPending );
+
+    /* Registration response containing the issued certificate chain */
+    prvGenerateResponse( &xPublishInfo,
+                         0,
+                         ucAssignedHubCsrResponse,
+                         sizeof( ucAssignedHubCsrResponse ) - 1 );
     assert_int_equal( AzureIoTProvisioningClient_Register( pxTestProvisioningClient,
                                                            azureiotprovisioningNO_WAIT ),
                       eAzureIoTErrorPending );
@@ -932,6 +973,181 @@ static void testAzureIoTProvisioningClient_WithCustomPayload_Success( void ** pp
 }
 /*-----------------------------------------------------------*/
 
+static void testAzureIoTProvisioningClient_SetRegistrationCSR_Failure( void ** ppvState )
+{
+    AzureIoTProvisioningClient_t xTestProvisioningClient;
+
+    ( void ) ppvState;
+
+    prvSetupTestProvisioningClient( &xTestProvisioningClient );
+
+    /* Fail when null client is passed */
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( NULL,
+                                                                                           ucCertificateSigningRequest, sizeof( ucCertificateSigningRequest ) - 1 ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when null certificate signing request is passed */
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( &xTestProvisioningClient,
+                                                                                           NULL, sizeof( ucCertificateSigningRequest ) - 1 ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when zero length is passed */
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( &xTestProvisioningClient,
+                                                                                           ucCertificateSigningRequest, 0 ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when the client is no longer in the init state */
+    prvRegister( &xTestProvisioningClient );
+
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( &xTestProvisioningClient,
+                                                                                           ucCertificateSigningRequest, sizeof( ucCertificateSigningRequest ) - 1 ),
+                      eAzureIoTErrorFailed );
+
+    AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTProvisioningClient_SetRegistrationCSR_Success( void ** ppvState )
+{
+    AzureIoTProvisioningClient_t xTestProvisioningClient;
+
+    ( void ) ppvState;
+
+    prvSetupTestProvisioningClient( &xTestProvisioningClient );
+
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( &xTestProvisioningClient,
+                                                                                           ucCertificateSigningRequest, sizeof( ucCertificateSigningRequest ) - 1 ),
+                      eAzureIoTSuccess );
+
+    AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTProvisioningClient_GetIssuedCertificateChainLength_Failure( void ** ppvState )
+{
+    AzureIoTProvisioningClient_t xTestProvisioningClient;
+    uint32_t ulChainLength = 0;
+
+    ( void ) ppvState;
+
+    prvSetupTestProvisioningClient( &xTestProvisioningClient );
+
+    /* Fail when null client is passed */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificateChainLength( NULL,
+                                                                                  &ulChainLength ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when null output pointer is passed */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificateChainLength( &xTestProvisioningClient,
+                                                                                  NULL ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when the registration is not yet complete */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificateChainLength( &xTestProvisioningClient,
+                                                                                  &ulChainLength ),
+                      eAzureIoTErrorFailed );
+
+    AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTProvisioningClient_GetIssuedCertificate_Failure( void ** ppvState )
+{
+    AzureIoTProvisioningClient_t xTestProvisioningClient;
+    uint8_t ucIssuedCertificate[ 128 ];
+    uint32_t ulIssuedCertificateLength = sizeof( ucIssuedCertificate );
+
+    ( void ) ppvState;
+
+    prvSetupTestProvisioningClient( &xTestProvisioningClient );
+
+    /* Fail when null client is passed */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( NULL, 0,
+                                                                       ucIssuedCertificate, &ulIssuedCertificateLength ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when null certificate buffer is passed */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 0,
+                                                                       NULL, &ulIssuedCertificateLength ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when null certificate length is passed */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 0,
+                                                                       ucIssuedCertificate, NULL ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when the registration is not yet complete */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 0,
+                                                                       ucIssuedCertificate, &ulIssuedCertificateLength ),
+                      eAzureIoTErrorFailed );
+
+    /* Complete a registration which returns an issued certificate chain */
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( &xTestProvisioningClient,
+                                                                                           ucCertificateSigningRequest, sizeof( ucCertificateSigningRequest ) - 1 ),
+                      eAzureIoTSuccess );
+    prvRegister( &xTestProvisioningClient );
+    prvQueryWithCert( &xTestProvisioningClient );
+
+    /* Fail when the certificate position number is out-of-bounds */
+    ulIssuedCertificateLength = sizeof( ucIssuedCertificate );
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 99,
+                                                                       ucIssuedCertificate, &ulIssuedCertificateLength ),
+                      eAzureIoTErrorInvalidArgument );
+
+    /* Fail when the buffer is too small to hold the certificate */
+    ulIssuedCertificateLength = 1;
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 0,
+                                                                       ucIssuedCertificate, &ulIssuedCertificateLength ),
+                      eAzureIoTErrorFailed );
+
+    AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
+}
+/*-----------------------------------------------------------*/
+
+static void testAzureIoTProvisioningClient_GetIssuedCertificate_Success( void ** ppvState )
+{
+    AzureIoTProvisioningClient_t xTestProvisioningClient;
+    uint8_t ucIssuedCertificate[ 128 ];
+    uint32_t ulIssuedCertificateLength;
+    uint32_t ulChainLength = 0;
+
+    ( void ) ppvState;
+
+    prvSetupTestProvisioningClient( &xTestProvisioningClient );
+
+    assert_int_equal( AzureIoTProvisioningClient_SetRegistrationCertificateSigningRequest( &xTestProvisioningClient,
+                                                                                           ucCertificateSigningRequest, sizeof( ucCertificateSigningRequest ) - 1 ),
+                      eAzureIoTSuccess );
+
+    prvRegister( &xTestProvisioningClient );
+    prvQueryWithCert( &xTestProvisioningClient );
+
+    /* The response carried two issued certificates */
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificateChainLength( &xTestProvisioningClient,
+                                                                                  &ulChainLength ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulChainLength, 2 );
+
+    /* Read the first issued certificate */
+    ulIssuedCertificateLength = sizeof( ucIssuedCertificate );
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 0,
+                                                                       ucIssuedCertificate, &ulIssuedCertificateLength ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulIssuedCertificateLength, sizeof( ucIssuedCertificateRoot ) - 1 );
+    assert_memory_equal( ucIssuedCertificate, ucIssuedCertificateRoot, ulIssuedCertificateLength );
+
+    /* Read the second issued certificate */
+    ulIssuedCertificateLength = sizeof( ucIssuedCertificate );
+    assert_int_equal( AzureIoTProvisioningClient_GetIssuedCertificate( &xTestProvisioningClient, 1,
+                                                                       ucIssuedCertificate, &ulIssuedCertificateLength ),
+                      eAzureIoTSuccess );
+    assert_int_equal( ulIssuedCertificateLength, sizeof( ucIssuedCertificateLeaf ) - 1 );
+    assert_memory_equal( ucIssuedCertificate, ucIssuedCertificateLeaf, ulIssuedCertificateLength );
+
+    AzureIoTProvisioningClient_Deinit( &xTestProvisioningClient );
+}
+/*-----------------------------------------------------------*/
+
 uint32_t ulGetAllTests()
 {
     const struct CMUnitTest tests[] =
@@ -955,7 +1171,12 @@ uint32_t ulGetAllTests()
         cmocka_unit_test( testAzureIoTProvisioningClient_GetDeviceAndHub_Failure ),
         cmocka_unit_test( testAzureIoTProvisioningClient_GetDeviceAndHub_Success ),
         cmocka_unit_test( testAzureIoTProvisioningClient_WithCustomPayload_Failure ),
-        cmocka_unit_test( testAzureIoTProvisioningClient_WithCustomPayload_Success )
+        cmocka_unit_test( testAzureIoTProvisioningClient_WithCustomPayload_Success ),
+        cmocka_unit_test( testAzureIoTProvisioningClient_SetRegistrationCSR_Failure ),
+        cmocka_unit_test( testAzureIoTProvisioningClient_SetRegistrationCSR_Success ),
+        cmocka_unit_test( testAzureIoTProvisioningClient_GetIssuedCertificateChainLength_Failure ),
+        cmocka_unit_test( testAzureIoTProvisioningClient_GetIssuedCertificate_Failure ),
+        cmocka_unit_test( testAzureIoTProvisioningClient_GetIssuedCertificate_Success )
     };
 
     return ( uint32_t ) cmocka_run_group_tests_name( "azure_iot_provisioning_client_ut", tests, NULL, NULL );
