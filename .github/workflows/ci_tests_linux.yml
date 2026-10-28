@@ -15,19 +15,12 @@ jobs:
     if: ( github.event.pull_request.head.repo.fork == false ) ||
         ( contains(github.event.pull_request.labels.*.name, 'Run CI') )
     steps:
-      # Same repo
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
-        with:
-          submodules: recursive
-        if: >-
-          ( github.event_name == 'pull_request' ) &&
-          ( github.event.pull_request.head.repo.fork == false )
-      
-      # Forked repo
+      # PR head (same repo or fork) on pull_request; the triggering ref otherwise.
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5.1.0
         with:
           ref: ${{ github.event.pull_request.head.sha }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+          submodules: recursive
 
       - name: Style Check
         run: |
